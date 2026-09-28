@@ -1,0 +1,35 @@
+{
+  "name": "AR Bijoy Exam Center",
+  "short_name": "Exam Center",
+  "description": "HSC MCQ Exam Center by AR Bijoy",
+  "lang": "bn",
+  "dir": "ltr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f8faff",
+  "theme_color": "#635bff",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Exam Center Home",
+      "short_name": "Home",
+      "url": "./",
+      "icons": [{"src":"icons/icon-192.png","sizes":"192x192","type":"image/png"}]
+    }
+  ]
+}

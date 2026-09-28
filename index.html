@@ -1,0 +1,2671 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Created By: AR Bijoy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style> 
+:root{
+--bg:#f4f7fb;--card:rgba(255,255,255,.92);--text:#172033;--muted:#697386;
+--border:#e5e9f2;--primary:#635bff;--primary2:#8b5cf6;--success:#16a34a;--danger:#ef4444;
+--warning:#f59e0b;--shadow:0 15px 45px rgba(30,41,59,.10);
+--ink:var(--text);--ink-soft:var(--muted);--paper:var(--bg);--paper-card:var(--card);
+--line:var(--border);--accent-red:#ef4444;--accent-gold:#f59e0b;--accent-green:#16a34a;
+--accent-blue:#635bff;--accent-plum:#8b5cf6;--ok-line:#16a34a;--bad-line:#ef4444;
+--serif:"Fraunces",Georgia,serif;--sans:"Hind Siliguri","Segoe UI",system-ui,sans-serif
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}html,body{height:100%}
+body{margin:0;color:var(--text);font-family:var(--sans);-webkit-font-smoothing:antialiased;
+background:radial-gradient(circle at 8% 8%,rgba(99,91,255,.12),transparent 28%),radial-gradient(circle at 92% 18%,rgba(139,92,246,.10),transparent 25%),linear-gradient(135deg,#f8faff,#eef2f8)}
+h1,h2,h3{font-family:var(--serif);font-weight:700;margin:0}button,input{font-family:inherit}[hidden]{display:none!important}
+.wrap{max-width:1050px;margin:0 auto;padding:30px 20px 70px}
+.topbar{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.84);backdrop-filter:blur(18px);
+border-bottom:1px solid rgba(255,255,255,.8);box-shadow:0 5px 25px rgba(15,23,42,.07)}
+.topbar-inner{max-width:1050px;margin:auto;padding:12px 20px;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:12px}.brand .seal{width:43px;height:43px;border-radius:15px;display:flex;align-items:center;justify-content:center;
+color:#fff;font-size:11px;font-weight:800;background:linear-gradient(135deg,var(--primary),var(--primary2));box-shadow:0 8px 20px rgba(99,91,255,.28)}
+.brand-text{font-family:var(--serif);font-size:18px;font-weight:800}.brand-sub{font-size:11.5px;color:var(--muted)}
+.lede{margin:28px 0 25px}.lede h2{font-size:clamp(28px,5vw,40px);line-height:1.25;background:linear-gradient(135deg,#111827,var(--primary),var(--primary2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.lede p{color:var(--muted);margin-top:8px;font-size:15px}
+.subject-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.subject-card{position:relative;overflow:hidden;text-align:left;cursor:pointer;width:100%;min-height:145px;padding:22px;color:var(--text);
+background:var(--card);border:1px solid rgba(255,255,255,.9);border-radius:22px;box-shadow:var(--shadow);backdrop-filter:blur(15px);transition:.28s ease}
+.subject-card:hover{transform:translateY(-6px);box-shadow:0 22px 55px rgba(30,41,59,.15)}
+.card-icon{width:56px;height:56px;border-radius:17px;display:flex;align-items:center;justify-content:center;font-size:27px;margin-bottom:15px;background:linear-gradient(135deg,rgba(99,91,255,.11),rgba(139,92,246,.13))}
+.subject-card h3{font-size:20px;margin-bottom:7px}.subject-meta{display:flex;gap:8px;flex-wrap:wrap}
+.pill{background:rgba(99,91,255,.07);border:1px solid rgba(99,91,255,.12);border-radius:30px;padding:4px 10px;color:var(--muted);font-size:12.5px}
+.card-arrow{position:absolute;right:20px;bottom:20px;width:36px;height:36px;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;background:linear-gradient(135deg,var(--primary),var(--primary2))}
+.back-btn{display:inline-flex;align-items:center;gap:7px;padding:10px 15px;margin-bottom:5px;background:var(--card);border:1px solid var(--border);border-radius:13px;cursor:pointer;color:var(--text);box-shadow:0 6px 18px rgba(15,23,42,.05);transition:.2s}
+.back-btn:hover{transform:translateX(-4px);color:var(--primary)}
+.modal-overlay{position:fixed;inset:0;z-index:1000;background:rgba(15,23,42,.60);backdrop-filter:blur(9px);display:flex;align-items:center;justify-content:center;padding:20px}
+.modal{width:min(440px,100%);padding:29px;background:#fff;border-radius:25px;box-shadow:0 30px 80px rgba(0,0,0,.25);animation:modalIn .3s ease}
+@keyframes modalIn{from{opacity:0;transform:scale(.94) translateY(15px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.modal h3{font-size:25px;margin-bottom:7px}.modal label{display:block;color:var(--muted);font-size:14px;margin-bottom:8px}
+.modal input{width:100%;height:52px;padding:0 15px;border:2px solid #e5e7eb;border-radius:14px;background:#f9fafb;color:#111827;font-size:16px;outline:none}
+.modal input:focus{border-color:var(--primary);box-shadow:0 0 0 4px rgba(99,91,255,.10)}
+.modal-buttons{display:flex;gap:10px;justify-content:flex-end;margin-top:18px}
+.exam-head{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:13px;flex-wrap:wrap}.exam-head .subject-name{font-size:21px}
+.timer{min-width:125px;justify-content:center;font-variant-numeric:tabular-nums;background:linear-gradient(135deg,#111827,#374151);color:#fff;border-radius:15px;padding:10px 16px;font-size:19px;font-weight:800;display:flex;align-items:center;gap:7px;box-shadow:0 8px 20px rgba(15,23,42,.16)}
+.timer.low{background:linear-gradient(135deg,#ef4444,#b91c1c);animation:pulse .75s infinite}@keyframes pulse{50%{transform:scale(1.04)}}
+.progress-track{height:9px;background:#e7eaf1;border-radius:20px;overflow:hidden;margin-bottom:19px}.progress-fill{height:100%;width:0;border-radius:20px;background:linear-gradient(90deg,var(--primary),var(--primary2));transition:width .4s ease}
+.question-card{background:rgba(255,255,255,.94);border:1px solid var(--border);border-radius:22px;padding:25px;margin-bottom:18px;box-shadow:0 12px 35px rgba(15,23,42,.07);animation:questionIn .35s ease}
+@keyframes questionIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.qnum{display:inline-flex;padding:5px 10px;border-radius:10px;color:var(--primary);background:rgba(99,91,255,.10);font-size:13px;font-weight:800;margin-bottom:12px}
+.qtext{font-size:19px;line-height:1.65;margin-bottom:18px;font-weight:700}
+.option{display:flex;align-items:flex-start;gap:11px;width:100%;text-align:left;cursor:pointer;padding:14px 15px;margin-bottom:10px;border:2px solid #e8ebf2;border-radius:15px;background:#fafbfe;color:var(--text);font-size:15.5px;line-height:1.5;transition:.22s ease}
+.option:hover{border-color:rgba(99,91,255,.48);background:rgba(99,91,255,.045);transform:translateX(3px)}
+.option .opt-tag{flex-shrink:0;width:31px;height:31px;border-radius:9px;background:#e9edf5;border:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#596579}
+.option.selected{border-color:var(--primary);background:linear-gradient(135deg,rgba(99,91,255,.10),rgba(139,92,246,.07));box-shadow:0 7px 20px rgba(99,91,255,.10)}
+.option.selected .opt-tag{color:#fff;background:linear-gradient(135deg,var(--primary),var(--primary2))}
+
+/* Answer Sheet Custom Option Colors */
+.option.correct-ans{border-color:#16a34a !important;background:rgba(22,163,74,0.08) !important}
+.option.correct-ans .opt-tag{color:#fff !important;background:#16a34a !important}
+.option.wrong-ans{border-color:#ef4444 !important;background:rgba(239,68,68,0.08) !important}
+.option.wrong-ans .opt-tag{color:#fff !important;background:#ef4444 !important}
+
+.page-label{font-size:13.5px;color:var(--muted);text-align:center;margin:-4px 0 14px}
+.nav-row{display:flex;justify-content:space-between;gap:10px;margin-top:7px;flex-wrap:wrap;position:sticky;bottom:10px;z-index:20;padding:10px;border-radius:18px;background:rgba(255,255,255,.88);backdrop-filter:blur(15px);box-shadow:0 10px 30px rgba(15,23,42,.10)}
+.btn{min-height:48px;font-size:15px;font-weight:700;padding:11px 19px;border-radius:14px;border:1px solid var(--border);background:var(--card);color:var(--text);cursor:pointer;transition:.22s}
+.btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:var(--shadow)}.btn-primary{color:#fff;background:linear-gradient(135deg,var(--primary),var(--primary2));border-color:transparent}.btn-submit{color:#fff;background:linear-gradient(135deg,#16a34a,#15803d);border-color:transparent}.btn-ghost{background:transparent}.btn:disabled{opacity:.4;cursor:not-allowed}
+.score-card{position:relative;overflow:hidden;text-align:center;background:rgba(255,255,255,.94);border:1px solid var(--border);border-radius:28px;padding:35px 25px;box-shadow:0 25px 70px rgba(30,41,59,.14);margin:15px auto 22px;max-width:760px}
+.score-card::before{content:"";position:absolute;width:260px;height:260px;left:50%;top:-175px;transform:translateX(-50%);border-radius:50%;background:linear-gradient(135deg,rgba(99,91,255,.15),rgba(139,92,246,.07))}
+.result-icon{position:relative;width:84px;height:84px;border-radius:50%;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;font-size:39px;color:#fff;background:linear-gradient(135deg,var(--primary),var(--primary2));box-shadow:0 15px 30px rgba(99,91,255,.25)}
+.score-big{position:relative;font-family:var(--serif);font-size:58px;font-weight:800;background:linear-gradient(135deg,var(--primary),var(--primary2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.score-sub{color:var(--muted);margin-top:6px;font-size:15px}.score-remark{margin-top:10px;font-size:17px;font-weight:700}
+.result-stat-grid{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:23px 0 0}.result-stat{padding:15px 10px;border-radius:16px;background:#f6f7fb}.result-stat strong{display:block;font-size:22px;font-weight:900}.result-stat span{font-size:13px;color:var(--muted)}
+.action-row{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0}
+.toast{position:fixed;top:88px;right:20px;z-index:2000;min-width:280px;max-width:390px;display:flex;align-items:center;gap:12px;padding:14px 17px;border-radius:17px;color:#fff;background:rgba(17,24,39,.95);box-shadow:0 18px 45px rgba(15,23,42,.25);backdrop-filter:blur(16px);opacity:0;visibility:hidden;transform:translateX(35px) scale(.96);transition:.32s cubic-bezier(.2,.8,.2,1)}
+.toast.show{opacity:1;visibility:visible;transform:translateX(0) scale(1)}.toast.success{background:linear-gradient(135deg,#15803d,#16a34a)}.toast.error{background:linear-gradient(135deg,#b91c1c,#ef4444)}.toast.warning{background:linear-gradient(135deg,#b45309,#f59e0b)}.toast.info{background:linear-gradient(135deg,#4338ca,#635bff)}
+.toast-icon{flex:none;width:35px;height:35px;border-radius:11px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.16);font-weight:900;font-size:17px}.toast-text{flex:1;font-size:14px;line-height:1.45;font-weight:600}
+.footnote{font-size:12.5px;color:var(--muted);margin-top:26px;line-height:1.6}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#080c18;--card:rgba(15,23,42,.90);--text:#f1f5f9;--muted:#94a3b8;--border:#263047}.topbar{background:rgba(8,12,24,.82)}.subject-card,.question-card,.score-card,.back-btn,.nav-row{background:rgba(15,23,42,.90)}.option{background:#111827;border-color:#27324a}.option:hover{background:#172033}.modal{background:#111827}.modal input{background:#0b1020;color:#fff;border-color:#334155}.result-stat{background:#111827}}
+@media(max-width:700px){.topbar-inner{padding:10px 14px}.wrap{width:100%;padding:22px 12px 55px}.brand-text{font-size:15px}.brand-sub{font-size:10px}.brand .seal{width:39px;height:39px}.subject-grid{grid-template-columns:1fr;gap:14px}.subject-card{min-height:135px;padding:19px}.lede{margin:20px 0}.lede h2{font-size:29px}.exam-head .subject-name{font-size:17px}.timer{width:100%;min-width:0}.question-card{padding:19px;border-radius:19px}.qtext{font-size:17px}.nav-row{bottom:6px}.nav-row .btn{flex:1;min-width:0;padding-left:10px;padding-right:10px}.score-big{font-size:50px}.result-stat-grid{grid-template-columns:1fr}.toast{left:12px;right:12px;top:76px;min-width:0;max-width:none}.modal{padding:24px}}
+/* Exam Header and Progress/Page Label Sticky Container */
+  .exam-sticky-header {
+    position: sticky;
+    top: 70px; /* topbar-er niche thakbe */
+    z-index: 95;
+    background: rgba(244, 247, 251, 0.94);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 12px 10px 5px;
+    margin: 0 -10px 15px -10px;
+    border-radius: 0 0 18px 18px;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
+  }
+  /* ---------- Fancy Submit Warning Modal ---------- */
+  .fancy-modal{
+    position:fixed;
+    inset:0;
+    background:rgba(15,23,42,.66);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    z-index:99999;
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+    transition:opacity .25s ease, visibility .25s ease;
+  }
+  .fancy-modal.show{
+    opacity:1;
+    visibility:visible;
+    pointer-events:auto;
+  }
+  .fancy-modal-box{
+    width:min(420px,100%);
+    background:var(--card,#fff);
+    color:var(--text,#172033);
+    border:1px solid rgba(148,163,184,.25);
+    border-radius:28px;
+    padding:30px 24px 24px;
+    text-align:center;
+    box-shadow:0 30px 80px rgba(0,0,0,.28);
+    transform:translateY(22px) scale(.94);
+    transition:transform .3s cubic-bezier(.2,.8,.2,1);
+  }
+  .fancy-modal.show .fancy-modal-box{
+    transform:translateY(0) scale(1);
+  }
+  .fancy-modal-icon{
+    width:72px;
+    height:72px;
+    margin:0 auto 17px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:34px;
+    background:linear-gradient(135deg,#fff7ed,#fef3c7);
+    box-shadow:0 10px 30px rgba(245,158,11,.18);
+    animation:warningFloat 2s ease-in-out infinite;
+  }
+
+  /* প্রশ্ন কার্ডের সাইজ ও প্যাডিং ছোট করা */
+.question-card{
+  background:rgba(255,255,255,.94);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:12px 16px; /* প্যাডিং কমানো হলো */
+  margin-bottom:10px;
+  box-shadow:0 6px 20px rgba(15,23,42,.05);
+}
+
+/* প্রশ্নের ফন্ট সাইজ ও মার্জিন ছোট করা */
+.qnum{
+  padding:2px 8px;
+  font-size:11.5px;
+  margin-bottom:6px;
+  border-radius:6px;
+}
+.qtext{
+  font-size:15px; /* ফন্ট সাইজ ছোট করা হলো */
+  line-height:1.4;
+  margin-bottom:10px;
+  font-weight:700;
+}
+
+/* অপশনের সাইজ ও প্যাডিং কমানো হলো যাতে স্ক্রিনে একসাথে মানায় */
+.option{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  width:100%;
+  text-align:left;
+  cursor:pointer;
+  padding:8px 12px; /* প্যাডিং কমানো হলো */
+  margin-bottom:6px; /* মার্জিন কমানো হলো */
+  border:1.5px solid #e8ebf2;
+  border-radius:11px;
+  background:#fafbfe;
+  color:var(--text);
+  font-size:14px; /* ফন্ট সাইজ ছোট করা হলো */
+  line-height:1.3;
+  transition:.2s ease;
+}
+.option .opt-tag{
+  flex-shrink:0;
+  width:25px;
+  height:25px;
+  border-radius:7px;
+  background:#e9edf5;
+  border:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:12px;
+  font-weight:800;
+  color:#596579;
+}
+  @keyframes warningFloat{
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-5px)}
+  }
+  .fancy-modal-box h3{
+    margin:0 0 10px;
+    font-size:22px;
+    font-weight:800;
+  }
+  .fancy-modal-box p{
+    margin:0 auto 24px;
+    max-width:340px;
+    line-height:1.75;
+    font-size:15px;
+    color:#64748b;
+  }
+  .fancy-modal-actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+  }
+  .fancy-modal-actions button{
+    border:0;
+    border-radius:15px;
+    padding:13px 15px;
+    font-family:inherit;
+    font-size:14px;
+    font-weight:700;
+    cursor:pointer;
+    transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .fancy-modal-actions button:hover{
+    transform:translateY(-2px);
+  }
+  .modal-cancel{
+    background:#f1f5f9;
+    color:#475569;
+    border:1px solid #e2e8f0 !important;
+  }
+  .modal-submit{
+    color:#fff;
+    background:linear-gradient(135deg,#635bff,#8b5cf6);
+    box-shadow:0 8px 22px rgba(99,91,255,.25);
+  }
+  .modal-submit:hover{
+    box-shadow:0 12px 30px rgba(99,91,255,.35);
+  }
+  @media(max-width:480px){
+    .fancy-modal-box{padding:26px 18px 18px;border-radius:24px}
+    .fancy-modal-actions{grid-template-columns:1fr}
+  }
+
+</style>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#635bff">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Exam Center">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <div class="seal">Bijoy</div>
+      <div>
+        <div class="brand-text">Created By: AR Bijoy</div>
+        <div class="brand-sub" id="topSub">সাবজেক্ট বেছে নিয়ে পরীক্ষা শুরু করো</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- স্ক্রিন ১: সাবজেক্ট লিস্ট -->
+  <section id="screen-subjects">
+    <div class="lede">
+      <h2>তোমার সাবজেক্ট বেছে নাও</h2>
+      <p>প্রতিটা সাবজেক্টে বিভিন্ন অধ্যায় এবং পরীক্ষা আছে। তোমার পছন্দের সাবজেক্ট বেছে নাও।</p>
+    </div>
+    <div class="subject-grid" id="subjectGrid"></div>
+  </section>
+
+  <!-- স্ক্রিন ২: অধ্যায় লিস্ট -->
+  <section id="screen-chapters" hidden>
+    <button class="back-btn" id="backToSubjects">← সাবজেক্টে ফিরে যাও</button>
+    <div class="lede">
+      <h2 id="chapterSubjectName"></h2>
+      <p>নিচের অধ্যায়গুলো থেকে একটি বেছে নাও</p>
+    </div>
+    <div class="subject-grid" id="chapterGrid"></div>
+  </section>
+
+  <!-- স্ক্রিন ৩: পরীক্ষা লিস্ট -->
+  <section id="screen-exams" hidden>
+    <button class="back-btn" id="backToChapters">← অধ্যায়ে ফিরে যাও</button>
+    <div class="lede">
+      <h2 id="examChapterName"></h2>
+      <p>নিচের পরীক্ষাগুলো থেকে একটি বেছে নাও</p>
+    </div>
+    <div class="subject-grid" id="examGrid"></div>
+  </section>
+
+  <!-- স্ক্রিন ৪: পরীক্ষা চলাকালীন -->
+<!-- স্ক্রিন ৪: পরীক্ষা চলাকালীন -->
+  <section id="screen-exam" hidden style="padding-top: 5px;">
+    <div class="exam-sticky-header" style="padding: 6px 10px 4px; margin-bottom: 8px;">
+      <div class="exam-head" style="margin-bottom: 6px;">
+        <h2 class="subject-name" id="examSubjectName" style="font-size: 17px;"></h2>
+        <div class="timer" id="timerBox" style="padding: 5px 10px; font-size: 15px; min-width: 95px;">⏱ <span id="timerText">--:--</span></div>
+      </div>
+      <div class="progress-track" style="margin-bottom: 6px; height: 6px;"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+      <div class="page-label" id="pageLabel" style="margin: 0; font-size: 12px;"></div>
+    </div>
+
+    <div id="questionsContainer" style="margin-top: 5px;"></div>
+
+    <div class="nav-row" style="margin-top: 10px; padding: 6px;">
+      <button class="btn btn-ghost" id="btnExitExam" style="color:#ef4444; border-color:rgba(239,68,68,0.3); padding: 8px 12px; min-height: 40px;">← হোম (Exit)</button>
+      <button class="btn btn-submit" id="btnSubmitExam" style="padding: 8px 16px; min-height: 40px;">পরীক্ষা জমা দাও ✓</button>
+    </div>
+  </section>
+
+  <!-- স্ক্রিন ৫: ফলাফল -->
+  <section id="screen-result" hidden>
+    <div class="score-card">
+      <div class="result-icon" id="resultIcon">🏆</div>
+      <div class="score-big" id="scoreBig">০ / ০</div>
+      <div class="score-sub" id="scoreSub"></div>
+      <div class="score-remark" id="scoreRemark"></div>
+      <div class="result-stat-grid">
+        <div class="result-stat"><strong id="statCorrect">০</strong><span>সঠিক উত্তর</span></div>
+        <div class="result-stat"><strong id="statWrong">০</strong><span>ভুল উত্তর</span></div>
+        <div class="result-stat"><strong id="statPercent">০%</strong><span>শতকরা</span></div>
+      </div>
+    </div>
+
+    <div class="action-row">
+      <button class="btn btn-primary" id="btnCopyResult">ফলাফল কপি করো</button>
+      <a class="btn" id="btnWhatsapp" href="#" target="_blank" rel="noopener" hidden>WhatsApp-এ পাঠাও</a>
+      <button class="btn btn-ghost" id="btnHome">← হোমে ফিরে যাও</button>
+    </div>
+
+    <h3 id="reviewTitle" style="margin-bottom:12px; font-size:17px;">উত্তরপত্র পর্যালোচনা</h3>
+    <div id="reviewBox"></div>
+  </section>
+
+</div>
+
+<!-- নাম ইনপুট মডাল -->
+<div class="modal-overlay" id="nameModal" hidden>
+  <div class="modal">
+    <h3>পরীক্ষা শুরু করার আগে</h3>
+    <label for="studentName">তোমার নাম লিখো</label>
+    <input id="studentName" type="text" placeholder="যেমন: Bijoy" autocomplete="name">
+    <div class="modal-buttons">
+      <button class="btn btn-ghost" id="btnCancelName">বাতিল</button>
+      <button class="btn btn-primary" id="btnStartExam">পরীক্ষা শুরু করো</button>
+    </div>
+  </div>
+</div>
+
+<!-- Fancy Submit Warning Modal -->
+<div class="fancy-modal" id="submitWarningModal" aria-hidden="true">
+  <div class="fancy-modal-box" role="dialog" aria-modal="true" aria-labelledby="submitWarningTitle">
+    <div class="fancy-modal-icon">⚠️</div>
+    <h3 id="submitWarningTitle">পরীক্ষা জমা দিতে চাও?</h3>
+    <p id="submitWarningText">কিছু প্রশ্নের উত্তর দেওয়া হয়নি।</p>
+    <div class="fancy-modal-actions">
+      <button class="modal-cancel" id="btnCancelSubmit">← ফিরে যাই</button>
+      <button class="modal-submit" id="btnConfirmSubmit">✓ তবুও জমা দিই</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ================================================================
+   [!] এ এখানে তোমার examData object টি বসিয়ে নেবে:
+   const examData = { ... };
+================================================================ */
+const examData = {
+  "আইসিটি": {
+  chapters: {
+    "অধ্যায় ২: সংখ্যা পদ্ধতি ও ডিজিটাল ডিভাইস": {
+      exams: {
+
+        "পরীক্ষা ১": {
+          examTime: 25,
+          questions: [
+            { q: "সংখ্যা প্রকাশ ও গণনার নির্দিষ্ট নিয়মকে কী বলে?", options: ["সংখ্যা পদ্ধতি","কোড","অ্যালগরিদম","লজিক"], answer: 0 },
+            { q: "পজিশনাল সংখ্যা পদ্ধতিতে কোনো অঙ্কের মান কোন বিষয়ের ওপর নির্ভর করে?", options: ["শুধু অঙ্কের ওপর","শুধু বেজের ওপর","অঙ্কের অবস্থান ও বেজের ওপর","শুধু সংখ্যার দৈর্ঘ্যের ওপর"], answer: 2 },
+            { q: "বাইনারি সংখ্যা পদ্ধতির ভিত্তি কত?", options: ["2","8","10","16"], answer: 0 },
+            { q: "অক্টাল সংখ্যা পদ্ধতির ভিত্তি কত?", options: ["2","8","10","16"], answer: 1 },
+            { q: "ডেসিমেল সংখ্যা পদ্ধতির ভিত্তি কত?", options: ["2","8","10","16"], answer: 2 },
+            { q: "হেক্সাডেসিমেল সংখ্যা পদ্ধতির ভিত্তি কত?", options: ["2","8","10","16"], answer: 3 },
+            { q: "বাইনারি সংখ্যা পদ্ধতিতে কোন অঙ্কগুলো ব্যবহৃত হয়?", options: ["0 ও 1","0 থেকে 7","0 থেকে 9","0 থেকে F"], answer: 0 },
+            { q: "অক্টাল সংখ্যা পদ্ধতিতে সর্বোচ্চ অঙ্ক কোনটি?", options: ["6","7","8","9"], answer: 1 },
+            { q: "হেক্সাডেসিমেলে A-এর দশমিক মান কত?", options: ["8","9","10","11"], answer: 2 },
+            { q: "হেক্সাডেসিমেলে F-এর দশমিক মান কত?", options: ["14","15","16","17"], answer: 1 },
+
+            { q: "দশমিক 10-এর বাইনারি মান কত?", options: ["1001","1010","1011","1100"], answer: 1 },
+            { q: "দশমিক 15-এর বাইনারি মান কত?", options: ["1110","1111","10000","1101"], answer: 1 },
+            { q: "বাইনারি 1010-এর দশমিক মান কত?", options: ["8","9","10","11"], answer: 2 },
+            { q: "বাইনারি 1101-এর দশমিক মান কত?", options: ["11","12","13","14"], answer: 2 },
+            { q: "অক্টাল 12-এর দশমিক মান কত?", options: ["8","10","12","14"], answer: 1 },
+            { q: "অক্টাল 17-এর দশমিক মান কত?", options: ["13","14","15","16"], answer: 2 },
+            { q: "হেক্সাডেসিমেল A-এর বাইনারি মান কোনটি?", options: ["1001","1010","1011","1100"], answer: 1 },
+            { q: "হেক্সাডেসিমেল F-এর বাইনারি মান কোনটি?", options: ["1101","1110","1111","10000"], answer: 2 },
+            { q: "বাইনারি 1111-এর হেক্সাডেসিমেল মান কত?", options: ["D","E","F","10"], answer: 2 },
+            { q: "বাইনারি 1000-এর অক্টাল মান কত?", options: ["8","10","11","12"], answer: 1 },
+
+            { q: "দশমিক 8-এর বাইনারি মান কত?", options: ["1000","1001","1010","111"], answer: 0 },
+            { q: "দশমিক 16-এর হেক্সাডেসিমেল মান কত?", options: ["F","10","11","A"], answer: 1 },
+            { q: "দশমিক 25-এর বাইনারি মান কত?", options: ["11001","10101","11100","10011"], answer: 0 },
+            { q: "বাইনারি 10000-এর দশমিক মান কত?", options: ["8","10","16","20"], answer: 2 },
+            { q: "অক্টাল 10-এর দশমিক মান কত?", options: ["8","10","16","2"], answer: 0 },
+            { q: "হেক্সাডেসিমেল 10-এর দশমিক মান কত?", options: ["10","12","16","20"], answer: 2 },
+            { q: "বাইনারি 10101-এর দশমিক মান কত?", options: ["19","20","21","22"], answer: 2 },
+            { q: "দশমিক 31-এর হেক্সাডেসিমেল মান কত?", options: ["1E","1F","2F","F1"], answer: 1 },
+            { q: "অক্টাল 20-এর দশমিক মান কত?", options: ["8","16","20","24"], answer: 1 },
+            { q: "হেক্সাডেসিমেল 1A-এর দশমিক মান কত?", options: ["16","24","26","28"], answer: 2 }
+          ]
+        },
+
+        "পরীক্ষা ২": {
+          examTime: 25,
+          questions: [
+            { q: "দশমিক 12-এর বাইনারি মান কত?", options: ["1010","1011","1100","1101"], answer: 2 },
+            { q: "দশমিক 20-এর বাইনারি মান কত?", options: ["10100","10010","11000","11100"], answer: 0 },
+            { q: "দশমিক 32-এর বাইনারি মান কত?", options: ["100000","10000","110000","11111"], answer: 0 },
+            { q: "বাইনারি 10111-এর দশমিক মান কত?", options: ["21","22","23","24"], answer: 2 },
+            { q: "বাইনারি 11010-এর দশমিক মান কত?", options: ["24","25","26","27"], answer: 2 },
+            { q: "বাইনারি 11100-এর দশমিক মান কত?", options: ["26","27","28","29"], answer: 2 },
+            { q: "অক্টাল 25-এর দশমিক মান কত?", options: ["19","20","21","22"], answer: 2 },
+            { q: "অক্টাল 31-এর দশমিক মান কত?", options: ["24","25","26","27"], answer: 2 },
+            { q: "দশমিক 18-এর অক্টাল মান কত?", options: ["20","21","22","23"], answer: 1 },
+            { q: "দশমিক 24-এর অক্টাল মান কত?", options: ["28","30","32","34"], answer: 2 },
+
+            { q: "দশমিক 26-এর হেক্সাডেসিমেল মান কত?", options: ["1A","1B","2A","2B"], answer: 0 },
+            { q: "দশমিক 35-এর হেক্সাডেসিমেল মান কত?", options: ["22","23","24","25"], answer: 1 },
+            { q: "হেক্সাডেসিমেল 1F-এর দশমিক মান কত?", options: ["29","30","31","32"], answer: 2 },
+            { q: "হেক্সাডেসিমেল 2A-এর দশমিক মান কত?", options: ["40","41","42","43"], answer: 2 },
+            { q: "অক্টাল 17-এর বাইনারি মান কত?", options: ["1111","1110","11111","10001"], answer: 3 },
+            { q: "অক্টাল 25-এর বাইনারি মান কত?", options: ["10101","10100","11001","11101"], answer: 2 },
+            { q: "হেক্সাডেসিমেল 2F-এর বাইনারি মান কোনটি?", options: ["0010 1111","0011 1111","0010 1101","0011 1011"], answer: 0 },
+            { q: "বাইনারি 101011-এর অক্টাল মান কত?", options: ["51","52","53","54"], answer: 2 },
+            { q: "বাইনারি 101011-এর হেক্সাডেসিমেল মান কত?", options: ["2A","2B","3A","3B"], answer: 1 },
+            { q: "অক্টাল 37-এর হেক্সাডেসিমেল মান কত?", options: ["1E","1F","2F","27"], answer: 1 },
+
+            { q: "বাইনারি যোগে 1 + 1-এর ফল কত?", options: ["0","1","10","11"], answer: 2 },
+            { q: "বাইনারি যোগে 1 + 0-এর ফল কত?", options: ["0","1","10","11"], answer: 1 },
+            { q: "বাইনারি যোগে 1 + 1 + 1-এর ফল কত?", options: ["10","11","100","101"], answer: 1 },
+            { q: "101₂ + 10₂ = কত?", options: ["110₂","111₂","1000₂","1010₂"], answer: 1 },
+            { q: "110₂ + 11₂ = কত?", options: ["1000₂","1001₂","1010₂","1111₂"], answer: 1 },
+            { q: "1010₂ − 1₂ = কত?", options: ["1000₂","1001₂","1011₂","1111₂"], answer: 1 },
+            { q: "1010₂ − 10₂ = কত?", options: ["1000₂","1001₂","111₂","110₂"], answer: 0 },
+            { q: "1111₂ − 1₂ = কত?", options: ["1100₂","1101₂","1110₂","1111₂"], answer: 2 },
+            { q: "8-bit সংখ্যায় MSB বলতে কী বোঝায়?", options: ["সবচেয়ে ডানদিকের বিট","মাঝের বিট","সবচেয়ে বামদিকের বিট","অতিরিক্ত বিট"], answer: 2 },
+            { q: "8-bit সংখ্যায় LSB বলতে কী বোঝায়?", options: ["সবচেয়ে বামদিকের বিট","সবচেয়ে ডানদিকের বিট","মাঝের বিট","সাইন বিট"], answer: 1 }
+          ]
+        },
+
+        "পরীক্ষা ৩": {
+          examTime: 25,
+          questions: [
+            { q: "1's complement পদ্ধতিতে 0-এর পরিবর্তে কী বসানো হয়?", options: ["0","1","2","10"], answer: 1 },
+            { q: "1's complement নির্ণয়ে 1-এর পরিবর্তে কী বসানো হয়?", options: ["0","1","2","10"], answer: 0 },
+            { q: "101010-এর 1's complement কত?", options: ["010101","101010","010110","110101"], answer: 0 },
+            { q: "110011-এর 1's complement কত?", options: ["001100","001101","110100","101100"], answer: 0 },
+            { q: "2's complement কীভাবে পাওয়া যায়?", options: ["1's complement-এর সাথে 1 যোগ করে","1's complement থেকে 1 বিয়োগ করে","মূল সংখ্যার সাথে 1 যোগ করে","সব বিট 0 করে"], answer: 0 },
+            { q: "1010-এর 1's complement কত?", options: ["0101","0110","1001","1011"], answer: 0 },
+            { q: "1010-এর 2's complement কত?", options: ["0101","0110","1001","1011"], answer: 1 },
+            { q: "1100-এর 2's complement কত?", options: ["0011","0100","0110","1000"], answer: 1 },
+            { q: "8-bit signed number-এ MSB সাধারণত কী নির্দেশ করে?", options: ["সাইন","বেজ","ক্যারি","কোড"], answer: 0 },
+            { q: "Signed number-এ 0 সাধারণত কী নির্দেশ করে?", options: ["ঋণাত্মক","ধনাত্মক","শূন্য নয়","ভগ্নাংশ"], answer: 1 },
+
+            { q: "BCD-এর পূর্ণরূপ কী?", options: ["Binary Coded Decimal","Binary Code Digit","Basic Coded Decimal","Binary Character Data"], answer: 0 },
+            { q: "BCD-তে প্রতিটি দশমিক অঙ্ককে কত বিটে প্রকাশ করা হয়?", options: ["2 বিট","3 বিট","4 বিট","8 বিট"], answer: 2 },
+            { q: "BCD-তে দশমিক 9-এর কোড কোনটি?", options: ["1000","1001","1010","1111"], answer: 1 },
+            { q: "BCD-তে দশমিক 5-এর কোড কোনটি?", options: ["0100","0101","0110","1001"], answer: 1 },
+            { q: "ASCII-এর পূর্ণরূপ কী?", options: ["American Standard Code for Information Interchange","American System Code for Internet Information","Advanced Standard Code for Information Interchange","American Scientific Code for Information"], answer: 0 },
+            { q: "ASCII মূলত কী প্রকাশ করতে ব্যবহৃত হয়?", options: ["শুধু সংখ্যা","অক্ষর ও বিভিন্ন প্রতীক","শুধু ছবি","শুধু ভিডিও"], answer: 1 },
+            { q: "EBCDIC-এর পূর্ণরূপ কোনটি?", options: ["Extended Binary Coded Decimal Interchange Code","Electronic Binary Code for Digital Information Control","Extended Binary Computer Data Interchange Code","Electronic Coded Decimal Interchange Code"], answer: 0 },
+            { q: "Unicode-এর প্রধান সুবিধা কী?", options: ["শুধু ইংরেজি অক্ষর প্রকাশ করে","বিভিন্ন ভাষার অক্ষর প্রকাশ করতে পারে","শুধু সংখ্যা প্রকাশ করে","শুধু ছবি সংরক্ষণ করে"], answer: 1 },
+            { q: "নিচের কোনটি একটি Character Code?", options: ["ASCII","RAM","CPU","ALU"], answer: 0 },
+            { q: "Unicode কোন ধরনের কোড?", options: ["আন্তর্জাতিক character encoding system","শুধু দশমিক কোড","শুধু বাইনারি যোগের কোড","শুধু মেশিন কোড"], answer: 0 },
+
+            { q: "দশমিক 45-এর বাইনারি মান কত?", options: ["101101","101011","110101","100101"], answer: 0 },
+            { q: "বাইনারি 110101-এর দশমিক মান কত?", options: ["51","52","53","54"], answer: 2 },
+            { q: "দশমিক 64-এর হেক্সাডেসিমেল মান কত?", options: ["40","41","44","64"], answer: 0 },
+            { q: "হেক্সাডেসিমেল 3C-এর দশমিক মান কত?", options: ["58","59","60","61"], answer: 2 },
+            { q: "অক্টাল 45-এর দশমিক মান কত?", options: ["35","36","37","38"], answer: 2 },
+            { q: "দশমিক 50-এর অক্টাল মান কত?", options: ["60","61","62","63"], answer: 2 },
+            { q: "101101₂-এর হেক্সাডেসিমেল মান কত?", options: ["2B","2C","2D","3D"], answer: 2 },
+            { q: "111001₂-এর অক্টাল মান কত?", options: ["70","71","72","73"], answer: 1 },
+            { q: "2's complement পদ্ধতির প্রধান ব্যবহার কোনটি?", options: ["ঋণাত্মক সংখ্যা প্রকাশ ও বাইনারি বিয়োগ","শুধু অক্ষর প্রকাশ","শুধু ছবি প্রকাশ","শুধু দশমিক সংখ্যা লেখা"], answer: 0 },
+            { q: "সংখ্যা পদ্ধতি অধ্যায়ে বাইনারি সংখ্যা কেন গুরুত্বপূর্ণ?", options: ["কম্পিউটার ডিজিটালভাবে 0 ও 1 নিয়ে কাজ করে","এটি শুধু মানুষের জন্য","এটি শুধু দশমিকের বিকল্প","এটি শুধু ক্যালকুলেটরে ব্যবহৃত হয়"], answer: 0 }
+          ]
+        }
+
+      }
+    }
+  }
+},
+  "রসায়ন": {
+    chapters: {
+          "অধ্যায় ২: গুণগত রসায়ন": {
+        exams: {
+          "পরীক্ষা ১": {
+            examTime: 25,
+            questions: [
+              { q: "রাদারফোর্ডের পরমাণু মডেলের প্রধান বৈশিষ্ট্য কোনটি?", options: ["ইলেকট্রন নির্দিষ্ট শক্তিস্তরে থাকে","পরমাণুর অধিকাংশ স্থান ফাঁকা","ইলেকট্রন নিউক্লিয়াসের ভিতরে থাকে","নিউট্রন নেই"], answer: 1 },
+              { q: "রাদারফোর্ডের আলফা কণা বিচ্ছুরণ পরীক্ষায় অধিকাংশ আলফা কণা কী করেছিল?", options: ["সম্পূর্ণ প্রতিফলিত হয়েছিল","নিউক্লিয়াসে আটকে গিয়েছিল","সোজা পথে চলে গিয়েছিল","শোষিত হয়েছিল"], answer: 2 },
+              { q: "রাদারফোর্ডের পরীক্ষায় খুব অল্পসংখ্যক আলফা কণা বড় কোণে বিচ্যুত হওয়ার কারণ কী?", options: ["ইলেকট্রনের আকর্ষণ","নিউক্লিয়াসের উপস্থিতি","নিউট্রনের বিকর্ষণ","পরমাণুর ফাঁকা স্থান"], answer: 1 },
+              { q: "পরমাণুর কেন্দ্রে অবস্থিত অতি ক্ষুদ্র ও ঘন অংশকে কী বলে?", options: ["অরবিটাল","শক্তিস্তর","নিউক্লিয়াস","উপশক্তিস্তর"], answer: 2 },
+              { q: "রাদারফোর্ডের পরমাণু মডেলের প্রধান সীমাবদ্ধতা কোনটি?", options: ["নিউক্লিয়াসের অস্তিত্ব ব্যাখ্যা করতে পারেনি","পরমাণুর স্থায়িত্ব ব্যাখ্যা করতে পারেনি","প্রোটনের অস্তিত্ব ব্যাখ্যা করতে পারেনি","ভর সংরক্ষণ ব্যাখ্যা করতে পারেনি"], answer: 1 },
+              { q: "বোরের পরমাণু মডেল অনুযায়ী ইলেকট্রন কোন ধরনের কক্ষপথে ঘোরে?", options: ["যেকোনো কক্ষপথে","নির্দিষ্ট শক্তির কক্ষপথে","সরলরেখায়","অনিয়মিত পথে"], answer: 1 },
+              { q: "বোরের মডেল অনুযায়ী ইলেকট্রন স্থির কক্ষপথে অবস্থানকালে কী করে?", options: ["ক্রমাগত শক্তি বিকিরণ করে","ক্রমাগত শক্তি শোষণ করে","শক্তি বিকিরণ করে না","নিউক্লিয়াসে পতিত হয়"], answer: 2 },
+              { q: "ইলেকট্রন উচ্চ শক্তিস্তর থেকে নিম্ন শক্তিস্তরে এলে কী ঘটে?", options: ["শক্তি শোষিত হয়","শক্তি নির্গত হয়","ভর বৃদ্ধি পায়","চার্জ পরিবর্তিত হয়"], answer: 1 },
+              { q: "ইলেকট্রন নিম্ন শক্তিস্তর থেকে উচ্চ শক্তিস্তরে গেলে কী ঘটে?", options: ["শক্তি শোষণ করে","শক্তি নির্গত করে","প্রোটনে পরিণত হয়","নিউট্রনে পরিণত হয়"], answer: 0 },
+              { q: "বোরের কৌণিক ভরবেগের শর্ত কোনটি?", options: ["mvr = nh/2π","mvr = h/n","mvr = 2πnh","mvr = nh"], answer: 0 },
+              { q: "তড়িৎচৌম্বকীয় বিকিরণের বেগের সমীকরণ কোনটি?", options: ["c = λν","c = λ/ν","c = ν/λ","c = hν"], answer: 0 },
+              { q: "তড়িৎচৌম্বকীয় বিকিরণের কম্পাঙ্কের একক কী?", options: ["মিটার","জুল","হার্টজ","নিউটন"], answer: 2 },
+              { q: "তরঙ্গদৈর্ঘ্যের SI একক কোনটি?", options: ["মিটার","হার্টজ","জুল","সেকেন্ড"], answer: 0 },
+              { q: "তরঙ্গদৈর্ঘ্য ও কম্পাঙ্কের মধ্যে সম্পর্ক কী?", options: ["সমানুপাতিক","ব্যস্তানুপাতিক","কোনো সম্পর্ক নেই","বর্গানুপাতিক"], answer: 1 },
+              { q: "প্ল্যাঙ্কের সমীকরণ কোনটি?", options: ["E = mc²","E = hν","E = λν","E = mv²"], answer: 1 },
+              { q: "ফোটনের শক্তি কোনটির সমানুপাতিক?", options: ["তরঙ্গদৈর্ঘ্য","কম্পাঙ্ক","ভর","আয়তন"], answer: 1 },
+              { q: "তড়িৎচৌম্বকীয় বর্ণালিতে দৃশ্যমান আলো কোনটির অংশ?", options: ["সম্পূর্ণ বর্ণালি","তড়িৎচৌম্বকীয় বর্ণালি","শুধু অবলোহিত বর্ণালি","শুধু অতিবেগুনি বর্ণালি"], answer: 1 },
+              { q: "শূন্য মাধ্যমে সব তড়িৎচৌম্বকীয় তরঙ্গের বেগ কত?", options: ["3 × 10⁶ m/s","3 × 10⁸ m/s","3 × 10¹⁰ m/s","3 × 10⁴ m/s"], answer: 1 },
+              { q: "হাইড্রোজেন পরমাণুর বর্ণালি কোন ধরনের?", options: ["ধারাবাহিক বর্ণালি","রেখা বর্ণালি","শোষণ বর্ণালি নয়","কোনোটিই নয়"], answer: 1 },
+              { q: "হাইড্রোজেনের দৃশ্যমান রেখা বর্ণালিকে কোন সিরিজ বলা হয়?", options: ["লাইম্যান","বালমার","প্যাশেন","ব্র্যাকেট"], answer: 1 },
+              { q: "লাইম্যান সিরিজের রেখাগুলো কোন অঞ্চলে পাওয়া যায়?", options: ["অতিবেগুনি","দৃশ্যমান","অবলোহিত","মাইক্রোওয়েভ"], answer: 0 },
+              { q: "বালমার সিরিজের সব ট্রানজিশনের চূড়ান্ত শক্তিস্তর কোনটি?", options: ["n = 1","n = 2","n = 3","n = 4"], answer: 1 },
+              { q: "প্যাশেন সিরিজের চূড়ান্ত শক্তিস্তর কোনটি?", options: ["n = 1","n = 2","n = 3","n = 4"], answer: 2 },
+              { q: "ডি-ব্রগলির সমীকরণ কোনটি?", options: ["λ = h/mv","λ = mv/h","λ = hν","λ = cν"], answer: 0 },
+              { q: "ডি-ব্রগলি কোন ধারণাটি প্রস্তাব করেন?", options: ["আলোর কণা ধর্ম","পদার্থের তরঙ্গ ধর্ম","নিউক্লিয়াসের অস্তিত্ব","প্রোটনের তরঙ্গ ধর্ম"], answer: 1 },
+              { q: "হাইজেনবার্গের অনিশ্চয়তা নীতি কোন দুটি রাশির অনিশ্চয়তার সাথে সম্পর্কিত?", options: ["ভর ও আধান","অবস্থান ও ভর","অবস্থান ও ভরবেগ","শক্তি ও আধান"], answer: 2 },
+              { q: "প্রধান কোয়ান্টাম সংখ্যা কোন প্রতীক দ্বারা প্রকাশ করা হয়?", options: ["n","l","m","s"], answer: 0 },
+              { q: "প্রধান কোয়ান্টাম সংখ্যার মান কী হতে পারে?", options: ["0, 1, 2, 3","1, 2, 3, ...","−1, 0, +1","+1/2, −1/2"], answer: 1 },
+              { q: "সহকারী বা আজিমুথাল কোয়ান্টাম সংখ্যা কোনটি নির্দেশ করে?", options: ["শক্তিস্তরের আকার","উপশক্তিস্তরের আকৃতি","ইলেকট্রনের ঘূর্ণন","নিউক্লিয়াসের ভর"], answer: 1 },
+              { q: "n = 3 হলে l-এর সম্ভাব্য মান কোনগুলো?", options: ["0, 1","1, 2, 3","0, 1, 2","−3 থেকে +3"], answer: 2 }
+            ]
+          },
+
+          "পরীক্ষা ২": {
+            examTime: 25,
+            questions: [
+              { q: "n = 4 হলে l-এর সর্বোচ্চ মান কত?", options: ["2","3","4","5"], answer: 1 },
+              { q: "l = 0 হলে কোন উপশক্তিস্তর নির্দেশ করে?", options: ["s","p","d","f"], answer: 0 },
+              { q: "l = 1 হলে কোন উপশক্তিস্তর নির্দেশ করে?", options: ["s","p","d","f"], answer: 1 },
+              { q: "l = 2 হলে কোন উপশক্তিস্তর নির্দেশ করে?", options: ["s","p","d","f"], answer: 2 },
+              { q: "l = 3 হলে কোন উপশক্তিস্তর নির্দেশ করে?", options: ["s","p","d","f"], answer: 3 },
+              { q: "s উপশক্তিস্তরে সর্বোচ্চ কতটি অরবিটাল থাকে?", options: ["1","2","3","5"], answer: 0 },
+              { q: "p উপশক্তিস্তরে মোট কতটি অরবিটাল থাকে?", options: ["1","2","3","5"], answer: 2 },
+              { q: "d উপশক্তিস্তরে মোট কতটি অরবিটাল থাকে?", options: ["3","5","7","9"], answer: 1 },
+              { q: "f উপশক্তিস্তরে মোট কতটি অরবিটাল থাকে?", options: ["5","7","9","14"], answer: 1 },
+              { q: "একটি অরবিটালে সর্বোচ্চ কতটি ইলেকট্রন থাকতে পারে?", options: ["1","2","4","8"], answer: 1 },
+              { q: "p উপশক্তিস্তরে সর্বোচ্চ কতটি ইলেকট্রন থাকতে পারে?", options: ["2","6","10","14"], answer: 1 },
+              { q: "d উপশক্তিস্তরে সর্বোচ্চ কতটি ইলেকট্রন থাকতে পারে?", options: ["6","8","10","14"], answer: 2 },
+              { q: "f উপশক্তিস্তরে সর্বোচ্চ কতটি ইলেকট্রন থাকতে পারে?", options: ["10","12","14","18"], answer: 2 },
+              { q: "একটি প্রধান শক্তিস্তরে সর্বোচ্চ ইলেকট্রন ধারণক্ষমতার সূত্র কোনটি?", options: ["n²","2n²","2n","n+2"], answer: 1 },
+              { q: "তৃতীয় শক্তিস্তরে সর্বোচ্চ কতটি ইলেকট্রন থাকতে পারে?", options: ["8","18","32","9"], answer: 1 },
+              { q: "চৌম্বকীয় কোয়ান্টাম সংখ্যা কোন প্রতীক দ্বারা প্রকাশ করা হয়?", options: ["n","l","m","s"], answer: 2 },
+              { q: "চৌম্বকীয় কোয়ান্টাম সংখ্যার মান কোন সীমার মধ্যে থাকে?", options: ["0 থেকে l","−l থেকে +l","1 থেকে n","−n থেকে +n"], answer: 1 },
+              { q: "l = 1 হলে m-এর সম্ভাব্য মান কোনগুলো?", options: ["0, 1","−1, 0, +1","−2, −1, 0, +1, +2","−1, +1"], answer: 1 },
+              { q: "l = 2 হলে মোট কতটি অরবিটালের দিকবিন্যাস সম্ভব?", options: ["3","5","7","9"], answer: 1 },
+              { q: "স্পিন কোয়ান্টাম সংখ্যার সম্ভাব্য মান কোনগুলো?", options: ["0, 1","−1, 0, +1","+1/2, −1/2","+1, −1"], answer: 2 },
+              { q: "একটি অরবিটালে দুটি ইলেকট্রনের স্পিন কেমন হয়?", options: ["একই দিকে","বিপরীত দিকে","কোনো স্পিন থাকে না","তিন দিকে"], answer: 1 },
+              { q: "অরবিট বলতে কী বোঝায়?", options: ["ইলেকট্রনের সম্ভাব্য অবস্থানের ত্রিমাত্রিক অঞ্চল","নিউক্লিয়াসের চারপাশে নির্দিষ্ট কক্ষপথ","শুধু s উপশক্তিস্তর","ইলেকট্রনের স্পিন অঞ্চল"], answer: 1 },
+              { q: "অরবিটাল কী?", options: ["ইলেকট্রনের নির্দিষ্ট বৃত্তাকার পথ","ইলেকট্রন পাওয়ার সম্ভাবনা বেশি এমন ত্রিমাত্রিক অঞ্চল","নিউক্লিয়াসের একটি অংশ","একটি শক্তিকণা"], answer: 1 },
+              { q: "s অরবিটালের আকৃতি কেমন?", options: ["ডাম্ববেল","গোলাকার","চতুর্ভুজ","জটিল"], answer: 1 },
+              { q: "p অরবিটালের সাধারণ আকৃতি কেমন?", options: ["গোলাকার","ডাম্ববেল","ত্রিভুজাকার","সরলরেখা"], answer: 1 },
+              { q: "p উপশক্তিস্তরের অরবিটালগুলো কোন অক্ষ বরাবর অবস্থান করতে পারে?", options: ["শুধু x অক্ষ","শুধু y অক্ষ","x, y ও z অক্ষ","কোনো অক্ষ বরাবর নয়"], answer: 2 },
+              { q: "d উপশক্তিস্তরে মোট কয়টি অরবিটাল থাকে?", options: ["3","5","7","10"], answer: 1 },
+              { q: "আউফবাউ নীতি অনুযায়ী ইলেকট্রন প্রথমে কোন অরবিটালে প্রবেশ করে?", options: ["উচ্চ শক্তির অরবিটালে","নিম্ন শক্তির অরবিটালে","যেকোনো অরবিটালে","শুধু p অরবিটালে"], answer: 1 },
+              { q: "পাউলির বর্জন নীতি অনুযায়ী একটি পরমাণুর দুই ইলেকট্রনের চারটি কোয়ান্টাম সংখ্যার মধ্যে কী হতে পারে না?", options: ["সবগুলো একই","শুধু n একই","শুধু l একই","শুধু m একই"], answer: 0 },
+              { q: "হুন্ডের নীতি কোন ধরনের অরবিটাল পূরণের ক্ষেত্রে গুরুত্বপূর্ণ?", options: ["সমশক্তির অরবিটাল","শুধু s অরবিটাল","নিউক্লিয়াস","শুধু K শেল"], answer: 0 }
+            ]
+          },
+           "পরীক্ষা ৩": {
+            examTime: 25,
+            questions: [
+              { q: "নির্দিষ্ট তাপমাত্রায় নির্দিষ্ট পরিমাণ দ্রাবকে সর্বোচ্চ যে পরিমাণ দ্রব দ্রবীভূত হয়ে সম্পৃক্ত দ্রবণ তৈরি করে তাকে কী বলে?", options: ["দ্রাব্যতা","দ্রাবক","দ্রব","দ্রাব্যতা গুণফল"], answer: 0 },
+              { q: "স্বল্প দ্রাব্য লবণের সম্পৃক্ত দ্রবণে আয়নগুলোর ঘনমাত্রার গুণফলকে কী বলে?", options: ["আয়নিক গুণফল","দ্রাব্যতা গুণফল","দ্রাব্যতা","আয়নীকরণ শক্তি"], answer: 1 },
+              { q: "দ্রাব্যতা গুণফলের প্রতীক কোনটি?", options: ["Ka","Kb","Ksp","Kw"], answer: 2 },
+              { q: "AgCl এর দ্রাব্যতা গুণফলের সঠিক রাশি কোনটি?", options: ["[Ag⁺][Cl⁻]","[Ag⁺]²[Cl⁻]","[Ag⁺][Cl⁻]²","[AgCl]"], answer: 0 },
+              { q: "BaSO₄ ⇌ Ba²⁺ + SO₄²⁻ হলে Ksp কোনটি?", options: ["[Ba²⁺][SO₄²⁻]","[Ba²⁺]²[SO₄²⁻]","[Ba²⁺][SO₄²⁻]²","[BaSO₄]"], answer: 0 },
+              { q: "CaF₂ ⇌ Ca²⁺ + 2F⁻ হলে Ksp কোনটি?", options: ["[Ca²⁺][F⁻]","[Ca²⁺]²[F⁻]","[Ca²⁺][F⁻]²","[CaF₂]"], answer: 2 },
+              { q: "MX₂ এর দ্রাব্যতা s mol L⁻¹ হলে X⁻ এর ঘনমাত্রা কত?", options: ["s","2s","s²","3s"], answer: 1 },
+              { q: "MX₂ এর দ্রাব্যতা s হলে M²⁺ এর ঘনমাত্রা কত?", options: ["s","2s","s²","1/s"], answer: 0 },
+              { q: "MX₂ এর দ্রাব্যতা s হলে Ksp কত?", options: ["s²","2s²","4s³","s³"], answer: 2 },
+              { q: "AgCl এর দ্রাব্যতা s mol L⁻¹ হলে Ksp কত?", options: ["s","s²","2s²","4s³"], answer: 1 },
+              { q: "AgCl এর Ksp = 1.0 × 10⁻¹⁰ এবং দ্রাব্যতা s হলে s কত?", options: ["1.0 × 10⁻⁵ M","1.0 × 10⁻¹⁰ M","1.0 × 10⁻² M","1.0 × 10⁵ M"], answer: 0 },
+              { q: "কোনো লবণের আয়নিক গুণফল Ksp-এর চেয়ে বেশি হলে কী ঘটবে?", options: ["অধঃক্ষেপ পড়বে","দ্রবণ অসম্পৃক্ত থাকবে","লবণ সম্পূর্ণ বাষ্পীভূত হবে","কোনো পরিবর্তন হবে না"], answer: 0 },
+              { q: "আয়নিক গুণফল Ksp-এর চেয়ে কম হলে দ্রবণ কেমন থাকে?", options: ["অতিপৃক্ত","সম্পৃক্ত","অসম্পৃক্ত","অধঃক্ষেপযুক্ত"], answer: 2 },
+              { q: "আয়নিক গুণফল Ksp-এর সমান হলে দ্রবণ কেমন থাকে?", options: ["অসম্পৃক্ত","সম্পৃক্ত","অতিপৃক্ত","গ্যাসীয়"], answer: 1 },
+              { q: "Kip > Ksp হলে কী বোঝায়?", options: ["অধঃক্ষেপ পড়বে","অধঃক্ষেপ গলে যাবে","দ্রাব্যতা বাড়বে","কোনো বিক্রিয়া হবে না"], answer: 0 },
+              { q: "AgCl এর দ্রাব্যতা কমানোর জন্য AgNO₃ যোগ করলে কোন প্রভাব দেখা যায়?", options: ["সমআয়ন প্রভাব","তাপীয় প্রভাব","আলোকীয় প্রভাব","অনুঘটকীয় প্রভাব"], answer: 0 },
+              { q: "সমআয়ন প্রভাবের ফলে স্বল্প দ্রাব্য লবণের দ্রাব্যতা সাধারণত কী হয়?", options: ["বাড়ে","কমে","অপরিবর্তিত থাকে","প্রথমে শূন্য হয়"], answer: 1 },
+              { q: "25°C তাপমাত্রায় CaF₂ এর দ্রাব্যতা 0.01 M হলে F⁻ এর ঘনমাত্রা কত?", options: ["0.005 M","0.01 M","0.02 M","0.04 M"], answer: 2 },
+              { q: "AgCl এর দ্রাব্যতা 2 × 10⁻⁵ M হলে Ksp কত?", options: ["2 × 10⁻⁵","4 × 10⁻¹⁰","4 × 10⁻⁵","2 × 10⁻¹⁰"], answer: 1 },
+              { q: "BaSO₄ এর দ্রাব্যতা 1 × 10⁻⁵ M হলে Ksp কত?", options: ["1 × 10⁻⁵","2 × 10⁻⁵","1 × 10⁻¹⁰","1 × 10⁻¹⁵"], answer: 2 },
+              { q: "CaF₂ এর দ্রাব্যতা 0.01 M হলে Ca²⁺ এর ঘনমাত্রা কত?", options: ["0.01 M","0.02 M","0.03 M","0.001 M"], answer: 0 },
+              { q: "CaF₂ এর দ্রাব্যতা 0.01 M হলে F⁻ এর ঘনমাত্রা কত?", options: ["0.005 M","0.01 M","0.02 M","0.04 M"], answer: 2 },
+              { q: "দুটি দ্রবণ মেশানোর পর অধঃক্ষেপ হবে কি না জানতে কোন দুটি রাশি তুলনা করা হয়?", options: ["Ka ও Kb","Kip ও Ksp","pH ও pOH","λ ও ν"], answer: 1 },
+              { q: "AgNO₃ দ্রবণে Cl⁻ শনাক্ত করতে সাধারণত কোন বিকারক ব্যবহার করা হয়?", options: ["BaCl₂","AgNO₃","NaOH","H₂SO₄"], answer: 1 },
+              { q: "Cl⁻ এর সাথে AgNO₃ বিক্রিয়া করলে কী রঙের অধঃক্ষেপ হয়?", options: ["নীল","লাল","সাদা","কালো"], answer: 2 },
+              { q: "SO₄²⁻ শনাক্ত করতে কোন বিকারক বেশি ব্যবহৃত হয়?", options: ["BaCl₂","AgNO₃","NaOH","NH₄Cl"], answer: 0 },
+              { q: "SO₄²⁻ এর সাথে BaCl₂ বিক্রিয়ায় কী তৈরি হয়?", options: ["BaSO₄","BaCO₃","AgCl","CuSO₄"], answer: 0 },
+              { q: "BaSO₄ অধঃক্ষেপের রং কী?", options: ["সাদা","নীল","সবুজ","হলুদ"], answer: 0 },
+              { q: "CO₃²⁻ এর সাথে dilute HCl যোগ করলে কোন গ্যাস উৎপন্ন হয়?", options: ["H₂","O₂","CO₂","NH₃"], answer: 2 },
+              { q: "CO₂ গ্যাস চুনের পানির মধ্য দিয়ে প্রবাহিত করলে প্রথমে কী ঘটে?", options: ["চুনের পানি নীল হয়","চুনের পানি দুধের মতো সাদা হয়","চুনের পানি লাল হয়","কোনো পরিবর্তন হয় না"], answer: 1 }
+            ]
+          },
+
+          "পরীক্ষা ৪": {
+            examTime: 25,
+            questions: [
+              { q: "আয়ন শনাক্তকরণ কোন ধরনের বিশ্লেষণের অন্তর্ভুক্ত?", options: ["গুণগত বিশ্লেষণ","পরিমাণগত বিশ্লেষণ","তাপীয় বিশ্লেষণ","ভৌত বিশ্লেষণ"], answer: 0 },
+              { q: "ধনাত্মক আয়নকে কী বলা হয়?", options: ["অ্যানায়ন","ক্যাটায়ন","র‌্যাডিক্যাল","ইলেকট্রন"], answer: 1 },
+              { q: "ঋণাত্মক আয়নকে কী বলা হয়?", options: ["ক্যাটায়ন","অ্যানায়ন","প্রোটন","নিউট্রন"], answer: 1 },
+              { q: "শিখা পরীক্ষার মাধ্যমে কোন ধরনের আয়ন সহজে শনাক্ত করা যায়?", options: ["কিছু ধাতব ক্যাটায়ন","সব অ্যানায়ন","সব গ্যাস","শুধু H⁺"], answer: 0 },
+              { q: "Na⁺ এর শিখার রং কী?", options: ["ইট লাল","হলুদ","বেগুনি","সবুজ"], answer: 1 },
+              { q: "K⁺ এর শিখার রং কী?", options: ["হলুদ","ইট লাল","হালকা বেগুনি","নীল"], answer: 2 },
+              { q: "Ca²⁺ এর শিখার রং কী?", options: ["ইট লাল","হলুদ","সবুজ","বেগুনি"], answer: 0 },
+              { q: "Cu²⁺ এর শিখার রং সাধারণত কী?", options: ["নীলাভ সবুজ","হলুদ","ইট লাল","বেগুনি"], answer: 0 },
+              { q: "NH₄⁺ শনাক্ত করতে NaOH যোগ করে উত্তপ্ত করলে কোন গ্যাস উৎপন্ন হয়?", options: ["CO₂","NH₃","H₂","Cl₂"], answer: 1 },
+              { q: "NH₃ গ্যাস সিক্ত লাল লিটমাস কাগজকে কী করে?", options: ["লালই রাখে","নীল করে","হলুদ করে","কালো করে"], answer: 1 },
+              { q: "NH₃ গ্যাসের সাথে HCl গ্যাসের বিক্রিয়ায় কী দেখা যায়?", options: ["কালো ধোঁয়া","সাদা ধোঁয়া","নীল ধোঁয়া","কোনো পরিবর্তন নেই"], answer: 1 },
+              { q: "Cl⁻ শনাক্তকরণে AgNO₃ যোগ করলে কোন যৌগের সাদা অধঃক্ষেপ পড়ে?", options: ["AgCl","AgBr","AgI","BaSO₄"], answer: 0 },
+              { q: "AgCl অধঃক্ষেপ কোন দ্রবণে দ্রবীভূত হতে পারে?", options: ["NH₃","NaCl","HCl","BaCl₂"], answer: 0 },
+              { q: "Br⁻ এর সাথে AgNO₃ বিক্রিয়ায় কী ধরনের অধঃক্ষেপ হয়?", options: ["সাদা","ক্রিম/হালকা হলুদ","কালো","নীল"], answer: 1 },
+              { q: "I⁻ এর সাথে AgNO₃ বিক্রিয়ায় কী রঙের অধঃক্ষেপ হয়?", options: ["হলুদ","সাদা","সবুজ","লাল"], answer: 0 },
+              { q: "SO₄²⁻ শনাক্তকরণে BaCl₂ যোগ করলে কোন অধঃক্ষেপ হয়?", options: ["BaSO₄","AgCl","Cu(OH)₂","Fe(OH)₃"], answer: 0 },
+              { q: "CO₃²⁻ শনাক্তকরণের সময় dilute HCl যোগ করলে বুদবুদ দেখা যায় কেন?", options: ["CO₂ গ্যাস উৎপন্ন হয়","O₂ উৎপন্ন হয়","H₂ উৎপন্ন হয়","NH₃ উৎপন্ন হয়"], answer: 0 },
+              { q: "CO₂ গ্যাসের উপস্থিতি নিশ্চিত করতে কোন পরীক্ষা করা হয়?", options: ["চুনের পানি পরীক্ষা","শিখা পরীক্ষা","লিটমাস পরীক্ষা","AgNO₃ পরীক্ষা"], answer: 0 },
+              { q: "Cu²⁺ দ্রবণে NaOH যোগ করলে কী রঙের অধঃক্ষেপ হয়?", options: ["সাদা","নীল","লাল","হলুদ"], answer: 1 },
+              { q: "Fe²⁺ দ্রবণে NaOH যোগ করলে সাধারণত কী রঙের অধঃক্ষেপ হয়?", options: ["সবুজ","নীল","সাদা","হলুদ"], answer: 0 },
+              { q: "Fe³⁺ দ্রবণে NaOH যোগ করলে কী রঙের অধঃক্ষেপ হয়?", options: ["নীল","লালচে বাদামি","সবুজ","সাদা"], answer: 1 },
+              { q: "Zn²⁺ দ্রবণে NaOH যোগ করলে প্রথমে কী রঙের অধঃক্ষেপ হয়?", options: ["সাদা","নীল","লাল","কালো"], answer: 0 },
+              { q: "অতিরিক্ত NaOH-এ Zn(OH)₂ কী করে?", options: ["দ্রবীভূত হয়","কালো হয়","নীল হয়","কোনো পরিবর্তন হয় না"], answer: 0 },
+              { q: "Cu²⁺ শনাক্তকরণে NH₄OH অতিরিক্ত দিলে কী রঙের দ্রবণ পাওয়া যায়?", options: ["গাঢ় নীল","হলুদ","লাল","সাদা"], answer: 0 },
+              { q: "Fe³⁺ শনাক্তকরণে KSCN যোগ করলে কী রঙ দেখা যায়?", options: ["রক্তবর্ণ/গাঢ় লাল","সাদা","নীল","হলুদ"], answer: 0 },
+              { q: "Fe³⁺ + K₄[Fe(CN)₆] বিক্রিয়ায় কোন রঙের কমপ্লেক্স/অধঃক্ষেপ দেখা যায়?", options: ["গাঢ় নীল","সাদা","সবুজ","হলুদ"], answer: 0 },
+              { q: "দ্রাব্যতা গুণফল কোন বিষয়ের উপর নির্ভর করে?", options: ["নির্দিষ্ট তাপমাত্রায় লবণের প্রকৃতি","শুধু দ্রবণের আয়তন","শুধু চাপ","শুধু আলো"], answer: 0 },
+              { q: "AgCl-এর Ksp = 1.0 × 10⁻¹⁰ হলে 1.0 × 10⁻⁵ M Ag⁺ ও 1.0 × 10⁻⁵ M Cl⁻ মিশালে Kip কত?", options: ["1.0 × 10⁻¹⁰","1.0 × 10⁻⁵","1.0 × 10⁻¹⁰⁻","1.0 × 10⁻²⁰"], answer: 0 },
+              { q: "উপরের ক্ষেত্রে Kip = Ksp হলে কী হবে?", options: ["দ্রবণ সম্পৃক্ত অবস্থায় থাকবে","অবশ্যই প্রচুর অধঃক্ষেপ পড়বে","দ্রবণ সম্পূর্ণ বাষ্পীভূত হবে","গ্যাস উৎপন্ন হবে"], answer: 0 },
+              { q: "CaF₂ এর Ksp = 4 × 10⁻¹² এবং দ্রাব্যতা s হলে 4s³ = 4 × 10⁻¹²। s কত?", options: ["1 × 10⁻⁴ M","1 × 10⁻³ M","1 × 10⁻² M","1 × 10⁻⁶ M"], answer: 0 }
+            ]
+          }
+        }
+      },
+       "অধ্যায় ৩: পরিমাণগত রসায়ন": {
+      exams: {
+
+        "পরীক্ষা ১": {
+          examTime: 25,
+          questions: [
+
+            {
+              q: "0.5 M NaOH দ্রবণের 200 mL-এ NaOH-এর মোল সংখ্যা কত?",
+              options: ["0.05 mol", "0.10 mol", "0.20 mol", "1.00 mol"],
+              answer: 1
+            },
+
+            {
+              q: "1 M H₂SO₄ দ্রবণের 500 mL-এ H₂SO₄-এর মোল সংখ্যা কত?",
+              options: ["0.25 mol", "0.50 mol", "1.00 mol", "2.00 mol"],
+              answer: 1
+            },
+
+            {
+              q: "কোন ঘনমাত্রা তাপমাত্রার পরিবর্তনে পরিবর্তিত হয় না?",
+              options: ["Molarity", "Molality", "Normality", "Volume percent"],
+              answer: 1
+            },
+
+            {
+              q: "1 M দ্রবণ বলতে কী বোঝায়?",
+              options: [
+                "1 L দ্রাবকে 1 mol দ্রব",
+                "1 L দ্রবণে 1 mol দ্রব",
+                "100 mL দ্রবণে 1 mol দ্রব",
+                "1 kg দ্রবণে 1 mol দ্রব"
+              ],
+              answer: 1
+            },
+
+            {
+              q: "0.1 M দ্রবণের 100 mL-এ দ্রবের মোল সংখ্যা কত?",
+              options: ["0.001 mol", "0.01 mol", "0.1 mol", "1 mol"],
+              answer: 1
+            },
+
+            {
+              q: "10% (w/v) NaOH দ্রবণে 100 mL দ্রবণে NaOH-এর ভর কত?",
+              options: ["1 g", "5 g", "10 g", "20 g"],
+              answer: 2
+            },
+
+            {
+              q: "ppm-এর পূর্ণরূপ কী?",
+              options: [
+                "Parts per million",
+                "Parts per mol",
+                "Percentage per million",
+                "Parts per mass"
+              ],
+              answer: 0
+            },
+
+            {
+              q: "1 ppm সমান কত ppb?",
+              options: ["10", "100", "1000", "10000"],
+              answer: 2
+            },
+
+            {
+              q: "1000 mL 1 M দ্রবণ থেকে 100 mL 0.1 M দ্রবণ প্রস্তুত করতে কত mL মূল দ্রবণ লাগবে?",
+              options: ["1 mL", "10 mL", "50 mL", "100 mL"],
+              answer: 1
+            },
+
+            {
+              q: "তরল দ্রবণ পাতলা করার ক্ষেত্রে কোন সমীকরণটি প্রযোজ্য?",
+              options: ["PV=nRT", "M₁V₁=M₂V₂", "E=mc²", "pV=constant"],
+              answer: 1
+            },
+
+            {
+              q: "18 g H₂O-তে কত mol H₂O আছে?",
+              options: ["0.5 mol", "1 mol", "2 mol", "18 mol"],
+              answer: 1
+            },
+
+            {
+              q: "44 g CO₂-তে CO₂-এর মোল সংখ্যা কত?",
+              options: ["0.5 mol", "1 mol", "2 mol", "44 mol"],
+              answer: 1
+            },
+
+            {
+              q: "Na₂CO₃-এর মোলার ভর কত?",
+              options: ["84 g mol⁻¹", "96 g mol⁻¹", "106 g mol⁻¹", "120 g mol⁻¹"],
+              answer: 2
+            },
+
+            {
+              q: "0.1 mol Na₂CO₃-এর ভর কত?",
+              options: ["5.3 g", "10.6 g", "21.2 g", "106 g"],
+              answer: 1
+            },
+
+            {
+              q: "Avogadro সংখ্যা কত?",
+              options: [
+                "6.022 × 10²¹",
+                "6.022 × 10²²",
+                "6.022 × 10²³",
+                "6.022 × 10²⁴"
+              ],
+              answer: 2
+            },
+
+            {
+              q: "প্রাইমারি স্ট্যান্ডার্ড পদার্থের বৈশিষ্ট্য কোনটি?",
+              options: [
+                "সহজে বাষ্পীভূত হয়",
+                "অত্যন্ত বিশুদ্ধ ও স্থিতিশীল",
+                "অত্যন্ত উদ্বায়ী",
+                "পানিতে অদ্রবণীয়"
+              ],
+              answer: 1
+            },
+
+            {
+              q: "নিচের কোনটি প্রাইমারি স্ট্যান্ডার্ড পদার্থ?",
+              options: ["NaOH", "KMnO₄", "K₂Cr₂O₇", "HCl"],
+              answer: 2
+            },
+
+            {
+              q: "KMnO₄ সাধারণত কী ধরনের পদার্থ হিসেবে ব্যবহৃত হয়?",
+              options: [
+                "Primary standard",
+                "Secondary standard",
+                "Indicator",
+                "Buffer"
+              ],
+              answer: 1
+            },
+
+            {
+              q: "টাইট্রেশনে যে দ্রবণের ঘনমাত্রা জানা থাকে তাকে কী বলে?",
+              options: ["Analyte", "Standard solution", "Indicator", "Solvent"],
+              answer: 1
+            },
+
+            {
+              q: "টাইট্রেশনে যে দ্রবণের ঘনমাত্রা নির্ণয় করা হয় তাকে কী বলা হয়?",
+              options: ["Standard solution", "Unknown solution", "Indicator", "Buffer"],
+              answer: 1
+            },
+
+            {
+              q: "অ্যাসিড-বেস টাইট্রেশনে equivalence point বলতে কী বোঝায়?",
+              options: [
+                "শুধু রঙ পরিবর্তনের বিন্দু",
+                "অ্যাসিড ও ক্ষারের সমতুল্য পরিমাণ বিক্রিয়া করার বিন্দু",
+                "দ্রবণের সর্বোচ্চ pH",
+                "দ্রবণের সর্বনিম্ন pH"
+              ],
+              answer: 1
+            },
+
+            {
+              q: "মিথাইল অরেঞ্জের রঙ পরিবর্তন সাধারণত কোন pH range-এ হয়?",
+              options: ["1.0–2.0", "3.1–4.4", "6.0–7.0", "8.0–10.0"],
+              answer: 1
+            },
+
+            {
+              q: "ফেনলফথ্যালিন ক্ষারীয় মাধ্যমে কী রঙ ধারণ করে?",
+              options: ["বর্ণহীন", "লাল", "গোলাপি", "হলুদ"],
+              answer: 2
+            },
+
+            {
+              q: "HCl ও NaOH-এর টাইট্রেশনে উপযুক্ত indicator কোনটি?",
+              options: [
+                "Phenolphthalein",
+                "Methyl orange",
+                "উভয়ই ব্যবহার করা যায়",
+                "Starch"
+              ],
+              answer: 2
+            },
+
+            {
+              q: "Normality-এর একক কোনটি?",
+              options: ["mol L⁻¹", "eq L⁻¹", "g L⁻¹", "mol kg⁻¹"],
+              answer: 1
+            },
+
+            {
+              q: "Equivalent weight = কোনটি?",
+              options: [
+                "Molecular mass × n-factor",
+                "Molecular mass / n-factor",
+                "n-factor / molecular mass",
+                "Molecular mass + n-factor"
+              ],
+              answer: 1
+            },
+
+            {
+              q: "H₂SO₄-এর acid-base reaction-এ n-factor কত?",
+              options: ["1", "2", "3", "4"],
+              answer: 1
+            },
+
+            {
+              q: "NaOH-এর equivalent weight কত?",
+              options: ["20", "40", "80", "100"],
+              answer: 1
+            },
+
+            {
+              q: "KMnO₄ অম্লীয় মাধ্যমে কত electron গ্রহণ করে?",
+              options: ["1", "3", "5", "7"],
+              answer: 2
+            },
+
+            {
+              q: "অম্লীয় মাধ্যমে KMnO₄-এর reduction product কোনটি?",
+              options: ["MnO₂", "Mn²⁺", "MnO₄²⁻", "Mn"],
+              answer: 1
+            }
+
+          ]
+        },
+
+        "পরীক্ষা ২": {
+          examTime: 25,
+          questions: [
+
+            {
+              q: "0.2 M HCl-এর 250 mL-এ HCl-এর মোল সংখ্যা কত?",
+              options: ["0.02 mol", "0.05 mol", "0.20 mol", "0.50 mol"],
+              answer: 1
+            },
+
+            {
+              q: "5.85 g NaCl-এ NaCl-এর মোল সংখ্যা কত?",
+              options: ["0.01 mol", "0.05 mol", "0.10 mol", "1 mol"],
+              answer: 2
+            },
+
+            {
+              q: "0.5 mol NaOH-এর ভর কত?",
+              options: ["10 g", "20 g", "40 g", "80 g"],
+              answer: 1
+            },
+
+            {
+              q: "2 M দ্রবণের 50 mL-কে 0.5 M করতে মোট আয়তন কত করতে হবে?",
+              options: ["100 mL", "150 mL", "200 mL", "250 mL"],
+              answer: 2
+            },
+
+            {
+              q: "25 mL 0.1 M HCl সম্পূর্ণ neutralize করতে 0.05 M NaOH কত mL লাগবে?",
+              options: ["25 mL", "50 mL", "75 mL", "100 mL"],
+              answer: 1
+            },
+
+            {
+              q: "20 mL 0.1 M H₂SO₄ সম্পূর্ণ neutralize করতে 0.1 M NaOH কত mL লাগবে?",
+              options: ["10 mL", "20 mL", "40 mL", "50 mL"],
+              answer: 2
+            },
+
+            {
+              q: "সমআয়তন 0.1 M HCl ও 0.1 M NaOH মেশালে দ্রবণের প্রকৃতি কী হবে?",
+              options: ["অম্লীয়", "ক্ষারীয়", "নিরপেক্ষ", "উভধর্মী"],
+              answer: 2
+            },
+
+            {
+              q: "সমআয়তন 1 M HCl ও 1 M NaOH মেশালে কোনটি সঠিক?",
+              options: [
+                "HCl অতিরিক্ত থাকবে",
+                "NaOH অতিরিক্ত থাকবে",
+                "উভয়ই সম্পূর্ণ বিক্রিয়া করবে",
+                "কোনোটিই বিক্রিয়া করবে না"
+              ],
+              answer: 2
+            },
+
+            {
+              q: "সমআয়তন 1 M H₂SO₄ ও 1 M NaOH মেশালে দ্রবণটি কেমন হবে?",
+              options: ["অম্লীয়", "ক্ষারীয়", "নিরপেক্ষ", "উভধর্মী"],
+              answer: 0
+            },
+
+            {
+              q: "Na₂CO₃-এর সাথে HCl-এর সম্পূর্ণ বিক্রিয়ায় কোন গ্যাস উৎপন্ন হয়?",
+              options: ["H₂", "O₂", "CO₂", "Cl₂"],
+              answer: 2
+            },
+
+            {
+              q: "CaCO₃ + 2HCl → CaCl₂ + H₂O + ?",
+              options: ["CO", "CO₂", "H₂", "O₂"],
+              answer: 1
+            },
+
+            {
+              q: "100 mL 0.2 M Na₂CO₃-এ Na₂CO₃-এর মোল সংখ্যা কত?",
+              options: ["0.002", "0.02", "0.20", "2.0"],
+              answer: 1
+            },
+
+            {
+              q: "0.02 mol Na₂CO₃ সম্পূর্ণ বিক্রিয়ার জন্য HCl-এর কত mol প্রয়োজন?",
+              options: ["0.01", "0.02", "0.04", "0.20"],
+              answer: 2
+            },
+
+            {
+              q: "জারণ-বিজারণ বিক্রিয়ায় electron-এর আদান-প্রদান কোন ধারণার সাথে সম্পর্কিত?",
+              options: ["Molarity", "Equivalent", "Molality", "Density"],
+              answer: 1
+            },
+
+            {
+              q: "Oxidation বলতে কী বোঝায়?",
+              options: [
+                "Electron গ্রহণ",
+                "Electron বর্জন",
+                "Proton গ্রহণ",
+                "Neutron বর্জন"
+              ],
+              answer: 1
+            },
+
+            {
+              q: "Reduction বলতে কী বোঝায়?",
+              options: [
+                "Electron গ্রহণ",
+                "Electron বর্জন",
+                "Oxygen গ্রহণ",
+                "Hydrogen বর্জন"
+              ],
+              answer: 0
+            },
+
+            {
+              q: "যে পদার্থ নিজে reduced হয়ে অন্যকে oxidize করে তাকে কী বলে?",
+              options: ["Reducing agent", "Oxidizing agent", "Indicator", "Catalyst"],
+              answer: 1
+            },
+
+            {
+              q: "যে পদার্থ নিজে oxidized হয়ে অন্যকে reduce করে তাকে কী বলে?",
+              options: ["Oxidizing agent", "Reducing agent", "Indicator", "Solvent"],
+              answer: 1
+            },
+
+            {
+              q: "Fe²⁺ → Fe³⁺ পরিবর্তনে Fe কী করছে?",
+              options: ["Reduction", "Oxidation", "Neutralization", "Hydrolysis"],
+              answer: 1
+            },
+
+            {
+              q: "Fe³⁺ → Fe²⁺ পরিবর্তনে Fe কী করছে?",
+              options: ["Oxidation", "Reduction", "Combustion", "Disproportionation"],
+              answer: 1
+            },
+
+            {
+              q: "K₂Cr₂O₇ অম্লীয় মাধ্যমে Cr-এর জারণ সংখ্যা কত থেকে কত হয়?",
+              options: [
+                "+3 থেকে +6",
+                "+6 থেকে +3",
+                "+2 থেকে +6",
+                "+6 থেকে +2"
+              ],
+              answer: 1
+            },
+
+            {
+              q: "অম্লীয় মাধ্যমে 1 mol K₂Cr₂O₇ কত mol electron গ্রহণ করে?",
+              options: ["3", "5", "6", "7"],
+              answer: 2
+            },
+
+            {
+              q: "অম্লীয় মাধ্যমে KMnO₄-এর equivalent weight কত?",
+              options: ["31.6", "39.5", "63.2", "158"],
+              answer: 0
+            },
+
+            {
+              q: "K₂Cr₂O₇-এর molar mass প্রায় কত?",
+              options: ["194 g mol⁻¹", "158 g mol⁻¹", "294 g mol⁻¹", "98 g mol⁻¹"],
+              answer: 0
+            },
+
+            {
+              q: "Primary standard হিসেবে K₂Cr₂O₇ ব্যবহারের প্রধান কারণ কী?",
+              options: [
+                "অস্থিতিশীল",
+                "সহজে বিশুদ্ধ ও স্থিতিশীল",
+                "অত্যন্ত উদ্বায়ী",
+                "অদ্রবণীয়"
+              ],
+              answer: 1
+            },
+
+            {
+              q: "Redox titration-এ KMnO₄-এর একটি বিশেষ বৈশিষ্ট্য কী?",
+              options: [
+                "এটি নিজেই indicator হিসেবে কাজ করতে পারে",
+                "এটি সবসময় বর্ণহীন",
+                "এটি acid নয়",
+                "এটি কোনো reaction করে না"
+              ],
+              answer: 0
+            },
+
+            {
+              q: "KMnO₄ titration-এ endpoint-এ সাধারণত কী দেখা যায়?",
+              options: [
+                "স্থায়ী হালকা গোলাপি রং",
+                "স্থায়ী নীল রং",
+                "হলুদ রং",
+                "সবুজ রং"
+              ],
+              answer: 0
+            },
+
+            {
+              q: "Starch indicator সাধারণত কোন titration-এ ব্যবহৃত হয়?",
+              options: [
+                "Acid-base",
+                "Iodometric",
+                "Precipitation",
+                "Complexometric"
+              ],
+              answer: 1
+            },
+
+            {
+              q: "I₂ + 2S₂O₃²⁻ → ?",
+              options: [
+                "2I⁻ + S₄O₆²⁻",
+                "I⁻ + S₂O₃²⁻",
+                "I₂ + S₄O₆²⁻",
+                "2I₂ + S₄O₆²⁻"
+              ],
+              answer: 0
+            },
+
+            {
+              q: "টাইট্রেশনে burette সাধারণত কোন দ্রবণ ধারণ করে?",
+              options: [
+                "Unknown solution",
+                "Standard/titrant solution",
+                "Indicator only",
+                "Distilled water"
+              ],
+              answer: 1
+            }
+
+          ]
+        },
+
+        "পরীক্ষা ৩": {
+          examTime: 25,
+          questions: [
+
+            {
+              q: "মোলালিটির সংজ্ঞা কোনটি সঠিক?",
+              options: [
+                "প্রতি লিটার দ্রবণে দ্রবের mol",
+                "প্রতি kg দ্রাবকে দ্রবের mol",
+                "প্রতি kg দ্রবণে দ্রবের mol",
+                "প্রতি 100 mL দ্রবণে দ্রবের mol"
+              ],
+              answer: 1
+            },
+
+            {
+              q: "0.5 mol দ্রব 2 kg দ্রাবকে দ্রবীভূত করলে molality কত?",
+              options: ["0.10 m", "0.25 m", "0.50 m", "1.0 m"],
+              answer: 1
+            },
+
+            {
+              q: "Molarity ও molality-এর মধ্যে কোনটি temperature-independent?",
+              options: ["Molarity", "Molality", "উভয়ই", "কোনোটিই নয়"],
+              answer: 1
+            },
+
+            {
+              q: "20% (w/w) NaOH দ্রবণের 100 g-এ NaOH-এর ভর কত?",
+              options: ["10 g", "20 g", "40 g", "80 g"],
+              answer: 1
+            },
+
+            {
+              q: "5% (w/v) glucose দ্রবণের 200 mL-এ glucose-এর ভর কত?",
+              options: ["5 g", "10 g", "20 g", "25 g"],
+              answer: 1
+            },
+
+            {
+              q: "একটি দ্রবণের ঘনমাত্রা কমাতে কী করা হয়?",
+              options: [
+                "দ্রব যোগ করা",
+                "দ্রাবক যোগ করা",
+                "দ্রাবক অপসারণ করা",
+                "তাপমাত্রা কমানো"
+              ],
+              answer: 1
+            },
+
+            {
+              q: "100 mL 2 M দ্রবণকে 0.5 M করতে মোট আয়তন কত হবে?",
+              options: ["200 mL", "300 mL", "400 mL", "500 mL"],
+              answer: 2
+            },
+
+            {
+              q: "25 mL 0.2 M NaOH-কে 0.1 M করতে কত mL পানি যোগ করতে হবে?",
+              options: ["15 mL", "25 mL", "50 mL", "75 mL"],
+              answer: 1
+            },
+
+            {
+              q: "10 mL 0.1 M HCl এবং 20 mL 0.1 M NaOH মেশালে দ্রবণটি কেমন হবে?",
+              options: ["অম্লীয়", "ক্ষারীয়", "নিরপেক্ষ", "Buffer"],
+              answer: 1
+            },
+
+            {
+              q: "20 mL 0.1 M HCl এবং 20 mL 0.1 M NaOH মেশালে উৎপন্ন লবণ কী?",
+              options: ["NaCl", "Na₂CO₃", "NH₄Cl", "KCl"],
+              answer: 0
+            },
+
+            {
+              q: "25 mL 0.1 M HCl নিরপেক্ষ করতে 0.1 M NaOH-এর কত mL লাগবে?",
+              options: ["10 mL", "20 mL", "25 mL", "50 mL"],
+              answer: 2
+            },
+
+            {
+              q: "25 mL 0.1 M H₂SO₄ সম্পূর্ণ neutralize করতে 0.1 M NaOH কত mL লাগবে?",
+              options: ["12.5 mL", "25 mL", "50 mL", "100 mL"],
+              answer: 2
+            },
+
+            {
+              q: "25 mL 0.2 M HCl এবং 50 mL 0.1 M NaOH মেশালে কী হবে?",
+              options: [
+                "HCl অতিরিক্ত থাকবে",
+                "NaOH অতিরিক্ত থাকবে",
+                "সম্পূর্ণ neutralization হবে",
+                "কোনোটিই নয়"
+              ],
+              answer: 2
+            },
+
+            {
+              q: "একটি acid-base titration-এর endpoint কী নির্দেশ করে?",
+              options: [
+                "Indicator-এর রঙ পরিবর্তন",
+                "শুধু তাপমাত্রা পরিবর্তন",
+                "চাপের পরিবর্তন",
+                "দ্রবণের ভর বৃদ্ধি"
+              ],
+              answer: 0
+            },
+
+            {
+              q: "Strong acid–strong base titration-এর equivalence point-এর pH সাধারণত কত?",
+              options: ["1", "5", "7", "14"],
+              answer: 2
+            },
+
+            {
+              q: "Weak acid–strong base titration-এর equivalence point সাধারণত—",
+              options: [
+                "pH < 7",
+                "pH = 7",
+                "pH > 7",
+                "সবসময় pH = 1"
+              ],
+              answer: 2
+            },
+
+            {
+              q: "Strong acid–weak base titration-এর equivalence point সাধারণত—",
+              options: [
+                "pH < 7",
+                "pH = 7",
+                "pH > 7",
+                "pH = 14"
+              ],
+              answer: 0
+            },
+
+            {
+              q: "H₂C₂O₄-এর সাথে KMnO₄-এর titration কোন মাধ্যমে করা হয়?",
+              options: ["HCl", "H₂SO₄", "HNO₃", "NaOH"],
+              answer: 1
+            },
+
+            {
+              q: "KMnO₄ ও Fe²⁺-এর redox titration-এ Fe²⁺ কী হিসেবে কাজ করে?",
+              options: [
+                "Oxidizing agent",
+                "Reducing agent",
+                "Indicator",
+                "Catalyst"
+              ],
+              answer: 1
+            },
+
+            {
+              q: "অম্লীয় মাধ্যমে KMnO₄-এর 1 mol কত mol Fe²⁺-কে Fe³⁺-এ জারিত করতে পারে?",
+              options: ["1 mol", "3 mol", "5 mol", "10 mol"],
+              answer: 2
+            },
+
+            {
+              q: "অম্লীয় মাধ্যমে K₂Cr₂O₇-এর 1 mol কত mol Fe²⁺-কে Fe³⁺-এ জারিত করতে পারে?",
+              options: ["3 mol", "5 mol", "6 mol", "7 mol"],
+              answer: 2
+            },
+
+            {
+              q: "H₂O₂ + 2I⁻ + 2H⁺ → I₂ + 2H₂O বিক্রিয়ায় H₂O₂ কী?",
+              options: ["Reducing agent", "Oxidizing agent", "Indicator", "Catalyst"],
+              answer: 1
+            },
+
+            {
+              q: "2Fe²⁺ + Cl₂ → 2Fe³⁺ + 2Cl⁻ বিক্রিয়ায় Cl₂ কী?",
+              options: [
+                "Reducing agent",
+                "Oxidizing agent",
+                "Indicator",
+                "Solvent"
+              ],
+              answer: 1
+            },
+
+            {
+              q: "KMnO₄-এর molecular mass কত?",
+              options: ["119", "158", "160", "174"],
+              answer: 1
+            },
+
+            {
+              q: "0.1 N KMnO₄-এর অম্লীয় দ্রবণের molarity কত?",
+              options: ["0.02 M", "0.05 M", "0.1 M", "0.5 M"],
+              answer: 1
+            },
+
+            {
+              q: "0.1 M K₂Cr₂O₇-এর অম্লীয় মাধ্যমে normality কত?",
+              options: ["0.1 N", "0.3 N", "0.6 N", "1.2 N"],
+              answer: 2
+            },
+
+            {
+              q: "কোনটি secondary standard solution-এর উদাহরণ?",
+              options: ["K₂Cr₂O₇", "Na₂CO₃", "KMnO₄", "Oxalic acid"],
+              answer: 2
+            },
+
+            {
+              q: "টাইট্রেশনে Concordant reading বলতে কী বোঝায়?",
+              options: [
+                "খুব বড় reading",
+                "পরস্পরের কাছাকাছি সঙ্গতিপূর্ণ reading",
+                "শূন্য reading",
+                "প্রথম reading"
+              ],
+              answer: 1
+            },
+
+            {
+              q: "Burette reading-এর ক্ষেত্রে কোনটি সঠিক?",
+              options: [
+                "Upper meniscus পড়া হয়",
+                "Lower meniscus পড়া হয়",
+                "যেকোনোটি পড়া যায়",
+                "Meniscus পড়ার প্রয়োজন নেই"
+              ],
+              answer: 1
+            },
+
+            {
+              q: "পরিমাণগত বিশ্লেষণের মূল উদ্দেশ্য কী?",
+              options: [
+                "শুধু পদার্থ শনাক্ত করা",
+                "পদার্থের পরিমাণ নির্ণয় করা",
+                "শুধু রঙ নির্ণয় করা",
+                "শুধু গন্ধ নির্ণয় করা"
+              ],
+              answer: 1
+            }
+
+          ]
+        }
+
+      }
+    },
+    }
+  },
+"পদার্থবিজ্ঞান": {
+  chapters: {
+    "অধ্যায় ২: ভেক্টর": {
+      exams: {
+
+        "পরীক্ষা ১": {
+          examTime: 25,
+          questions: [
+            {
+              q: "নিচের কোনটি স্কেলার রাশি?",
+              options: ["বেগ", "সরণ", "দ্রুতি", "ত্বরণ"],
+              answer: 2
+            },
+            {
+              q: "নিচের কোনটি ভেক্টর রাশি?",
+              options: ["ভর", "সময়", "কাজ", "বল"],
+              answer: 3
+            },
+            {
+              q: "ভেক্টর রাশি সম্পূর্ণরূপে প্রকাশ করতে কী প্রয়োজন?",
+              options: ["শুধু মান", "শুধু দিক", "মান ও দিক উভয়ই", "একক মাত্র"],
+              answer: 2
+            },
+            {
+              q: "একক ভেক্টরের মান কত?",
+              options: ["0", "1", "-1", "অসীম"],
+              answer: 1
+            },
+            {
+              q: "শূন্য ভেক্টরের মান কত?",
+              options: ["0", "1", "-1", "2"],
+              answer: 0
+            },
+            {
+              q: "একটি ভেক্টরকে বিপরীতমুখী করতে কী করতে হবে?",
+              options: ["0 দিয়ে গুণ", "-1 দিয়ে গুণ", "1 দিয়ে গুণ", "বর্গ করতে হবে"],
+              answer: 1
+            },
+            {
+              q: "A⃗ + B⃗ = B⃗ + A⃗ কোন সূত্র নির্দেশ করে?",
+              options: ["বণ্টন সূত্র", "অ্যাসোসিয়েটিভ সূত্র", "কমিউটেটিভ সূত্র", "ত্রিভুজ সূত্র"],
+              answer: 2
+            },
+            {
+              q: "A⃗ + 0⃗ এর মান কত?",
+              options: ["0⃗", "A⃗", "-A⃗", "1"],
+              answer: 1
+            },
+            {
+              q: "দুটি সমান ভেক্টরের মান ও দিক কেমন?",
+              options: ["শুধু মান সমান", "শুধু দিক সমান", "মান ও দিক উভয়ই সমান", "কোনোটিই নয়"],
+              answer: 2
+            },
+            {
+              q: "একটি ভেক্টরের মান 5 এবং x-অক্ষের সাথে কোণ 60° হলে x-উপাংশ কত?",
+              options: ["2.5", "5", "5√3/2", "√3"],
+              answer: 0
+            },
+            {
+              q: "একটি ভেক্টরের y-উপাংশ নির্ণয়ের সূত্র কোনটি?",
+              options: ["A cosθ", "A sinθ", "A tanθ", "A/secθ"],
+              answer: 1
+            },
+            {
+              q: "A⃗ = 3î + 4ĵ হলে |A⃗| কত?",
+              options: ["3", "4", "5", "7"],
+              answer: 2
+            },
+            {
+              q: "3î + 4ĵ ভেক্টরের দিক x-অক্ষের সাথে কত কোণ?",
+              options: ["30°", "37°", "45°", "53°"],
+              answer: 3
+            },
+            {
+              q: "î · ĵ এর মান কত?",
+              options: ["0", "1", "-1", "î"],
+              answer: 0
+            },
+            {
+              q: "î · î এর মান কত?",
+              options: ["0", "1", "-1", "2"],
+              answer: 1
+            },
+            {
+              q: "দুটি ভেক্টরের ডট গুণনের ফল কী?",
+              options: ["ভেক্টর", "স্কেলার", "ম্যাট্রিক্স", "টেনসর"],
+              answer: 1
+            },
+            {
+              q: "A⃗ · B⃗ = AB cosθ হলে θ = 90° এ ডট গুণনের মান কত?",
+              options: ["AB", "1", "0", "-AB"],
+              answer: 2
+            },
+            {
+              q: "দুটি ভেক্টর পরস্পর সমান্তরাল হলে তাদের মধ্যকার কোণ কত?",
+              options: ["0°", "45°", "90°", "180°"],
+              answer: 0
+            },
+            {
+              q: "দুটি ভেক্টর পরস্পর লম্ব হলে তাদের ডট গুণন কত?",
+              options: ["1", "AB", "0", "-AB"],
+              answer: 2
+            },
+            {
+              q: "A⃗ × B⃗ এর মান কোনটি?",
+              options: ["AB cosθ", "AB sinθ", "A+B", "A-B"],
+              answer: 1
+            },
+            {
+              q: "দুটি ভেক্টরের ক্রস গুণনের ফল কী?",
+              options: ["স্কেলার", "ভেক্টর", "শূন্য সবসময়", "একক"],
+              answer: 1
+            },
+            {
+              q: "î × ĵ এর মান কোনটি?",
+              options: ["î", "ĵ", "k̂", "0"],
+              answer: 2
+            },
+            {
+              q: "ĵ × k̂ এর মান কোনটি?",
+              options: ["î", "-î", "ĵ", "k̂"],
+              answer: 0
+            },
+            {
+              q: "k̂ × î এর মান কোনটি?",
+              options: ["î", "ĵ", "k̂", "-ĵ"],
+              answer: 1
+            },
+            {
+              q: "î × î এর মান কত?",
+              options: ["0", "1", "î", "-1"],
+              answer: 0
+            },
+            {
+              q: "A⃗ × B⃗ = -(B⃗ × A⃗) কোন বৈশিষ্ট্য নির্দেশ করে?",
+              options: ["কমিউটেটিভ", "অ্যান্টি-কমিউটেটিভ", "অ্যাসোসিয়েটিভ", "বণ্টন"],
+              answer: 1
+            },
+            {
+              q: "একটি অবস্থান ভেক্টর কী নির্দেশ করে?",
+              options: ["বস্তুর ভর", "মূলবিন্দু থেকে অবস্থান", "বস্তুর ত্বরণ", "সময়"],
+              answer: 1
+            },
+            {
+              q: "সরণ ভেক্টর কোন ধরনের রাশি?",
+              options: ["স্কেলার", "ভেক্টর", "মাত্রাহীন", "ধ্রুবক"],
+              answer: 1
+            },
+            {
+              q: "দুটি ভেক্টরের লব্ধির সর্বোচ্চ মান কখন হয়?",
+              options: ["θ = 0°", "θ = 60°", "θ = 90°", "θ = 180°"],
+              answer: 0
+            },
+            {
+              q: "দুটি সমান মানের বিপরীতমুখী ভেক্টরের লব্ধি কত?",
+              options: ["A", "2A", "0", "A/2"],
+              answer: 2
+            }
+          ]
+        },
+
+        "পরীক্ষা ২": {
+          examTime: 25,
+          questions: [
+            {
+              q: "দুটি ভেক্টরের লব্ধির সূত্র কোনটি?",
+              options: ["R²=A²+B²+2AB cosθ", "R=A+B+θ", "R²=A²-B²", "R=AB sinθ"],
+              answer: 0
+            },
+            {
+              q: "দুটি ভেক্টর পরস্পর লম্ব হলে লব্ধি কত?",
+              options: ["A+B", "√(A²+B²)", "A-B", "AB"],
+              answer: 1
+            },
+            {
+              q: "5 N ও 12 N দুটি পরস্পর লম্ব বলের লব্ধি কত?",
+              options: ["7 N", "13 N", "17 N", "60 N"],
+              answer: 1
+            },
+            {
+              q: "3 N ও 4 N পরস্পর লম্ব বলের লব্ধি কত?",
+              options: ["1 N", "5 N", "7 N", "12 N"],
+              answer: 1
+            },
+            {
+              q: "দুটি সমান ভেক্টরের মধ্যকার কোণ 60° হলে লব্ধির মান কত?",
+              options: ["A", "√2A", "√3A", "2A"],
+              answer: 2
+            },
+            {
+              q: "দুটি সমান ভেক্টরের মধ্যকার কোণ 120° হলে লব্ধি কত?",
+              options: ["0", "A", "√3A", "2A"],
+              answer: 1
+            },
+            {
+              q: "A⃗ = 6î + 8ĵ হলে A⃗-এর মান কত?",
+              options: ["8", "10", "14", "48"],
+              answer: 1
+            },
+            {
+              q: "A⃗ = 5î - 12ĵ হলে |A⃗| কত?",
+              options: ["7", "13", "17", "60"],
+              answer: 1
+            },
+            {
+              q: "2î - 3ĵ ভেক্টরের x-উপাংশ কত?",
+              options: ["2", "-3", "3", "-2"],
+              answer: 0
+            },
+            {
+              q: "2î - 3ĵ ভেক্টরের y-উপাংশ কত?",
+              options: ["2", "3", "-3", "-2"],
+              answer: 2
+            },
+            {
+              q: "A⃗ = 3î + 4ĵ এবং B⃗ = 2î + ĵ হলে A⃗+B⃗ কত?",
+              options: ["5î+5ĵ", "î+3ĵ", "6î+4ĵ", "5î+3ĵ"],
+              answer: 0
+            },
+            {
+              q: "A⃗ = 5î+2ĵ এবং B⃗ = 2î-ĵ হলে A⃗-B⃗ কত?",
+              options: ["3î+3ĵ", "7î+ĵ", "3î+ĵ", "7î+3ĵ"],
+              answer: 0
+            },
+            {
+              q: "একটি ভেক্টরের x ও y উপাংশ 3 এবং 4 হলে ভেক্টরের মান কত?",
+              options: ["3", "4", "5", "7"],
+              answer: 2
+            },
+            {
+              q: "A⃗ = 3î+4ĵ হলে A⃗-এর দিকে একক ভেক্টর কোনটি?",
+              options: ["3î+4ĵ", "(3î+4ĵ)/5", "(3î+4ĵ)/7", "5î+5ĵ"],
+              answer: 1
+            },
+            {
+              q: "একটি ভেক্টরের মান দ্বিগুণ করলে তার দিক—",
+              options: ["দ্বিগুণ হয়", "অর্ধেক হয়", "অপরিবর্তিত থাকে", "90° পরিবর্তিত হয়"],
+              answer: 2
+            },
+            {
+              q: "একটি ভেক্টরকে -2 দ্বারা গুণ করলে—",
+              options: ["মান অর্ধেক হয়", "মান দ্বিগুণ ও দিক বিপরীত হয়", "দিক অপরিবর্তিত থাকে", "মান শূন্য হয়"],
+              answer: 1
+            },
+            {
+              q: "A⃗ · B⃗ = AB হলে A⃗ ও B⃗-এর মধ্যকার কোণ কত?",
+              options: ["0°", "45°", "90°", "180°"],
+              answer: 0
+            },
+            {
+              q: "A⃗ · B⃗ = -AB হলে কোণ কত?",
+              options: ["0°", "60°", "90°", "180°"],
+              answer: 3
+            },
+            {
+              q: "A⃗ · A⃗ এর মান কত?",
+              options: ["A", "A²", "0", "2A"],
+              answer: 1
+            },
+            {
+              q: "|A⃗ × B⃗| সর্বোচ্চ হয় কখন?",
+              options: ["θ=0°", "θ=30°", "θ=90°", "θ=180°"],
+              answer: 2
+            },
+            {
+              q: "|A⃗ × B⃗| = 0 হলে দুটি ভেক্টরের সম্পর্ক কী?",
+              options: ["পরস্পর লম্ব", "সমান্তরাল বা বিপরীতমুখী", "সবসময় সমান", "কোনো সম্পর্ক নেই"],
+              answer: 1
+            },
+            {
+              q: "î × k̂ এর মান কত?",
+              options: ["ĵ", "-ĵ", "k̂", "-k̂"],
+              answer: 1
+            },
+            {
+              q: "ĵ × î এর মান কত?",
+              options: ["k̂", "-k̂", "î", "-î"],
+              answer: 1
+            },
+            {
+              q: "k̂ × ĵ এর মান কত?",
+              options: ["î", "-î", "ĵ", "-ĵ"],
+              answer: 1
+            },
+            {
+              q: "A⃗ × B⃗ কোন দিকে নির্দেশ করে?",
+              options: ["A⃗-এর দিকে", "B⃗-এর দিকে", "A⃗ ও B⃗ উভয়ের সমতলের লম্ব দিকে", "মূলবিন্দুর দিকে"],
+              answer: 2
+            },
+            {
+              q: "ভেক্টর যোগের ক্ষেত্রে A⃗+(B⃗+C⃗) কোন সূত্রের উদাহরণ?",
+              options: ["কমিউটেটিভ", "অ্যাসোসিয়েটিভ", "বণ্টন", "বিপরীত"],
+              answer: 1
+            },
+            {
+              q: "m(A⃗+B⃗)=mA⃗+mB⃗ কোন সূত্র?",
+              options: ["বণ্টন সূত্র", "কমিউটেটিভ সূত্র", "অ্যাসোসিয়েটিভ সূত্র", "ত্রিভুজ সূত্র"],
+              answer: 0
+            },
+            {
+              q: "নদীর স্রোত ও নৌকার বেগের ভেক্টর যোগ করলে কী পাওয়া যায়?",
+              options: ["নৌকার আপেক্ষিক বেগ", "ভূমির সাপেক্ষে নৌকার বেগ", "নদীর গভীরতা", "নৌকার ভর"],
+              answer: 1
+            },
+            {
+              q: "আপেক্ষিক বেগ নির্ণয়ের ক্ষেত্রে A-এর সাপেক্ষে B-এর বেগ কোনটি?",
+              options: ["vA+vB", "vA-vB", "vB-vA", "vA×vB"],
+              answer: 2
+            },
+            {
+              q: "একটি ভেক্টরের তিনটি Cartesian উপাংশ কোন অক্ষ বরাবর?",
+              options: ["x,y", "x,z", "y,z", "x,y,z"],
+              answer: 3
+            }
+          ]
+        },
+
+        "পরীক্ষা ৩": {
+          examTime: 25,
+          questions: [
+            {
+              q: "A⃗ = 2î+3ĵ+6k̂ হলে |A⃗| কত?",
+              options: ["5", "6", "7", "11"],
+              answer: 2
+            },
+            {
+              q: "A⃗ = î+2ĵ+2k̂ হলে একক ভেক্টর কোনটি?",
+              options: ["î+2ĵ+2k̂", "(î+2ĵ+2k̂)/3", "(î+2ĵ+2k̂)/5", "3î+6ĵ+6k̂"],
+              answer: 1
+            },
+            {
+              q: "A⃗ = 2î+3ĵ এবং B⃗ = 4î-ĵ হলে A⃗·B⃗ কত?",
+              options: ["5", "8", "11", "14"],
+              answer: 2
+            },
+            {
+              q: "A⃗ = 2î+3ĵ এবং B⃗ = 4î-ĵ হলে A⃗×B⃗ কত?",
+              options: ["14k̂", "-14k̂", "10k̂", "-10k̂"],
+              answer: 0
+            },
+            {
+              q: "A⃗ = 3î+4ĵ এবং B⃗ = 4î-3ĵ হলে A⃗·B⃗ কত?",
+              options: ["0", "7", "12", "25"],
+              answer: 0
+            },
+            {
+              q: "উপরের A⃗ ও B⃗ ভেক্টরের মধ্যকার কোণ কত?",
+              options: ["0°", "45°", "90°", "180°"],
+              answer: 2
+            },
+            {
+              q: "A⃗ = 3î+4ĵ এবং B⃗ = 4î-3ĵ হলে |A⃗×B⃗| কত?",
+              options: ["7", "12", "25", "49"],
+              answer: 2
+            },
+            {
+              q: "দুটি ভেক্টরের ডট গুণন ঋণাত্মক হলে তাদের মধ্যকার কোণ—",
+              options: ["0° থেকে 90°", "90° থেকে 180°", "শুধু 90°", "শুধু 0°"],
+              answer: 1
+            },
+            {
+              q: "দুটি ভেক্টরের ডট গুণন ধনাত্মক হলে তাদের মধ্যকার কোণ—",
+              options: ["0° থেকে 90°", "90° থেকে 180°", "শুধু 180°", "সবসময় 90°"],
+              answer: 0
+            },
+            {
+              q: "একটি ভেক্টরের x-উপাংশ 6 এবং y-উপাংশ 8। এর একক ভেক্টর কোনটি?",
+              options: ["6î+8ĵ", "(3/5)î+(4/5)ĵ", "(4/5)î+(3/5)ĵ", "10î+10ĵ"],
+              answer: 1
+            },
+            {
+              q: "দুটি ভেক্টরের লব্ধি শূন্য হতে হলে—",
+              options: ["দুটি ভেক্টর সমদিকী", "দুটি ভেক্টর সমান ও বিপরীতমুখী", "দুটি ভেক্টর লম্ব", "দুটি ভেক্টর অসমান"],
+              answer: 1
+            },
+            {
+              q: "A⃗-B⃗ কে কীভাবে লেখা যায়?",
+              options: ["A⃗+(-B⃗)", "A⃗+B⃗", "-A⃗+B⃗", "AB"],
+              answer: 0
+            },
+            {
+              q: "একটি ভেক্টরের বিপরীত ভেক্টরের মান—",
+              options: ["শূন্য", "সমান", "দ্বিগুণ", "অর্ধেক"],
+              answer: 1
+            },
+            {
+              q: "একটি ভেক্টরের বিপরীত ভেক্টরের দিক—",
+              options: ["একই", "লম্ব", "বিপরীত", "অনির্দিষ্ট"],
+              answer: 2
+            },
+            {
+              q: "A⃗ = 5î+12ĵ হলে A⃗-এর দিকের tangent-এর মান কত?",
+              options: ["5/12", "12/5", "13/5", "5/13"],
+              answer: 1
+            },
+            {
+              q: "A⃗ = 5î+12ĵ হলে x-অক্ষের সাথে কোণ θ-এর tanθ কত?",
+              options: ["5/12", "12/5", "13/12", "12/13"],
+              answer: 1
+            },
+            {
+              q: "একটি ভেক্টরের মান 10 এবং x-অক্ষের সাথে 30° কোণ হলে x-উপাংশ কত?",
+              options: ["5", "5√3", "10", "10√3"],
+              answer: 1
+            },
+            {
+              q: "একটি ভেক্টরের মান 10 এবং x-অক্ষের সাথে 30° কোণ হলে y-উপাংশ কত?",
+              options: ["5", "5√3", "10", "10√3"],
+              answer: 0
+            },
+            {
+              q: "A⃗·(B⃗+C⃗) = A⃗·B⃗ + A⃗·C⃗ কোন বৈশিষ্ট্য?",
+              options: ["বণ্টন সূত্র", "কমিউটেটিভ সূত্র", "অ্যাসোসিয়েটিভ সূত্র", "বিপরীত সূত্র"],
+              answer: 0
+            },
+            {
+              q: "A⃗×(B⃗+C⃗) = A⃗×B⃗ + A⃗×C⃗ কোন সূত্র?",
+              options: ["কমিউটেটিভ", "বণ্টন", "অ্যাসোসিয়েটিভ", "ত্রিভুজ"],
+              answer: 1
+            },
+            {
+              q: "(A⃗×B⃗)·C⃗ কী ধরনের রাশি?",
+              options: ["স্কেলার", "ভেক্টর", "একক ভেক্টর", "শূন্য সবসময়"],
+              answer: 0
+            },
+            {
+              q: "A⃗×(B⃗×C⃗) কোন ধরনের রাশি?",
+              options: ["স্কেলার", "ভেক্টর", "শূন্য", "মাত্রাহীন"],
+              answer: 1
+            },
+            {
+              q: "A⃗ ও B⃗-এর মধ্যে কোণ θ হলে A⃗×B⃗-এর দিক নির্ণয়ে কোন নিয়ম ব্যবহৃত হয়?",
+              options: ["বাম হাত নিয়ম", "ডান হাতের স্ক্রু/ডান হাত নিয়ম", "ত্রিভুজ নিয়ম", "সমান্তরাল সূত্র"],
+              answer: 1
+            },
+            {
+              q: "A⃗×B⃗-এর মান কোন অবস্থায় শূন্য হয়?",
+              options: ["A ও B পরস্পর লম্ব হলে", "A ও B সমান্তরাল হলে", "A ও B-এর কোণ 45° হলে", "সবসময়"],
+              answer: 1
+            },
+            {
+              q: "A⃗·B⃗-এর মান সর্বাধিক হয় যখন—",
+              options: ["θ=0°", "θ=45°", "θ=90°", "θ=180°"],
+              answer: 0
+            },
+            {
+              q: "A⃗·B⃗-এর মান সর্বনিম্ন হয় যখন—",
+              options: ["θ=0°", "θ=60°", "θ=90°", "θ=180°"],
+              answer: 3
+            },
+            {
+              q: "একটি কণার অবস্থান ভেক্টর r⃗ = 3î+4ĵ হলে মূলবিন্দু থেকে দূরত্ব কত?",
+              options: ["3", "4", "5", "7"],
+              answer: 2
+            },
+            {
+              q: "দুটি বিন্দুর অবস্থান ভেক্টর r⃗₁ ও r⃗₂ হলে তাদের মধ্যকার সরণ কোনটি?",
+              options: ["r⃗₁+r⃗₂", "r⃗₁-r⃗₂", "r⃗₂-r⃗₁", "উভয় B ও C"],
+              answer: 3
+            },
+            {
+              q: "সময় অনুযায়ী অবস্থান ভেক্টরের অন্তরক কী নির্দেশ করে?",
+              options: ["বল", "বেগ", "ত্বরণ", "ভরবেগ"],
+              answer: 1
+            },
+            {
+              q: "সময় অনুযায়ী বেগ ভেক্টরের অন্তরক কী নির্দেশ করে?",
+              options: ["সরণ", "বেগ", "ত্বরণ", "বল"],
+              answer: 2
+            }
+          ]
+        },
+        "পরীক্ষা -৪ ***": {
+  examTime: 25,
+  questions: [
+    {
+      q: "P ও Q দুটি ভেক্টরের মধ্যবর্তী কোণ α হলে তাদের লব্ধির মান কোনটি?",
+      options: [
+        "√(P² + Q² + 2PQ cosα)",
+        "√(P² + Q² - 2PQ cosα)",
+        "P + Q + 2PQ",
+        "PQ cosα"
+      ],
+      answer: 0
+    },
+    {
+      q: "দুটি ভেক্টরের লব্ধির সর্বোচ্চ মান কত?",
+      options: [
+        "|P - Q|",
+        "√(P² + Q²)",
+        "P + Q",
+        "PQ"
+      ],
+      answer: 2
+    },
+    {
+      q: "দুটি ভেক্টরের লব্ধির সর্বনিম্ন মান কত?",
+      options: [
+        "P + Q",
+        "|P - Q|",
+        "PQ",
+        "√(P² + Q²)"
+      ],
+      answer: 1
+    },
+    {
+      q: "|A⃗ + B⃗| = |A⃗ - B⃗| হলে A⃗ ও B⃗-এর মধ্যবর্তী কোণ কত?",
+      options: ["0°", "45°", "90°", "180°"],
+      answer: 2
+    },
+    {
+      q: "দুটি সমান ভেক্টরের লব্ধি যদি একটি ভেক্টরের √3 গুণ হয়, তবে তাদের মধ্যবর্তী কোণ কত?",
+      options: ["30°", "45°", "60°", "90°"],
+      answer: 2
+    },
+    {
+      q: "দুটি ভেক্টরের মান 5 ও 12 এবং তাদের লব্ধির মান 13 হলে তাদের মধ্যবর্তী কোণ কত?",
+      options: ["0°", "60°", "90°", "180°"],
+      answer: 2
+    },
+    {
+      q: "10 N ও 15 N দুটি বলের লব্ধির সম্ভাব্য সর্বোচ্চ মান কত?",
+      options: ["5 N", "15 N", "20 N", "25 N"],
+      answer: 3
+    },
+    {
+      q: "10 N ও 15 N দুটি বলের লব্ধির সম্ভাব্য সর্বনিম্ন মান কত?",
+      options: ["0 N", "5 N", "10 N", "15 N"],
+      answer: 1
+    },
+    {
+      q: "একটি ভেক্টর A-এর x-অক্ষের সাথে θ কোণ হলে তার x-উপাংশ কত?",
+      options: [
+        "A sinθ",
+        "A cosθ",
+        "A tanθ",
+        "A/cosθ"
+      ],
+      answer: 1
+    },
+    {
+      q: "একটি ভেক্টর A-এর y-উপাংশ কত, যদি x-অক্ষের সাথে θ কোণ উৎপন্ন করে?",
+      options: [
+        "A cosθ",
+        "A tanθ",
+        "A sinθ",
+        "A/cosθ"
+      ],
+      answer: 2
+    },
+    {
+      q: "10 N মানের একটি ভেক্টর x-অক্ষের সাথে 60° কোণ উৎপন্ন করলে x-উপাংশ কত?",
+      options: ["5 N", "5√3 N", "10 N", "10√3 N"],
+      answer: 0
+    },
+    {
+      q: "10 N মানের একটি ভেক্টর x-অক্ষের সাথে 60° কোণ উৎপন্ন করলে y-উপাংশ কত?",
+      options: ["5 N", "5√3 N", "10 N", "10√3 N"],
+      answer: 1
+    },
+    {
+      q: "A⃗ = 3î + 4ĵ হলে |A⃗| কত?",
+      options: ["3", "4", "5", "7"],
+      answer: 2
+    },
+    {
+      q: "A⃗ = 3î + 4ĵ হলে A⃗-এর দিকে একক ভেক্টর কোনটি?",
+      options: [
+        "3î + 4ĵ",
+        "(3î + 4ĵ)/3",
+        "(3î + 4ĵ)/5",
+        "(3î + 4ĵ)/7"
+      ],
+      answer: 2
+    },
+    {
+      q: "A⃗ = î + ĵ + k̂ হলে A⃗-এর মান কত?",
+      options: ["1", "√2", "√3", "3"],
+      answer: 2
+    },
+    {
+      q: "একটি একক ভেক্টরের মান কত?",
+      options: ["0", "1", "2", "অসীম"],
+      answer: 1
+    },
+    {
+      q: "A⃗ · B⃗-এর সূত্র কোনটি?",
+      options: [
+        "AB sinθ",
+        "AB cosθ",
+        "A+B",
+        "A-B"
+      ],
+      answer: 1
+    },
+    {
+      q: "দুটি ভেক্টর পরস্পর লম্ব হলে তাদের ডট গুণনের মান কত?",
+      options: ["AB", "A+B", "0", "1"],
+      answer: 2
+    },
+    {
+      q: "î · ĵ এর মান কত?",
+      options: ["1", "-1", "0", "k̂"],
+      answer: 2
+    },
+    {
+      q: "î · î এর মান কত?",
+      options: ["0", "1", "-1", "î"],
+      answer: 1
+    },
+    {
+      q: "A⃗ = 2î + 3ĵ এবং B⃗ = 4î - ĵ হলে A⃗ · B⃗ কত?",
+      options: ["5", "8", "11", "14"],
+      answer: 2
+    },
+    {
+      q: "দুটি ভেক্টরের ক্রস গুণনের মান কোনটি?",
+      options: [
+        "AB cosθ",
+        "AB sinθ",
+        "A+B",
+        "A-B"
+      ],
+      answer: 1
+    },
+    {
+      q: "A⃗ × B⃗ কোন ধরনের রাশি?",
+      options: [
+        "স্কেলার",
+        "ভেক্টর",
+        "মাত্রাহীন রাশি",
+        "ধ্রুবক"
+      ],
+      answer: 1
+    },
+    {
+      q: "î × ĵ এর মান কত?",
+      options: ["î", "ĵ", "k̂", "0"],
+      answer: 2
+    },
+    {
+      q: "ĵ × î এর মান কত?",
+      options: ["k̂", "-k̂", "î", "-î"],
+      answer: 1
+    },
+    {
+      q: "A⃗ × B⃗ = -(B⃗ × A⃗) কোন বৈশিষ্ট্য নির্দেশ করে?",
+      options: [
+        "বিনিময় সূত্র",
+        "বণ্টন সূত্র",
+        "অ্যান্টি-কমিউটেটিভ সূত্র",
+        "সহযোগী সূত্র"
+      ],
+      answer: 2
+    },
+    {
+      q: "|A⃗ × B⃗| সর্বোচ্চ হয় কখন?",
+      options: ["0°", "30°", "90°", "180°"],
+      answer: 2
+    },
+    {
+      q: "একটি ভেক্টরের direction cosines l, m, n হলে কোন সম্পর্কটি সঠিক?",
+      options: [
+        "l + m + n = 1",
+        "l² + m² + n² = 1",
+        "lmn = 1",
+        "l² + m² + n² = 0"
+      ],
+      answer: 1
+    },
+    {
+      q: "নদীর স্রোত ও নৌকার বেগ ভেক্টর যোগ করলে কী পাওয়া যায়?",
+      options: [
+        "নৌকার নিজস্ব বেগ",
+        "নদীর স্রোতের বেগ",
+        "ভূমির সাপেক্ষে নৌকার বেগ",
+        "নৌকার ভর"
+      ],
+      answer: 2
+    },
+    {
+      q: "সময় অনুযায়ী অবস্থান ভেক্টরের অন্তরক কী নির্দেশ করে?",
+      options: [
+        "সরণ",
+        "বেগ",
+        "ত্বরণ",
+        "বল"
+      ],
+      answer: 1
+    }
+  ]
+}
+
+      }
+    }
+  }
+},
+  "গণিত ১ম পত্র": {
+  chapters: {
+    "অধ্যায় ১: ম্যাট্রিক্স ও নির্ণায়ক": {
+      exams: {
+
+        "পরীক্ষা ১": {
+          examTime: 30,
+          questions: [
+            { q: "ম্যাট্রিক্স কী?", options: ["সংখ্যাগুলোকে সারি ও কলামে সাজানো আয়তাকার বিন্যাস","শুধু একটি সংখ্যা","একটি সমীকরণ","একটি জ্যামিতিক চিত্র"], answer: 0 },
+            { q: "যে ম্যাট্রিক্সের একটি মাত্র সারি থাকে তাকে কী বলে?", options: ["Column matrix","Row matrix","Square matrix","Null matrix"], answer: 1 },
+            { q: "যে ম্যাট্রিক্সের একটি মাত্র কলাম থাকে তাকে কী বলে?", options: ["Row matrix","Column matrix","Unit matrix","Zero matrix"], answer: 1 },
+            { q: "যে ম্যাট্রিক্সের সারি ও কলামের সংখ্যা সমান তাকে কী বলে?", options: ["Row matrix","Column matrix","Square matrix","Rectangular matrix"], answer: 2 },
+            { q: "2 × 3 ম্যাট্রিক্সে মোট কয়টি উপাদান থাকে?", options: ["5","6","8","9"], answer: 1 },
+            { q: "3 × 3 ম্যাট্রিক্সে মোট কয়টি উপাদান থাকে?", options: ["6","8","9","12"], answer: 2 },
+            { q: "সব উপাদান শূন্য এমন ম্যাট্রিক্সকে কী বলে?", options: ["Unit matrix","Null matrix","Scalar matrix","Identity matrix"], answer: 1 },
+            { q: "একক ম্যাট্রিক্সের প্রধান কর্ণের উপাদানগুলো কী?", options: ["0","1","−1","2"], answer: 1 },
+            { q: "একক ম্যাট্রিক্সের কর্ণের বাইরের উপাদানগুলো কী?", options: ["1","2","0","−1"], answer: 2 },
+            { q: "একটি 2 × 2 একক ম্যাট্রিক্স কোনটি?", options: ["[[1,0],[0,1]]","[[0,1],[1,0]]","[[1,1],[0,1]]","[[0,0],[0,0]]"], answer: 0 },
+
+            { q: "দুটি ম্যাট্রিক্স সমান হওয়ার জন্য কী প্রয়োজন?", options: ["শুধু একই সারি থাকতে হবে","শুধু একই কলাম থাকতে হবে","ক্রম ও সংশ্লিষ্ট উপাদান সমান হতে হবে","শুধু determinant সমান হতে হবে"], answer: 2 },
+            { q: "A + B নির্ণয় করা সম্ভব কখন?", options: ["যেকোনো দুটি ম্যাট্রিক্সে","একই ক্রমের ম্যাট্রিক্স হলে","শুধু square matrix হলে","শুধু 2×2 হলে"], answer: 1 },
+            { q: "A − B নির্ণয় করতে হলে A ও B-এর কী একই হতে হবে?", options: ["determinant","ক্রম","উপাদানের যোগফল","rank"], answer: 1 },
+            { q: "A = [[1,2],[3,4]] এবং B = [[2,1],[4,3]] হলে A+B কত?", options: ["[[3,3],[7,7]]","[[1,1],[1,1]]","[[2,2],[4,4]]","[[3,2],[7,6]]"], answer: 0 },
+            { q: "A = [[5,4],[3,2]] এবং B = [[2,1],[1,1]] হলে A−B কত?", options: ["[[3,3],[2,1]]","[[7,5],[4,3]]","[[2,3],[1,2]]","[[3,2],[2,3]]"], answer: 0 },
+            { q: "A = [[1,2],[3,4]] হলে 2A কত?", options: ["[[2,4],[6,8]]","[[1,4],[3,8]]","[[2,2],[4,4]]","[[3,4],[5,6]]"], answer: 0 },
+            { q: "A = [[2,1],[0,3]] হলে 3A কত?", options: ["[[6,3],[0,9]]","[[5,4],[0,6]]","[[6,1],[0,9]]","[[2,3],[0,9]]"], answer: 0 },
+            { q: "ম্যাট্রিক্সের transpose-এ কী করা হয়?", options: ["প্রতিটি উপাদান দ্বিগুণ করা হয়","সারি ও কলাম অদলবদল করা হয়","সব উপাদান শূন্য করা হয়","determinant নেওয়া হয়"], answer: 1 },
+            { q: "A-এর transpose কোন প্রতীক দ্বারা প্রকাশ করা হয়?", options: ["A⁻¹","Aᵀ","|A|","2A"], answer: 1 },
+            { q: "A = [[1,2],[3,4]] হলে Aᵀ কত?", options: ["[[1,2],[3,4]]","[[1,3],[2,4]]","[[4,3],[2,1]]","[[2,1],[4,3]]"], answer: 1 },
+
+            { q: "2 × 3 ম্যাট্রিক্সের transpose-এর ক্রম কত হবে?", options: ["2 × 3","3 × 2","2 × 2","3 × 3"], answer: 1 },
+            { q: "A-এর inverse-এর প্রতীক কোনটি?", options: ["Aᵀ","A⁻¹","|A|","A²"], answer: 1 },
+            { q: "কোন ম্যাট্রিক্সের inverse থাকে?", options: ["শুধু null matrix","শুধু singular matrix","non-singular square matrix","সব matrix"], answer: 2 },
+            { q: "2 × 2 ম্যাট্রিক্স [[a,b],[c,d]]-এর determinant কত?", options: ["ab−cd","ad−bc","ac−bd","a+b+c+d"], answer: 1 },
+            { q: "[[2,3],[1,4]]-এর determinant কত?", options: ["5","6","7","8"], answer: 0 },
+            { q: "[[1,2],[3,4]]-এর determinant কত?", options: ["−2","2","−4","4"], answer: 0 },
+            { q: "একটি determinant-এর মান 0 হলে matrix-টি কী?", options: ["Unit","Singular","Identity","Scalar"], answer: 1 },
+            { q: "det(A) ≠ 0 হলে A কী ধরনের matrix?", options: ["Singular","Null","Non-singular","Zero"], answer: 2 },
+            { q: "একটি 2 × 2 matrix-এর determinant নির্ণয়ে কয়টি diagonal product ব্যবহৃত হয়?", options: ["1","2","3","4"], answer: 1 },
+            { q: "det [[3,0],[0,5]] কত?", options: ["8","15","10","0"], answer: 1 }
+          ]
+        },
+
+        "পরীক্ষা ২": {
+          examTime: 30,
+          questions: [
+            { q: "det(A) = 5 হলে det(Aᵀ) কত?", options: ["−5","0","5","25"], answer: 2 },
+            { q: "det(A) = 3 হলে det(2A) একটি 2 × 2 matrix-এর ক্ষেত্রে কত?", options: ["6","9","12","24"], answer: 2 },
+            { q: "একটি determinant-এর দুটি সারি পরস্পর সমান হলে determinant-এর মান কত?", options: ["1","−1","0","2"], answer: 2 },
+            { q: "একটি determinant-এর দুটি কলাম পরস্পর সমান হলে determinant-এর মান কত?", options: ["0","1","2","−1"], answer: 0 },
+            { q: "একটি determinant-এর কোনো একটি সারির সব উপাদান 0 হলে determinant কত?", options: ["1","−1","0","2"], answer: 2 },
+            { q: "det(A) = 4 এবং det(B) = 5 হলে det(AB) কত?", options: ["9","20","1","25"], answer: 1 },
+            { q: "det(A) = 6 হলে det(A⁻¹) কত?", options: ["6","−6","1/6","0"], answer: 2 },
+            { q: "A ও B একই order-এর matrix হলে AB সবসময় কী?", options: ["সংজ্ঞায়িত নয়","সংজ্ঞায়িত","শূন্য","একক matrix"], answer: 1 },
+            { q: "A-এর order 2×3 এবং B-এর order 3×2 হলে AB-এর order কত?", options: ["2×2","3×3","2×3","3×2"], answer: 0 },
+            { q: "A-এর order 3×2 এবং B-এর order 2×4 হলে AB-এর order কত?", options: ["2×3","3×4","4×3","2×4"], answer: 1 },
+
+            { q: "A-এর order 2×3 এবং B-এর order 2×3 হলে AB কি সংজ্ঞায়িত?", options: ["হ্যাঁ","না","শুধু A=B হলে","শুধু determinant থাকলে"], answer: 1 },
+            { q: "Matrix multiplication সাধারণত কোন ধর্ম মেনে চলে না?", options: ["যোগের বিনিময় ধর্ম","গুণের বিনিময় ধর্ম","যোগের সংযোগ ধর্ম","গুণের সংযোগ ধর্ম"], answer: 1 },
+            { q: "A(B+C) = AB+AC কোন ধর্মের উদাহরণ?", options: ["বণ্টন ধর্ম","বিনিময় ধর্ম","সংযোগ ধর্ম","পরিচয় ধর্ম"], answer: 0 },
+            { q: "(AB)C = A(BC) কোন ধর্ম?", options: ["বিনিময়","সংযোগ","বণ্টন","বিপরীত"], answer: 1 },
+            { q: "AB ≠ BA সাধারণত কোন বিষয়ে প্রযোজ্য?", options: ["Matrix multiplication","Matrix addition","Scalar addition","Determinant addition"], answer: 0 },
+            { q: "A = [[1,2],[0,1]], B = [[2,0],[1,3]] হলে AB কত?", options: ["[[4,6],[1,3]]","[[2,6],[1,3]]","[[3,6],[1,2]]","[[4,3],[2,1]]"], answer: 0 },
+            { q: "A = [[1,0],[2,1]], B = [[3,1],[0,2]] হলে AB কত?", options: ["[[3,1],[6,4]]","[[3,1],[6,3]]","[[1,3],[2,4]]","[[3,2],[6,1]]"], answer: 0 },
+            { q: "A = [[2,1],[1,1]], B = [[1,0],[2,3]] হলে AB কত?", options: ["[[4,3],[3,3]]","[[2,3],[3,4]]","[[4,2],[3,1]]","[[3,4],[3,2]]"], answer: 0 },
+            { q: "[[1,2],[3,4]] × [[1,0],[0,1]] = ?", options: ["[[1,2],[3,4]]","[[0,0],[0,0]]","[[1,3],[2,4]]","[[2,1],[4,3]]"], answer: 0 },
+            { q: "A × I = ?", options: ["I","A","0","A⁻¹"], answer: 1 },
+
+            { q: "একটি square matrix-এর principal diagonal কোনটি?", options: ["উপরের সারি","বাম কলাম","বাম-উপর থেকে ডান-নিচ","ডান-উপর থেকে বাম-নিচ"], answer: 2 },
+            { q: "যে square matrix-এর diagonal-এর বাইরে সব উপাদান 0 তাকে কী বলা হয়?", options: ["Diagonal matrix","Row matrix","Column matrix","Null matrix"], answer: 0 },
+            { q: "Diagonal matrix-এর সব diagonal element 1 হলে সেটি কী?", options: ["Null matrix","Identity matrix","Row matrix","Singular matrix"], answer: 1 },
+            { q: "একটি scalar matrix-এ diagonal-এর উপাদানগুলো কেমন?", options: ["সব আলাদা","সব সমান","সব 0","সব 1 অবশ্যই"], answer: 1 },
+            { q: "A = [[2,0],[0,2]] কোন ধরনের matrix?", options: ["Scalar matrix","Row matrix","Column matrix","Null matrix"], answer: 0 },
+            { q: "A = [[0,1],[1,0]]-এর determinant কত?", options: ["0","1","−1","2"], answer: 2 },
+            { q: "A = [[4,2],[2,1]] singular কি না?", options: ["হ্যাঁ, কারণ determinant 0","না, determinant 1","না, determinant 2","হ্যাঁ, determinant 4"], answer: 0 },
+            { q: "A = [[2,1],[1,1]]-এর determinant কত?", options: ["0","1","2","3"], answer: 1 },
+            { q: "A = [[5,2],[3,1]]-এর determinant কত?", options: ["−1","1","5","−5"], answer: 0 },
+            { q: "A = [[4,1],[2,3]]-এর determinant কত?", options: ["8","10","12","14"], answer: 1 }
+          ]
+        },
+
+        "পরীক্ষা ৩": {
+          examTime: 30,
+          questions: [
+            { q: "3 × 3 determinant-এর একটি উপাদানের minor কী?", options: ["উপাদানটি বাদ দিয়ে অবশিষ্ট 2×2 determinant","উপাদানটির দ্বিগুণ","পুরো determinant","শুধু সারির যোগফল"], answer: 0 },
+            { q: "Cofactor নির্ণয়ের সূত্র কোনটি?", options: ["Cᵢⱼ = Mᵢⱼ","Cᵢⱼ = (−1)ⁱ⁺ʲ Mᵢⱼ","Cᵢⱼ = i+j","Cᵢⱼ = Mᵢⱼ²"], answer: 1 },
+            { q: "Cofactor-এর sign pattern কী?", options: ["সব +","+ − + / − + − / + − +","সব −","+ + − / − − +"], answer: 1 },
+            { q: "3 × 3 determinant-এর প্রথম সারি দিয়ে expansion করলে কয়টি term থাকে?", options: ["2","3","4","6"], answer: 1 },
+            { q: "যদি কোনো determinant-এর একটি সারির প্রতিটি উপাদান k দ্বারা গুণ করা হয়, determinant কী হবে?", options: ["k গুণ হবে","k² গুণ হবে","অপরিবর্তিত থাকবে","0 হবে"], answer: 0 },
+            { q: "একটি determinant-এর দুটি সারি অদলবদল করলে কী হয়?", options: ["মান অপরিবর্তিত","চিহ্ন পরিবর্তিত হয়","মান 0 হয়","দ্বিগুণ হয়"], answer: 1 },
+            { q: "একটি determinant-এর একটি সারির সাথে অন্য সারির k গুণ যোগ করলে determinant-এর কী হয়?", options: ["পরিবর্তন হয় না","0 হয়","k গুণ হয়","চিহ্ন বদলে যায়"], answer: 0 },
+            { q: "3 × 3 identity matrix-এর determinant কত?", options: ["0","1","3","9"], answer: 1 },
+            { q: "একটি singular matrix-এর determinant কত?", options: ["1","−1","0","অসংজ্ঞায়িত"], answer: 2 },
+            { q: "A⁻¹ নির্ণয়ের জন্য কোন শর্তটি দরকার?", options: ["det(A)=0","det(A)≠0","A=0","A=I শুধু"], answer: 1 },
+
+            { q: "2×2 matrix A = [[a,b],[c,d]]-এর adjoint কীভাবে পাওয়া যায়?", options: ["diagonal element অদলবদল ও অন্য দুটির sign পরিবর্তন করে","সব element যোগ করে","সব element বর্গ করে","transpose নিয়ে"], answer: 0 },
+            { q: "A = [[2,1],[3,4]] হলে det(A) কত?", options: ["5","6","7","8"], answer: 0 },
+            { q: "উপরের A-এর inverse-এর denominator কী হবে?", options: ["2","3","5","7"], answer: 2 },
+            { q: "A = [[2,1],[3,4]] হলে A⁻¹ কোনটি?", options: ["1/5 [[4,-1],[-3,2]]","1/5 [[2,-1],[-3,4]]","1/7 [[4,-1],[-3,2]]","[[4,-1],[-3,2]]"], answer: 0 },
+            { q: "A = [[1,2],[3,5]]-এর determinant কত?", options: ["−1","1","2","−2"], answer: 0 },
+            { q: "A = [[1,2],[3,5]] singular কি?", options: ["হ্যাঁ","না","শুধু transpose করলে","শুধু inverse নিলে"], answer: 0 },
+            { q: "Cramer's Rule কোন ধরনের সমীকরণ সমাধানে ব্যবহৃত হয়?", options: ["রৈখিক সমীকরণের জোট","শুধু দ্বিঘাত সমীকরণ","শুধু ত্রিকোণমিতিক সমীকরণ","শুধু সূচকীয় সমীকরণ"], answer: 0 },
+            { q: "x + y = 5 এবং x − y = 1 হলে x কত?", options: ["2","3","4","5"], answer: 1 },
+            { q: "x + y = 5 এবং x − y = 1 হলে y কত?", options: ["1","2","3","4"], answer: 1 },
+            { q: "2x + y = 7 এবং x + y = 5 হলে x কত?", options: ["1","2","3","4"], answer: 1 },
+
+            { q: "2x + y = 7 এবং x + y = 5 হলে y কত?", options: ["2","3","4","5"], answer: 1 },
+            { q: "x + 2y = 8 এবং x − y = 2 হলে y কত?", options: ["1","2","3","4"], answer: 1 },
+            { q: "x + 2y = 8 এবং x − y = 2 হলে x কত?", options: ["2","3","4","5"], answer: 2 },
+            { q: "x + y = 6 এবং 2x − y = 3 হলে x কত?", options: ["2","3","4","5"], answer: 1 },
+            { q: "x + y = 6 এবং 2x − y = 3 হলে y কত?", options: ["2","3","4","5"], answer: 2 },
+            { q: "A = [[3,1],[2,1]] হলে det(A) কত?", options: ["1","2","3","5"], answer: 0 },
+            { q: "A = [[1,2],[2,4]] হলে matrix-টি কী?", options: ["Non-singular","Singular","Identity","Scalar"], answer: 1 },
+            { q: "A = [[1,2],[3,6]]-এর determinant কত?", options: ["0","1","3","6"], answer: 0 },
+            { q: "det(A)=−2 হলে det(Aᵀ) কত?", options: ["2","−2","4","−4"], answer: 1 },
+            { q: "det(A)=4 এবং det(B)=2 হলে det(AB) কত?", options: ["2","6","8","16"], answer: 2 }
+          ]
+        }
+
+      }
+    }
+  }
+},
+};
+
+
+const TEACHER_WHATSAPP_NUMBER = "8801995125480"; 
+
+const accentPalette = ["var(--accent-blue)","var(--accent-red)","var(--accent-green)","var(--accent-plum)","var(--accent-gold)"];
+
+let state = { 
+  selectedSubject: null,
+  selectedChapter: null,
+  selectedExam: null,
+  studentName: null,
+  answers:[], 
+  timeLeft:0, 
+  timerId:null, 
+  finished:false 
+};
+
+const $ = (id)=>document.getElementById(id);
+
+function toast(msg, type="info", duration=2800){
+  const icons = {success:"✓",error:"✕",warning:"!",info:"i"};
+  const t = $("toast");
+  t.className = "toast " + type;
+  t.innerHTML = `<span class="toast-icon">${icons[type] || "i"}</span><span class="toast-text">${msg}</span>`;
+  requestAnimationFrame(()=>t.classList.add("show"));
+  clearTimeout(t._timer);
+  t._timer = setTimeout(()=>t.classList.remove("show"), duration);
+}
+
+function bnNum(n){
+  const map = {"0":"০","1":"১","2":"২","3":"৩","4":"৪","5":"৫","6":"৬","7":"৭","8":"৮","9":"৯"};
+  return String(n).split("").map(c=>map[c]!==undefined?map[c]:c).join("");
+}
+
+function hideAllScreens(){
+  window.scrollTo(0, 0);
+  $("screen-subjects").hidden = true;
+  $("screen-chapters").hidden = true;
+  $("screen-exams").hidden = true;
+  $("screen-exam").hidden = true;
+  $("screen-result").hidden = true;
+}
+
+// ১. সাবজেক্ট লিস্ট রেন্ডার
+function renderSubjects(){
+  const grid = $("subjectGrid");
+  grid.innerHTML = "";
+  const subjects = Object.keys(examData);
+  const icons = {"আইসিটি":"💻","রসায়ন":"🧪","পদার্থবিজ্ঞান":"⚛️","গণিত":"🧮","জীববিজ্ঞান":"🧬","ইংরেজি":"📖"};
+
+  subjects.forEach((name,i)=>{
+    const card = document.createElement("button");
+    card.className = "subject-card";
+    const chapterCount = Object.keys(examData[name].chapters).length;
+    card.innerHTML = `
+      <div class="card-icon">${icons[name] || "📚"}</div>
+      <h3>${name}</h3>
+      <div class="subject-meta"><span class="pill">${bnNum(chapterCount)}টি অধ্যায়</span></div>
+      <div class="card-arrow">→</div>`;
+    card.addEventListener("click", ()=>showChapters(name));
+    grid.appendChild(card);
+  });
+}
+
+// ২. অধ্যায় লিস্ট দেখানো
+function showChapters(subject){
+  state.selectedSubject = subject;
+  hideAllScreens();
+  $("screen-chapters").hidden = false;
+  $("chapterSubjectName").textContent = subject;
+  $("topSub").textContent = subject;
+  
+  const grid = $("chapterGrid");
+  grid.innerHTML = "";
+  const chapters = Object.keys(examData[subject].chapters);
+  chapters.forEach((chapterName,i)=>{
+    const card = document.createElement("button");
+    card.className = "subject-card";
+    card.style.setProperty("--card-accent", accentPalette[i % accentPalette.length]);
+    const examCount = Object.keys(examData[subject].chapters[chapterName].exams).length;
+    card.innerHTML = `
+      <div class="card-icon">📚</div>
+      <h3>${chapterName}</h3>
+      <div class="subject-meta"><span class="pill">${bnNum(examCount)}টি পরীক্ষা</span></div>
+      <div class="card-arrow">→</div>`;
+    card.addEventListener("click", ()=>showExams(subject, chapterName));
+    grid.appendChild(card);
+  });
+}
+
+// ৩. পরীক্ষা লিস্ট দেখানো
+function showExams(subject, chapter){
+  state.selectedChapter = chapter;
+  hideAllScreens();
+  $("screen-exams").hidden = false;
+  $("examChapterName").textContent = chapter;
+  $("topSub").textContent = subject + " → " + chapter;
+  
+  const grid = $("examGrid");
+  grid.innerHTML = "";
+  const exams = Object.keys(examData[subject].chapters[chapter].exams);
+  exams.forEach((examName,i)=>{
+    const examObj = examData[subject].chapters[chapter].exams[examName];
+    const qCount = examObj.questions.length;
+    const timeInMinutes = examObj.examTime || qCount;
+    
+    const card = document.createElement("button");
+    card.className = "subject-card";
+    card.style.setProperty("--card-accent", accentPalette[i % accentPalette.length]);
+    card.innerHTML = `
+      <div class="card-icon">📝</div>
+      <h3>${examName}</h3>
+      <div class="subject-meta">
+        <span class="pill">${bnNum(qCount)}টি প্রশ্ন</span>
+        <span class="pill">⏱ ${bnNum(timeInMinutes)} মিনিট</span>
+      </div>
+      <div class="card-arrow">→</div>`;
+    card.addEventListener("click", ()=>askForName(subject, chapter, examName));
+    grid.appendChild(card);
+  });
+}
+
+// ৪. নাম চাওয়া
+function askForName(subject, chapter, exam){
+  state.selectedExam = exam;
+  $("nameModal").hidden = false;
+  $("studentName").value = state.studentName || "";
+  $("studentName").focus();
+}
+
+$("btnCancelName").addEventListener("click", ()=>{
+  $("nameModal").hidden = true;
+});
+
+$("btnStartExam").addEventListener("click", ()=>{
+  const name = $("studentName").value.trim();
+  if(!name){
+    toast("আগে তোমার নাম লিখো", "warning");
+    $("studentName").focus();
+    return;
+  }
+  state.studentName = name;
+  $("nameModal").hidden = true;
+  startExam();
+});
+
+$("studentName").addEventListener("keypress", (e)=>{
+  if(e.key === "Enter"){
+    $("btnStartExam").click();
+  }
+});
+
+// ৫. পরীক্ষা শুরু
+function startExam(){
+  const examObj = examData[state.selectedSubject].chapters[state.selectedChapter].exams[state.selectedExam];
+  const questions = examObj.questions;
+  const timeInMinutes = examObj.examTime || questions.length;
+  
+  state.answers = new Array(questions.length).fill(null);
+  state.timeLeft = timeInMinutes * 60;
+  state.timerId = null;
+  state.finished = false;
+  
+  hideAllScreens();
+  $("screen-exam").hidden = false;
+  $("examSubjectName").textContent = `${state.selectedSubject} → ${state.selectedChapter} → ${state.selectedExam}`;
+  $("topSub").textContent = state.studentName;
+  
+  renderAllQuestions();
+  startTimer();
+  toast(`🎯 ${state.studentName}, পরীক্ষা শুরু হয়েছে। শুভকামনা!`, "success", 3500);
+}
+
+function startTimer(){
+  clearInterval(state.timerId);
+  updateTimerText();
+  state.timerId = setInterval(()=>{
+    state.timeLeft--;
+    updateTimerText();
+    if(state.timeLeft <= 0){
+      clearInterval(state.timerId);
+      toast("সময় শেষ! পরীক্ষা জমা দেওয়া হচ্ছে...", "warning");
+      finishExam();
+    }
+  },1000);
+}
+
+function updateTimerText(){
+  const m = Math.floor(state.timeLeft/60), s = state.timeLeft%60;
+  $("timerText").textContent = String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
+  $("timerBox").classList.toggle("low", state.timeLeft <= 60);
+}
+
+// শসবগুলো প্রশ্ন একই পেজে রেন্ডার করা (স্কোরযোগ্য/স্ক্রোলযোগ্য)
+function renderAllQuestions(){
+  const questions = examData[state.selectedSubject].chapters[state.selectedChapter].exams[state.selectedExam].questions;
+  const total = questions.length;
+  
+  const container = $("questionsContainer");
+  container.innerHTML = "";
+  
+  const tags = ["ক","খ","গ","ঘ"];
+  
+  questions.forEach((q, i)=>{
+    const qCard = document.createElement("div");
+    qCard.className = "question-card";
+    qCard.id = "question-" + i;
+    
+    const qNumDiv = document.createElement("div");
+    qNumDiv.className = "qnum";
+    qNumDiv.textContent = `প্রশ্ন ${bnNum(i+1)} / ${bnNum(total)}`;
+    
+    const qTextDiv = document.createElement("div");
+    qTextDiv.className = "qtext";
+    qTextDiv.textContent = q.q;
+    
+    const optionsBox = document.createElement("div");
+    q.options.forEach((opt, optIdx)=>{
+      const b = document.createElement("button");
+      b.className = "option" + (state.answers[i]===optIdx ? " selected" : "");
+      b.innerHTML = `<span class="opt-tag">${tags[optIdx]}</span><span>${opt}</span>`;
+      b.addEventListener("click", (e)=>{
+        e.preventDefault();
+
+        const previousAnswer = state.answers[i];
+        const allOptions = optionsBox.querySelectorAll('.option');
+
+        if(previousAnswer === optIdx){
+          state.answers[i] = null;
+          b.classList.remove('selected');
+          toast("উত্তরটি আনসিলেক্ট হয়েছে", "info", 1000);
+        }else{
+          state.answers[i] = optIdx;
+          allOptions.forEach(opt => opt.classList.remove('selected'));
+          b.classList.add('selected');
+          toast("উত্তরটি সিলেক্ট করা হয়েছে ✓", "success", 1100);
+        }
+
+        const answeredCount = state.answers.filter(a => a !== null).length;
+        $("progressFill").style.width = (answeredCount/total*100)+"%";
+        const unansweredCount = total - answeredCount;
+        $("pageLabel").textContent = `উত্তর দেওয়া ${bnNum(answeredCount)}টি • বাকি ${bnNum(unansweredCount)}টি`;
+      });
+      optionsBox.appendChild(b);
+    });
+    
+    qCard.appendChild(qNumDiv);
+    qCard.appendChild(qTextDiv);
+    qCard.appendChild(optionsBox);
+    container.appendChild(qCard);
+  });
+  
+  const answeredCount = state.answers.filter(a => a !== null).length;
+  $("progressFill").style.width = (answeredCount/total*100)+"%";
+  const unansweredCount = total - answeredCount;
+  $("pageLabel").textContent = `উত্তর দেওয়া ${bnNum(answeredCount)}টি • বাকি ${bnNum(unansweredCount)}টি`;
+  
+  window.scrollTo(0, 0);
+}
+
+// Exit button click handler (হোমপেজে নিয়ে যাবে)
+$("btnExitExam").addEventListener("click", ()=>{
+  if(confirm("তুমি কি পরীক্ষাটি বাতিল করে হোমে ফিরে যেতে চাও?")){
+    clearInterval(state.timerId);
+    hideAllScreens();
+    $("screen-subjects").hidden = false;
+    $("topSub").textContent = "সাবজেক্ট বেছে নিয়ে পরীক্ষা শুরু করো";
+  }
+});
+
+$("btnSubmitExam").addEventListener("click", ()=>{
+  const unanswered = state.answers.filter(a=>a===null).length;
+
+  if(unanswered > 0){
+    showSubmitWarning(unanswered);
+    return;
+  }
+
+  submitExamNow();
+});
+
+function showSubmitWarning(unanswered){
+  const modal = $("submitWarningModal");
+  const text = $("submitWarningText");
+
+  text.innerHTML = `
+    <strong style="color:#ef4444;">
+      ${bnNum(unanswered)}টি প্রশ্ন
+    </strong>
+    এর উত্তর এখনো দেওয়া হয়নি।<br>
+    তবুও কি তুমি পরীক্ষাটি জমা দিতে চাও?
+  `;
+
+  modal.classList.add("show");
+  modal.setAttribute("aria-hidden","false");
+}
+
+function closeSubmitWarning(){
+  const modal = $("submitWarningModal");
+  modal.classList.remove("show");
+  modal.setAttribute("aria-hidden","true");
+}
+
+function submitExamNow(){
+  closeSubmitWarning();
+  toast("📤 পরীক্ষা জমা নেওয়া হচ্ছে...", "success");
+
+  setTimeout(()=>{
+    finishExam();
+  },500);
+}
+
+$("btnCancelSubmit").addEventListener("click", closeSubmitWarning);
+$("btnConfirmSubmit").addEventListener("click", submitExamNow);
+
+$("submitWarningModal").addEventListener("click", (e)=>{
+  if(e.target === $("submitWarningModal")){
+    closeSubmitWarning();
+  }
+});
+
+document.addEventListener("keydown", (e)=>{
+  if(e.key === "Escape"){
+    const modal = $("submitWarningModal");
+    if(modal.classList.contains("show")){
+      closeSubmitWarning();
+    }
+  }
+});
+
+function finishExam(){
+  if(state.finished) return;
+  state.finished = true;
+  clearInterval(state.timerId);
+  showResult();
+}
+
+function showResult(){
+  const questions = examData[state.selectedSubject].chapters[state.selectedChapter].exams[state.selectedExam].questions;
+  const total = questions.length;
+  let correct = 0;
+
+  questions.forEach((q,i)=>{
+    if(state.answers[i] === q.answer) correct++;
+  });
+
+  const percent = Math.round(correct / total * 100);
+
+  hideAllScreens();
+  $("screen-result").hidden = false;
+
+  $("scoreBig").textContent = `${bnNum(correct)} / ${bnNum(total)}`;
+  $("scoreSub").textContent = `${state.studentName} — ${state.selectedSubject} (${bnNum(percent)}%)`;
+  $("statCorrect").textContent = bnNum(correct);
+  $("statWrong").textContent = bnNum(total - correct);
+  $("statPercent").textContent = `${bnNum(percent)}%`;
+
+  let remark = "";
+  let icon = "🏆";
+  if(percent >= 90){ remark = "🏆 অসাধারণ! তোমার প্রস্তুতি দারুণ।"; icon = "🏆"; }
+  else if(percent >= 80){ remark = "🎉 চমৎকার! খুব ভালো করেছো।"; icon = "🎉"; }
+  else if(percent >= 70){ remark = "🔥 দারুণ! আরেকটু practice করলে আরও ভালো হবে।"; icon = "🔥"; }
+  else if(percent >= 50){ remark = "👍 ভালো চেষ্টা। ভুলগুলো দেখে আবার practice করো।"; icon = "👍"; }
+  else { remark = "📚 চিন্তা করো না। আবার চেষ্টা করো, তুমি পারবে!"; icon = "📚"; }
+  $("resultIcon").textContent = icon;
+  $("scoreRemark").textContent = remark;
+  $("topSub").textContent = "পরীক্ষার ফলাফল ঠিক আছে";
+
+  const reviewTitle = $("reviewTitle");
+  const reviewBox = $("reviewBox");
+
+  reviewTitle.hidden = false;
+  reviewBox.hidden = false;
+  reviewBox.innerHTML = "";
+
+  const tags = ["ক","খ","গ","ঘ"];
+
+  // উত্তরপত্র একেবারে প্রশ্ন পেজের মতো ডেসক্রিপশনসহ রেন্ডার করা (সঠিক সবুজ, ভুল লাল)
+  questions.forEach((q,i)=>{
+    const userAns = state.answers[i];
+    const correctAns = q.answer;
+
+    const qCard = document.createElement("div");
+    qCard.className = "question-card";
+    
+    const qNumDiv = document.createElement("div");
+    qNumDiv.className = "qnum";
+    qNumDiv.textContent = `প্রশ্ন ${bnNum(i+1)} / ${bnNum(total)}`;
+    
+    const qTextDiv = document.createElement("div");
+    qTextDiv.className = "qtext";
+    qTextDiv.textContent = q.q;
+    
+    const optionsBox = document.createElement("div");
+    q.options.forEach((opt, optIdx)=>{
+      const b = document.createElement("div");
+      b.className = "option";
+      
+      if(optIdx === correctAns){
+        b.classList.add("correct-ans"); // সঠিক উত্তর সবুজ রঙ
+      } else if(optIdx === userAns && userAns !== correctAns){
+        b.classList.add("wrong-ans"); // ব্যবহারকারীর ভুল সিলেক্ট করা অপশন লাল রঙ
+      }
+
+      b.innerHTML = `<span class="opt-tag">${tags[optIdx]}</span><span>${opt}</span>`;
+      optionsBox.appendChild(b);
+    });
+    
+    qCard.appendChild(qNumDiv);
+    qCard.appendChild(qTextDiv);
+    qCard.appendChild(optionsBox);
+    reviewBox.appendChild(qCard);
+  });
+
+  const resultText =
+`AR Bijoy's Exam Center — ফলাফল
+নাম: ${state.studentName}
+সাবজেক্ট: ${state.selectedSubject}
+অধ্যায়: ${state.selectedChapter}
+পরীক্ষা: ${state.selectedExam}
+স্কোর: ${correct} / ${total} (${percent}%)`;
+
+  $("btnCopyResult").onclick = ()=>{
+    navigator.clipboard.writeText(resultText)
+      .then(()=>toast("📋 ফলাফল কপি হয়েছে", "success"))
+      .catch(()=>toast("কপি করা যায়নি", "error"));
+  };
+
+  const waBtn = $("btnWhatsapp");
+
+  if(TEACHER_WHATSAPP_NUMBER.trim()){
+    waBtn.hidden = false;
+    waBtn.href = `https://wa.me/${TEACHER_WHATSAPP_NUMBER.trim()}?text=${encodeURIComponent(resultText)}`;
+  } else {
+    waBtn.hidden = true;
+  }
+
+  toast(`🎉 ${state.studentName}, তোমার ফলাফল প্রস্তুত!`, "success", 3500);
+}
+
+$("backToSubjects").addEventListener("click", ()=>{
+  hideAllScreens();
+  $("screen-subjects").hidden = false;
+  $("topSub").textContent = "সাবজেক্ট বেছে নিয়ে পরীক্ষা শুরু করো";
+});
+
+$("backToChapters").addEventListener("click", ()=>{
+  showChapters(state.selectedSubject);
+});
+
+$("btnHome").addEventListener("click", ()=>{
+  hideAllScreens();
+  $("screen-subjects").hidden = false;
+  $("topSub").textContent = "সাবজেক্ট বেছে নিয়ে পরীক্ষা শুরু করো";
+});
+
+renderSubjects();
+
+setTimeout(()=>{
+  toast("Welcome to AR Bijoy's Exam Center", "info");
+}, 600);
+</script>
+
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("service-worker.js")
+      .then(() => console.log("PWA Service Worker registered"))
+      .catch(err => console.error("Service Worker registration failed:", err));
+  });
+}
+</script>
+</body>
+</html>
