@@ -2393,12 +2393,12 @@ function renderAllQuestions(){
         if(previousAnswer === optIdx){
           state.answers[i] = null;
           b.classList.remove('selected');
-          toast("উত্তরটি আনসিলেক্ট হয়েছে", "info", 1000);
+          
         }else{
           state.answers[i] = optIdx;
           allOptions.forEach(opt => opt.classList.remove('selected'));
           b.classList.add('selected');
-          toast("উত্তরটি সিলেক্ট করা হয়েছে ✓", "success", 1100);
+          
         }
 
         const answeredCount = state.answers.filter(a => a !== null).length;
