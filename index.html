@@ -172,39 +172,7 @@ background:var(--card);border:1px solid rgba(255,255,255,.9);border-radius:22px;
   font-weight:700;
 }
 
-/* অপশনের সাইজ ও প্যাডিং কমানো হলো যাতে স্ক্রিনে একসাথে মানায় */
-.option{
-  display:flex;
-  align-items:center;
-  gap:9px;
-  width:100%;
-  text-align:left;
-  cursor:pointer;
-  padding:8px 12px; /* প্যাডিং কমানো হলো */
-  margin-bottom:6px; /* মার্জিন কমানো হলো */
-  border:1.5px solid #e8ebf2;
-  border-radius:11px;
-  background:#fafbfe;
-  color:var(--text);
-  font-size:14px; /* ফন্ট সাইজ ছোট করা হলো */
-  line-height:1.3;
-  transition:.2s ease;
-}
-.option .opt-tag{
-  flex-shrink:0;
-  width:25px;
-  height:25px;
-  border-radius:7px;
-  background:#e9edf5;
-  border:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:12px;
-  font-weight:800;
-  color:#596579;
-}
-  @keyframes warningFloat{
+keyframes warningFloat{
     0%,100%{transform:translateY(0)}
     50%{transform:translateY(-5px)}
   }
