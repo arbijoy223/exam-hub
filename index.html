@@ -224,8 +224,8 @@ keyframes warningFloat{
 .option.correct-ans .opt-tag{color:#fff !important;background:#16a34a !important}
 .option.wrong-ans{border-color:#ef4444 !important;background:rgba(239,68,68,0.08) !important}
 .option.wrong-ans .opt-tag{color:#fff !important;background:#ef4444 !important}
-.option.unanswered-ans{border-color:#f59e0b !important;background:rgba(245,158,11,0.08) !important}
-.option.unanswered-ans .opt-tag{color:#fff !important;background:#f59e0b !important}
+.option.unanswered-ans{border-color:#facc15 !important;background:#fff9c4 !important}
+.option.unanswered-ans .opt-tag{color:#fff !important;background:#eab308 !important}
   @media(max-width:480px){
     .fancy-modal-box{padding:26px 18px 18px;border-radius:24px}
     .fancy-modal-actions{grid-template-columns:1fr}
@@ -3132,6 +3132,7 @@ function showResult(){
   questions.forEach((q,i)=>{
     const userAns = state.answers[i];
     const correctAns = q.answer;
+    const skipped = (userAns === null || userAns === undefined || userAns === -1 || userAns === "");
 
     const qCard = document.createElement("div");
     qCard.className = "question-card";
@@ -3150,11 +3151,13 @@ function showResult(){
       b.className = "option";
       
       if(optIdx === correctAns){
-        b.classList.add("correct-ans"); // সঠিক উত্তর সবুজ রঙ
-      } else if(userAns !== null && optIdx === userAns && userAns !== correctAns){
-        b.classList.add("wrong-ans"); // ব্যবহারকারীর ভুল সিলেক্ট করা অপশন লাল রঙ
-      } else if(userAns === null && optIdx === correctAns){
-        b.classList.add("unanswered-ans"); // যেগুলোর উত্তর দেওয়া হয়নি, সেটির সঠিক উত্তর লাইট ইয়েলো ব্যাকগ্রাউন্ড
+        if(skipped){
+          b.classList.add("unanswered-ans"); // উত্তর দেওয়া হয়নি: সঠিক অপশন হালকা হলুদ
+        } else {
+          b.classList.add("correct-ans"); // উত্তর দেওয়া হয়েছে: সঠিক অপশন সবুজ
+        }
+      } else if(!skipped && optIdx === userAns){
+        b.classList.add("wrong-ans"); // স্টুডেন্টের বাছা ভুল অপশন লাল
       }
 
       b.innerHTML = `<span class="opt-tag">${tags[optIdx]}</span><span>${opt}</span>`;
