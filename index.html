@@ -219,6 +219,10 @@ keyframes warningFloat{
   .modal-submit:hover{
     box-shadow:0 12px 30px rgba(99,91,255,.35);
   }
+  .option.unanswered-ans{
+  background: #fff8d6;
+  border-color: #f5d76e;
+}
   @media(max-width:480px){
     .fancy-modal-box{padding:26px 18px 18px;border-radius:24px}
     .fancy-modal-actions{grid-template-columns:1fr}
@@ -3121,42 +3125,69 @@ function showResult(){
   const tags = ["ক","খ","গ","ঘ"];
 
   // উত্তরপত্র একেবারে প্রশ্ন পেজের মতো ডেসক্রিপশনসহ রেন্ডার করা (সঠিক সবুজ, ভুল লাল)
-  questions.forEach((q,i)=>{
-    const userAns = state.answers[i];
-    const correctAns = q.answer;
+  // উত্তরপত্র একেবারে প্রশ্ন পেজের মতো ডেসক্রিপশনসহ রেন্ডার করা
+// সঠিক = সবুজ, ভুল = লাল, উত্তর না করা = হালকা হলুদ
 
-    const qCard = document.createElement("div");
-    qCard.className = "question-card";
-    
-    const qNumDiv = document.createElement("div");
-    qNumDiv.className = "qnum";
-    qNumDiv.textContent = `প্রশ্ন ${bnNum(i+1)} / ${bnNum(total)}`;
-    
-    const qTextDiv = document.createElement("div");
-    qTextDiv.className = "qtext";
-    qTextDiv.textContent = q.q;
-    
-    const optionsBox = document.createElement("div");
-    q.options.forEach((opt, optIdx)=>{
-      const b = document.createElement("div");
-      b.className = "option";
-      
-      if(optIdx === correctAns){
-        b.classList.add("correct-ans"); // সঠিক উত্তর সবুজ রঙ
-      } else if(optIdx === userAns && userAns !== correctAns){
-        b.classList.add("wrong-ans"); // ব্যবহারকারীর ভুল সিলেক্ট করা অপশন লাল রঙ
-      }
+questions.forEach((q,i)=>{
 
-      b.innerHTML = `<span class="opt-tag">${tags[optIdx]}</span><span>${opt}</span>`;
-      optionsBox.appendChild(b);
-    });
-    
-    qCard.appendChild(qNumDiv);
-    qCard.appendChild(qTextDiv);
-    qCard.appendChild(optionsBox);
-    reviewBox.appendChild(qCard);
+  const userAns = state.answers[i];
+  const correctAns = q.answer;
+
+  const qCard = document.createElement("div");
+  qCard.className = "question-card";
+
+  const qNumDiv = document.createElement("div");
+  qNumDiv.className = "qnum";
+  qNumDiv.textContent = `প্রশ্ন ${bnNum(i+1)} / ${bnNum(total)}`;
+
+  const qTextDiv = document.createElement("div");
+  qTextDiv.className = "qtext";
+  qTextDiv.textContent = q.q;
+
+  const optionsBox = document.createElement("div");
+
+  q.options.forEach((opt, optIdx)=>{
+
+    const b = document.createElement("div");
+    b.className = "option";
+
+    // সঠিক উত্তর → সবুজ
+    if(optIdx === correctAns){
+
+      b.classList.add("correct-ans");
+
+    }
+
+    // ব্যবহারকারীর ভুল উত্তর → লাল
+    else if(optIdx === userAns && userAns !== correctAns){
+
+      b.classList.add("wrong-ans");
+
+    }
+
+    // কোনো উত্তর দেওয়া হয়নি → সব অপশন হালকা হলুদ
+    else if(userAns === null){
+
+      b.classList.add("unanswered-ans");
+
+    }
+
+    b.innerHTML = `
+      <span class="opt-tag">${tags[optIdx]}</span>
+      <span>${opt}</span>
+    `;
+
+    optionsBox.appendChild(b);
+
   });
 
+  qCard.appendChild(qNumDiv);
+  qCard.appendChild(qTextDiv);
+  qCard.appendChild(optionsBox);
+
+  reviewBox.appendChild(qCard);
+
+});
   const resultText =
 `নাম: ${state.studentName}
 সাবজেক্ট: ${state.selectedSubject}
