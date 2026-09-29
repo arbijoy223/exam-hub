@@ -2662,7 +2662,7 @@ const examData = {
     }
   }
 },
-  "গণিত ১ম পত্র": {
+  "ম্যাথ ১ম পত্র": {
   chapters: {
     "অধ্যায় ১: ম্যাট্রিক্স ও নির্ণায়ক": {
       exams: {
@@ -3273,7 +3273,7 @@ $("btnHome").addEventListener("click", ()=>{
    Script Web App-এর লিংক বসাও (নিচে ধাপ ধাপ নির্দেশনা দেওয়া আছে)।
    খালি রাখলে লিডারবোর্ড শুধু এই ডিভাইসেই (localStorage) কাজ করবে।
 ================================================================ */
-const LEADERBOARD_API_URL = "https://script.google.com/macros/s/AKfycbwS7IkEOBoVro-seIBFGHUlLM7e13YNJQVfdEo9Tijm2KlHG_av0itJS9XnnWUE_eHPKA/exec"; // যেমন: "https://script.google.com/macros/s/AKfycb.../exec"
+const LEADERBOARD_API_URL = "https://script.google.com/macros/s/AKfycbxo4Mf-I15yb2-ENEiAuT85ZKDn9k2EsloExkXdY7U0p99ZlX7BCo6gWKvfufv_sLQp8A/exec"; // যেমন: "https://script.google.com/macros/s/AKfycb.../exec"
 
 const LB_KEY = "examLeaderboardData_v1";
 
@@ -3334,6 +3334,14 @@ function renderLeaderboardRows(all, noticeText){
   });
 }
 
+// আগেরবার শেয়ার্ড লিডারবোর্ড থেকে যা এসেছিল, সেটা এই ডিভাইসেই cache করে রাখি
+function getLbCache(key){
+  try{ return JSON.parse(localStorage.getItem("lbCache_"+key)) || null; }catch(e){ return null; }
+}
+function setLbCache(key, rows){
+  try{ localStorage.setItem("lbCache_"+key, JSON.stringify(rows)); }catch(e){}
+}
+
 async function showLeaderboard(){
   hideAllScreens();
   $("screen-leaderboard").hidden = false;
@@ -3343,19 +3351,35 @@ async function showLeaderboard(){
 
   if(!LEADERBOARD_API_URL.trim()){
     // কোনো শেয়ার্ড শিট কনফিগার করা নেই — শুধু এই ডিভাইসের ফলাফল দেখাও
-    renderLeaderboardRows(localAll, "📱");
+    renderLeaderboardRows(localAll, "📱 এখন শুধু এই ডিভাইসের ফলাফল দেখানো হচ্ছে।");
     return;
   }
 
-  $("lbList").innerHTML = `<div class="lb-empty">⏳ লিডারবোর্ড লোড হচ্ছে...</div>`;
+  // ধাপ ১: আগে cache করা ডেটা থাকলে সাথে সাথে দেখাও (instant feel)
+  const cached = getLbCache(key);
+  if(cached && cached.length){
+    renderLeaderboardRows(cached, "🔄 সবশেষ সেভ করা তথ্য দেখানো হচ্ছে, হালনাগাদ করা হচ্ছে...");
+  } else {
+    $("lbList").innerHTML = `<div class="lb-empty">⏳ লিডারবোর্ড লোড হচ্ছে...</div>`;
+  }
+
+  // ধাপ ২: background-এ আসল/নতুন ডেটা আনো, এসে গেলে চুপচাপ বদলে দাও
   try{
     const res = await fetch(`${LEADERBOARD_API_URL}?examKey=${encodeURIComponent(key)}`);
     const data = await res.json();
     const sharedAll = Array.isArray(data) ? data : (data.rows || []);
-    renderLeaderboardRows(sharedAll, null);
+    setLbCache(key, sharedAll);
+    // ইউজার এর মধ্যে অন্য পেজে চলে গেলে যেন ভুল জায়গায় রেন্ডার না হয়
+    if(!$("screen-leaderboard").hidden){
+      renderLeaderboardRows(sharedAll, null);
+    }
   }catch(err){
-    // ইন্টারনেট/শিট সমস্যা হলে অন্তত এই ডিভাইসের স্কোরগুলো দেখাও
-    renderLeaderboardRows(localAll, "⚠️ শেয়ার্ড লিডারবোর্ড লোড করা যায়নি (ইন্টারনেট/শিট চেক করো)। আপাতত এই ডিভাইসের ফলাফল দেখানো হচ্ছে।");
+    if($("screen-leaderboard").hidden) return;
+    if(cached && cached.length){
+      renderLeaderboardRows(cached, "⚠️ নতুন তথ্য আনা যায়নি, সবশেষ সেভ করা তথ্য দেখানো হচ্ছে।");
+    } else {
+      renderLeaderboardRows(localAll, "⚠️ শেয়ার্ড লিডারবোর্ড লোড করা যায়নি (ইন্টারনেট/শিট চেক করো)। আপাতত এই ডিভাইসের ফলাফল দেখানো হচ্ছে।");
+    }
   }
 }
 
