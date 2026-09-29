@@ -3,12 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
 <title>Created By: AR Bijoy</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style> 
 :root{
+color-scheme:light only;
 --bg:#f4f7fb;--card:rgba(255,255,255,.92);--text:#172033;--muted:#697386;
 --border:#e5e9f2;--primary:#635bff;--primary2:#8b5cf6;--success:#16a34a;--danger:#ef4444;
 --warning:#f59e0b;--shadow:0 15px 45px rgba(30,41,59,.10);
@@ -18,7 +20,7 @@
 --serif:"Fraunces",Georgia,serif;--sans:"Hind Siliguri","Segoe UI",system-ui,sans-serif
 }
 *{box-sizing:border-box}html{scroll-behavior:smooth}html,body{height:100%}
-body{margin:0;color:var(--text);font-family:var(--sans);-webkit-font-smoothing:antialiased;
+body{margin:0;color:var(--text) !important;background-color:var(--bg);font-family:var(--sans);-webkit-font-smoothing:antialiased;
 background:radial-gradient(circle at 8% 8%,rgba(99,91,255,.12),transparent 28%),radial-gradient(circle at 92% 18%,rgba(139,92,246,.10),transparent 25%),linear-gradient(135deg,#f8faff,#eef2f8)}
 h1,h2,h3{font-family:var(--serif);font-weight:700;margin:0}button,input{font-family:inherit}[hidden]{display:none!important}
 .wrap{max-width:1050px;margin:0 auto;padding:30px 20px 70px}
@@ -51,10 +53,10 @@ background:var(--card);border:1px solid rgba(255,255,255,.9);border-radius:22px;
 .timer{min-width:125px;justify-content:center;font-variant-numeric:tabular-nums;background:linear-gradient(135deg,#111827,#374151);color:#fff;border-radius:15px;padding:10px 16px;font-size:19px;font-weight:800;display:flex;align-items:center;gap:7px;box-shadow:0 8px 20px rgba(15,23,42,.16)}
 .timer.low{background:linear-gradient(135deg,#ef4444,#b91c1c);animation:pulse .75s infinite}@keyframes pulse{50%{transform:scale(1.04)}}
 .progress-track{height:9px;background:#e7eaf1;border-radius:20px;overflow:hidden;margin-bottom:19px}.progress-fill{height:100%;width:0;border-radius:20px;background:linear-gradient(90deg,var(--primary),var(--primary2));transition:width .4s ease}
-.question-card{background:rgba(234, 231, 176, 0.94);border:1px solid var(--border);border-radius:22px;padding:25px;margin-bottom:18px;box-shadow:0 12px 35px rgba(15,23,42,.07);animation:questionIn .35s ease}
+.question-card{background:rgba(255,255,255,.94);border:1px solid var(--border);border-radius:22px;padding:25px;margin-bottom:18px;box-shadow:0 12px 35px rgba(15,23,42,.07);animation:questionIn .35s ease}
 @keyframes questionIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 .qnum{display:inline-flex;padding:5px 10px;border-radius:10px;color:var(--primary);background:rgba(99,91,255,.10);font-size:13px;font-weight:800;margin-bottom:12px}
-.qtext{font-size:21px;line-height:1.65;margin-bottom:18px;font-weight:500}
+.qtext{font-size:19px;line-height:1.65;margin-bottom:18px;font-weight:700}
 .option{display:flex;align-items:flex-start;gap:11px;width:100%;text-align:left;cursor:pointer;padding:14px 15px;margin-bottom:10px;border:2px solid #e8ebf2;border-radius:15px;background:#fafbfe;color:var(--text);font-size:15.5px;line-height:1.5;transition:.22s ease}
 .option:hover{border-color:rgba(99,91,255,.48);background:rgba(99,91,255,.045);transform:translateX(3px)}
 .option .opt-tag{flex-shrink:0;width:31px;height:31px;border-radius:9px;background:#e9edf5;border:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#596579}
@@ -78,6 +80,26 @@ background:var(--card);border:1px solid rgba(255,255,255,.9);border-radius:22px;
 .score-sub{color:var(--muted);margin-top:6px;font-size:15px}.score-remark{margin-top:10px;font-size:17px;font-weight:700}
 .result-stat-grid{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:23px 0 0}.result-stat{padding:15px 10px;border-radius:16px;background:#f6f7fb}.result-stat strong{display:block;font-size:22px;font-weight:900}.result-stat span{font-size:13px;color:var(--muted)}
 .action-row{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0}
+.lb-head{margin-bottom:16px}
+.lb-head h2{font-size:22px}
+.lb-head p{color:var(--muted);font-size:13.5px;margin-top:4px}
+.lb-row{display:flex;align-items:center;gap:12px;padding:13px 15px;border:1px solid var(--border);
+border-radius:14px;background:var(--card);margin-bottom:9px;box-shadow:0 3px 10px rgba(30,41,59,.05)}
+.lb-row.me{border-color:var(--primary);background:linear-gradient(135deg,rgba(99,91,255,.08),rgba(139,92,246,.05))}
+.lb-rank{flex-shrink:0;width:34px;height:34px;border-radius:10px;background:#eef1f8;color:var(--muted);
+display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px}
+.lb-rank.top1{background:linear-gradient(135deg,#ffd54a,#ffb300);color:#5a3d00}
+.lb-rank.top2{background:linear-gradient(135deg,#e3e8f0,#b9c2d1);color:#33404f}
+.lb-rank.top3{background:linear-gradient(135deg,#e6b07a,#c9834a);color:#4a2c0e}
+.lb-name{flex:1;min-width:0}
+.lb-name strong{display:block;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lb-name span{font-size:12px;color:var(--muted)}
+.lb-score{flex-shrink:0;text-align:right}
+.lb-score strong{display:block;font-size:15px;color:var(--success)}
+.lb-score span{font-size:12px;color:var(--muted)}
+.lb-empty{text-align:center;color:var(--muted);padding:40px 20px;font-size:14.5px}
+.lb-notice{font-size:12.5px;color:var(--muted);background:rgba(99,91,255,.07);border:1px solid var(--border);border-radius:10px;padding:9px 12px;margin-bottom:12px;line-height:1.6}
+
 .toast{position:fixed;top:88px;right:20px;z-index:2000;min-width:280px;max-width:390px;display:flex;align-items:center;gap:12px;padding:14px 17px;border-radius:17px;color:#fff;background:rgba(17,24,39,.95);box-shadow:0 18px 45px rgba(15,23,42,.25);backdrop-filter:blur(16px);opacity:0;visibility:hidden;transform:translateX(35px) scale(.96);transition:.32s cubic-bezier(.2,.8,.2,1)}
 .toast.show{opacity:1;visibility:visible;transform:translateX(0) scale(1)}.toast.success{background:linear-gradient(135deg,#15803d,#16a34a)}.toast.error{background:linear-gradient(135deg,#b91c1c,#ef4444)}.toast.warning{background:linear-gradient(135deg,#b45309,#f59e0b)}.toast.info{background:linear-gradient(135deg,#4338ca,#635bff)}
 .toast-icon{flex:none;width:35px;height:35px;border-radius:11px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.16);font-weight:900;font-size:17px}.toast-text{flex:1;font-size:14px;line-height:1.45;font-weight:600}
@@ -172,7 +194,7 @@ background:var(--card);border:1px solid rgba(255,255,255,.9);border-radius:22px;
   font-weight:700;
 }
 
-@keyframes warningFloat{
+keyframes warningFloat{
     0%,100%{transform:translateY(0)}
     50%{transform:translateY(-5px)}
   }
@@ -321,12 +343,26 @@ background:var(--card);border:1px solid rgba(255,255,255,.9);border-radius:22px;
 
     <div class="action-row">
       <button class="btn btn-primary" id="btnCopyResult">ফলাফল কপি করো</button>
+      <button class="btn btn-primary" id="btnLeaderboard">🏆 লিডারবোর্ড দেখো</button>
       <a class="btn" id="btnWhatsapp" href="#" target="_blank" rel="noopener" hidden>WhatsApp-এ পাঠাও</a>
       <button class="btn btn-ghost" id="btnHome">← হোমে ফিরে যাও</button>
     </div>
 
     <h3 id="reviewTitle" style="margin-bottom:12px; font-size:17px;">উত্তরপত্র পর্যালোচনা</h3>
     <div id="reviewBox"></div>
+  </section>
+
+  <!-- লিডারবোর্ড পেজ (এই নির্দিষ্ট পরীক্ষার) -->
+  <section id="screen-leaderboard" hidden>
+    <div class="lb-head">
+      <h2>🏆 লিডারবোর্ড</h2>
+      <p id="lbSubtitle"></p>
+    </div>
+    <div id="lbList"></div>
+    <div class="action-row">
+      <button class="btn btn-ghost" id="btnBackToResult">← ফলাফলে ফিরে যাও</button>
+      <button class="btn btn-ghost" id="btnClearLeaderboard">এই লিডারবোর্ড মুছে ফেলো</button>
+    </div>
   </section>
 
 </div>
@@ -2791,6 +2827,7 @@ function hideAllScreens(){
   $("screen-exams").hidden = true;
   $("screen-exam").hidden = true;
   $("screen-result").hidden = true;
+  $("screen-leaderboard").hidden = true;
 }
 
 // ১. সাবজেক্ট লিস্ট রেন্ডার
@@ -3098,6 +3135,18 @@ function showResult(){
 
   const percent = Math.round(correct / total * 100);
 
+  state._lastResultTime = Date.now();
+
+  saveLeaderboardEntry({
+    examKey: getExamKey(),
+    time: state._lastResultTime,
+    subject: state.selectedSubject,
+    chapter: state.selectedChapter,
+    exam: state.selectedExam,
+    name: state.studentName,
+    correct, total, percent
+  });
+
   hideAllScreens();
   $("screen-result").hidden = false;
 
@@ -3209,6 +3258,118 @@ $("btnHome").addEventListener("click", ()=>{
   hideAllScreens();
   $("screen-subjects").hidden = false;
   $("topSub").textContent = "সাবজেক্ট বেছে নিয়ে পরীক্ষা শুরু করো";
+});
+
+/* ================================================================
+   লিডারবোর্ড (এই ব্রাউজার/ডিভাইসেই জমা থাকে — localStorage)
+   [!] গুরুত্বপূর্ণ: এটা static HTML হওয়ায় কোনো সার্ভার নেই।
+   তাই লিডারবোর্ডে শুধু ওই একই ডিভাইস/ব্রাউজারে দেওয়া পরীক্ষার স্কোর জমা হবে।
+   একেক স্টুডেন্ট একেক ফোনে/ব্রাউজারে দিলে, একজনের লিডারবোর্ডে আরেকজনের
+   স্কোর দেখাবে না — সবার স্কোর একসাথে দেখতে হলে একটা শেয়ার্ড
+   অনলাইন স্টোরেজ (যেমন Google Sheet / Firebase) লাগবে।
+================================================================ */
+/* ================================================================
+   [!] সবার স্কোর একসাথে (সব ফোনে) দেখাতে চাইলে এখানে Google Apps
+   Script Web App-এর লিংক বসাও (নিচে ধাপ ধাপ নির্দেশনা দেওয়া আছে)।
+   খালি রাখলে লিডারবোর্ড শুধু এই ডিভাইসেই (localStorage) কাজ করবে।
+================================================================ */
+const LEADERBOARD_API_URL = "https://script.google.com/macros/s/AKfycbwS7IkEOBoVro-seIBFGHUlLM7e13YNJQVfdEo9Tijm2KlHG_av0itJS9XnnWUE_eHPKA/exec"; // যেমন: "https://script.google.com/macros/s/AKfycb.../exec"
+
+const LB_KEY = "examLeaderboardData_v1";
+
+function getExamKey(){
+  return `${state.selectedSubject}|||${state.selectedChapter}|||${state.selectedExam}`;
+}
+function loadLeaderboard(){
+  try{ return JSON.parse(localStorage.getItem(LB_KEY)) || []; }
+  catch(e){ return []; }
+}
+function saveLeaderboardEntry(entry){
+  // স্থানীয় ব্যাকআপ হিসেবে সবসময় এই ডিভাইসেও রেখে দাও (ইন্টারনেট না থাকলেও কাজ করবে)
+  const all = loadLeaderboard();
+  all.push(entry);
+  try{ localStorage.setItem(LB_KEY, JSON.stringify(all)); }catch(e){}
+
+  // ইন্টারনেট থাকলে এবং শিট কনফিগার করা থাকলে, শেয়ার্ড লিডারবোর্ডেও পাঠাও
+  if(LEADERBOARD_API_URL.trim()){
+    fetch(LEADERBOARD_API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" }, // preflight এড়াতে text/plain
+      body: JSON.stringify(entry)
+    }).catch(()=>{ /* ইন্টারনেট না থাকলে চুপচাপ স্থানীয় কপিতেই থেকে যাবে */ });
+  }
+}
+
+function renderLeaderboardRows(all, noticeText){
+  $("lbSubtitle").textContent = `${state.selectedSubject} → ${state.selectedChapter} → ${state.selectedExam}`;
+  const box = $("lbList");
+  box.innerHTML = "";
+
+  if(noticeText){
+    const note = document.createElement("div");
+    note.className = "lb-notice";
+    note.textContent = noticeText;
+    box.appendChild(note);
+  }
+
+  if(all.length === 0){
+    box.innerHTML += `<div class="lb-empty">এখনো কেউ এই পরীক্ষা দেয়নি।</div>`;
+    return;
+  }
+
+  all.sort((a,b)=> b.percent - a.percent || b.correct - a.correct || a.time - b.time);
+
+  const myTime = state._lastResultTime;
+  all.forEach((e, idx)=>{
+    const rank = idx+1;
+    const row = document.createElement("div");
+    row.className = "lb-row" + (e.time === myTime ? " me" : "");
+    const rankCls = rank===1?"top1":rank===2?"top2":rank===3?"top3":"";
+    const medal = rank===1?"🥇":rank===2?"🥈":rank===3?"🥉":bnNum(rank);
+    row.innerHTML = `
+      <div class="lb-rank ${rankCls}">${medal}</div>
+      <div class="lb-name"><strong>${e.name}</strong><span>${new Date(e.time).toLocaleDateString("bn-BD")}</span></div>
+      <div class="lb-score"><strong>${bnNum(e.correct)}/${bnNum(e.total)}</strong><span>${bnNum(e.percent)}%</span></div>`;
+    box.appendChild(row);
+  });
+}
+
+async function showLeaderboard(){
+  hideAllScreens();
+  $("screen-leaderboard").hidden = false;
+
+  const key = getExamKey();
+  const localAll = loadLeaderboard().filter(e => e.examKey === key);
+
+  if(!LEADERBOARD_API_URL.trim()){
+    // কোনো শেয়ার্ড শিট কনফিগার করা নেই — শুধু এই ডিভাইসের ফলাফল দেখাও
+    renderLeaderboardRows(localAll, "📱 এখন শুধু এই ডিভাইসের ফলাফল দেখানো হচ্ছে।");
+    return;
+  }
+
+  $("lbList").innerHTML = `<div class="lb-empty">⏳ লিডারবোর্ড লোড হচ্ছে...</div>`;
+  try{
+    const res = await fetch(`${LEADERBOARD_API_URL}?examKey=${encodeURIComponent(key)}`);
+    const data = await res.json();
+    const sharedAll = Array.isArray(data) ? data : (data.rows || []);
+    renderLeaderboardRows(sharedAll, null);
+  }catch(err){
+    // ইন্টারনেট/শিট সমস্যা হলে অন্তত এই ডিভাইসের স্কোরগুলো দেখাও
+    renderLeaderboardRows(localAll, "⚠️ শেয়ার্ড লিডারবোর্ড লোড করা যায়নি (ইন্টারনেট/শিট চেক করো)। আপাতত এই ডিভাইসের ফলাফল দেখানো হচ্ছে।");
+  }
+}
+
+$("btnLeaderboard").addEventListener("click", showLeaderboard);
+$("btnBackToResult").addEventListener("click", ()=>{
+  hideAllScreens();
+  $("screen-result").hidden = false;
+});
+$("btnClearLeaderboard").addEventListener("click", ()=>{
+  if(!confirm("এই পরীক্ষার লিডারবোর্ড পুরোপুরি মুছে ফেলতে চাও? এটা আর ফিরিয়ে আনা যাবে না।")) return;
+  const key = getExamKey();
+  const remaining = loadLeaderboard().filter(e => e.examKey !== key);
+  try{ localStorage.setItem(LB_KEY, JSON.stringify(remaining)); }catch(e){}
+  showLeaderboard();
 });
 
 renderSubjects();
