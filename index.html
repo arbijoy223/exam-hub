@@ -104,7 +104,7 @@ display:flex;align-items:center;justify-content:center;font-weight:800;font-size
 .toast.show{opacity:1;visibility:visible;transform:translateX(0) scale(1)}.toast.success{background:linear-gradient(135deg,#15803d,#16a34a)}.toast.error{background:linear-gradient(135deg,#b91c1c,#ef4444)}.toast.warning{background:linear-gradient(135deg,#b45309,#f59e0b)}.toast.info{background:linear-gradient(135deg,#4338ca,#635bff)}
 .toast-icon{flex:none;width:35px;height:35px;border-radius:11px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.16);font-weight:900;font-size:17px}.toast-text{flex:1;font-size:14px;line-height:1.45;font-weight:600}
 .footnote{font-size:12.5px;color:var(--muted);margin-top:26px;line-height:1.6}
-@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#080c18;--card:rgba(15,23,42,.90);--text:#f1f5f9;--muted:#94a3b8;--border:#263047}.topbar{background:rgba(8,12,24,.82)}.subject-card,.question-card,.score-card,.back-btn,.nav-row{background:rgba(15,23,42,.90)}.option{background:#111827;border-color:#27324a}.option:hover{background:#172033}.modal{background:#111827}.modal input{background:#0b1020;color:#fff;border-color:#334155}.result-stat{background:#111827}}
+/* ফোন dark mode-এ থাকলেও সাইট সবসময় একই (light) রং ব্যবহার করবে, তাই প্রশ্নের লেখা কখনো অদৃশ্য হবে না — তাই dark-mode override ইচ্ছাকৃতভাবে বন্ধ রাখা হলো */
 @media(max-width:700px){.topbar-inner{padding:10px 14px}.wrap{width:100%;padding:22px 12px 55px}.brand-text{font-size:15px}.brand-sub{font-size:10px}.brand .seal{width:39px;height:39px}.subject-grid{grid-template-columns:1fr;gap:14px}.subject-card{min-height:135px;padding:19px}.lede{margin:20px 0}.lede h2{font-size:29px}.exam-head .subject-name{font-size:17px}.timer{width:100%;min-width:0}.question-card{padding:19px;border-radius:19px}.qtext{font-size:17px}.nav-row{bottom:6px}.nav-row .btn{flex:1;min-width:0;padding-left:10px;padding-right:10px}.score-big{font-size:50px}.result-stat-grid{grid-template-columns:1fr}.toast{left:12px;right:12px;top:76px;min-width:0;max-width:none}.modal{padding:24px}}
 /* Exam Header and Progress/Page Label Sticky Container */
   .exam-sticky-header {
@@ -360,8 +360,21 @@ keyframes warningFloat{
     </div>
     <div id="lbList"></div>
     <div class="action-row">
-      <button class="btn btn-ghost" id="btnBackToResult">← ফলাফলে ফিরে যাও</button>
-      <button class="btn btn-ghost" id="btnClearLeaderboard">এই লিডারবোর্ড মুছে ফেলো</button>
+      <button class="btn btn-ghost" id="btnBackToResult">← ফিরে যাও</button>
+      <button class="btn btn-ghost" id="btnClearLeaderboard" hidden>এই লিডারবোর্ড মুছে ফেলো (শুধু admin)</button>
+    </div>
+  </section>
+
+  <!-- admin-এর জন্য উত্তরপত্র (পরীক্ষা না নিয়ে শুধু সঠিক উত্তর দেখায়) -->
+  <section id="screen-answerkey" hidden>
+    <div class="lb-head">
+      <h2>📋 উত্তরপত্র (Admin)</h2>
+      <p id="akSubtitle"></p>
+    </div>
+    <div id="akList"></div>
+    <div class="action-row">
+      <button class="btn btn-primary" id="btnAkLeaderboard">🏆 লিডারবোর্ড দেখো</button>
+      <button class="btn btn-ghost" id="btnAkBack">← হোমে ফিরে যাও</button>
     </div>
   </section>
 
@@ -2800,8 +2813,21 @@ let state = {
   answers:[], 
   timeLeft:0, 
   timerId:null, 
-  finished:false 
+  finished:false,
+  examInProgress:false
 };
+
+/* ================================================================
+   ফোনের ব্যাক বাটন চাপলে যেন সাইট থেকে বের হয়ে না যায়, বরং
+   আগের স্ক্রিনে ফিরে আসে — তার জন্য ব্রাউজার History API ব্যবহার
+   করা হচ্ছে। প্রতিটা নতুন স্ক্রিনে গেলে pushScreen() কল হয়, আর
+   ফোনের ব্যাক বাটন চাপলে popstate ইভেন্ট ধরে সঠিক স্ক্রিন দেখানো হয়।
+================================================================ */
+let historyNavInProgress = false;
+function pushScreen(name, extra){
+  if(historyNavInProgress) return;
+  try{ history.pushState(Object.assign({screen:name}, extra||{}), "", "#"+name); }catch(e){}
+}
 
 const $ = (id)=>document.getElementById(id);
 
@@ -2828,6 +2854,7 @@ function hideAllScreens(){
   $("screen-exam").hidden = true;
   $("screen-result").hidden = true;
   $("screen-leaderboard").hidden = true;
+  $("screen-answerkey").hidden = true;
 }
 
 // ১. সাবজেক্ট লিস্ট রেন্ডার
@@ -2875,6 +2902,7 @@ function showChapters(subject){
     card.addEventListener("click", ()=>showExams(subject, chapterName));
     grid.appendChild(card);
   });
+  pushScreen("chapters", {subject});
 }
 
 // ৩. পরীক্ষা লিস্ট দেখানো
@@ -2907,6 +2935,7 @@ function showExams(subject, chapter){
     card.addEventListener("click", ()=>askForName(subject, chapter, examName));
     grid.appendChild(card);
   });
+  pushScreen("exams", {subject, chapter});
 }
 
 // ৪. নাম চাওয়া
@@ -2916,6 +2945,60 @@ function askForName(subject, chapter, exam){
   $("studentName").value = state.studentName || "";
   $("studentName").focus();
 }
+
+function isAdmin(){
+  return !!(state.studentName && state.studentName.trim().toLowerCase() === "admin");
+}
+
+// admin নাম দিলে পরীক্ষা না নিয়ে সরাসরি সঠিক উত্তরগুলো দেখানো হয়
+function showAnswerKeyForAdmin(){
+  hideAllScreens();
+  $("screen-answerkey").hidden = false;
+
+  const subject = state.selectedSubject, chapter = state.selectedChapter, exam = state.selectedExam;
+  $("akSubtitle").textContent = `${subject} → ${chapter} → ${exam}`;
+
+  const questions = examData[subject].chapters[chapter].exams[exam].questions;
+  const tags = ["ক","খ","গ","ঘ"];
+  const box = $("akList");
+  box.innerHTML = "";
+
+  questions.forEach((q,i)=>{
+    const qCard = document.createElement("div");
+    qCard.className = "question-card";
+
+    const qNumDiv = document.createElement("div");
+    qNumDiv.className = "qnum";
+    qNumDiv.textContent = `প্রশ্ন ${bnNum(i+1)} / ${bnNum(questions.length)}`;
+
+    const qTextDiv = document.createElement("div");
+    qTextDiv.className = "qtext";
+    qTextDiv.textContent = q.q;
+
+    qCard.appendChild(qNumDiv);
+    qCard.appendChild(qTextDiv);
+
+    const optionsBox = document.createElement("div");
+    q.options.forEach((opt, optIdx)=>{
+      const b = document.createElement("div");
+      b.className = "option" + (optIdx === q.answer ? " correct-ans" : "");
+      b.innerHTML = `<span class="opt-tag">${tags[optIdx] || (optIdx+1)}</span><span>${opt}</span>`;
+      optionsBox.appendChild(b);
+    });
+    qCard.appendChild(optionsBox);
+    box.appendChild(qCard);
+  });
+
+  pushScreen("answerkey", {});
+}
+
+$("btnAkBack").addEventListener("click", ()=>{
+  hideAllScreens();
+  $("screen-subjects").hidden = false;
+  $("topSub").textContent = "সাবজেক্ট বেছে নিয়ে পরীক্ষা শুরু করো";
+  pushScreen("subjects", {});
+});
+$("btnAkLeaderboard").addEventListener("click", showLeaderboard);
 
 $("btnCancelName").addEventListener("click", ()=>{
   $("nameModal").hidden = true;
@@ -2930,7 +3013,13 @@ $("btnStartExam").addEventListener("click", ()=>{
   }
   state.studentName = name;
   $("nameModal").hidden = true;
-  startExam();
+
+  if(name.toLowerCase() === "admin"){
+    // admin এর জন্য পরীক্ষা নেওয়া হবে না, শুধু উত্তরপত্র (সঠিক অপশন) দেখানো হবে
+    showAnswerKeyForAdmin();
+  } else {
+    startExam();
+  }
 });
 
 $("studentName").addEventListener("keypress", (e)=>{
@@ -2957,6 +3046,8 @@ function startExam(){
   
   renderAllQuestions();
   startTimer();
+  state.examInProgress = true;
+  pushScreen("exam", {});
   toast(`🎯 ${state.studentName}, পরীক্ষা শুরু হয়েছে। শুভকামনা!`, "success", 3500);
 }
 
@@ -3051,9 +3142,11 @@ function renderAllQuestions(){
 $("btnExitExam").addEventListener("click", ()=>{
   if(confirm("তুমি কি পরীক্ষাটি বাতিল করে হোমে ফিরে যেতে চাও?")){
     clearInterval(state.timerId);
+    state.examInProgress = false;
     hideAllScreens();
     $("screen-subjects").hidden = false;
     $("topSub").textContent = "সাবজেক্ট বেছে নিয়ে পরীক্ষা শুরু করো";
+    pushScreen("subjects", {});
   }
 });
 
@@ -3120,6 +3213,7 @@ document.addEventListener("keydown", (e)=>{
 function finishExam(){
   if(state.finished) return;
   state.finished = true;
+  state.examInProgress = false;
   clearInterval(state.timerId);
   showResult();
 }
@@ -3149,6 +3243,7 @@ function showResult(){
 
   hideAllScreens();
   $("screen-result").hidden = false;
+  pushScreen("result", {});
 
   $("scoreBig").textContent = `${bnNum(correct)} / ${bnNum(total)}`;
   $("scoreSub").textContent = `${state.studentName} — ${state.selectedSubject} (${bnNum(percent)}%)`;
@@ -3248,6 +3343,7 @@ $("backToSubjects").addEventListener("click", ()=>{
   hideAllScreens();
   $("screen-subjects").hidden = false;
   $("topSub").textContent = "সাবজেক্ট বেছে নিয়ে পরীক্ষা শুরু করো";
+  pushScreen("subjects", {});
 });
 
 $("backToChapters").addEventListener("click", ()=>{
@@ -3258,6 +3354,7 @@ $("btnHome").addEventListener("click", ()=>{
   hideAllScreens();
   $("screen-subjects").hidden = false;
   $("topSub").textContent = "সাবজেক্ট বেছে নিয়ে পরীক্ষা শুরু করো";
+  pushScreen("subjects", {});
 });
 
 /* ================================================================
@@ -3273,7 +3370,7 @@ $("btnHome").addEventListener("click", ()=>{
    Script Web App-এর লিংক বসাও (নিচে ধাপ ধাপ নির্দেশনা দেওয়া আছে)।
    খালি রাখলে লিডারবোর্ড শুধু এই ডিভাইসেই (localStorage) কাজ করবে।
 ================================================================ */
-const LEADERBOARD_API_URL = "https://script.google.com/macros/s/AKfycbxo4Mf-I15yb2-ENEiAuT85ZKDn9k2EsloExkXdY7U0p99ZlX7BCo6gWKvfufv_sLQp8A/exec"; // যেমন: "https://script.google.com/macros/s/AKfycb.../exec"
+const LEADERBOARD_API_URL = ""; // যেমন: "https://script.google.com/macros/s/AKfycb.../exec"
 
 const LB_KEY = "examLeaderboardData_v1";
 
@@ -3345,6 +3442,8 @@ function setLbCache(key, rows){
 async function showLeaderboard(){
   hideAllScreens();
   $("screen-leaderboard").hidden = false;
+  $("btnClearLeaderboard").hidden = !isAdmin(); // শুধু admin ডিলিট করতে পারবে
+  pushScreen("leaderboard", {});
 
   const key = getExamKey();
   const localAll = loadLeaderboard().filter(e => e.examKey === key);
@@ -3385,15 +3484,93 @@ async function showLeaderboard(){
 
 $("btnLeaderboard").addEventListener("click", showLeaderboard);
 $("btnBackToResult").addEventListener("click", ()=>{
-  hideAllScreens();
-  $("screen-result").hidden = false;
+  history.back(); // যেখান থেকে লিডারবোর্ডে এসেছিলে (ফলাফল বা admin উত্তরপত্র) সেখানেই ফিরিয়ে দেবে
 });
 $("btnClearLeaderboard").addEventListener("click", ()=>{
+  if(!isAdmin()) return; // নিরাপত্তার জন্য দ্বিতীয়বার যাচাই — শুধু admin ডিলিট করতে পারবে
   if(!confirm("এই পরীক্ষার লিডারবোর্ড পুরোপুরি মুছে ফেলতে চাও? এটা আর ফিরিয়ে আনা যাবে না।")) return;
   const key = getExamKey();
   const remaining = loadLeaderboard().filter(e => e.examKey !== key);
   try{ localStorage.setItem(LB_KEY, JSON.stringify(remaining)); }catch(e){}
   showLeaderboard();
+});
+
+/* ================================================================
+   পরীক্ষা চলাকালীন পাতা রিফ্রেশ/বন্ধ করতে চাইলে কনফার্মেশন দেখানো
+   [!] ব্রাউজার নিরাপত্তার কারণে কাস্টম লেখা ("তুমি কি নিশ্চিত...")
+   দেখাতে দেয় না — ব্রাউজার নিজের ডিফল্ট লেখায় (Leave/Cancel ধরনের)
+   একটা কনফার্মেশন বক্স দেখাবে। "Leave"/"ঠিক আছে" চাপলে রিফ্রেশ হবে,
+   "Cancel" চাপলে পরীক্ষাতেই থেকে যাবে।
+================================================================ */
+window.addEventListener("beforeunload", function(e){
+  if(state.examInProgress){
+    e.preventDefault();
+    e.returnValue = "";
+    return "";
+  }
+});
+
+/* ================================================================
+   ফোনের ব্যাক বাটন → সাইট থেকে বের না করে আগের স্ক্রিনে ফেরানো
+================================================================ */
+try{
+  history.replaceState({screen:"subjects"}, "", location.pathname + location.search);
+}catch(e){ /* preview/sandbox এর মতো পরিবেশে URL বসানো আটকাতে পারে, তাতে অ্যাপ থেমে থাকবে না */ }
+
+window.addEventListener("popstate", function(e){
+  const target = e.state || {screen:"subjects"};
+
+  // পরীক্ষা চলাকালীন ব্যাক চাপলে আগে কনফার্ম করো, এমনি এমনি বের হতে দিও না
+  if(state.examInProgress && target.screen !== "exam"){
+    historyNavInProgress = true;
+    history.pushState({screen:"exam"}, "", "#exam"); // ব্যাক বাতিল করে পরীক্ষাতেই রাখো
+    historyNavInProgress = false;
+
+    if(confirm("তুমি কি পরীক্ষাটি বাতিল করে বের হয়ে যেতে চাও? অগ্রগতি সেভ হবে না।")){
+      clearInterval(state.timerId);
+      state.examInProgress = false;
+      hideAllScreens();
+      $("screen-subjects").hidden = false;
+      $("topSub").textContent = "সাবজেক্ট বেছে নিয়ে পরীক্ষা শুরু করো";
+      historyNavInProgress = true;
+      history.replaceState({screen:"subjects"}, "", "#subjects");
+      historyNavInProgress = false;
+    }
+    return;
+  }
+
+  historyNavInProgress = true;
+  switch(target.screen){
+    case "chapters":
+      if(target.subject) showChapters(target.subject);
+      break;
+    case "exams":
+      if(target.subject && target.chapter) showExams(target.subject, target.chapter);
+      break;
+    case "result":
+      hideAllScreens();
+      $("screen-result").hidden = false;
+      break;
+    case "leaderboard":
+      showLeaderboard();
+      break;
+    case "answerkey":
+      if(state.selectedSubject && state.selectedChapter && state.selectedExam) showAnswerKeyForAdmin();
+      break;
+    case "exam":
+      // পরীক্ষা স্ক্রিনে সরাসরি ব্যাক/ফরোয়ার্ড করা নিরাপদ নয় (টাইমার/উত্তর হারাতে পারে),
+      // তাই হোমেই ফিরিয়ে দাও
+      hideAllScreens();
+      $("screen-subjects").hidden = false;
+      $("topSub").textContent = "সাবজেক্ট বেছে নিয়ে পরীক্ষা শুরু করো";
+      break;
+    case "subjects":
+    default:
+      hideAllScreens();
+      $("screen-subjects").hidden = false;
+      $("topSub").textContent = "সাবজেক্ট বেছে নিয়ে পরীক্ষা শুরু করো";
+  }
+  historyNavInProgress = false;
 });
 
 renderSubjects();
@@ -3403,14 +3580,5 @@ setTimeout(()=>{
 }, 600);
 </script>
 
-<script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("service-worker.js")
-      .then(() => console.log("PWA Service Worker registered"))
-      .catch(err => console.error("Service Worker registration failed:", err));
-  });
-}
-</script>
 </body>
 </html>
