@@ -2900,32 +2900,58 @@ const TEACHER_WHATSAPP_NUMBER = "8801995125480";
 /* ================================================================
    স্টাডি ম্যাটেরিয়াল (PDF নোট ও ভিডিও) — অধ্যায় অনুযায়ী
    ================================================================
-   - subject ও chapter-এর নাম examData-র সাথে হুবহু মিলতে হবে
+   - subject ও chapter-এর নাম examData-র সাথে হুবহু মিলতে হবে (বানান,
+     স্পেস, কোলন সব মিলিয়ে), নাহলে ম্যাটেরিয়াল সাইটে দেখাবে না
    - type: "pdf" হলে url-এ সরাসরি ফাইলের লিংক দাও (GitHub raw লিংক)
-   - type: "video" হলে youtubeId-তে শুধু ভিডিও আইডিটা দাও
-     (youtube.com/watch?v=XXXXXXXXXXX এর XXXXXXXXXXX অংশটুকু)
+   - type: "video" হলে youtubeId-তে ভিডিও আইডি, পুরো লিংক (youtu.be/
+     বা watch?v=, si= সহ হলেও সমস্যা নেই), বা পুরো embed কোড — যেকোনোটা
+     দিলেই চলবে, সাইট নিজে থেকে সঠিক আইডিটা বের করে নেবে
+   - [!] একটা chapter-এ একাধিক PDF বা একাধিক Video যোগ করতে চাইলে,
+     [ ] এর ভেতরে শুধু আরেকটা { ... } বসিয়ে কমা দিয়ে যোগ করো — নিচে
+     "অধ্যায় ২"-এ দুটো PDF আর দুটো Video দিয়ে উদাহরণ দেওয়া আছে
    - এখন demo লিংক বসানো আছে, আসল লিংক দিয়ে বদলে নিও
 ================================================================ */
 const materialsData = {
-  "গণিত": {
-    "অধ্যায় ১": [
-      { type:"pdf", title:"অধ্যায় ১ — নোট", url:"https://raw.githubusercontent.com/username/repo/main/materials/math/chapter1/note.pdf" },
-      { type:"video", title:"অধ্যায় ১ — ব্যাখ্যা ভিডিও", youtubeId:"dQw4w9WgXcQ" }
-    ]
-  },
   "আইসিটি": {
+    "অধ্যায় ২: সংখ্যা পদ্ধতি ও ডিজিটাল ডিভাইস": [
+      { type:"pdf", title:"অধ্যায়ের নোট — ১ম অংশ (demo)", url:"https://raw.githubusercontent.com/username/repo/main/materials/demo-note-1.pdf" },
+      { type:"pdf", title:"অধ্যায়ের নোট — ২য় অংশ (demo)", url:"https://raw.githubusercontent.com/username/repo/main/materials/demo-note-2.pdf" },
+      { type:"video", title:"Decimal to Binary,Octal,Hexa-Decimal", youtubeId:"https://youtu.be/6jnR74aAwx8?si=kk1Vy7b1XhT8Oeo_" },
+      { type:"video", title:"অধ্যায়ের ভিডিও — পার্ট ২ (demo)", youtubeId:"dQw4w9WgXcQ" }
+    ],
     "তথ্য ও যোগাযোগ প্রযুক্তি: বিশ্ব ও বাংলাদেশ প্রেক্ষিত": [
       { type:"pdf", title:"অধ্যায়ের নোট (PDF)", url:"https://raw.githubusercontent.com/arbijoy223/Materials/main/ICT/%E0%A7%A7%E0%A6%AE%20%E0%A6%85%E0%A6%A7%E0%A7%8D%E0%A6%AF%E0%A6%BE%E0%A7%9F/ict-1st%20chapter.pdf" },
       { type:"video", title:"অধ্যায়ের ব্যাখ্যা ভিডিও", youtubeId:"https://youtu.be/1zE0R4X0Xz0?si=PZ2kDp_8RknLNK8W" }
     ]
   },
+  "জীববিজ্ঞান": {
+    "অধ্যায় ৮: মানব শারীরতত্ত্ব : সমন্বয় ও নিয়ন্ত্রণ": [
+      { type:"pdf", title:"অধ্যায়ের নোট (demo — নিজের লিংক দিয়ে বদলাও)", url:"https://raw.githubusercontent.com/username/repo/main/materials/demo-note.pdf" },
+      { type:"video", title:"অধ্যায়ের ভিডিও (demo — নিজের লিংক/আইডি দিয়ে বদলাও)", youtubeId:"dQw4w9WgXcQ" }
+    ]
+  },
   "রসায়ন": {
+    "অধ্যায় ২: গুণগত রসায়ন": [
+      { type:"pdf", title:"অধ্যায়ের নোট (demo — নিজের লিংক দিয়ে বদলাও)", url:"https://raw.githubusercontent.com/username/repo/main/materials/demo-note.pdf" },
+      { type:"video", title:"অধ্যায়ের ভিডিও (demo — নিজের লিংক/আইডি দিয়ে বদলাও)", youtubeId:"dQw4w9WgXcQ" }
+    ],
     "অধ্যায় ৩: পরিমাণগত রসায়ন": [
       { type:"pdf", title:"অধ্যায়ের নোট (PDF)", url:"https://raw.githubusercontent.com/arbijoy223/Materials/main/Chemistry-2nd%20papaer/%E0%A6%AA%E0%A6%B0%E0%A6%BF%E0%A6%AE%E0%A6%BE%E0%A6%A8%E0%A6%97%E0%A6%A4%20%E0%A6%B0%E0%A6%B8%E0%A6%BE%E0%A7%9F%E0%A6%A8.pdf" },
       { type:"video", title:"অধ্যায়ের ব্যাখ্যা ভিডিও", youtubeId:"https://youtu.be/e5daed87jRs?si=xpTkMLow7f2Tt6Ag" }
     ]
   },
-
+  "পদার্থবিজ্ঞান": {
+    "অধ্যায় ২: ভেক্টর": [
+      { type:"pdf", title:"অধ্যায়ের নোট (demo — নিজের লিংক দিয়ে বদলাও)", url:"https://raw.githubusercontent.com/username/repo/main/materials/demo-note.pdf" },
+      { type:"video", title:"অধ্যায়ের ভিডিও (demo — নিজের লিংক/আইডি দিয়ে বদলাও)", youtubeId:"dQw4w9WgXcQ" }
+    ]
+  },
+  "ম্যাথ ১ম পত্র": {
+    "অধ্যায় ১: ম্যাট্রিক্স ও নির্ণায়ক": [
+      { type:"pdf", title:"অধ্যায় ১ — নোট", url:"https://raw.githubusercontent.com/username/repo/main/materials/math/chapter1/note.pdf" },
+      { type:"video", title:"অধ্যায় ১ — ব্যাখ্যা ভিডিও", youtubeId:"dQw4w9WgXcQ" }
+    ]
+  }
 };
 
 const accentPalette = ["var(--accent-blue)","var(--accent-red)","var(--accent-green)","var(--accent-plum)","var(--accent-gold)"];
