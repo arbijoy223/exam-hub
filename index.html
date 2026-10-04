@@ -33,6 +33,34 @@ color:#fff;font-size:11px;font-weight:800;background:linear-gradient(135deg,var(
 .lede{margin:28px 0 25px}.lede h2{font-size:clamp(28px,5vw,40px);line-height:1.25;background:linear-gradient(135deg,#111827,var(--primary),var(--primary2));-webkit-background-clip:text;background-clip:text;color:transparent}
 .lede p{color:var(--muted);margin-top:8px;font-size:15px}
 .subject-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.hub-grid{display:flex;flex-direction:column;gap:14px;margin-top:6px}
+.hub-card{display:flex;align-items:center;gap:16px;text-align:left;cursor:pointer;width:100%;
+padding:20px 22px;background:var(--card);border:1px solid var(--border);border-radius:18px;
+box-shadow:var(--shadow);font-family:inherit;color:var(--text);transition:transform .15s ease}
+.hub-card:hover{transform:translateY(-3px)}
+.hub-icon{flex-shrink:0;width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px}
+.hub-icon-exam{background:rgba(99,91,255,.12)}
+.hub-icon-material{background:rgba(22,163,74,.12)}
+.hub-text{flex:1;min-width:0}
+.hub-text h3{font-size:17px;margin-bottom:3px}
+.hub-text p{font-size:13px;color:var(--muted);margin:0}
+.hub-card .card-arrow{flex-shrink:0;font-size:18px;color:var(--muted)}
+
+.mat-row{display:flex;align-items:center;gap:14px;padding:16px 18px;background:var(--card);
+border:1px solid var(--border);border-radius:16px;margin-bottom:12px;box-shadow:var(--shadow)}
+.mat-icon{flex-shrink:0;width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:20px}
+.mat-icon-pdf{background:rgba(239,68,68,.12);color:var(--danger)}
+.mat-icon-video{background:rgba(239,68,68,.12);color:var(--danger)}
+.mat-text{flex:1;min-width:0}
+.mat-text p.mat-title{font-size:15px;margin:0 0 2px;color:var(--text)}
+.mat-text p.mat-sub{font-size:12.5px;color:var(--muted);margin:0}
+.mat-action{flex-shrink:0;padding:9px 14px;border-radius:10px;border:1px solid var(--border);
+background:var(--bg);color:var(--text);font-size:13.5px;font-weight:600;cursor:pointer;text-decoration:none;white-space:nowrap}
+.mat-action:hover{background:var(--card)}
+.mat-video-frame{margin-top:-4px;margin-bottom:12px;border-radius:16px;overflow:hidden;box-shadow:var(--shadow)}
+.mat-video-frame iframe{width:100%;aspect-ratio:16/9;display:block;border:0}
+.mat-empty{text-align:center;color:var(--muted);padding:50px 20px;font-size:14.5px}
+
 .subject-card{position:relative;overflow:hidden;text-align:left;cursor:pointer;width:100%;min-height:145px;padding:22px;color:var(--text);
 background:var(--card);border:1px solid rgba(255,255,255,.9);border-radius:22px;box-shadow:var(--shadow);backdrop-filter:blur(15px);transition:.28s ease}
 .subject-card:hover{transform:translateY(-6px);box-shadow:0 22px 55px rgba(30,41,59,.15)}
@@ -297,6 +325,33 @@ keyframes warningFloat{
     <div class="subject-grid" id="chapterGrid"></div>
   </section>
 
+  <!-- স্ক্রিন ২.৫: অধ্যায় হাব — পরীক্ষা দাও / স্টাডি ম্যাটেরিয়াল -->
+  <section id="screen-chapterhub" hidden>
+    <button class="back-btn" id="backToChaptersFromHub">← অধ্যায় লিস্টে ফিরে যাও</button>
+    <div class="lede">
+      <h2 id="hubChapterName"></h2>
+      <p id="hubSubtitle"></p>
+    </div>
+    <div class="hub-grid">
+      <button class="hub-card" id="hubGoExams">
+        <div class="hub-icon hub-icon-exam"><i>📝</i></div>
+        <div class="hub-text">
+          <h3>পরীক্ষা দাও</h3>
+          <p id="hubExamCount"></p>
+        </div>
+        <div class="card-arrow">→</div>
+      </button>
+      <button class="hub-card" id="hubGoMaterials">
+        <div class="hub-icon hub-icon-material"><i>📚</i></div>
+        <div class="hub-text">
+          <h3>স্টাডি ম্যাটেরিয়াল</h3>
+          <p id="hubMaterialCount"></p>
+        </div>
+        <div class="card-arrow">→</div>
+      </button>
+    </div>
+  </section>
+
   <!-- স্ক্রিন ৩: পরীক্ষা লিস্ট -->
   <section id="screen-exams" hidden>
     <button class="back-btn" id="backToChapters">← অধ্যায়ে ফিরে যাও</button>
@@ -305,6 +360,16 @@ keyframes warningFloat{
       <p>নিচের পরীক্ষাগুলো থেকে একটি বেছে নাও</p>
     </div>
     <div class="subject-grid" id="examGrid"></div>
+  </section>
+
+  <!-- স্ক্রিন ৩.৫: স্টাডি ম্যাটেরিয়াল (PDF/Video) -->
+  <section id="screen-materials" hidden>
+    <button class="back-btn" id="backToHubFromMaterials">← ফিরে যাও</button>
+    <div class="lede">
+      <h2 id="materialsChapterName"></h2>
+      <p>নোট (PDF) পড়ো বা ডাউনলোড করো, ভিডিও দেখো</p>
+    </div>
+    <div id="materialsList"></div>
   </section>
 
   <!-- স্ক্রিন ৪: পরীক্ষা চলাকালীন -->
@@ -416,6 +481,35 @@ keyframes warningFloat{
 const examData = {
   "আইসিটি": {
   chapters: {
+    "তথ্য ও যোগাযোগ প্রযুক্তি: বিশ্ব ও বাংলাদেশ প্রেক্ষিত": {
+      exams: {
+        "পরীক্ষা ১ (বোর্ড প্রশ্নভিত্তিক)": {
+          examTime: 20,
+          questions: [
+            { q: "ICT শব্দের পূর্ণরূপ কী?", options: ["Information and Communication Technology","Internet and Computer Technology","Information and Computer Transfer","Integrated Communication Terminal"], answer: 0 },
+            { q: "তথ্য ও যোগাযোগ প্রযুক্তির মূল ভিত্তি হিসেবে নিচের কোনটিকে ধরা হয়?", options: ["কম্পিউটার ও টেলিযোগাযোগ প্রযুক্তির সমন্বয়","শুধু ইন্টারনেট","শুধু মোবাইল ফোন","শুধু সফটওয়্যার"], answer: 0 },
+            { q: "বাংলাদেশ সরকার কোন সালকে 'ডিজিটাল বাংলাদেশ' গড়ার লক্ষ্যমাত্রা হিসেবে ঘোষণা করেছিল?", options: ["২০১৫","২০২১","২০২৫","২০৩০"], answer: 1 },
+            { q: "ডিজিটাল বাংলাদেশের মূল স্তম্ভ কয়টি?", options: ["২টি","৩টি","৪টি","৫টি"], answer: 2 },
+            { q: "ডিজিটাল বাংলাদেশের চারটি স্তম্ভের মধ্যে নেই কোনটি?", options: ["মানবসম্পদ উন্নয়ন","ই-গভর্ন্যান্স","সামরিক শক্তি বৃদ্ধি","সিটিজেন সার্ভিস"], answer: 2 },
+            { q: "সরকারি সেবা অনলাইনে দ্রুত ও স্বচ্ছভাবে প্রদান করাকে কী বলে?", options: ["ই-কমার্স","ই-গভর্ন্যান্স","ই-লার্নিং","ই-মেইল"], answer: 1 },
+            { q: "দূরবর্তী স্থান থেকে চিকিৎসকের পরামর্শ নেওয়ার প্রযুক্তিকে কী বলা হয়?", options: ["টেলিমেডিসিন","টেলিকনফারেন্স","রোবটিক্স","বায়োমেট্রিক্স"], answer: 0 },
+            { q: "ইন্টারনেটের মাধ্যমে পণ্য কেনাবেচা করাকে কী বলে?", options: ["ই-কমার্স","ই-গভর্ন্যান্স","ই-মেইল","ই-লার্নিং"], answer: 0 },
+            { q: "ইন্টারনেটের মাধ্যমে সংরক্ষণ ও সেবা গ্রহণের প্রযুক্তিকে কী বলা হয়?", options: ["ক্লাউড কম্পিউটিং","বায়োইনফরমেটিক্স","রোবটিক্স","ন্যানো টেকনোলজি"], answer: 0 },
+            { q: "মানুষের শারীরিক বৈশিষ্ট্য (আঙুলের ছাপ, চোখের রেটিনা ইত্যাদি) ব্যবহার করে পরিচয় শনাক্তকরণ পদ্ধতিকে কী বলে?", options: ["বায়োমেট্রিক্স","রোবটিক্স","ন্যানো টেকনোলজি","জিনোম প্রকৌশল"], answer: 0 },
+            { q: "মানুষের মতো চিন্তা ও সিদ্ধান্ত নিতে পারে এমন প্রযুক্তিকে কী বলা হয়?", options: ["কৃত্রিম বুদ্ধিমত্তা (AI)","রোবটিক্স","বায়োমেট্রিক্স","GPS"], answer: 0 },
+            { q: "স্বয়ংক্রিয় যন্ত্রের মাধ্যমে মানুষের কাজ সম্পাদনের প্রযুক্তিকে কী বলা হয়?", options: ["রোবটিক্স","বায়োইনফরমেটিক্স","ন্যানো টেকনোলজি","ভার্চুয়াল রিয়েলিটি"], answer: 0 },
+            { q: "পৃথিবীর যেকোনো স্থানের অবস্থান নির্ণয়ে ব্যবহৃত স্যাটেলাইটভিত্তিক প্রযুক্তিকে কী বলে?", options: ["GPS","GIS","AI","IoT"], answer: 0 },
+            { q: "ভৌগোলিক তথ্য সংগ্রহ, বিশ্লেষণ ও উপস্থাপনের প্রযুক্তিকে কী বলা হয়?", options: ["GIS","GPS","VR","AI"], answer: 0 },
+            { q: "অত্যন্ত ক্ষুদ্র (ন্যানোমিটার) পরিসরে পদার্থ নিয়ন্ত্রণ ও ব্যবহারের প্রযুক্তিকে কী বলা হয়?", options: ["ন্যানো টেকনোলজি","বায়োমেট্রিক্স","রোবটিক্স","ক্লাউড কম্পিউটিং"], answer: 0 },
+            { q: "জীবের বংশগতীয় বৈশিষ্ট্য পরিবর্তন/উন্নয়নের প্রযুক্তিকে কী বলা হয়?", options: ["জেনেটিক ইঞ্জিনিয়ারিং","ন্যানো টেকনোলজি","রোবটিক্স","বায়োমেট্রিক্স"], answer: 0 },
+            { q: "কম্পিউটারের সাহায্যে কৃত্রিমভাবে বাস্তবসদৃশ পরিবেশ তৈরি করাকে কী বলে?", options: ["ভার্চুয়াল রিয়েলিটি (VR)","অগমেন্টেড রিয়েলিটি","রোবটিক্স","GIS"], answer: 0 },
+            { q: "ইন্টারনেটের সাথে বিভিন্ন যন্ত্র/ডিভাইস সংযুক্ত করে পারস্পরিক তথ্য আদান-প্রদানের ব্যবস্থাকে কী বলা হয়?", options: ["IoT (Internet of Things)","GIS","VR","Bioinformatics"], answer: 0 },
+            { q: "তথ্য ও যোগাযোগ প্রযুক্তি কোন খাতে বাংলাদেশের অর্থনীতিতে উল্লেখযোগ্য ভূমিকা রাখছে?", options: ["রপ্তানি আয় ও কর্মসংস্থান","শুধু কৃষি উৎপাদন","শুধু শিক্ষাখাত","শুধু স্বাস্থ্যখাত"], answer: 0 },
+            { q: "ডিজিটাল বাংলাদেশ বাস্তবায়নের মূল উদ্দেশ্য কী?", options: ["তথ্যপ্রযুক্তি ব্যবহার করে দেশের উন্নয়ন ও সেবা সহজলভ্য করা","শুধু মোবাইল ব্যবহার বাড়ানো","শুধু ইন্টারনেট স্পিড বাড়ানো","শুধু কম্পিউটার আমদানি বাড়ানো"], answer: 0 }
+          ]
+        }
+      }
+    },
     "অধ্যায় ২: সংখ্যা পদ্ধতি ও ডিজিটাল ডিভাইস": {
       exams: {
 
@@ -534,7 +628,8 @@ const examData = {
         }
 
       }
-    }
+    },
+    
   }
 },
   "জীববিজ্ঞান": {
@@ -2803,6 +2898,30 @@ const examData = {
 
 const TEACHER_WHATSAPP_NUMBER = "8801995125480"; 
 
+/* ================================================================
+   স্টাডি ম্যাটেরিয়াল (PDF নোট ও ভিডিও) — অধ্যায় অনুযায়ী
+   ================================================================
+   - subject ও chapter-এর নাম examData-র সাথে হুবহু মিলতে হবে
+   - type: "pdf" হলে url-এ সরাসরি ফাইলের লিংক দাও (GitHub raw লিংক)
+   - type: "video" হলে youtubeId-তে শুধু ভিডিও আইডিটা দাও
+     (youtube.com/watch?v=XXXXXXXXXXX এর XXXXXXXXXXX অংশটুকু)
+   - এখন demo লিংক বসানো আছে, আসল লিংক দিয়ে বদলে নিও
+================================================================ */
+const materialsData = {
+  "গণিত": {
+    "অধ্যায় ১": [
+      { type:"pdf", title:"অধ্যায় ১ — নোট", url:"https://raw.githubusercontent.com/username/repo/main/materials/math/chapter1/note.pdf" },
+      { type:"video", title:"অধ্যায় ১ — ব্যাখ্যা ভিডিও", youtubeId:"dQw4w9WgXcQ" }
+    ]
+  },
+  "আইসিটি": {
+    "তথ্য ও যোগাযোগ প্রযুক্তি: বিশ্ব ও বাংলাদেশ প্রেক্ষিত": [
+      { type:"pdf", title:"অধ্যায়ের নোট (PDF)", url:"https://raw.githubusercontent.com/arbijoy223/Materials/main/ICT/%E0%A7%A7%E0%A6%AE%20%E0%A6%85%E0%A6%A7%E0%A7%8D%E0%A6%AF%E0%A6%BE%E0%A7%9F/ict-1st%20chapter.pdf" },
+      { type:"video", title:"অধ্যায়ের ব্যাখ্যা ভিডিও", youtubeId:"dtjD86MIs715f0Ew" }
+    ]
+  }
+};
+
 const accentPalette = ["var(--accent-blue)","var(--accent-red)","var(--accent-green)","var(--accent-plum)","var(--accent-gold)"];
 
 let state = { 
@@ -2850,7 +2969,9 @@ function hideAllScreens(){
   window.scrollTo(0, 0);
   $("screen-subjects").hidden = true;
   $("screen-chapters").hidden = true;
+  $("screen-chapterhub").hidden = true;
   $("screen-exams").hidden = true;
+  $("screen-materials").hidden = true;
   $("screen-exam").hidden = true;
   $("screen-result").hidden = true;
   $("screen-leaderboard").hidden = true;
@@ -2899,11 +3020,33 @@ function showChapters(subject){
       <h3>${chapterName}</h3>
       <div class="subject-meta"><span class="pill">${bnNum(examCount)}টি পরীক্ষা</span></div>
       <div class="card-arrow">→</div>`;
-    card.addEventListener("click", ()=>showExams(subject, chapterName));
+    card.addEventListener("click", ()=>showChapterHub(subject, chapterName));
     grid.appendChild(card);
   });
   pushScreen("chapters", {subject});
 }
+
+// ২.৫ অধ্যায় হাব — পরীক্ষা দাও / স্টাডি ম্যাটেরিয়াল বেছে নেওয়ার পেজ
+function showChapterHub(subject, chapter){
+  state.selectedSubject = subject;
+  state.selectedChapter = chapter;
+  hideAllScreens();
+  $("screen-chapterhub").hidden = false;
+  $("hubChapterName").textContent = chapter;
+  $("hubSubtitle").textContent = subject;
+  $("topSub").textContent = subject + " → " + chapter;
+
+  const examCount = Object.keys(examData[subject].chapters[chapter].exams).length;
+  const materialCount = (materialsData[subject] && materialsData[subject][chapter]) ? materialsData[subject][chapter].length : 0;
+  $("hubExamCount").textContent = `${bnNum(examCount)}টি পরীক্ষা`;
+  $("hubMaterialCount").textContent = materialCount > 0 ? `${bnNum(materialCount)}টি ফাইল (PDF/ভিডিও)` : "এখনো যোগ করা হয়নি";
+
+  pushScreen("chapterhub", {subject, chapter});
+}
+
+$("hubGoExams").addEventListener("click", ()=> showExams(state.selectedSubject, state.selectedChapter));
+$("hubGoMaterials").addEventListener("click", ()=> showMaterials(state.selectedSubject, state.selectedChapter));
+$("backToChaptersFromHub").addEventListener("click", ()=> showChapters(state.selectedSubject));
 
 // ৩. পরীক্ষা লিস্ট দেখানো
 function showExams(subject, chapter){
@@ -2937,6 +3080,72 @@ function showExams(subject, chapter){
   });
   pushScreen("exams", {subject, chapter});
 }
+
+// ৩.৫ স্টাডি ম্যাটেরিয়াল (PDF/ভিডিও) দেখানো
+function showMaterials(subject, chapter){
+  state.selectedSubject = subject;
+  state.selectedChapter = chapter;
+  hideAllScreens();
+  $("screen-materials").hidden = false;
+  $("materialsChapterName").textContent = `${subject} → ${chapter}`;
+  $("topSub").textContent = subject + " → " + chapter + " → ম্যাটেরিয়াল";
+
+  const items = (materialsData[subject] && materialsData[subject][chapter]) || [];
+  const box = $("materialsList");
+  box.innerHTML = "";
+
+  if(items.length === 0){
+    box.innerHTML = `<div class="mat-empty">📭 এই অধ্যায়ের জন্য এখনো কোনো নোট/ভিডিও যোগ করা হয়নি।</div>`;
+    pushScreen("materials", {subject, chapter});
+    return;
+  }
+
+  items.forEach((item, idx)=>{
+    const row = document.createElement("div");
+    row.className = "mat-row";
+
+    if(item.type === "pdf"){
+      row.innerHTML = `
+        <div class="mat-icon mat-icon-pdf">📄</div>
+        <div class="mat-text">
+          <p class="mat-title">${item.title}</p>
+          <p class="mat-sub">PDF নোট</p>
+        </div>
+        <a class="mat-action" href="${item.url}" target="_blank" rel="noopener">পড়ো/ডাউনলোড</a>`;
+      box.appendChild(row);
+    } else if(item.type === "video"){
+      row.innerHTML = `
+        <div class="mat-icon mat-icon-video">▶️</div>
+        <div class="mat-text">
+          <p class="mat-title">${item.title}</p>
+          <p class="mat-sub">ভিডিও</p>
+        </div>
+        <button class="mat-action" data-play="${idx}">দেখো</button>`;
+      box.appendChild(row);
+
+      const frameHolder = document.createElement("div");
+      frameHolder.id = "mat-frame-" + idx;
+      box.appendChild(frameHolder);
+
+      row.querySelector("[data-play]").addEventListener("click", (e)=>{
+        const holder = $("mat-frame-" + idx);
+        if(holder.innerHTML){
+          holder.innerHTML = ""; // আবার ক্লিক করলে ভিডিও বন্ধ হয়ে যাবে
+          e.target.textContent = "দেখো";
+        } else {
+          holder.innerHTML = `<div class="mat-video-frame"><iframe src="https://www.youtube.com/embed/${item.youtubeId}" title="${item.title}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`;
+          e.target.textContent = "লুকাও";
+        }
+      });
+    }
+  });
+
+  pushScreen("materials", {subject, chapter});
+}
+
+$("backToHubFromMaterials").addEventListener("click", ()=>{
+  showChapterHub(state.selectedSubject, state.selectedChapter);
+});
 
 // ৪. নাম চাওয়া
 function askForName(subject, chapter, exam){
@@ -3347,7 +3556,7 @@ $("backToSubjects").addEventListener("click", ()=>{
 });
 
 $("backToChapters").addEventListener("click", ()=>{
-  showChapters(state.selectedSubject);
+  showChapterHub(state.selectedSubject, state.selectedChapter);
 });
 
 $("btnHome").addEventListener("click", ()=>{
@@ -3544,8 +3753,14 @@ window.addEventListener("popstate", function(e){
     case "chapters":
       if(target.subject) showChapters(target.subject);
       break;
+    case "chapterhub":
+      if(target.subject && target.chapter) showChapterHub(target.subject, target.chapter);
+      break;
     case "exams":
       if(target.subject && target.chapter) showExams(target.subject, target.chapter);
+      break;
+    case "materials":
+      if(target.subject && target.chapter) showMaterials(target.subject, target.chapter);
       break;
     case "result":
       hideAllScreens();
