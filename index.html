@@ -311,8 +311,8 @@ keyframes warningFloat{
 
 /* ===== Account / Profile ===== */
 .account-area{display:flex;align-items:center;gap:8px}
-.account-btn{border:0;border-radius:14px;padding:9px 13px;font:700 13px var(--sans);cursor:pointer;background:linear-gradient(135deg,var(--primary),var(--primary2));color:#fff;box-shadow:0 7px 18px rgba(99,91,255,.22)}
-.account-btn.ghost{background:#fff;color:var(--text);border:1px solid var(--border);box-shadow:none}
+.account-btn{border:0;border-radius:16px;padding:11px 17px;min-height:44px;font:800 14px var(--sans);cursor:pointer;background:linear-gradient(135deg,var(--primary),var(--primary2));color:#fff;box-shadow:0 9px 24px rgba(99,91,255,.28);transition:transform .2s ease,box-shadow .2s ease,filter .2s ease;white-space:nowrap}.account-btn:hover{transform:translateY(-2px);box-shadow:0 13px 30px rgba(99,91,255,.35);filter:saturate(1.08)}
+.account-btn.ghost{background:linear-gradient(135deg,#635bff,#8b5cf6);color:#fff;border:1px solid rgba(255,255,255,.22);box-shadow:0 9px 24px rgba(99,91,255,.28)}
 .auth-modal{width:min(430px,100%);padding:26px!important}
 .auth-tabs{display:grid;grid-template-columns:1fr 1fr;gap:7px;padding:5px;background:#f1f5f9;border-radius:14px;margin:18px 0}
 .auth-tab{border:0;background:transparent;padding:10px;border-radius:10px;font:700 14px var(--sans);cursor:pointer;color:#64748b}.auth-tab.active{background:#fff;color:var(--primary);box-shadow:0 3px 12px rgba(15,23,42,.08)}
@@ -320,8 +320,9 @@ keyframes warningFloat{
 .auth-note{font-size:12px;line-height:1.65;color:#64748b;margin:3px 0 8px}.auth-error{min-height:20px;color:#dc2626;font-size:12px;font-weight:700}
 .profile-head{display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap;margin:20px 0}.profile-user{display:flex;align-items:center;gap:13px}.profile-avatar{width:58px;height:58px;border-radius:19px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:22px;background:linear-gradient(135deg,var(--primary),var(--primary2));box-shadow:0 10px 25px rgba(99,91,255,.22)}
 .profile-user h2{font-size:25px}.profile-user p{margin:3px 0 0;color:var(--muted);font-size:13px}.profile-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0}.pstat{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:17px;text-align:center;box-shadow:var(--shadow)}.pstat strong{display:block;font-size:25px;color:var(--primary)}.pstat span{font-size:12px;color:var(--muted)}
-.profile-card{background:var(--card);border:1px solid var(--border);border-radius:22px;padding:20px;margin:16px 0;box-shadow:var(--shadow)}.profile-card h3{font-size:19px;margin-bottom:14px}.chart-wrap{position:relative;height:260px}.profile-result{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 0;border-bottom:1px solid var(--border)}.profile-result:last-child{border-bottom:0}.pr-main{min-width:0}.pr-main strong{display:block;font-size:14px}.pr-main span{display:block;font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.pr-score{text-align:right;white-space:nowrap}.pr-score strong{display:block;font-size:16px}.pass{color:#16a34a}.fail{color:#dc2626}.empty-profile{text-align:center;padding:28px;color:var(--muted);font-size:14px}
-@media(max-width:700px){.account-btn{padding:8px 10px;font-size:12px}.profile-stats{grid-template-columns:repeat(2,1fr)}.chart-wrap{height:220px}.profile-user h2{font-size:21px}}
+.profile-card{background:var(--card);border:1px solid var(--border);border-radius:22px;padding:20px;margin:16px 0;box-shadow:var(--shadow)}.profile-card h3{font-size:19px;margin-bottom:14px}.chart-wrap{position:relative;width:100%;height:300px;overflow:hidden;border-radius:16px;background:linear-gradient(180deg,rgba(99,91,255,.035),rgba(99,91,255,.01));padding:4px}.chart-wrap canvas{display:block;width:100%;height:100%;touch-action:pan-y}.profile-result{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 0;border-bottom:1px solid var(--border)}.profile-result:last-child{border-bottom:0}.pr-main{min-width:0}.pr-main strong{display:block;font-size:14px}.pr-main span{display:block;font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.pr-score{text-align:right;white-space:nowrap}.pr-score strong{display:block;font-size:16px}.pass{color:#16a34a}.fail{color:#dc2626}.empty-profile{text-align:center;padding:28px;color:var(--muted);font-size:14px}
+@media(max-width:700px){.account-area{gap:6px}.account-btn{padding:11px 14px;min-height:46px;font-size:14px;border-radius:15px}.profile-stats{grid-template-columns:repeat(2,1fr)}.profile-card{padding:14px;border-radius:18px}.profile-card h3{font-size:17px}.chart-wrap{height:300px;padding:2px}.profile-user h2{font-size:21px}}
+@media(max-width:420px){.topbar-inner{gap:8px}.brand{min-width:0}.brand-text{font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.brand-sub{font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.seal{width:42px;height:42px;font-size:11px;flex:0 0 42px}.account-btn{padding:10px 12px;min-height:44px;font-size:13px}.profile-card{padding:12px}.chart-wrap{height:310px}}
 </style>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#635bff">
@@ -336,7 +337,7 @@ keyframes warningFloat{
 
 <div class="topbar">
   <div class="topbar-inner">
-    <div class="brand">
+    <div class="brand" id="brandHomeBtn" role="button" tabindex="0" title="হোমে ফিরে যাও">
       <div class="seal">Bijoy</div>
       <div>
         <div class="brand-text">Created By: AR Bijoy</div>
@@ -3855,12 +3856,34 @@ function renderProfileResults(rows){
   box.innerHTML=rows.slice().reverse().map((r,i)=>{const pass=Number(r.percent)>=50;const d=new Date(r.attempted_at);return `<div class="profile-result"><div class="pr-main"><strong>${r.subject} → ${r.exam}</strong><span>${r.chapter} • ${d.toLocaleDateString("bn-BD")}</span></div><div class="pr-score"><strong class="${pass?"pass":"fail"}">${bnNum(r.percent)}% • ${pass?"PASS":"FAIL"}</strong><span>${bnNum(r.correct)} / ${bnNum(r.total)}</span></div></div>`;}).join("");
 }
 function renderPerformanceChart(rows){
-  const canvas=$("performanceChart"); const ctx=canvas.getContext("2d"); const rect=canvas.getBoundingClientRect(); const dpr=window.devicePixelRatio||1; canvas.width=rect.width*dpr; canvas.height=rect.height*dpr; ctx.setTransform(dpr,0,0,dpr,0,0); const w=rect.width,h=rect.height; ctx.clearRect(0,0,w,h);
-  ctx.font='12px Hind Siliguri, sans-serif'; ctx.fillStyle='#64748b'; ctx.strokeStyle='#e2e8f0'; ctx.lineWidth=1;
-  const pad={l:38,r:15,t:18,b:32}; const cw=w-pad.l-pad.r,ch=h-pad.t-pad.b; for(let y=0;y<=100;y+=25){const yy=pad.t+ch-(y/100)*ch;ctx.beginPath();ctx.moveTo(pad.l,yy);ctx.lineTo(w-pad.r,yy);ctx.stroke();ctx.fillText(y+'%',5,yy+4);}
-  if(!rows.length){ctx.fillStyle='#94a3b8';ctx.fillText('পরীক্ষা দিলে এখানে পারফরম্যান্স দেখা যাবে',pad.l+10,h/2);return;}
-  const pts=rows.map((r,i)=>[rows.length===1?pad.l+cw/2:pad.l+(i/(rows.length-1))*cw, pad.t+ch-(Number(r.percent)/100)*ch]); ctx.strokeStyle='#635bff';ctx.lineWidth=3;ctx.beginPath();pts.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.stroke(); pts.forEach((p,i)=>{ctx.beginPath();ctx.fillStyle=Number(rows[i].percent)>=50?'#16a34a':'#ef4444';ctx.arc(p[0],p[1],5,0,Math.PI*2);ctx.fill();});
+  const canvas=$("performanceChart"), ctx=canvas.getContext("2d");
+  const rect=canvas.getBoundingClientRect(), dpr=Math.min(window.devicePixelRatio||1,2);
+  const w=Math.max(260,rect.width), h=Math.max(240,rect.height), mobile=w<560;
+  canvas.width=Math.round(w*dpr); canvas.height=Math.round(h*dpr);
+  canvas.style.width="100%"; canvas.style.height="100%";
+  ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,w,h);
+  const pad={l:mobile?42:48,r:mobile?12:22,t:20,b:mobile?40:34};
+  const cw=Math.max(10,w-pad.l-pad.r), ch=Math.max(10,h-pad.t-pad.b);
+  ctx.font=(mobile?"11px":"12px")+' Hind Siliguri, sans-serif'; ctx.textBaseline="middle";
+  ctx.lineWidth=1; ctx.strokeStyle="rgba(148,163,184,.28)"; ctx.fillStyle="#64748b";
+  for(let y=0;y<=100;y+=25){const yy=pad.t+ch-(y/100)*ch;ctx.beginPath();ctx.moveTo(pad.l,yy);ctx.lineTo(w-pad.r,yy);ctx.stroke();ctx.fillText(y+"%",4,yy);}
+  const passY=pad.t+ch-.5*ch; ctx.save(); ctx.setLineDash([6,5]); ctx.strokeStyle="rgba(22,163,74,.48)"; ctx.beginPath();ctx.moveTo(pad.l,passY);ctx.lineTo(w-pad.r,passY);ctx.stroke();ctx.restore();
+  ctx.fillStyle="#16a34a"; ctx.font=(mobile?"10px":"11px")+' Hind Siliguri, sans-serif'; ctx.fillText("পাস ৫০%",Math.max(pad.l+4,w-pad.r-58),passY-10);
+  if(!rows.length){ctx.fillStyle="#94a3b8";ctx.textAlign="center";ctx.font=(mobile?"12px":"13px")+' Hind Siliguri, sans-serif';ctx.fillText("পরীক্ষা দিলে এখানে পারফরম্যান্স দেখা যাবে",w/2,h/2);ctx.textAlign="start";return;}
+  const values=rows.map(r=>Math.max(0,Math.min(100,Number(r.percent)||0)));
+  const xFor=i=>rows.length===1?pad.l+cw/2:pad.l+(i/(rows.length-1))*cw;
+  const yFor=v=>pad.t+ch-(v/100)*ch;
+  const pts=values.map((v,i)=>[xFor(i),yFor(v)]);
+  ctx.strokeStyle="#635bff";ctx.lineWidth=mobile?3:3.5;ctx.lineJoin="round";ctx.lineCap="round";ctx.beginPath();
+  pts.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.stroke();
+  pts.forEach((p,i)=>{ctx.beginPath();ctx.fillStyle=values[i]>=50?"#16a34a":"#ef4444";ctx.arc(p[0],p[1],mobile?4.5:5.5,0,Math.PI*2);ctx.fill();ctx.lineWidth=2;ctx.strokeStyle="#fff";ctx.stroke();});
+  ctx.fillStyle="#64748b";ctx.font=(mobile?"9px":"10px")+' Hind Siliguri, sans-serif';ctx.textAlign="center";
+  const labelStep=rows.length<=6?1:rows.length<=12?2:Math.ceil(rows.length/6);
+  for(let i=0;i<rows.length;i+=labelStep)ctx.fillText("#"+(i+1),pts[i][0],h-17);
+  if((rows.length-1)%labelStep!==0)ctx.fillText("#"+rows.length,pts[rows.length-1][0],h-17);
+  ctx.textAlign="start";
 }
+
 
 function finishExam(){
   if(state.finished) return;
@@ -4137,6 +4160,11 @@ async function showLeaderboard(){
 }
 
 $("btnLeaderboard").addEventListener("click", showLeaderboard);
+$("brandHomeBtn").addEventListener("click",()=>{
+  if(state.examInProgress){ openExitWarning(); return; }
+  hideAllScreens(); $("screen-subjects").hidden=false; $("topSub").textContent="সাবজেক্ট বেছে নিয়ে পরীক্ষা শুরু করো"; pushScreen("subjects",{}); window.scrollTo({top:0,behavior:"smooth"});
+});
+$("brandHomeBtn").addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();$("brandHomeBtn").click();}});
 $("authActionBtn").addEventListener("click",()=>currentProfile?showProfile():openAuthModal("login"));
 $("profileBtn").addEventListener("click",showProfile);
 $("backFromProfile").addEventListener("click",()=>{hideAllScreens();$("screen-subjects").hidden=false;$("topSub").textContent="সাবজেক্ট বেছে নিয়ে পরীক্ষা শুরু করো";pushScreen("subjects",{});});
