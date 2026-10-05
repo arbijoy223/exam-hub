@@ -3221,6 +3221,7 @@ function showMaterials(subject, chapter){
     row.className = "mat-row";
 
     if(item.type === "pdf"){
+      const isDemo = isPlaceholderMaterial(item.url);
       row.innerHTML = `
         <div class="mat-icon mat-icon-pdf">📄</div>
         <div class="mat-text">
@@ -3229,7 +3230,7 @@ function showMaterials(subject, chapter){
         </div>
         <div class="mat-btns">
           <button class="mat-action" data-view="${idx}">👁️ পড়ো</button>
-          <a class="mat-action" href="${item.url}" download target="_blank" rel="noopener">⬇️ ডাউনলোড</a>
+          <a class="mat-action" href="${isDemo ? '#' : item.url}"${isDemo ? '' : ' download target="_blank" rel="noopener"'}>⬇️ ডাউনলোড</a>
         </div>`;
       box.appendChild(row);
 
@@ -3238,15 +3239,28 @@ function showMaterials(subject, chapter){
       box.appendChild(frameHolder);
 
       row.querySelector("[data-view]").addEventListener("click", (e)=>{
+        if(isDemo){ toast("এই ফাইলটা এখনো যোগ করা হয়নি", "warning"); return; }
         const holder = $("mat-frame-" + idx);
         if(holder.innerHTML){
           holder.innerHTML = ""; // আবার ক্লিক করলে বন্ধ হয়ে যাবে
           e.target.textContent = "👁️ পড়ো";
         } else {
-          holder.innerHTML = `<div class="mat-pdf-frame"><iframe src="${item.url}" title="${item.title}"></iframe></div>`;
+          // GitHub raw PDF-কে সরাসরি <iframe>-এ দিলে অনেক সময় সাদা পেজ দেখায় বা
+          // ডাউনলোড হয়ে যায় (GitHub raw ফাইলের content-type এর একটা পরিচিত সমস্যা),
+          // তাই Google Docs Viewer দিয়ে র‍্যাপ করে পাঠানো হচ্ছে — এতে যেকোনো পাবলিক
+          // PDF লিংক নির্ভরযোগ্যভাবে পেজের ভেতরেই পুরোটা পড়া যায়
+          const viewerUrl = "https://docs.google.com/viewer?url=" + encodeURIComponent(item.url) + "&embedded=true";
+          holder.innerHTML = `<div class="mat-pdf-frame"><iframe src="${viewerUrl}" title="${item.title}"></iframe></div>`;
           e.target.textContent = "🔽 লুকাও";
         }
       });
+
+      if(isDemo){
+        row.querySelector("a.mat-action").addEventListener("click", (e)=>{
+          e.preventDefault();
+          toast("এই ফাইলটা এখনো যোগ করা হয়নি", "warning");
+        });
+      }
     } else if(item.type === "video"){
       row.innerHTML = `
         <div class="mat-icon mat-icon-video">▶️</div>
@@ -3262,12 +3276,26 @@ function showMaterials(subject, chapter){
       box.appendChild(frameHolder);
 
       const ytId = extractYouTubeId(item.youtubeId);
-      fetchYouTubeViews(ytId).then(views=>{
-        if(views !== null){
-          const el = $("mat-views-" + idx);
-          if(el) el.textContent = "· 👁️ " + formatViews(views) + " ভিউ";
-        }
-      });
+      let localViewCount = null;
+
+      // আসল YouTube ভিউ (API key দেওয়া থাকলে), নাহলে সাইটের নিজস্ব "দেখো" কাউন্টার
+      if(YOUTUBE_API_KEY.trim()){
+        fetchYouTubeViews(ytId).then(views=>{
+          if(views !== null){
+            localViewCount = views;
+            const el = $("mat-views-" + idx);
+            if(el) el.textContent = "· 👁️ " + formatViews(views) + " ভিউ";
+          }
+        });
+      } else if(LEADERBOARD_API_URL.trim()){
+        getSiteViewCount(ytId).then(count=>{
+          if(count !== null){
+            localViewCount = count;
+            const el = $("mat-views-" + idx);
+            if(el) el.textContent = "· 👁️ " + formatViews(count) + " বার দেখা হয়েছে";
+          }
+        });
+      }
 
       row.querySelector("[data-play]").addEventListener("click", (e)=>{
         const holder = $("mat-frame-" + idx);
@@ -3277,6 +3305,16 @@ function showMaterials(subject, chapter){
         } else {
           holder.innerHTML = `<div class="mat-video-frame"><iframe src="https://www.youtube.com/embed/${ytId}" title="${item.title}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`;
           e.target.textContent = "লুকাও";
+
+          // YouTube API key না থাকলে, প্রতিবার "দেখো" চাপলে সাইটের নিজস্ব কাউন্টার বাড়াও
+          if(!YOUTUBE_API_KEY.trim() && LEADERBOARD_API_URL.trim()){
+            incrementSiteViewCount(ytId);
+            if(localViewCount !== null){
+              localViewCount++;
+              const el = $("mat-views-" + idx);
+              if(el) el.textContent = "· 👁️ " + formatViews(localViewCount) + " বার দেখা হয়েছে";
+            }
+          }
         }
       });
     }
@@ -3336,6 +3374,40 @@ async function fetchYouTubeViews(videoId){
   }catch(e){
     return null;
   }
+}
+
+// demo/placeholder লিংক কিনা চেক করে (এখনো বদলানো হয়নি এমন লিংক)
+function isPlaceholderMaterial(url){
+  return !url || url.includes("username/repo");
+}
+
+/* ================================================================
+   ভিডিও ভিউ কাউন্টের সহজ বিকল্প — YouTube API key না থাকলে এটা
+   ব্যবহার হয়। YOUTUBE_API_KEY এর মতো আলাদা কিছু বসাতে হবে না —
+   লিডারবোর্ডের জন্য আগে যে LEADERBOARD_API_URL বসিয়েছ, এটা সেটাই
+   reuse করে। এটা আসল YouTube ভিউ না, শুধু এই সাইট থেকে কতবার
+   "দেখো" চাপা হয়েছে তার হিসাব। কাজ করতে হলে সেই Apps Script কোডে
+   doGet/doPost-এ view-কাউন্টের অংশটুকু যোগ করে নিতে হবে (নিচের
+   নির্দেশনা দেখো)।
+================================================================ */
+async function getSiteViewCount(videoId){
+  if(!LEADERBOARD_API_URL.trim() || !videoId) return null;
+  try{
+    const res = await fetch(`${LEADERBOARD_API_URL}?videoId=${encodeURIComponent(videoId)}`);
+    const data = await res.json();
+    return (typeof data.count === "number") ? data.count : null;
+  }catch(e){
+    return null;
+  }
+}
+
+function incrementSiteViewCount(videoId){
+  if(!LEADERBOARD_API_URL.trim() || !videoId) return;
+  fetch(LEADERBOARD_API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify({ type:"view", videoId, time: Date.now() })
+  }).catch(()=>{});
 }
 
 function formatViews(n){
