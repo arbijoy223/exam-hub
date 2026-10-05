@@ -308,6 +308,20 @@ keyframes warningFloat{
     .fancy-modal-actions{grid-template-columns:1fr}
   }
 
+
+/* ===== Account / Profile ===== */
+.account-area{display:flex;align-items:center;gap:8px}
+.account-btn{border:0;border-radius:14px;padding:9px 13px;font:700 13px var(--sans);cursor:pointer;background:linear-gradient(135deg,var(--primary),var(--primary2));color:#fff;box-shadow:0 7px 18px rgba(99,91,255,.22)}
+.account-btn.ghost{background:#fff;color:var(--text);border:1px solid var(--border);box-shadow:none}
+.auth-modal{width:min(430px,100%);padding:26px!important}
+.auth-tabs{display:grid;grid-template-columns:1fr 1fr;gap:7px;padding:5px;background:#f1f5f9;border-radius:14px;margin:18px 0}
+.auth-tab{border:0;background:transparent;padding:10px;border-radius:10px;font:700 14px var(--sans);cursor:pointer;color:#64748b}.auth-tab.active{background:#fff;color:var(--primary);box-shadow:0 3px 12px rgba(15,23,42,.08)}
+.auth-form{display:grid;gap:11px}.auth-form label{font-size:13px;font-weight:700;color:#475569}.auth-form input{width:100%;border:1px solid var(--border);border-radius:13px;padding:12px 13px;outline:none;font-size:14px;background:#fff}.auth-form input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(99,91,255,.10)}
+.auth-note{font-size:12px;line-height:1.65;color:#64748b;margin:3px 0 8px}.auth-error{min-height:20px;color:#dc2626;font-size:12px;font-weight:700}
+.profile-head{display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap;margin:20px 0}.profile-user{display:flex;align-items:center;gap:13px}.profile-avatar{width:58px;height:58px;border-radius:19px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:22px;background:linear-gradient(135deg,var(--primary),var(--primary2));box-shadow:0 10px 25px rgba(99,91,255,.22)}
+.profile-user h2{font-size:25px}.profile-user p{margin:3px 0 0;color:var(--muted);font-size:13px}.profile-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0}.pstat{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:17px;text-align:center;box-shadow:var(--shadow)}.pstat strong{display:block;font-size:25px;color:var(--primary)}.pstat span{font-size:12px;color:var(--muted)}
+.profile-card{background:var(--card);border:1px solid var(--border);border-radius:22px;padding:20px;margin:16px 0;box-shadow:var(--shadow)}.profile-card h3{font-size:19px;margin-bottom:14px}.chart-wrap{position:relative;height:260px}.profile-result{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 0;border-bottom:1px solid var(--border)}.profile-result:last-child{border-bottom:0}.pr-main{min-width:0}.pr-main strong{display:block;font-size:14px}.pr-main span{display:block;font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.pr-score{text-align:right;white-space:nowrap}.pr-score strong{display:block;font-size:16px}.pass{color:#16a34a}.fail{color:#dc2626}.empty-profile{text-align:center;padding:28px;color:var(--muted);font-size:14px}
+@media(max-width:700px){.account-btn{padding:8px 10px;font-size:12px}.profile-stats{grid-template-columns:repeat(2,1fr)}.chart-wrap{height:220px}.profile-user h2{font-size:21px}}
 </style>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#635bff">
@@ -316,6 +330,7 @@ keyframes warningFloat{
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Exam Center">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -327,6 +342,10 @@ keyframes warningFloat{
         <div class="brand-text">Created By: AR Bijoy</div>
         <div class="brand-sub" id="topSub">সাবজেক্ট বেছে নিয়ে পরীক্ষা শুরু করো</div>
       </div>
+    </div>
+    <div class="account-area">
+      <button class="account-btn ghost" id="authActionBtn">🔐 লগইন</button>
+      <button class="account-btn" id="profileBtn" hidden>👤 প্রোফাইল</button>
     </div>
   </div>
 </div>
@@ -444,6 +463,23 @@ keyframes warningFloat{
     <div id="reviewBox"></div>
   </section>
 
+  <!-- User Profile -->
+  <section id="screen-profile" hidden>
+    <button class="back-btn" id="backFromProfile">← হোমে ফিরে যাও</button>
+    <div class="profile-head">
+      <div class="profile-user"><div class="profile-avatar" id="profileAvatar">U</div><div><h2 id="profileUsername">User</h2><p>তোমার পরীক্ষা ও পারফরম্যান্স</p></div></div>
+      <button class="btn btn-ghost" id="btnLogout">🚪 লগআউট</button>
+    </div>
+    <div class="profile-stats">
+      <div class="pstat"><strong id="profileTotal">০</strong><span>মোট পরীক্ষা</span></div>
+      <div class="pstat"><strong id="profilePassed">০</strong><span>পাস</span></div>
+      <div class="pstat"><strong id="profileFailed">০</strong><span>ফেল</span></div>
+      <div class="pstat"><strong id="profileAvg">০%</strong><span>গড় স্কোর</span></div>
+    </div>
+    <div class="profile-card"><h3>📈 পারফরম্যান্স গ্রাফ</h3><div class="chart-wrap"><canvas id="performanceChart"></canvas></div></div>
+    <div class="profile-card"><h3>📋 পরীক্ষার ইতিহাস</h3><div id="profileResults"></div></div>
+  </section>
+
   <!-- লিডারবোর্ড পেজ (এই নির্দিষ্ট পরীক্ষার) -->
   <section id="screen-leaderboard" hidden>
     <div class="lb-head">
@@ -470,6 +506,23 @@ keyframes warningFloat{
     </div>
   </section>
 
+</div>
+
+<!-- Authentication Modal -->
+<div class="modal-overlay" id="authModal" hidden>
+  <div class="modal auth-modal">
+    <h3 id="authTitle">🔐 অ্যাকাউন্টে লগইন</h3>
+    <div class="auth-tabs"><button class="auth-tab active" id="authTabLogin">লগইন</button><button class="auth-tab" id="authTabSignup">সাইন আপ</button></div>
+    <form class="auth-form" id="authForm">
+      <label for="authUsername">Username</label>
+      <input id="authUsername" type="text" autocomplete="username" placeholder="যেমন: bijoy_123" minlength="3" maxlength="20" required>
+      <label for="authPassword">Password</label>
+      <input id="authPassword" type="password" autocomplete="current-password" placeholder="কমপক্ষে ৬ অক্ষর" minlength="6" required>
+      <div class="auth-note">Username দিয়ে লগইন হবে। Password তোমার সাইটে plain text হিসেবে রাখা হবে না—Supabase Auth এটি নিরাপদভাবে পরিচালনা করবে।</div>
+      <div class="auth-error" id="authError"></div>
+      <div class="modal-buttons"><button type="button" class="btn btn-ghost" id="authCancelBtn">বাতিল</button><button type="submit" class="btn btn-primary" id="authSubmitBtn">লগইন</button></div>
+    </form>
+  </div>
 </div>
 
 <!-- নাম ইনপুট মডাল -->
@@ -513,9 +566,87 @@ keyframes warningFloat{
 
 <script>
 /* ================================================================
-   [!] এ এখানে তোমার examData object টি বসিয়ে নেবে:
-   const examData = { ... };
+   [!] এখানে তোমার examData object টি বসানো আছে।
 ================================================================ */
+/* ================================================================
+   USER AUTH + PROFILE CONFIG
+   Supabase Dashboard থেকে Project URL + Publishable/Anon key বসাও।
+   এখানে কখনো service_role key দেবে না।
+================================================================ */
+const SUPABASE_URL = "https://mjsdwhwigzqzdtataaqy.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_jafSOckq1PsH_hiIwynFLQ_jm69LYGc";
+const supabaseClient = (SUPABASE_URL.startsWith("http") && SUPABASE_ANON_KEY.length > 20)
+  ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+
+let currentProfile = null;
+let authMode = "login";
+let pendingExamAfterLogin = null;
+
+function usernameEmail(username){ return username.toLowerCase()+"@login.examcenter.local"; }
+function cleanUsername(v){ return v.trim().toLowerCase(); }
+function validUsername(v){ return /^[a-z0-9_]{3,20}$/.test(v); }
+function authReady(){
+  if(supabaseClient) return true;
+  toast("Supabase config এখনো বসানো হয়নি", "warning", 3500);
+  return false;
+}
+
+function openAuthModal(mode="login", pending=null){
+  if(!authReady()) return;
+  authMode=mode; pendingExamAfterLogin=pending;
+  $("authModal").hidden=false; $("authError").textContent=""; $("authForm").reset();
+  setAuthMode(mode); setTimeout(()=>$("authUsername").focus(),50);
+}
+function closeAuthModal(){ $("authModal").hidden=true; pendingExamAfterLogin=null; }
+function setAuthMode(mode){
+  authMode=mode;
+  $("authTitle").textContent=mode==="login"?"🔐 অ্যাকাউন্টে লগইন":"✨ নতুন অ্যাকাউন্ট তৈরি করো";
+  $("authSubmitBtn").textContent=mode==="login"?"লগইন":"সাইন আপ";
+  $("authTabLogin").classList.toggle("active",mode==="login"); $("authTabSignup").classList.toggle("active",mode==="signup");
+  $("authPassword").autocomplete=mode==="login"?"current-password":"new-password";
+}
+
+async function loadCurrentProfile(){
+  if(!supabaseClient) return null;
+  const {data:{user}}=await supabaseClient.auth.getUser();
+  if(!user){ currentProfile=null; updateAccountUI(); return null; }
+  const {data,error}=await supabaseClient.from("profiles").select("username").eq("user_id",user.id).single();
+  if(error){ console.error(error); currentProfile={user_id:user.id,username:user.user_metadata?.username||"User"}; }
+  else currentProfile={user_id:user.id,username:data.username};
+  state.studentName=currentProfile.username; updateAccountUI(); return currentProfile;
+}
+function updateAccountUI(){
+  const logged=!!currentProfile; $("profileBtn").hidden=!logged; $("authActionBtn").textContent=logged?`👤 ${currentProfile.username}`:"🔐 লগইন";
+}
+
+async function handleAuthSubmit(e){
+  e.preventDefault(); if(!authReady()) return;
+  const username=cleanUsername($("authUsername").value); const password=$("authPassword").value;
+  $("authError").textContent="";
+  if(!validUsername(username)){ $("authError").textContent="Username ৩–২০ অক্ষর হবে; শুধু a-z, 0-9 এবং _ ব্যবহার করো।"; return; }
+  if(password.length<6){ $("authError").textContent="Password কমপক্ষে ৬ অক্ষরের হতে হবে।"; return; }
+  $("authSubmitBtn").disabled=true;
+  try{
+    let result;
+    if(authMode==="signup") result=await supabaseClient.auth.signUp({email:usernameEmail(username),password,options:{data:{username}}});
+    else result=await supabaseClient.auth.signInWithPassword({email:usernameEmail(username),password});
+    if(result.error) throw result.error;
+    if(authMode==="signup" && !result.data.session){
+      $("authError").textContent="অ্যাকাউন্ট তৈরি হয়েছে। Supabase-এ Email Confirmations বন্ধ করলে username/password দিয়ে সরাসরি লগইন হবে।";
+      return;
+    }
+    await loadCurrentProfile(); closeAuthModal(); toast(authMode==="login"?"👋 সফলভাবে লগইন হয়েছে":"🎉 অ্যাকাউন্ট তৈরি হয়েছে", "success", 2500);
+    if(pendingExamAfterLogin){ const p=pendingExamAfterLogin; pendingExamAfterLogin=null; state.selectedExam=p.exam; startExam(); }
+  }catch(err){ console.error(err); $("authError").textContent=err.message||"লগইন করা যায়নি।"; }
+  finally{ $("authSubmitBtn").disabled=false; }
+}
+
+async function logoutUser(){
+  if(!supabaseClient) return;
+  await supabaseClient.auth.signOut(); currentProfile=null; state.studentName=null; updateAccountUI(); toast("👋 লগআউট হয়েছে","info"); hideAllScreens(); $("screen-subjects").hidden=false; $("topSub").textContent="সাবজেক্ট বেছে নিয়ে পরীক্ষা শুরু করো";
+}
+
+// const examData = { ... };
 const examData = {
   "আইসিটি": {
   chapters: {
@@ -3072,6 +3203,7 @@ function hideAllScreens(){
   $("screen-materials").hidden = true;
   $("screen-exam").hidden = true;
   $("screen-result").hidden = true;
+  if($("screen-profile")) $("screen-profile").hidden = true;
   $("screen-leaderboard").hidden = true;
   $("screen-answerkey").hidden = true;
 }
@@ -3328,11 +3460,13 @@ $("backToHubFromMaterials").addEventListener("click", ()=>{
 });
 
 // ৪. নাম চাওয়া
-function askForName(subject, chapter, exam){
+async function askForName(subject, chapter, exam){
   state.selectedExam = exam;
-  $("nameModal").hidden = false;
-  $("studentName").value = state.studentName || "";
-  $("studentName").focus();
+  if(!authReady()) return;
+  const {data:{session}}=await supabaseClient.auth.getSession();
+  if(!session){ openAuthModal("login", {exam}); toast("🔐 পরীক্ষা দিতে আগে লগইন করো","warning",2500); return; }
+  await loadCurrentProfile();
+  startExam();
 }
 
 function isAdmin(){
@@ -3695,6 +3829,39 @@ document.addEventListener("keydown", (e)=>{
   }
 });
 
+async function saveUserResult(entry){
+  if(!supabaseClient || !currentProfile) return;
+  const {data:{user}}=await supabaseClient.auth.getUser();
+  if(!user) return;
+  const row={user_id:user.id,exam_key:entry.examKey,subject:entry.subject,chapter:entry.chapter,exam:entry.exam,correct:entry.correct,total:entry.total,percent:entry.percent,status:entry.percent>=50?"pass":"fail",attempted_at:new Date(entry.time).toISOString()};
+  const {error}=await supabaseClient.from("results").insert(row);
+  if(error) console.error("Result save failed:",error);
+}
+
+async function showProfile(){
+  if(!authReady()) return;
+  await loadCurrentProfile(); if(!currentProfile){openAuthModal("login"); return;}
+  hideAllScreens(); $("screen-profile").hidden=false; $("topSub").textContent="আমার প্রোফাইল"; pushScreen("profile",{});
+  $("profileUsername").textContent=currentProfile.username; $("profileAvatar").textContent=currentProfile.username.charAt(0).toUpperCase();
+  $("profileResults").innerHTML='<div class="empty-profile">⏳ ফলাফল লোড হচ্ছে...</div>';
+  const {data,error}=await supabaseClient.from("results").select("subject,chapter,exam,correct,total,percent,status,attempted_at").order("attempted_at",{ascending:true});
+  if(error){ console.error(error); $("profileResults").innerHTML='<div class="empty-profile">ফলাফল লোড করা যায়নি।</div>'; return; }
+  renderProfileResults(data||[]); renderPerformanceChart(data||[]);
+}
+function renderProfileResults(rows){
+  const total=rows.length, passed=rows.filter(r=>r.percent>=50).length, failed=total-passed, avg=total?Math.round(rows.reduce((a,r)=>a+Number(r.percent||0),0)/total):0;
+  $("profileTotal").textContent=bnNum(total); $("profilePassed").textContent=bnNum(passed); $("profileFailed").textContent=bnNum(failed); $("profileAvg").textContent=bnNum(avg)+"%";
+  const box=$("profileResults"); if(!rows.length){box.innerHTML='<div class="empty-profile">এখনও কোনো পরীক্ষা দেওয়া হয়নি।</div>';return;}
+  box.innerHTML=rows.slice().reverse().map((r,i)=>{const pass=Number(r.percent)>=50;const d=new Date(r.attempted_at);return `<div class="profile-result"><div class="pr-main"><strong>${r.subject} → ${r.exam}</strong><span>${r.chapter} • ${d.toLocaleDateString("bn-BD")}</span></div><div class="pr-score"><strong class="${pass?"pass":"fail"}">${bnNum(r.percent)}% • ${pass?"PASS":"FAIL"}</strong><span>${bnNum(r.correct)} / ${bnNum(r.total)}</span></div></div>`;}).join("");
+}
+function renderPerformanceChart(rows){
+  const canvas=$("performanceChart"); const ctx=canvas.getContext("2d"); const rect=canvas.getBoundingClientRect(); const dpr=window.devicePixelRatio||1; canvas.width=rect.width*dpr; canvas.height=rect.height*dpr; ctx.setTransform(dpr,0,0,dpr,0,0); const w=rect.width,h=rect.height; ctx.clearRect(0,0,w,h);
+  ctx.font='12px Hind Siliguri, sans-serif'; ctx.fillStyle='#64748b'; ctx.strokeStyle='#e2e8f0'; ctx.lineWidth=1;
+  const pad={l:38,r:15,t:18,b:32}; const cw=w-pad.l-pad.r,ch=h-pad.t-pad.b; for(let y=0;y<=100;y+=25){const yy=pad.t+ch-(y/100)*ch;ctx.beginPath();ctx.moveTo(pad.l,yy);ctx.lineTo(w-pad.r,yy);ctx.stroke();ctx.fillText(y+'%',5,yy+4);}
+  if(!rows.length){ctx.fillStyle='#94a3b8';ctx.fillText('পরীক্ষা দিলে এখানে পারফরম্যান্স দেখা যাবে',pad.l+10,h/2);return;}
+  const pts=rows.map((r,i)=>[rows.length===1?pad.l+cw/2:pad.l+(i/(rows.length-1))*cw, pad.t+ch-(Number(r.percent)/100)*ch]); ctx.strokeStyle='#635bff';ctx.lineWidth=3;ctx.beginPath();pts.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.stroke(); pts.forEach((p,i)=>{ctx.beginPath();ctx.fillStyle=Number(rows[i].percent)>=50?'#16a34a':'#ef4444';ctx.arc(p[0],p[1],5,0,Math.PI*2);ctx.fill();});
+}
+
 function finishExam(){
   if(state.finished) return;
   state.finished = true;
@@ -3725,6 +3892,8 @@ function showResult(){
     name: state.studentName,
     correct, total, percent
   });
+
+  saveUserResult({examKey:getExamKey(),time:state._lastResultTime,subject:state.selectedSubject,chapter:state.selectedChapter,exam:state.selectedExam,correct,total,percent});
 
   hideAllScreens();
   $("screen-result").hidden = false;
@@ -3968,6 +4137,14 @@ async function showLeaderboard(){
 }
 
 $("btnLeaderboard").addEventListener("click", showLeaderboard);
+$("authActionBtn").addEventListener("click",()=>currentProfile?showProfile():openAuthModal("login"));
+$("profileBtn").addEventListener("click",showProfile);
+$("backFromProfile").addEventListener("click",()=>{hideAllScreens();$("screen-subjects").hidden=false;$("topSub").textContent="সাবজেক্ট বেছে নিয়ে পরীক্ষা শুরু করো";pushScreen("subjects",{});});
+$("btnLogout").addEventListener("click",logoutUser);
+$("authTabLogin").addEventListener("click",()=>setAuthMode("login"));
+$("authTabSignup").addEventListener("click",()=>setAuthMode("signup"));
+$("authCancelBtn").addEventListener("click",closeAuthModal);
+$("authForm").addEventListener("submit",handleAuthSubmit);
 $("btnBackToResult").addEventListener("click", ()=>{
   history.back(); // যেখান থেকে লিডারবোর্ডে এসেছিলে (ফলাফল বা admin উত্তরপত্র) সেখানেই ফিরিয়ে দেবে
 });
@@ -4045,6 +4222,9 @@ window.addEventListener("popstate", async function(e){
     case "leaderboard":
       showLeaderboard();
       break;
+    case "profile":
+      showProfile();
+      break;
     case "answerkey":
       if(state.selectedSubject && state.selectedChapter && state.selectedExam) showAnswerKeyForAdmin();
       break;
@@ -4063,6 +4243,13 @@ window.addEventListener("popstate", async function(e){
   }
   historyNavInProgress = false;
 });
+
+(async()=>{
+  if(supabaseClient){
+    await loadCurrentProfile();
+    supabaseClient.auth.onAuthStateChange(async()=>{ setTimeout(()=>loadCurrentProfile(),0); });
+  } else updateAccountUI();
+})();
 
 renderSubjects();
 
