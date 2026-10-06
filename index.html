@@ -323,6 +323,16 @@ keyframes warningFloat{
 .profile-card{background:var(--card);border:1px solid var(--border);border-radius:22px;padding:20px;margin:16px 0;box-shadow:var(--shadow)}.profile-card h3{font-size:19px;margin-bottom:14px}.chart-wrap{position:relative;width:100%;height:300px;overflow:hidden;border-radius:16px;background:linear-gradient(180deg,rgba(99,91,255,.035),rgba(99,91,255,.01));padding:4px}.chart-wrap canvas{display:block;width:100%;height:100%;touch-action:pan-y}.profile-result{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 0;border-bottom:1px solid var(--border)}.profile-result:last-child{border-bottom:0}.pr-main{min-width:0}.pr-main strong{display:block;font-size:14px}.pr-main span{display:block;font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.pr-score{text-align:right;white-space:nowrap}.pr-score strong{display:block;font-size:16px}.pass{color:#16a34a}.fail{color:#dc2626}.empty-profile{text-align:center;padding:28px;color:var(--muted);font-size:14px}
 @media(max-width:700px){.account-area{gap:6px}.account-btn{padding:11px 14px;min-height:46px;font-size:14px;border-radius:15px}.profile-stats{grid-template-columns:repeat(2,1fr)}.profile-card{padding:14px;border-radius:18px}.profile-card h3{font-size:17px}.chart-wrap{height:300px;padding:2px}.profile-user h2{font-size:21px}}
 @media(max-width:420px){.topbar-inner{gap:8px}.brand{min-width:0}.brand-text{font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.brand-sub{font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.seal{width:42px;height:42px;font-size:11px;flex:0 0 42px}.account-btn{padding:10px 12px;min-height:44px;font-size:13px}.profile-card{padding:12px}.chart-wrap{height:310px}}
+
+/* ===== Admin Dashboard ===== */
+.admin-account-btn{background:linear-gradient(135deg,#0f172a,#334155)!important;box-shadow:0 9px 24px rgba(15,23,42,.22)!important}
+.admin-head{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:22px 0 18px;padding:22px;border-radius:24px;background:linear-gradient(135deg,rgba(99,91,255,.10),rgba(139,92,246,.07));border:1px solid rgba(99,91,255,.14)}
+.admin-head h2{font-size:28px;margin:8px 0 4px}.admin-head p{margin:0;color:var(--muted);font-size:13px}.admin-badge{display:inline-flex;align-items:center;padding:6px 10px;border-radius:999px;background:#eef2ff;color:#4f46e5;font-size:11px;font-weight:800;letter-spacing:.4px}
+.admin-stats{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin:16px 0}.admin-stat{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:16px;box-shadow:var(--shadow)}.admin-stat span{display:block;color:var(--muted);font-size:11px;font-weight:700}.admin-stat strong{display:block;margin-top:6px;font-size:25px;color:var(--primary)}
+.admin-section-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}.admin-section-title h3{margin:0;font-size:18px}.admin-section-title p{margin:4px 0 0;color:var(--muted);font-size:12px}.admin-table-wrap{width:100%;overflow-x:auto;border:1px solid var(--border);border-radius:16px}.admin-table{width:100%;min-width:760px;border-collapse:collapse;background:var(--card)}.admin-table th,.admin-table td{padding:12px 13px;text-align:left;border-bottom:1px solid var(--border);font-size:12px}.admin-table th{background:#f8fafc;color:#475569;font-weight:800;white-space:nowrap}.admin-table tr:last-child td{border-bottom:0}.admin-table td strong{font-size:13px}.admin-empty{text-align:center!important;color:var(--muted)!important;padding:28px!important}.user-status{display:inline-flex;padding:5px 9px;border-radius:999px;font-size:10px;font-weight:800}.user-status.active{background:#dcfce7;color:#15803d}.user-status.blocked{background:#fee2e2;color:#b91c1c}.user-status.admin{background:#e0e7ff;color:#4338ca}.admin-block-btn{border:0;border-radius:10px;padding:8px 10px;background:#fee2e2;color:#b91c1c;font:800 11px var(--sans);cursor:pointer;white-space:nowrap}.admin-block-btn:hover{transform:translateY(-1px)}.admin-block-btn.unblock{background:#dcfce7;color:#15803d}.admin-actions-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.admin-action-card{border:1px solid var(--border);border-radius:17px;background:linear-gradient(135deg,#fff,#f8fafc);padding:17px;text-align:left;font:800 15px var(--sans);cursor:pointer;color:var(--text);display:grid;gap:4px;transition:.2s}.admin-action-card:hover{transform:translateY(-2px);box-shadow:var(--shadow)}.admin-action-card small{font-size:11px;color:var(--muted);font-weight:500}
+@media(max-width:900px){.admin-stats{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:600px){.admin-head{padding:17px;align-items:flex-start;flex-direction:column}.admin-head h2{font-size:23px}.admin-head .btn{width:100%}.admin-stats{grid-template-columns:repeat(2,1fr);gap:9px}.admin-stat{padding:13px}.admin-stat strong{font-size:21px}.admin-actions-grid{grid-template-columns:1fr}.admin-section-title{align-items:flex-start;flex-direction:column}.admin-card{padding:13px}}
+
 </style>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#635bff">
@@ -347,6 +357,7 @@ keyframes warningFloat{
     <div class="account-area">
       <button class="account-btn ghost" id="authActionBtn">🔐 লগইন</button>
       <button class="account-btn" id="profileBtn" hidden>👤 প্রোফাইল</button>
+      <button class="account-btn admin-account-btn" id="adminBtn" hidden>🛡️ Admin</button>
     </div>
   </div>
 </div>
@@ -383,7 +394,7 @@ keyframes warningFloat{
       <button class="hub-card" id="hubGoExams">
         <div class="hub-icon hub-icon-exam"><i>📝</i></div>
         <div class="hub-text">
-          <h3>পরীক্ষা দাও</h3>
+          <h3 id="hubExamTitle">পরীক্ষা দাও</h3>
           <p id="hubExamCount"></p>
         </div>
         <div class="card-arrow">→</div>
@@ -479,6 +490,38 @@ keyframes warningFloat{
     </div>
     <div class="profile-card"><h3>📈 পারফরম্যান্স গ্রাফ</h3><div class="chart-wrap"><canvas id="performanceChart"></canvas></div></div>
     <div class="profile-card"><h3>📋 পরীক্ষার ইতিহাস</h3><div id="profileResults"></div></div>
+  </section>
+
+  <!-- Admin Dashboard -->
+  <section id="screen-admin" hidden>
+    <button class="back-btn" id="backFromAdmin">← হোমে ফিরে যাও</button>
+    <div class="admin-head">
+      <div>
+        <span class="admin-badge">🛡️ ADMIN CONTROL</span>
+        <h2>অ্যাডমিন ড্যাশবোর্ড</h2>
+        <p>সব ইউজারের পরীক্ষা, পারফরম্যান্স ও অ্যাকাউন্ট স্ট্যাটাস মনিটর করো।</p>
+      </div>
+      <button class="btn btn-primary" id="adminRefreshBtn">↻ রিফ্রেশ</button>
+    </div>
+    <div class="admin-stats">
+      <div class="admin-stat"><span>👥 মোট ইউজার</span><strong id="adminTotalUsers">০</strong></div>
+      <div class="admin-stat"><span>📝 মোট পরীক্ষা</span><strong id="adminTotalExams">০</strong></div>
+      <div class="admin-stat"><span>✅ Pass</span><strong id="adminTotalPass">০</strong></div>
+      <div class="admin-stat"><span>❌ Fail</span><strong id="adminTotalFail">০</strong></div>
+      <div class="admin-stat"><span>📈 Overall Average</span><strong id="adminOverallAvg">০%</strong></div>
+      <div class="admin-stat"><span>🚫 Blocked</span><strong id="adminBlockedUsers">০</strong></div>
+    </div>
+    <div class="profile-card admin-card">
+      <div class="admin-section-title"><div><h3>👥 User Performance</h3><p>প্রতিটি ইউজারের মোট পরীক্ষা, Pass, Fail ও Average score</p></div><span id="adminLoadStatus"></span></div>
+      <div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>User</th><th>Exam</th><th>Pass</th><th>Fail</th><th>Average</th><th>Status</th><th>Action</th></tr></thead><tbody id="adminUsersBody"></tbody></table></div>
+    </div>
+    <div class="profile-card admin-card">
+      <div class="admin-section-title"><div><h3>🏆 Leaderboard</h3><p>কোনো পরীক্ষার উত্তরপত্র দেখতে Exams section-এ ঢুকে পরীক্ষা নির্বাচন করো।</p></div></div>
+      <div class="admin-actions-grid">
+        <button class="admin-action-card" id="adminGoSubjects">📚<span>Exam / Answer Key</span><small>যেকোনো পরীক্ষার সঠিক উত্তর দেখো</small></button>
+        <button class="admin-action-card" id="adminGoLeaderboard">🏆<span>Leaderboard</span><small>সর্বশেষ নির্বাচিত পরীক্ষার leaderboard</small></button>
+      </div>
+    </div>
   </section>
 
   <!-- লিডারবোর্ড পেজ (এই নির্দিষ্ট পরীক্ষার) -->
@@ -611,13 +654,31 @@ async function loadCurrentProfile(){
   if(!supabaseClient) return null;
   const {data:{user}}=await supabaseClient.auth.getUser();
   if(!user){ currentProfile=null; updateAccountUI(); return null; }
-  const {data,error}=await supabaseClient.from("profiles").select("username").eq("user_id",user.id).single();
-  if(error){ console.error(error); currentProfile={user_id:user.id,username:user.user_metadata?.username||"User"}; }
-  else currentProfile={user_id:user.id,username:data.username};
-  state.studentName=currentProfile.username; updateAccountUI(); return currentProfile;
+  const {data,error}=await supabaseClient.from("profiles").select("username,is_admin,blocked").eq("user_id",user.id).single();
+  if(error || !data){
+    console.error(error || "Profile not found");
+    currentProfile=null;
+    await supabaseClient.auth.signOut();
+    updateAccountUI();
+    toast("প্রোফাইল লোড করা যায়নি। আবার লগইন করো।", "error", 3500);
+    return null;
+  }
+  currentProfile={user_id:user.id,username:data.username,is_admin:!!data.is_admin,blocked:!!data.blocked};
+  state.studentName=currentProfile.username;
+  if(currentProfile.blocked){
+    currentProfile=null;
+    await supabaseClient.auth.signOut();
+    updateAccountUI();
+    toast("🚫 তোমার অ্যাকাউন্টটি ব্লক করা হয়েছে।", "error", 4000);
+    return null;
+  }
+  updateAccountUI(); return currentProfile;
 }
 function updateAccountUI(){
-  const logged=!!currentProfile; $("profileBtn").hidden=!logged; $("authActionBtn").textContent=logged?`👤 ${currentProfile.username}`:"🔐 লগইন";
+  const logged=!!currentProfile;
+  $("profileBtn").hidden=!logged;
+  $("adminBtn").hidden=!(logged && currentProfile.is_admin);
+  $("authActionBtn").textContent=logged?(currentProfile.is_admin?"👤 Admin":"👤 "+currentProfile.username):"🔐 লগইন";
 }
 
 async function handleAuthSubmit(e){
@@ -3205,6 +3266,7 @@ function hideAllScreens(){
   $("screen-exam").hidden = true;
   $("screen-result").hidden = true;
   if($("screen-profile")) $("screen-profile").hidden = true;
+  if($("screen-admin")) $("screen-admin").hidden = true;
   $("screen-leaderboard").hidden = true;
   $("screen-answerkey").hidden = true;
 }
@@ -3287,8 +3349,9 @@ function showChapterHub(subject, chapter){
 
   const examCount = Object.keys(examData[subject].chapters[chapter].exams).length;
   const materialCount = (materialsData[subject] && materialsData[subject][chapter]) ? materialsData[subject][chapter].length : 0;
-  $("hubExamCount").textContent = `${bnNum(examCount)}টি পরীক্ষা`;
+  $("hubExamCount").textContent = isAdmin() ? `${bnNum(examCount)}টি উত্তরপত্র` : `${bnNum(examCount)}টি পরীক্ষা`;
   $("hubMaterialCount").textContent = materialCount > 0 ? `${bnNum(materialCount)}টি ফাইল (PDF/ভিডিও)` : "এখনো যোগ করা হয়নি";
+  $("hubExamTitle").textContent = isAdmin() ? "উত্তরপত্র দেখো" : "পরীক্ষা দাও";
 
   pushScreen("chapterhub", {subject, chapter});
 }
@@ -3317,7 +3380,7 @@ function showExams(subject, chapter){
     card.className = "subject-card";
     card.style.setProperty("--card-accent", accentPalette[i % accentPalette.length]);
     card.innerHTML = `
-      <div class="card-icon">📝</div>
+      <div class="card-icon">${isAdmin()?"📋":"📝"}</div>
       <h3>${examName}</h3>
       <div class="subject-meta">
         <span class="pill">${bnNum(qCount)}টি প্রশ্ন</span>
@@ -3463,6 +3526,7 @@ $("backToHubFromMaterials").addEventListener("click", ()=>{
 // ৪. নাম চাওয়া
 async function askForName(subject, chapter, exam){
   state.selectedExam = exam;
+  if(isAdmin()){ showAnswerKeyForAdmin(); return; }
   if(!authReady()) return;
   const {data:{session}}=await supabaseClient.auth.getSession();
   if(!session){ openAuthModal("login", {exam}); toast("🔐 পরীক্ষা দিতে আগে লগইন করো","warning",2500); return; }
@@ -3470,9 +3534,7 @@ async function askForName(subject, chapter, exam){
   startExam();
 }
 
-function isAdmin(){
-  return !!(state.studentName && state.studentName.trim().toLowerCase() === "admin");
-}
+function isAdmin(){ return !!(currentProfile && currentProfile.is_admin === true); }
 
 // youtubeId ফিল্ডে বসানো যেকোনো ফরম্যাট (শুধু আইডি, পুরো লিংক, বা পুরো embed কোড)
 // থেকে সঠিক YouTube ভিডিও আইডিটা বের করে আনে
@@ -3572,6 +3634,7 @@ function extractYouTubeId(input){
 
 // admin নাম দিলে পরীক্ষা না নিয়ে সরাসরি সঠিক উত্তরগুলো দেখানো হয়
 function showAnswerKeyForAdmin(){
+  if(!isAdmin()){ toast("⛔ শুধু admin উত্তরপত্র দেখতে পারবে", "error"); return; }
   hideAllScreens();
   $("screen-answerkey").hidden = false;
 
@@ -3837,6 +3900,65 @@ async function saveUserResult(entry){
   const row={user_id:user.id,exam_key:entry.examKey,subject:entry.subject,chapter:entry.chapter,exam:entry.exam,correct:entry.correct,total:entry.total,percent:entry.percent,status:entry.percent>=50?"pass":"fail",attempted_at:new Date(entry.time).toISOString()};
   const {error}=await supabaseClient.from("results").insert(row);
   if(error) console.error("Result save failed:",error);
+}
+
+async function showAdminDashboard(){
+  if(!isAdmin()){ toast("⛔ Admin access only", "error"); return; }
+  hideAllScreens();
+  $("screen-admin").hidden=false;
+  $("topSub").textContent="Admin Dashboard";
+  pushScreen("admin",{});
+  $("adminLoadStatus").textContent="⏳ লোড হচ্ছে...";
+  $("adminUsersBody").innerHTML='<tr><td colspan="7" class="admin-empty">⏳ ডেটা লোড হচ্ছে...</td></tr>';
+  try{
+    const [{data:users,error:userErr},{data:results,error:resultErr}] = await Promise.all([
+      supabaseClient.from("profiles").select("user_id,username,is_admin,blocked,created_at").order("created_at",{ascending:true}),
+      supabaseClient.from("results").select("user_id,subject,chapter,exam,correct,total,percent,status,attempted_at").order("attempted_at",{ascending:false})
+    ]);
+    if(userErr) throw userErr;
+    if(resultErr) throw resultErr;
+    const allUsers=users||[], allResults=results||[];
+    const map={};
+    allUsers.forEach(u=>map[u.user_id]={...u,total:0,pass:0,fail:0,avg:0,results:[]});
+    allResults.forEach(r=>{ if(!map[r.user_id]) return; const m=map[r.user_id]; m.total++; if(Number(r.percent)>=50)m.pass++;else m.fail++; m.results.push(r); });
+    Object.values(map).forEach(m=>m.avg=m.total?Math.round(m.results.reduce((a,r)=>a+Number(r.percent||0),0)/m.total):0);
+    const nonAdminUsers=Object.values(map);
+    const totalExams=allResults.length, totalPass=allResults.filter(r=>Number(r.percent)>=50).length, totalFail=totalExams-totalPass;
+    const overallAvg=totalExams?Math.round(allResults.reduce((a,r)=>a+Number(r.percent||0),0)/totalExams):0;
+    $("adminTotalUsers").textContent=bnNum(allUsers.length);
+    $("adminTotalExams").textContent=bnNum(totalExams);
+    $("adminTotalPass").textContent=bnNum(totalPass);
+    $("adminTotalFail").textContent=bnNum(totalFail);
+    $("adminOverallAvg").textContent=bnNum(overallAvg)+"%";
+    $("adminBlockedUsers").textContent=bnNum(allUsers.filter(u=>u.blocked).length);
+    const body=$("adminUsersBody"); body.innerHTML="";
+    if(!nonAdminUsers.length){ body.innerHTML='<tr><td colspan="7" class="admin-empty">এখনো কোনো student user নেই।</td></tr>'; }
+    else nonAdminUsers.sort((a,b)=>b.avg-a.avg || b.total-a.total).forEach(u=>{
+      const tr=document.createElement("tr");
+      const statusText=u.is_admin?"ADMIN":(u.blocked?"BLOCKED":"ACTIVE");
+      const statusClass=u.is_admin?"admin":(u.blocked?"blocked":"active");
+      const action=u.is_admin?"—":`<button class="admin-block-btn ${u.blocked?"unblock":""}" data-user-id="${u.user_id}" data-blocked="${u.blocked}">${u.blocked?"↗ Unblock":"🚫 Block"}</button>`;
+      tr.innerHTML=`<td><strong>${u.username}</strong></td><td>${bnNum(u.total)}</td><td class="pass">${bnNum(u.pass)}</td><td class="fail">${bnNum(u.fail)}</td><td><strong>${bnNum(u.avg)}%</strong></td><td><span class="user-status ${statusClass}">${statusText}</span></td><td>${action}</td>`;
+      body.appendChild(tr);
+    });
+    body.querySelectorAll(".admin-block-btn").forEach(btn=>btn.addEventListener("click",()=>toggleUserBlock(btn.dataset.userId,btn.dataset.blocked==="true",btn)));
+    $("adminLoadStatus").textContent=`${bnNum(allUsers.length)} জন user`;
+  }catch(err){
+    console.error(err); $("adminLoadStatus").textContent=""; $("adminUsersBody").innerHTML=`<tr><td colspan="7" class="admin-empty">❌ ডেটা লোড করা যায়নি। RLS/SQL setup চেক করো।</td></tr>`;
+    toast("Admin data load failed", "error", 3500);
+  }
+}
+
+async function toggleUserBlock(userId, currentlyBlocked, btn){
+  if(!isAdmin() || !supabaseClient) return;
+  const action=currentlyBlocked?"unblock":"block";
+  if(!(await customConfirm(currentlyBlocked?"এই user-কে আবার unblock করতে চাও?":"এই user-কে block করতে চাও?",{icon:currentlyBlocked?"🔓":"🚫",okText:currentlyBlocked?"Unblock":"Block"}))) return;
+  btn.disabled=true;
+  const {error}=await supabaseClient.rpc("admin_set_user_blocked",{target_user_id:userId,should_block:!currentlyBlocked});
+  btn.disabled=false;
+  if(error){ console.error(error); toast("User status change করা যায়নি", "error", 3000); return; }
+  toast(currentlyBlocked?"🔓 User unblock হয়েছে":"🚫 User block হয়েছে", "success", 2200);
+  showAdminDashboard();
 }
 
 async function showProfile(){
@@ -4167,6 +4289,11 @@ $("brandHomeBtn").addEventListener("click",()=>{
 $("brandHomeBtn").addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();$("brandHomeBtn").click();}});
 $("authActionBtn").addEventListener("click",()=>currentProfile?showProfile():openAuthModal("login"));
 $("profileBtn").addEventListener("click",showProfile);
+$("adminBtn").addEventListener("click",showAdminDashboard);
+$("backFromAdmin").addEventListener("click",()=>{hideAllScreens();$("screen-subjects").hidden=false;$("topSub").textContent="সাবজেক্ট বেছে নিয়ে পরীক্ষা শুরু করো";pushScreen("subjects",{});});
+$("adminRefreshBtn").addEventListener("click",showAdminDashboard);
+$("adminGoSubjects").addEventListener("click",()=>{hideAllScreens();$("screen-subjects").hidden=false;$("topSub").textContent="সাবজেক্ট বেছে নিয়ে উত্তরপত্র দেখো";pushScreen("subjects",{});});
+$("adminGoLeaderboard").addEventListener("click",()=>{if(state.selectedSubject&&state.selectedChapter&&state.selectedExam) showLeaderboard(); else toast("আগে কোনো পরীক্ষা নির্বাচন করো", "warning", 2500);});
 $("backFromProfile").addEventListener("click",()=>{hideAllScreens();$("screen-subjects").hidden=false;$("topSub").textContent="সাবজেক্ট বেছে নিয়ে পরীক্ষা শুরু করো";pushScreen("subjects",{});});
 $("btnLogout").addEventListener("click",logoutUser);
 $("authTabLogin").addEventListener("click",()=>setAuthMode("login"));
@@ -4252,6 +4379,9 @@ window.addEventListener("popstate", async function(e){
       break;
     case "profile":
       showProfile();
+      break;
+    case "admin":
+      showAdminDashboard();
       break;
     case "answerkey":
       if(state.selectedSubject && state.selectedChapter && state.selectedExam) showAnswerKeyForAdmin();
