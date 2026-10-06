@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -333,6 +333,19 @@ keyframes warningFloat{
 @media(max-width:900px){.admin-stats{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:600px){.admin-head{padding:17px;align-items:flex-start;flex-direction:column}.admin-head h2{font-size:23px}.admin-head .btn{width:100%}.admin-stats{grid-template-columns:repeat(2,1fr);gap:9px}.admin-stat{padding:13px}.admin-stat strong{font-size:21px}.admin-actions-grid{grid-template-columns:1fr}.admin-section-title{align-items:flex-start;flex-direction:column}.admin-card{padding:13px}}
 
+
+/* Professional navigation, drawer, footer and auth polish */
+.menu-trigger{width:44px;height:44px;flex:0 0 44px;border:1px solid #e4e8f2;border-radius:15px;background:rgba(255,255,255,.92);display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px;cursor:pointer;box-shadow:0 6px 18px rgba(15,23,42,.07);transition:.2s}
+.menu-trigger:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(99,91,255,.16);border-color:#c7c5ff}.menu-trigger span{display:block;width:18px;height:2px;border-radius:5px;background:#4338ca;transition:.2s}
+.brand{cursor:pointer;min-width:0}.brand .seal{position:relative;width:48px;height:48px;border-radius:17px;background:linear-gradient(145deg,#4338ca 0%,#7c3aed 58%,#a78bfa 100%);border:1px solid rgba(255,255,255,.65);box-shadow:0 8px 0 rgba(79,70,229,.10),0 12px 25px rgba(99,91,255,.28);font-size:0;flex:0 0 48px;overflow:hidden}.brand .seal:before{content:"";position:absolute;inset:4px;border:1px solid rgba(255,255,255,.45);border-radius:13px}.brand .seal span{font-family:Georgia,serif;font-size:23px;font-weight:900;line-height:1;color:#fff;text-shadow:0 2px 5px rgba(0,0,0,.2);z-index:1}.brand .seal small{position:absolute;bottom:5px;font:700 6px system-ui;letter-spacing:1.3px;color:#ede9fe}
+.account-area{gap:10px}.account-btn{min-height:46px;padding:12px 19px;font-size:14px;border-radius:15px}.account-btn.ghost{background:linear-gradient(135deg,#4f46e5,#7c3aed);border:1px solid rgba(255,255,255,.6);box-shadow:0 9px 24px rgba(79,70,229,.3)}
+.drawer-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.44);backdrop-filter:blur(3px);z-index:1000;opacity:0;transition:opacity .25s}.drawer-backdrop.open{opacity:1}.side-drawer{position:fixed;z-index:1001;left:0;top:0;bottom:0;width:min(340px,88vw);padding:20px 16px;background:rgba(255,255,255,.97);backdrop-filter:blur(20px);box-shadow:20px 0 60px rgba(15,23,42,.18);transform:translateX(-105%);transition:transform .28s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column}.side-drawer.open{transform:translateX(0)}.drawer-head{display:flex;align-items:center;gap:12px;padding:10px 4px 22px;border-bottom:1px solid #e9edf5}.drawer-avatar,.footer-mark{width:48px;height:48px;display:grid;place-items:center;border-radius:16px;background:linear-gradient(135deg,#4f46e5,#8b5cf6);color:white;font:900 22px Georgia,serif;box-shadow:0 8px 20px rgba(99,91,255,.22)}.drawer-head strong{display:block;font-size:15px;color:#172033}.drawer-head small{display:block;font-size:11px;color:#7b8497;margin-top:3px}.drawer-close{margin-left:auto;width:34px;height:34px;border:0;border-radius:10px;background:#f1f3f9;color:#475569;font-size:24px;cursor:pointer}.drawer-nav{display:grid;gap:7px;padding:20px 0}.drawer-nav button{width:100%;display:flex;align-items:center;gap:13px;padding:13px 14px;border:1px solid transparent;border-radius:14px;background:transparent;color:#344054;text-align:left;font:700 14px var(--sans);cursor:pointer;transition:.18s}.drawer-nav button span{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;background:#f0efff;color:#5b50db;font-size:16px}.drawer-nav button:hover{background:#f6f5ff;border-color:#e5e3ff;transform:translateX(2px)}.drawer-nav #drawerLogout{color:#b91c1c}.drawer-nav #drawerLogout span{background:#fff0f0;color:#dc2626}.drawer-foot{margin-top:auto;border-top:1px solid #e9edf5;padding:17px 4px 4px;font-size:12px;font-weight:800;color:#475569}.drawer-foot span{display:block;font-size:11px;font-weight:500;color:#8991a3;margin-top:4px}
+.site-footer{margin-top:35px;background:linear-gradient(135deg,#111827,#25234a 65%,#312e81);color:#f8fafc;padding:34px 20px 0}.footer-inner{max-width:1050px;margin:auto;display:grid;grid-template-columns:1fr 1.3fr;gap:36px}.footer-brand{display:flex;align-items:flex-start;gap:13px}.footer-mark{background:linear-gradient(135deg,#635bff,#a78bfa);border:1px solid rgba(255,255,255,.25)}.footer-brand strong{font-size:17px}.footer-brand p{margin:7px 0;color:#cbd5e1;font-size:12px;line-height:1.7}.footer-contact h3{font-size:18px;margin-bottom:7px}.footer-contact p{margin:0 0 13px;color:#e2e8f0;font-size:13px;line-height:1.7}.footer-links{display:flex;flex-wrap:wrap;gap:8px}.footer-links a{color:#eef2ff;text-decoration:none;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.07);padding:8px 11px;border-radius:10px;font-size:12px;transition:.2s}.footer-links a:hover{background:rgba(139,92,246,.35);transform:translateY(-2px)}.footer-edit-note{display:block;margin-top:10px;color:#aab4ca;font-size:10px}.footer-bottom{max-width:1050px;margin:25px auto 0;padding:15px 0;border-top:1px solid rgba(255,255,255,.12);text-align:center;color:#aab4ca;font-size:11px}
+.auth-modal{position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.8);background:linear-gradient(160deg,#fff 0%,#fbfaff 100%);box-shadow:0 30px 90px rgba(20,20,60,.28);border-radius:28px!important;padding:30px!important}.auth-modal:before{content:"";position:absolute;left:0;top:0;right:0;height:6px;background:linear-gradient(90deg,#4f46e5,#8b5cf6,#c4b5fd)}.auth-modal h3{font-size:27px;letter-spacing:-.5px;margin:4px 0 6px}.auth-tabs{padding:5px;background:#eeedff;border:1px solid #e5e3ff;border-radius:15px}.auth-tab{padding:12px;border-radius:11px}.auth-tab.active{color:#4f46e5;box-shadow:0 5px 15px rgba(79,70,229,.12)}.auth-form{gap:9px}.auth-form label{font-size:12px;color:#344054;letter-spacing:.2px}.auth-form input{min-height:48px;border-radius:13px;border:1px solid #dfe3ee;background:#fff;padding:13px 14px}.auth-note{padding:10px 12px;border-radius:12px;background:#f4f5ff;color:#667085}.auth-form .btn-primary{box-shadow:0 8px 20px rgba(99,91,255,.24)}
+.subject-card{animation:floatCard 5.5s ease-in-out infinite;will-change:transform}.subject-card:nth-child(2n){animation-delay:-1.8s}.subject-card:nth-child(3n){animation-delay:-3.2s}.subject-card:hover{animation-play-state:paused;transform:translateY(-6px)}@keyframes floatCard{0%,100%{translate:0 0}50%{translate:0 -4px}}
+@media(max-width:700px){.topbar-inner{padding:10px 12px;gap:9px}.menu-trigger{width:40px;height:40px;flex-basis:40px;border-radius:13px}.brand{gap:8px;flex:1}.brand .seal{width:42px;height:42px;flex-basis:42px;border-radius:14px}.brand .seal span{font-size:20px}.brand-text{font-size:12px}.brand-sub{font-size:10px}.account-area{gap:5px}.account-btn{padding:10px 11px;min-height:41px;font-size:12px;border-radius:12px}.account-area #profileBtn,.account-area #adminBtn{display:none!important}.footer-inner{grid-template-columns:1fr;gap:20px}.site-footer{padding:27px 16px 0}.auth-modal{padding:26px 20px!important}.auth-modal h3{font-size:23px}}
+@media(prefers-reduced-motion:reduce){.subject-card{animation:none!important}*,*:before,*:after{scroll-behavior:auto!important;transition-duration:.01ms!important}}
+
 </style>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#635bff">
@@ -347,45 +360,60 @@ keyframes warningFloat{
 
 <div class="topbar">
   <div class="topbar-inner">
-    <div class="brand" id="brandHomeBtn" role="button" tabindex="0" title="হোমে ফিরে যাও">
-      <div class="seal">Bijoy</div>
+    <button class="menu-trigger" id="menuTrigger" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    <div class="brand" id="brandHomeBtn" role="button" tabindex="0" title="Go to homepage">
+      <div class="seal"><span>B</span><small>EXAM</small></div>
       <div>
         <div class="brand-text">Created By: AR Bijoy</div>
         <div class="brand-sub" id="topSub">সাবজেক্ট বেছে নিয়ে পরীক্ষা শুরু করো</div>
       </div>
     </div>
     <div class="account-area">
-      <button class="account-btn ghost" id="authActionBtn">🔐 লগইন</button>
-      <button class="account-btn" id="profileBtn" hidden>👤 প্রোফাইল</button>
+      <button class="account-btn ghost" id="authActionBtn">↪ Log in</button>
+      <button class="account-btn" id="profileBtn" hidden>👤 Profile</button>
       <button class="account-btn admin-account-btn" id="adminBtn" hidden>🛡️ Admin</button>
     </div>
   </div>
 </div>
+<div class="drawer-backdrop" id="drawerBackdrop" hidden></div>
+<aside class="side-drawer" id="sideDrawer" aria-hidden="true">
+  <div class="drawer-head"><div class="drawer-avatar" id="drawerAvatar">B</div><div><strong id="drawerName">Welcome</strong><small id="drawerRole">AR Bijoy Exam Center</small></div><button id="drawerClose" class="drawer-close" aria-label="Close menu">×</button></div>
+  <nav class="drawer-nav" aria-label="Main menu">
+    <button id="drawerHome"><span>⌂</span> Home</button>
+    <button id="drawerDashboard"><span>▦</span> My Dashboard</button>
+    <button id="drawerProfile"><span>♙</span> My Profile</button>
+    <button id="drawerAdmin" hidden><span>🛡</span> Admin Dashboard</button>
+    <button id="drawerLeaderboard"><span>🏆</span> Leaderboard</button>
+    <button id="drawerLogin"><span>↪</span> Log in / Sign up</button>
+    <button id="drawerLogout" hidden><span>⇥</span> Log out</button>
+  </nav>
+  <div class="drawer-foot">AR Bijoy Exam Center <span>Learn • Practice • Improve</span></div>
+</aside>
 
 <div class="wrap">
 
-  <!-- স্ক্রিন ১: সাবজেক্ট লিস্ট -->
+  <!-- স্ক্রিন ১: Subject লিস্ট -->
   <section id="screen-subjects">
     <div class="lede">
-      <h2>তোমার সাবজেক্ট বেছে নাও</h2>
-      <p>প্রতিটা সাবজেক্টে বিভিন্ন অধ্যায় এবং পরীক্ষা আছে। তোমার পছন্দের সাবজেক্ট বেছে নাও।</p>
+      <h2>তোমার Subject বেছে নাও</h2>
+      <p>প্রতিটা Subjectে বিভিন্ন Chapter এবং Exam আছে। তোমার পছন্দের Subject বেছে নাও।</p>
     </div>
     <div class="subject-grid" id="subjectGrid"></div>
   </section>
 
-  <!-- স্ক্রিন ২: অধ্যায় লিস্ট -->
+  <!-- স্ক্রিন ২: Chapter লিস্ট -->
   <section id="screen-chapters" hidden>
-    <button class="back-btn" id="backToSubjects">← সাবজেক্টে ফিরে যাও</button>
+    <button class="back-btn" id="backToSubjects">← Subjectে ফিরে যাও</button>
     <div class="lede">
       <h2 id="chapterSubjectName"></h2>
-      <p>নিচের অধ্যায়গুলো থেকে একটি বেছে নাও</p>
+      <p>নিচের Chapterগুলো থেকে একটি বেছে নাও</p>
     </div>
     <div class="subject-grid" id="chapterGrid"></div>
   </section>
 
-  <!-- স্ক্রিন ২.৫: অধ্যায় হাব — পরীক্ষা দাও / স্টাডি ম্যাটেরিয়াল -->
+  <!-- স্ক্রিন ২.৫: Chapter হাব — Exam দাও / স্টাডি ম্যাটেরিয়াল -->
   <section id="screen-chapterhub" hidden>
-    <button class="back-btn" id="backToChaptersFromHub">← অধ্যায় লিস্টে ফিরে যাও</button>
+    <button class="back-btn" id="backToChaptersFromHub">← Chapter লিস্টে ফিরে যাও</button>
     <div class="lede">
       <h2 id="hubChapterName"></h2>
       <p id="hubSubtitle"></p>
@@ -394,7 +422,7 @@ keyframes warningFloat{
       <button class="hub-card" id="hubGoExams">
         <div class="hub-icon hub-icon-exam"><i>📝</i></div>
         <div class="hub-text">
-          <h3 id="hubExamTitle">পরীক্ষা দাও</h3>
+          <h3 id="hubExamTitle">Exam দাও</h3>
           <p id="hubExamCount"></p>
         </div>
         <div class="card-arrow">→</div>
@@ -410,12 +438,12 @@ keyframes warningFloat{
     </div>
   </section>
 
-  <!-- স্ক্রিন ৩: পরীক্ষা লিস্ট -->
+  <!-- স্ক্রিন ৩: Exam লিস্ট -->
   <section id="screen-exams" hidden>
-    <button class="back-btn" id="backToChapters">← অধ্যায়ে ফিরে যাও</button>
+    <button class="back-btn" id="backToChapters">← Chapterে ফিরে যাও</button>
     <div class="lede">
       <h2 id="examChapterName"></h2>
-      <p>নিচের পরীক্ষাগুলো থেকে একটি বেছে নাও</p>
+      <p>নিচের Examগুলো থেকে একটি বেছে নাও</p>
     </div>
     <div class="subject-grid" id="examGrid"></div>
   </section>
@@ -430,8 +458,8 @@ keyframes warningFloat{
     <div id="materialsList"></div>
   </section>
 
-  <!-- স্ক্রিন ৪: পরীক্ষা চলাকালীন -->
-<!-- স্ক্রিন ৪: পরীক্ষা চলাকালীন -->
+  <!-- স্ক্রিন ৪: Exam চলাকালীন -->
+<!-- স্ক্রিন ৪: Exam চলাকালীন -->
   <section id="screen-exam" hidden style="padding-top: 5px;">
     <div class="exam-sticky-header" style="padding: 6px 10px 4px; margin-bottom: 8px;">
       <div class="exam-head" style="margin-bottom: 6px;">
@@ -446,7 +474,7 @@ keyframes warningFloat{
 
     <div class="nav-row" style="margin-top: 10px; padding: 6px;">
       <button class="btn btn-ghost" id="btnExitExam" style="color:#ef4444; border-color:rgba(239,68,68,0.3); padding: 8px 12px; min-height: 40px;">← হোম (Exit)</button>
-      <button class="btn btn-submit" id="btnSubmitExam" style="padding: 8px 16px; min-height: 40px;">পরীক্ষা জমা দাও ✓</button>
+      <button class="btn btn-submit" id="btnSubmitExam" style="padding: 8px 16px; min-height: 40px;">Submit Exam ✓</button>
     </div>
   </section>
 
@@ -458,73 +486,73 @@ keyframes warningFloat{
       <div class="score-sub" id="scoreSub"></div>
       <div class="score-remark" id="scoreRemark"></div>
       <div class="result-stat-grid">
-        <div class="result-stat"><strong id="statCorrect">০</strong><span>সঠিক উত্তর</span></div>
-        <div class="result-stat"><strong id="statWrong">০</strong><span>ভুল উত্তর</span></div>
-        <div class="result-stat"><strong id="statPercent">০%</strong><span>শতকরা</span></div>
+        <div class="result-stat"><strong id="statCorrect">০</strong><span>Correct Answers</span></div>
+        <div class="result-stat"><strong id="statWrong">০</strong><span>Wrong Answers</span></div>
+        <div class="result-stat"><strong id="statPercent">০%</strong><span>Percentage</span></div>
       </div>
     </div>
 
     <div class="action-row">
-      <button class="btn btn-primary" id="btnCopyResult">ফলাফল কপি করো</button>
-      <button class="btn btn-primary" id="btnLeaderboard">🏆 লিডারবোর্ড দেখো</button>
+      <button class="btn btn-primary" id="btnCopyResult">Copy Result</button>
+      <button class="btn btn-primary" id="btnLeaderboard">🏆 View Leaderboard</button>
       <a class="btn" id="btnWhatsapp" href="#" target="_blank" rel="noopener" hidden>WhatsApp-এ পাঠাও</a>
-      <button class="btn btn-ghost" id="btnHome">← হোমে ফিরে যাও</button>
+      <button class="btn btn-ghost" id="btnHome">← Back to Home</button>
     </div>
 
-    <h3 id="reviewTitle" style="margin-bottom:12px; font-size:17px;">উত্তরপত্র পর্যালোচনা</h3>
+    <h3 id="reviewTitle" style="margin-bottom:12px; font-size:17px;">Answer Review</h3>
     <div id="reviewBox"></div>
   </section>
 
   <!-- User Profile -->
   <section id="screen-profile" hidden>
-    <button class="back-btn" id="backFromProfile">← হোমে ফিরে যাও</button>
+    <button class="back-btn" id="backFromProfile">← Back to Home</button>
     <div class="profile-head">
-      <div class="profile-user"><div class="profile-avatar" id="profileAvatar">U</div><div><h2 id="profileUsername">User</h2><p>তোমার পরীক্ষা ও পারফরম্যান্স</p></div></div>
-      <button class="btn btn-ghost" id="btnLogout">🚪 লগআউট</button>
+      <div class="profile-user"><div class="profile-avatar" id="profileAvatar">U</div><div><h2 id="profileUsername">User</h2><p>Your exams and performance</p></div></div>
+      <button class="btn btn-ghost" id="btnLogout">🚪 Log out</button>
     </div>
     <div class="profile-stats">
-      <div class="pstat"><strong id="profileTotal">০</strong><span>মোট পরীক্ষা</span></div>
-      <div class="pstat"><strong id="profilePassed">০</strong><span>পাস</span></div>
-      <div class="pstat"><strong id="profileFailed">০</strong><span>ফেল</span></div>
-      <div class="pstat"><strong id="profileAvg">০%</strong><span>গড় স্কোর</span></div>
+      <div class="pstat"><strong id="profileTotal">০</strong><span>Total Exams</span></div>
+      <div class="pstat"><strong id="profilePassed">০</strong><span>Passed</span></div>
+      <div class="pstat"><strong id="profileFailed">০</strong><span>Failed</span></div>
+      <div class="pstat"><strong id="profileAvg">০%</strong><span>Average Score</span></div>
     </div>
-    <div class="profile-card"><h3>📈 পারফরম্যান্স গ্রাফ</h3><div class="chart-wrap"><canvas id="performanceChart"></canvas></div></div>
-    <div class="profile-card"><h3>📋 পরীক্ষার ইতিহাস</h3><div id="profileResults"></div></div>
+    <div class="profile-card"><h3>📈 Performance Chart</h3><div class="chart-wrap"><canvas id="performanceChart"></canvas></div></div>
+    <div class="profile-card"><h3>📋 Exam History</h3><div id="profileResults"></div></div>
   </section>
 
   <!-- Admin Dashboard -->
   <section id="screen-admin" hidden>
-    <button class="back-btn" id="backFromAdmin">← হোমে ফিরে যাও</button>
+    <button class="back-btn" id="backFromAdmin">← Back to Home</button>
     <div class="admin-head">
       <div>
         <span class="admin-badge">🛡️ ADMIN CONTROL</span>
-        <h2>অ্যাডমিন ড্যাশবোর্ড</h2>
-        <p>সব ইউজারের পরীক্ষা, পারফরম্যান্স ও অ্যাকাউন্ট স্ট্যাটাস মনিটর করো।</p>
+        <h2>Admin Dashboard</h2>
+        <p>Monitor every user’s exams, performance, and account status.</p>
       </div>
       <button class="btn btn-primary" id="adminRefreshBtn">↻ রিফ্রেশ</button>
     </div>
     <div class="admin-stats">
-      <div class="admin-stat"><span>👥 মোট ইউজার</span><strong id="adminTotalUsers">০</strong></div>
-      <div class="admin-stat"><span>📝 মোট পরীক্ষা</span><strong id="adminTotalExams">০</strong></div>
+      <div class="admin-stat"><span>👥 Total Users</span><strong id="adminTotalUsers">০</strong></div>
+      <div class="admin-stat"><span>📝 Total Exams</span><strong id="adminTotalExams">০</strong></div>
       <div class="admin-stat"><span>✅ Pass</span><strong id="adminTotalPass">০</strong></div>
       <div class="admin-stat"><span>❌ Fail</span><strong id="adminTotalFail">০</strong></div>
       <div class="admin-stat"><span>📈 Overall Average</span><strong id="adminOverallAvg">০%</strong></div>
       <div class="admin-stat"><span>🚫 Blocked</span><strong id="adminBlockedUsers">০</strong></div>
     </div>
     <div class="profile-card admin-card">
-      <div class="admin-section-title"><div><h3>👥 User Performance</h3><p>প্রতিটি ইউজারের মোট পরীক্ষা, Pass, Fail ও Average score</p></div><span id="adminLoadStatus"></span></div>
+      <div class="admin-section-title"><div><h3>👥 User Performance</h3><p>প্রতিটি ইউজারের Total Exams, Pass, Fail ও Average score</p></div><span id="adminLoadStatus"></span></div>
       <div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>User</th><th>Exam</th><th>Pass</th><th>Fail</th><th>Average</th><th>Status</th><th>Action</th></tr></thead><tbody id="adminUsersBody"></tbody></table></div>
     </div>
     <div class="profile-card admin-card">
-      <div class="admin-section-title"><div><h3>🏆 Leaderboard</h3><p>কোনো পরীক্ষার উত্তরপত্র দেখতে Exams section-এ ঢুকে পরীক্ষা নির্বাচন করো।</p></div></div>
+      <div class="admin-section-title"><div><h3>🏆 Leaderboard</h3><p>কোনো Examর উত্তরপত্র দেখতে Exams section-এ ঢুকে Exam নির্বাচন করো।</p></div></div>
       <div class="admin-actions-grid">
-        <button class="admin-action-card" id="adminGoSubjects">📚<span>Exam / Answer Key</span><small>যেকোনো পরীক্ষার সঠিক উত্তর দেখো</small></button>
-        <button class="admin-action-card" id="adminGoLeaderboard">🏆<span>Leaderboard</span><small>সর্বশেষ নির্বাচিত পরীক্ষার leaderboard</small></button>
+        <button class="admin-action-card" id="adminGoSubjects">📚<span>Exam / Answer Key</span><small>যেকোনো Examর Correct Answers দেখো</small></button>
+        <button class="admin-action-card" id="adminGoLeaderboard">🏆<span>Leaderboard</span><small>সর্বশেষ নির্বাচিত Examর leaderboard</small></button>
       </div>
     </div>
   </section>
 
-  <!-- লিডারবোর্ড পেজ (এই নির্দিষ্ট পরীক্ষার) -->
+  <!-- লিডারবোর্ড পেজ (এই নির্দিষ্ট Examর) -->
   <section id="screen-leaderboard" hidden>
     <div class="lb-head">
       <h2>🏆 লিডারবোর্ড</h2>
@@ -533,38 +561,54 @@ keyframes warningFloat{
     <div id="lbList"></div>
     <div class="action-row">
       <button class="btn btn-ghost" id="btnBackToResult">← ফিরে যাও</button>
-      <button class="btn btn-ghost" id="btnClearLeaderboard" hidden>এই লিডারবোর্ড মুছে ফেলো (শুধু admin)</button>
+      <button class="btn btn-ghost" id="btnClearLeaderboard" hidden>এই লিডারবোর্ড মুছে Failedো (শুধু admin)</button>
     </div>
   </section>
 
-  <!-- admin-এর জন্য উত্তরপত্র (পরীক্ষা না নিয়ে শুধু সঠিক উত্তর দেখায়) -->
+  <!-- admin-এর জন্য উত্তরপত্র (Exam না নিয়ে শুধু Correct Answers দেখায়) -->
   <section id="screen-answerkey" hidden>
     <div class="lb-head">
-      <h2>📋 উত্তরপত্র (Admin)</h2>
+      <h2>📋 Answer Key (Admin)</h2>
       <p id="akSubtitle"></p>
     </div>
     <div id="akList"></div>
     <div class="action-row">
-      <button class="btn btn-primary" id="btnAkLeaderboard">🏆 লিডারবোর্ড দেখো</button>
-      <button class="btn btn-ghost" id="btnAkBack">← হোমে ফিরে যাও</button>
+      <button class="btn btn-primary" id="btnAkLeaderboard">🏆 View Leaderboard</button>
+      <button class="btn btn-ghost" id="btnAkBack">← Back to Home</button>
     </div>
   </section>
 
 </div>
 
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand"><div class="footer-mark">B</div><div><strong>AR Bijoy Exam Center</strong><p>Practice with confidence. Improve with every attempt.</p></div></div>
+    <div class="footer-contact"><h3>Need help?</h3><p>কোনো সমস্যা হলে যোগাযোগ করো — আমরা সাহায্য করার চেষ্টা করব।</p>
+      <div class="footer-links">
+        <a href="https://facebook.com/" target="_blank" rel="noopener">ⓕ Facebook</a>
+        <a href="https://youtube.com/" target="_blank" rel="noopener">▶ YouTube</a>
+        <a href="https://instagram.com/" target="_blank" rel="noopener">◎ Instagram</a>
+        <a href="https://wa.me/8801000000000" target="_blank" rel="noopener">☏ WhatsApp</a>
+        <a href="mailto:your-email@example.com">✉ Email</a>
+        <a href="tel:+8801000000000">☎ +880 1000-000000</a>
+      </div><small class="footer-edit-note">Replace these sample links and phone number with your own contact details.</small>
+    </div>
+  </div><div class="footer-bottom">© <span id="footerYear"></span> AR Bijoy Exam Center. All rights reserved.</div>
+</footer>
+
 <!-- Authentication Modal -->
 <div class="modal-overlay" id="authModal" hidden>
   <div class="modal auth-modal">
-    <h3 id="authTitle">🔐 অ্যাকাউন্টে লগইন</h3>
-    <div class="auth-tabs"><button class="auth-tab active" id="authTabLogin">লগইন</button><button class="auth-tab" id="authTabSignup">সাইন আপ</button></div>
+    <h3 id="authTitle">🔐 অ্যাকাউন্টে Log in</h3>
+    <div class="auth-tabs"><button class="auth-tab active" id="authTabLogin">Log in</button><button class="auth-tab" id="authTabSignup">Sign up</button></div>
     <form class="auth-form" id="authForm">
       <label for="authUsername">Username</label>
-      <input id="authUsername" type="text" autocomplete="username" placeholder="যেমন: bijoy_123" minlength="3" maxlength="20" required>
+      <input id="authUsername" type="text" autocomplete="username" placeholder="e.g. bijoy_123" minlength="3" maxlength="20" required>
       <label for="authPassword">Password</label>
-      <input id="authPassword" type="password" autocomplete="current-password" placeholder="কমপক্ষে ৬ অক্ষর" minlength="6" required>
-      <div class="auth-note">Username দিয়ে লগইন হবে। Password তোমার সাইটে plain text হিসেবে রাখা হবে না—Supabase Auth এটি নিরাপদভাবে পরিচালনা করবে।</div>
+      <input id="authPassword" type="password" autocomplete="current-password" placeholder="At least 6 characters" minlength="6" required>
+      <div class="auth-note">Username দিয়ে Log in হবে। Password তোমার সাইটে plain text হিসেবে রাখা হবে না—Supabase Auth এটি নিরাপদভাবে পরিচালনা করবে।</div>
       <div class="auth-error" id="authError"></div>
-      <div class="modal-buttons"><button type="button" class="btn btn-ghost" id="authCancelBtn">বাতিল</button><button type="submit" class="btn btn-primary" id="authSubmitBtn">লগইন</button></div>
+      <div class="modal-buttons"><button type="button" class="btn btn-ghost" id="authCancelBtn">Cancel</button><button type="submit" class="btn btn-primary" id="authSubmitBtn">Log in</button></div>
     </form>
   </div>
 </div>
@@ -575,20 +619,20 @@ keyframes warningFloat{
     <p class="confirm-icon" id="confirmIcon">⚠️</p>
     <p class="confirm-text" id="confirmText"></p>
     <div class="confirm-btns">
-      <button class="btn btn-ghost" id="confirmCancelBtn">বাতিল</button>
-      <button class="btn btn-primary" id="confirmOkBtn">নিশ্চিত</button>
+      <button class="btn btn-ghost" id="confirmCancelBtn">Cancel</button>
+      <button class="btn btn-primary" id="confirmOkBtn">Confirm</button>
     </div>
   </div>
 </div>
 
 <div class="modal-overlay" id="nameModal" hidden>
   <div class="modal">
-    <h3>পরীক্ষা শুরু করার আগে</h3>
-    <label for="studentName">তোমার নাম লিখো</label>
-    <input id="studentName" type="text" placeholder="যেমন: Bijoy" autocomplete="name">
+    <h3>Before you begin</h3>
+    <label for="studentName">Enter your name</label>
+    <input id="studentName" type="text" placeholder="e.g. Alex" autocomplete="name">
     <div class="modal-buttons">
-      <button class="btn btn-ghost" id="btnCancelName">বাতিল</button>
-      <button class="btn btn-primary" id="btnStartExam">পরীক্ষা শুরু করো</button>
+      <button class="btn btn-ghost" id="btnCancelName">Cancel</button>
+      <button class="btn btn-primary" id="btnStartExam">Start Exam</button>
     </div>
   </div>
 </div>
@@ -597,11 +641,11 @@ keyframes warningFloat{
 <div class="fancy-modal" id="submitWarningModal" aria-hidden="true">
   <div class="fancy-modal-box" role="dialog" aria-modal="true" aria-labelledby="submitWarningTitle">
     <div class="fancy-modal-icon">⚠️</div>
-    <h3 id="submitWarningTitle">পরীক্ষা জমা দিতে চাও?</h3>
-    <p id="submitWarningText">কিছু প্রশ্নের উত্তর দেওয়া হয়নি।</p>
+    <h3 id="submitWarningTitle">Submit your exam?</h3>
+    <p id="submitWarningText">Some questions are unanswered.</p>
     <div class="fancy-modal-actions">
-      <button class="modal-cancel" id="btnCancelSubmit">← ফিরে যাই</button>
-      <button class="modal-submit" id="btnConfirmSubmit">✓ তবুও জমা দিই</button>
+      <button class="modal-cancel" id="btnCancelSubmit">← Keep Working</button>
+      <button class="modal-submit" id="btnConfirmSubmit">✓ Submit Anyway</button>
     </div>
   </div>
 </div>
@@ -644,8 +688,8 @@ function openAuthModal(mode="login", pending=null){
 function closeAuthModal(){ $("authModal").hidden=true; pendingExamAfterLogin=null; }
 function setAuthMode(mode){
   authMode=mode;
-  $("authTitle").textContent=mode==="login"?"🔐 অ্যাকাউন্টে লগইন":"✨ নতুন অ্যাকাউন্ট তৈরি করো";
-  $("authSubmitBtn").textContent=mode==="login"?"লগইন":"সাইন আপ";
+  $("authTitle").textContent=mode==="login"?"🔐 অ্যাকাউন্টে Log in":"✨ Create your account";
+  $("authSubmitBtn").textContent=mode==="login"?"Log in":"Sign up";
   $("authTabLogin").classList.toggle("active",mode==="login"); $("authTabSignup").classList.toggle("active",mode==="signup");
   $("authPassword").autocomplete=mode==="login"?"current-password":"new-password";
 }
@@ -660,7 +704,7 @@ async function loadCurrentProfile(){
     currentProfile=null;
     await supabaseClient.auth.signOut();
     updateAccountUI();
-    toast("প্রোফাইল লোড করা যায়নি। আবার লগইন করো।", "error", 3500);
+    toast("Profile লোড করা যায়নি। আবার Log in করো।", "error", 3500);
     return null;
   }
   currentProfile={user_id:user.id,username:data.username,is_admin:!!data.is_admin,blocked:!!data.blocked};
@@ -669,7 +713,7 @@ async function loadCurrentProfile(){
     currentProfile=null;
     await supabaseClient.auth.signOut();
     updateAccountUI();
-    toast("🚫 তোমার অ্যাকাউন্টটি ব্লক করা হয়েছে।", "error", 4000);
+    toast("🚫 তোমার অ্যাকাউন্টটি Blocked হয়েছে।", "error", 4000);
     return null;
   }
   updateAccountUI(); return currentProfile;
@@ -678,15 +722,15 @@ function updateAccountUI(){
   const logged=!!currentProfile;
   $("profileBtn").hidden=!logged;
   $("adminBtn").hidden=!(logged && currentProfile.is_admin);
-  $("authActionBtn").textContent=logged?(currentProfile.is_admin?"👤 Admin":"👤 "+currentProfile.username):"🔐 লগইন";
+  $("authActionBtn").textContent=logged?(currentProfile.is_admin?"👤 Admin":"👤 "+currentProfile.username):"🔐 Log in";
 }
 
 async function handleAuthSubmit(e){
   e.preventDefault(); if(!authReady()) return;
   const username=cleanUsername($("authUsername").value); const password=$("authPassword").value;
   $("authError").textContent="";
-  if(!validUsername(username)){ $("authError").textContent="Username ৩–২০ অক্ষর হবে; শুধু a-z, 0-9 এবং _ ব্যবহার করো।"; return; }
-  if(password.length<6){ $("authError").textContent="Password কমপক্ষে ৬ অক্ষরের হতে হবে।"; return; }
+  if(!validUsername(username)){ $("authError").textContent="Username must be 3–20 characters and use only a-z, 0-9, and underscore (_)."; return; }
+  if(password.length<6){ $("authError").textContent="Password At least 6 charactersের হতে হবে।"; return; }
   $("authSubmitBtn").disabled=true;
   try{
     let result;
@@ -694,28 +738,28 @@ async function handleAuthSubmit(e){
     else result=await supabaseClient.auth.signInWithPassword({email:usernameEmail(username),password});
     if(result.error) throw result.error;
     if(authMode==="signup" && !result.data.session){
-      $("authError").textContent="অ্যাকাউন্ট তৈরি হয়েছে। Supabase-এ Email Confirmations বন্ধ করলে username/password দিয়ে সরাসরি লগইন হবে।";
+      $("authError").textContent="Account created successfully। Supabase-এ Email Confirmations বন্ধ করলে username/password দিয়ে সরাসরি Log in হবে।";
       return;
     }
-    await loadCurrentProfile(); closeAuthModal(); toast(authMode==="login"?"👋 সফলভাবে লগইন হয়েছে":"🎉 অ্যাকাউন্ট তৈরি হয়েছে", "success", 2500);
+    await loadCurrentProfile(); closeAuthModal(); toast(authMode==="login"?"👋 সফলভাবে Log in হয়েছে":"🎉 Account created successfully", "success", 2500);
     if(pendingExamAfterLogin){ const p=pendingExamAfterLogin; pendingExamAfterLogin=null; state.selectedExam=p.exam; startExam(); }
-  }catch(err){ console.error(err); $("authError").textContent=err.message||"লগইন করা যায়নি।"; }
+  }catch(err){ console.error(err); $("authError").textContent=err.message||"Log in করা যায়নি।"; }
   finally{ $("authSubmitBtn").disabled=false; }
 }
 
 async function logoutUser(){
   if(!supabaseClient) return;
-  await supabaseClient.auth.signOut(); currentProfile=null; state.studentName=null; updateAccountUI(); toast("👋 লগআউট হয়েছে","info"); hideAllScreens(); $("screen-subjects").hidden=false; $("topSub").textContent="সাবজেক্ট বেছে নিয়ে পরীক্ষা শুরু করো";
+  await supabaseClient.auth.signOut(); currentProfile=null; state.studentName=null; updateAccountUI(); toast("👋 Log out হয়েছে","info"); hideAllScreens(); $("screen-subjects").hidden=false; $("topSub").textContent="Choose a subject to begin";
 }
 
 // const examData = { ... };
 const examData = {
   "আইসিটি": {
   chapters: {
-    "অধ্যায় ২: সংখ্যা পদ্ধতি ও ডিজিটাল ডিভাইস": {
+    "Chapter ২: সংখ্যা পদ্ধতি ও ডিজিটাল ডিভাইস": {
       exams: {
 
-        "পরীক্ষা ১": {
+        "Exam ১": {
           examTime: 25,
           questions: [
             { q: "সংখ্যা প্রকাশ ও গণনার নির্দিষ্ট নিয়মকে কী বলে?", options: ["সংখ্যা পদ্ধতি","কোড","অ্যালগরিদম","লজিক"], answer: 0 },
@@ -753,7 +797,7 @@ const examData = {
           ]
         },
 
-        "পরীক্ষা ২": {
+        "Exam ২": {
           examTime: 25,
           questions: [
             { q: "দশমিক 12-এর বাইনারি মান কত?", options: ["1010","1011","1100","1101"], answer: 2 },
@@ -791,7 +835,7 @@ const examData = {
           ]
         },
 
-        "পরীক্ষা ৩": {
+        "Exam ৩": {
           examTime: 25,
           questions: [
             { q: "1's complement পদ্ধতিতে 0-এর পরিবর্তে কী বসানো হয়?", options: ["0","1","2","10"], answer: 1 },
@@ -825,7 +869,7 @@ const examData = {
             { q: "101101₂-এর হেক্সাডেসিমেল মান কত?", options: ["2B","2C","2D","3D"], answer: 2 },
             { q: "111001₂-এর অক্টাল মান কত?", options: ["70","71","72","73"], answer: 1 },
             { q: "2's complement পদ্ধতির প্রধান ব্যবহার কোনটি?", options: ["ঋণাত্মক সংখ্যা প্রকাশ ও বাইনারি বিয়োগ","শুধু অক্ষর প্রকাশ","শুধু ছবি প্রকাশ","শুধু দশমিক সংখ্যা লেখা"], answer: 0 },
-            { q: "সংখ্যা পদ্ধতি অধ্যায়ে বাইনারি সংখ্যা কেন গুরুত্বপূর্ণ?", options: ["কম্পিউটার ডিজিটালভাবে 0 ও 1 নিয়ে কাজ করে","এটি শুধু মানুষের জন্য","এটি শুধু দশমিকের বিকল্প","এটি শুধু ক্যালকুলেটরে ব্যবহৃত হয়"], answer: 0 }
+            { q: "সংখ্যা পদ্ধতি Chapterে বাইনারি সংখ্যা কেন গুরুত্বপূর্ণ?", options: ["কম্পিউটার ডিজিটালভাবে 0 ও 1 নিয়ে কাজ করে","এটি শুধু মানুষের জন্য","এটি শুধু দশমিকের বিকল্প","এটি শুধু ক্যালকুলেটরে ব্যবহৃত হয়"], answer: 0 }
           ]
         }
 
@@ -833,7 +877,7 @@ const examData = {
     },
     "তথ্য ও যোগাযোগ প্রযুক্তি: বিশ্ব ও বাংলাদেশ প্রেক্ষিত": {
       exams: {
-        "পরীক্ষা ১ (বোর্ড প্রশ্নভিত্তিক)": {
+        "Exam ১ (বোর্ড প্রশ্নভিত্তিক)": {
           examTime: 20,
           questions: [
             { q: "ICT শব্দের পূর্ণরূপ কী?", options: ["Information and Communication Technology","Internet and Computer Technology","Information and Computer Transfer","Integrated Communication Terminal"], answer: 0 },
@@ -865,11 +909,11 @@ const examData = {
   "জীববিজ্ঞান": {
   chapters: {
 
-    "অধ্যায় ৮: মানব শারীরতত্ত্ব : সমন্বয় ও নিয়ন্ত্রণ": {
+    "Chapter ৮: মানব শারীরতত্ত্ব : সমন্বয় ও নিয়ন্ত্রণ": {
 
       exams: {
 
-        "পরীক্ষা ১": {
+        "Exam ১": {
           examTime: 15,
           questions: [
 
@@ -1057,7 +1101,7 @@ const examData = {
         },
 
 
-        "পরীক্ষা ২": {
+        "Exam ২": {
           examTime: 15,
           questions: [
 
@@ -1245,7 +1289,7 @@ const examData = {
         },
 
 
-        "পরীক্ষা ৩": {
+        "Exam ৩": {
           examTime: 15,
           questions: [
 
@@ -1444,14 +1488,14 @@ const examData = {
 },
   "রসায়ন": {
     chapters: {
-          "অধ্যায় ২: গুণগত রসায়ন": {
+          "Chapter ২: গুণগত রসায়ন": {
         exams: {
-          "পরীক্ষা ১": {
+          "Exam ১": {
             examTime: 25,
             questions: [
               { q: "রাদারফোর্ডের পরমাণু মডেলের প্রধান বৈশিষ্ট্য কোনটি?", options: ["ইলেকট্রন নির্দিষ্ট শক্তিস্তরে থাকে","পরমাণুর অধিকাংশ স্থান ফাঁকা","ইলেকট্রন নিউক্লিয়াসের ভিতরে থাকে","নিউট্রন নেই"], answer: 1 },
-              { q: "রাদারফোর্ডের আলফা কণা বিচ্ছুরণ পরীক্ষায় অধিকাংশ আলফা কণা কী করেছিল?", options: ["সম্পূর্ণ প্রতিফলিত হয়েছিল","নিউক্লিয়াসে আটকে গিয়েছিল","সোজা পথে চলে গিয়েছিল","শোষিত হয়েছিল"], answer: 2 },
-              { q: "রাদারফোর্ডের পরীক্ষায় খুব অল্পসংখ্যক আলফা কণা বড় কোণে বিচ্যুত হওয়ার কারণ কী?", options: ["ইলেকট্রনের আকর্ষণ","নিউক্লিয়াসের উপস্থিতি","নিউট্রনের বিকর্ষণ","পরমাণুর ফাঁকা স্থান"], answer: 1 },
+              { q: "রাদারফোর্ডের আলফা কণা বিচ্ছুরণ Examয় অধিকাংশ আলফা কণা কী করেছিল?", options: ["সম্পূর্ণ প্রতিফলিত হয়েছিল","নিউক্লিয়াসে আটকে গিয়েছিল","সোজা পথে চলে গিয়েছিল","শোষিত হয়েছিল"], answer: 2 },
+              { q: "রাদারফোর্ডের Examয় খুব অল্পসংখ্যক আলফা কণা বড় কোণে বিচ্যুত হওয়ার কারণ কী?", options: ["ইলেকট্রনের আকর্ষণ","নিউক্লিয়াসের উপস্থিতি","নিউট্রনের বিকর্ষণ","পরমাণুর ফাঁকা স্থান"], answer: 1 },
               { q: "পরমাণুর কেন্দ্রে অবস্থিত অতি ক্ষুদ্র ও ঘন অংশকে কী বলে?", options: ["অরবিটাল","শক্তিস্তর","নিউক্লিয়াস","উপশক্তিস্তর"], answer: 2 },
               { q: "রাদারফোর্ডের পরমাণু মডেলের প্রধান সীমাবদ্ধতা কোনটি?", options: ["নিউক্লিয়াসের অস্তিত্ব ব্যাখ্যা করতে পারেনি","পরমাণুর স্থায়িত্ব ব্যাখ্যা করতে পারেনি","প্রোটনের অস্তিত্ব ব্যাখ্যা করতে পারেনি","ভর সংরক্ষণ ব্যাখ্যা করতে পারেনি"], answer: 1 },
               { q: "বোরের পরমাণু মডেল অনুযায়ী ইলেকট্রন কোন ধরনের কক্ষপথে ঘোরে?", options: ["যেকোনো কক্ষপথে","নির্দিষ্ট শক্তির কক্ষপথে","সরলরেখায়","অনিয়মিত পথে"], answer: 1 },
@@ -1482,7 +1526,7 @@ const examData = {
             ]
           },
 
-          "পরীক্ষা ২": {
+          "Exam ২": {
             examTime: 25,
             questions: [
               { q: "n = 4 হলে l-এর সর্বোচ্চ মান কত?", options: ["2","3","4","5"], answer: 1 },
@@ -1517,7 +1561,7 @@ const examData = {
               { q: "হুন্ডের নীতি কোন ধরনের অরবিটাল পূরণের ক্ষেত্রে গুরুত্বপূর্ণ?", options: ["সমশক্তির অরবিটাল","শুধু s অরবিটাল","নিউক্লিয়াস","শুধু K শেল"], answer: 0 }
             ]
           },
-           "পরীক্ষা ৩": {
+           "Exam ৩": {
             examTime: 25,
             questions: [
               { q: "নির্দিষ্ট তাপমাত্রায় নির্দিষ্ট পরিমাণ দ্রাবকে সর্বোচ্চ যে পরিমাণ দ্রব দ্রবীভূত হয়ে সম্পৃক্ত দ্রবণ তৈরি করে তাকে কী বলে?", options: ["দ্রাব্যতা","দ্রাবক","দ্রব","দ্রাব্যতা গুণফল"], answer: 0 },
@@ -1553,13 +1597,13 @@ const examData = {
             ]
           },
 
-          "পরীক্ষা ৪": {
+          "Exam ৪": {
             examTime: 25,
             questions: [
               { q: "আয়ন শনাক্তকরণ কোন ধরনের বিশ্লেষণের অন্তর্ভুক্ত?", options: ["গুণগত বিশ্লেষণ","পরিমাণগত বিশ্লেষণ","তাপীয় বিশ্লেষণ","ভৌত বিশ্লেষণ"], answer: 0 },
               { q: "ধনাত্মক আয়নকে কী বলা হয়?", options: ["অ্যানায়ন","ক্যাটায়ন","র‌্যাডিক্যাল","ইলেকট্রন"], answer: 1 },
               { q: "ঋণাত্মক আয়নকে কী বলা হয়?", options: ["ক্যাটায়ন","অ্যানায়ন","প্রোটন","নিউট্রন"], answer: 1 },
-              { q: "শিখা পরীক্ষার মাধ্যমে কোন ধরনের আয়ন সহজে শনাক্ত করা যায়?", options: ["কিছু ধাতব ক্যাটায়ন","সব অ্যানায়ন","সব গ্যাস","শুধু H⁺"], answer: 0 },
+              { q: "শিখা Examর মাধ্যমে কোন ধরনের আয়ন সহজে শনাক্ত করা যায়?", options: ["কিছু ধাতব ক্যাটায়ন","সব অ্যানায়ন","সব গ্যাস","শুধু H⁺"], answer: 0 },
               { q: "Na⁺ এর শিখার রং কী?", options: ["ইট লাল","হলুদ","বেগুনি","সবুজ"], answer: 1 },
               { q: "K⁺ এর শিখার রং কী?", options: ["হলুদ","ইট লাল","হালকা বেগুনি","নীল"], answer: 2 },
               { q: "Ca²⁺ এর শিখার রং কী?", options: ["ইট লাল","হলুদ","সবুজ","বেগুনি"], answer: 0 },
@@ -1573,7 +1617,7 @@ const examData = {
               { q: "I⁻ এর সাথে AgNO₃ বিক্রিয়ায় কী রঙের অধঃক্ষেপ হয়?", options: ["হলুদ","সাদা","সবুজ","লাল"], answer: 0 },
               { q: "SO₄²⁻ শনাক্তকরণে BaCl₂ যোগ করলে কোন অধঃক্ষেপ হয়?", options: ["BaSO₄","AgCl","Cu(OH)₂","Fe(OH)₃"], answer: 0 },
               { q: "CO₃²⁻ শনাক্তকরণের সময় dilute HCl যোগ করলে বুদবুদ দেখা যায় কেন?", options: ["CO₂ গ্যাস উৎপন্ন হয়","O₂ উৎপন্ন হয়","H₂ উৎপন্ন হয়","NH₃ উৎপন্ন হয়"], answer: 0 },
-              { q: "CO₂ গ্যাসের উপস্থিতি নিশ্চিত করতে কোন পরীক্ষা করা হয়?", options: ["চুনের পানি পরীক্ষা","শিখা পরীক্ষা","লিটমাস পরীক্ষা","AgNO₃ পরীক্ষা"], answer: 0 },
+              { q: "CO₂ গ্যাসের উপস্থিতি Confirm করতে কোন Exam করা হয়?", options: ["চুনের পানি Exam","শিখা Exam","লিটমাস Exam","AgNO₃ Exam"], answer: 0 },
               { q: "Cu²⁺ দ্রবণে NaOH যোগ করলে কী রঙের অধঃক্ষেপ হয়?", options: ["সাদা","নীল","লাল","হলুদ"], answer: 1 },
               { q: "Fe²⁺ দ্রবণে NaOH যোগ করলে সাধারণত কী রঙের অধঃক্ষেপ হয়?", options: ["সবুজ","নীল","সাদা","হলুদ"], answer: 0 },
               { q: "Fe³⁺ দ্রবণে NaOH যোগ করলে কী রঙের অধঃক্ষেপ হয়?", options: ["নীল","লালচে বাদামি","সবুজ","সাদা"], answer: 1 },
@@ -1590,10 +1634,10 @@ const examData = {
           }
         }
       },
-       "অধ্যায় ৩: পরিমাণগত রসায়ন": {
+       "Chapter ৩: পরিমাণগত রসায়ন": {
       exams: {
 
-        "পরীক্ষা ১": {
+        "Exam ১": {
           examTime: 25,
           questions: [
 
@@ -1820,7 +1864,7 @@ const examData = {
           ]
         },
 
-        "পরীক্ষা ২": {
+        "Exam ২": {
           examTime: 25,
           questions: [
 
@@ -2057,7 +2101,7 @@ const examData = {
           ]
         },
 
-        "পরীক্ষা ৩": {
+        "Exam ৩": {
           examTime: 25,
           questions: [
 
@@ -2305,10 +2349,10 @@ const examData = {
   },
 "পদার্থবিজ্ঞান": {
   chapters: {
-    "অধ্যায় ২: ভেক্টর": {
+    "Chapter ২: ভেক্টর": {
       exams: {
 
-        "পরীক্ষা ১": {
+        "Exam ১": {
           examTime: 25,
           questions: [
             {
@@ -2464,7 +2508,7 @@ const examData = {
           ]
         },
 
-        "পরীক্ষা ২": {
+        "Exam ২": {
           examTime: 25,
           questions: [
             {
@@ -2620,7 +2664,7 @@ const examData = {
           ]
         },
 
-        "পরীক্ষা ৩": {
+        "Exam ৩": {
           examTime: 25,
           questions: [
             {
@@ -2775,7 +2819,7 @@ const examData = {
             }
           ]
         },
-        "পরীক্ষা -৪ ***": {
+        "Exam -৪ ***": {
   examTime: 25,
   questions: [
     {
@@ -3002,10 +3046,10 @@ const examData = {
 },
   "ম্যাথ ১ম পত্র": {
   chapters: {
-    "অধ্যায় ১: ম্যাট্রিক্স ও নির্ণায়ক": {
+    "Chapter ১: ম্যাট্রিক্স ও নির্ণায়ক": {
       exams: {
 
-        "পরীক্ষা ১": {
+        "Exam ১": {
           examTime: 30,
           questions: [
             { q: "ম্যাট্রিক্স কী?", options: ["সংখ্যাগুলোকে সারি ও কলামে সাজানো আয়তাকার বিন্যাস","শুধু একটি সংখ্যা","একটি সমীকরণ","একটি জ্যামিতিক চিত্র"], answer: 0 },
@@ -3043,7 +3087,7 @@ const examData = {
           ]
         },
 
-        "পরীক্ষা ২": {
+        "Exam ২": {
           examTime: 30,
           questions: [
             { q: "det(A) = 5 হলে det(Aᵀ) কত?", options: ["−5","0","5","25"], answer: 2 },
@@ -3081,7 +3125,7 @@ const examData = {
           ]
         },
 
-        "পরীক্ষা ৩": {
+        "Exam ৩": {
           examTime: 30,
           questions: [
             { q: "3 × 3 determinant-এর একটি উপাদানের minor কী?", options: ["উপাদানটি বাদ দিয়ে অবশিষ্ট 2×2 determinant","উপাদানটির দ্বিগুণ","পুরো determinant","শুধু সারির যোগফল"], answer: 0 },
@@ -3129,7 +3173,7 @@ const examData = {
 const TEACHER_WHATSAPP_NUMBER = "8801995125480"; 
 
 /* ================================================================
-   স্টাডি ম্যাটেরিয়াল (PDF নোট ও ভিডিও) — অধ্যায় অনুযায়ী
+   স্টাডি ম্যাটেরিয়াল (PDF নোট ও ভিডিও) — Chapter অনুযায়ী
    ================================================================
    - subject ও chapter-এর নাম examData-র সাথে হুবহু মিলতে হবে (বানান,
      স্পেস, কোলন সব মিলিয়ে), নাহলে ম্যাটেরিয়াল সাইটে দেখাবে না
@@ -3139,48 +3183,48 @@ const TEACHER_WHATSAPP_NUMBER = "8801995125480";
      দিলেই চলবে, সাইট নিজে থেকে সঠিক আইডিটা বের করে নেবে
    - [!] একটা chapter-এ একাধিক PDF বা একাধিক Video যোগ করতে চাইলে,
      [ ] এর ভেতরে শুধু আরেকটা { ... } বসিয়ে কমা দিয়ে যোগ করো — নিচে
-     "অধ্যায় ২"-এ দুটো PDF আর দুটো Video দিয়ে উদাহরণ দেওয়া আছে
+     "Chapter ২"-এ দুটো PDF আর দুটো Video দিয়ে উদাহরণ দেওয়া আছে
    - এখন demo লিংক বসানো আছে, আসল লিংক দিয়ে বদলে নিও
 ================================================================ */
 const materialsData = {
   "আইসিটি": {
-    "অধ্যায় ২: সংখ্যা পদ্ধতি ও ডিজিটাল ডিভাইস": [
-    //  { type:"pdf", title:"অধ্যায়ের নোট — ১ম অংশ (demo)", url:"https://raw.githubusercontent.com/username/repo/main/materials/demo-note-1.pdf" },
-     // { type:"pdf", title:"অধ্যায়ের নোট — ২য় অংশ (demo)", url:"https://raw.githubusercontent.com/username/repo/main/materials/demo-note-2.pdf" },
-      { type:"video", title:"অধ্যায়ের ভিডিও — পার্ট ১ ", youtubeId:"https://youtu.be/6jnR74aAwx8?si=PvgQQ16cHJaNZF8J" },
-     // { type:"video", title:"অধ্যায়ের ভিডিও — পার্ট ২ (demo)", youtubeId:"dQw4w9WgXcQ" }
+    "Chapter ২: সংখ্যা পদ্ধতি ও ডিজিটাল ডিভাইস": [
+    //  { type:"pdf", title:"Chapterের নোট — ১ম অংশ (demo)", url:"https://raw.githubusercontent.com/username/repo/main/materials/demo-note-1.pdf" },
+     // { type:"pdf", title:"Chapterের নোট — ২য় অংশ (demo)", url:"https://raw.githubusercontent.com/username/repo/main/materials/demo-note-2.pdf" },
+      { type:"video", title:"Chapterের ভিডিও — পার্ট ১ ", youtubeId:"https://youtu.be/6jnR74aAwx8?si=PvgQQ16cHJaNZF8J" },
+     // { type:"video", title:"Chapterের ভিডিও — পার্ট ২ (demo)", youtubeId:"dQw4w9WgXcQ" }
     ],
     "তথ্য ও যোগাযোগ প্রযুক্তি: বিশ্ব ও বাংলাদেশ প্রেক্ষিত": [
-      { type:"pdf", title:"অধ্যায়ের নোট (PDF)", url:"https://raw.githubusercontent.com/arbijoy223/Materials/main/ICT/%E0%A7%A7%E0%A6%AE%20%E0%A6%85%E0%A6%A7%E0%A7%8D%E0%A6%AF%E0%A6%BE%E0%A7%9F/ict-1st%20chapter.pdf" },
-      { type:"video", title:"অধ্যায়ের ব্যাখ্যা ভিডিও", youtubeId:"https://youtu.be/1zE0R4X0Xz0?si=PZ2kDp_8RknLNK8W" }
+      { type:"pdf", title:"Chapterের নোট (PDF)", url:"https://raw.githubusercontent.com/arbijoy223/Materials/main/ICT/%E0%A7%A7%E0%A6%AE%20%E0%A6%85%E0%A6%A7%E0%A7%8D%E0%A6%AF%E0%A6%BE%E0%A7%9F/ict-1st%20chapter.pdf" },
+      { type:"video", title:"Chapterের ব্যাখ্যা ভিডিও", youtubeId:"https://youtu.be/1zE0R4X0Xz0?si=PZ2kDp_8RknLNK8W" }
     ]
   },
   "জীববিজ্ঞান": {
-    "অধ্যায় ৮: মানব শারীরতত্ত্ব : সমন্বয় ও নিয়ন্ত্রণ": [
-      { type:"pdf", title:"অধ্যায়ের নোট (demo — নিজের লিংক দিয়ে বদলাও)", url:"https://raw.githubusercontent.com/username/repo/main/materials/demo-note.pdf" },
-      { type:"video", title:"অধ্যায়ের ভিডিও (demo — নিজের লিংক/আইডি দিয়ে বদলাও)", youtubeId:"" }
+    "Chapter ৮: মানব শারীরতত্ত্ব : সমন্বয় ও নিয়ন্ত্রণ": [
+      { type:"pdf", title:"Chapterের নোট (demo — নিজের লিংক দিয়ে বদলাও)", url:"https://raw.githubusercontent.com/username/repo/main/materials/demo-note.pdf" },
+      { type:"video", title:"Chapterের ভিডিও (demo — নিজের লিংক/আইডি দিয়ে বদলাও)", youtubeId:"" }
     ]
   },
   "রসায়ন": {
-    "অধ্যায় ২: গুণগত রসায়ন": [
-      { type:"pdf", title:"অধ্যায়ের নোট (demo — নিজের লিংক দিয়ে বদলাও)", url:"https://raw.githubusercontent.com/username/repo/main/materials/demo-note.pdf" },
-      { type:"video", title:"অধ্যায়ের ভিডিও (demo — নিজের লিংক/আইডি দিয়ে বদলাও)", youtubeId:"" }
+    "Chapter ২: গুণগত রসায়ন": [
+      { type:"pdf", title:"Chapterের নোট (demo — নিজের লিংক দিয়ে বদলাও)", url:"https://raw.githubusercontent.com/username/repo/main/materials/demo-note.pdf" },
+      { type:"video", title:"Chapterের ভিডিও (demo — নিজের লিংক/আইডি দিয়ে বদলাও)", youtubeId:"" }
     ],
-    "অধ্যায় ৩: পরিমাণগত রসায়ন": [
-      { type:"pdf", title:"অধ্যায়ের নোট (PDF)", url:"https://raw.githubusercontent.com/arbijoy223/Materials/main/Chemistry-2nd%20papaer/%E0%A6%AA%E0%A6%B0%E0%A6%BF%E0%A6%AE%E0%A6%BE%E0%A6%A8%E0%A6%97%E0%A6%A4%20%E0%A6%B0%E0%A6%B8%E0%A6%BE%E0%A7%9F%E0%A6%A8.pdf" },
-      { type:"video", title:"অধ্যায়ের ব্যাখ্যা ভিডিও", youtubeId:"https://youtu.be/e5daed87jRs?si=xpTkMLow7f2Tt6Ag" }
+    "Chapter ৩: পরিমাণগত রসায়ন": [
+      { type:"pdf", title:"Chapterের নোট (PDF)", url:"https://raw.githubusercontent.com/arbijoy223/Materials/main/Chemistry-2nd%20papaer/%E0%A6%AA%E0%A6%B0%E0%A6%BF%E0%A6%AE%E0%A6%BE%E0%A6%A8%E0%A6%97%E0%A6%A4%20%E0%A6%B0%E0%A6%B8%E0%A6%BE%E0%A7%9F%E0%A6%A8.pdf" },
+      { type:"video", title:"Chapterের ব্যাখ্যা ভিডিও", youtubeId:"https://youtu.be/e5daed87jRs?si=xpTkMLow7f2Tt6Ag" }
     ]
   },
   "পদার্থবিজ্ঞান": {
-    "অধ্যায় ২: ভেক্টর": [
-      { type:"pdf", title:"অধ্যায়ের নোট (demo — নিজের লিংক দিয়ে বদলাও)", url:"https://raw.githubusercontent.com/username/repo/main/materials/demo-note.pdf" },
-     // { type:"video", title:"অধ্যায়ের ভিডিও (demo — নিজের লিংক/আইডি দিয়ে বদলাও)", youtubeId:"" }
+    "Chapter ২: ভেক্টর": [
+      { type:"pdf", title:"Chapterের নোট (demo — নিজের লিংক দিয়ে বদলাও)", url:"https://raw.githubusercontent.com/username/repo/main/materials/demo-note.pdf" },
+     // { type:"video", title:"Chapterের ভিডিও (demo — নিজের লিংক/আইডি দিয়ে বদলাও)", youtubeId:"" }
     ]
   },
   "ম্যাথ ১ম পত্র": {
-    "অধ্যায় ১: ম্যাট্রিক্স ও নির্ণায়ক": [
-      { type:"pdf", title:"অধ্যায় ১ — নোট", url:"https://raw.githubusercontent.com/username/repo/main/materials/math/chapter1/note.pdf" },
-      { type:"video", title:"অধ্যায় ১ — ব্যাখ্যা ভিডিও", youtubeId:"" }
+    "Chapter ১: ম্যাট্রিক্স ও নির্ণায়ক": [
+      { type:"pdf", title:"Chapter ১ — নোট", url:"https://raw.githubusercontent.com/username/repo/main/materials/math/chapter1/note.pdf" },
+      { type:"video", title:"Chapter ১ — ব্যাখ্যা ভিডিও", youtubeId:"" }
     ]
   }
 };
@@ -3216,8 +3260,8 @@ const $ = (id)=>document.getElementById(id);
 // ব্রাউজারের ডিফল্ট "...says" কনফার্মেশন বক্সের বদলে সাইটের নিজস্ব সুন্দর ডায়ালগ
 function customConfirm(message, opts){
   opts = opts || {};
-  const okText = opts.okText || "নিশ্চিত";
-  const cancelText = opts.cancelText || "বাতিল";
+  const okText = opts.okText || "Confirm";
+  const cancelText = opts.cancelText || "Cancel";
   const icon = opts.icon || "⚠️";
   return new Promise((resolve)=>{
     $("confirmText").textContent = message;
@@ -3271,7 +3315,7 @@ function hideAllScreens(){
   $("screen-answerkey").hidden = true;
 }
 
-// ১. সাবজেক্ট লিস্ট রেন্ডার
+// ১. Subject লিস্ট রেন্ডার
 function renderSubjects(){
   const grid = $("subjectGrid");
   grid.innerHTML = "";
@@ -3283,7 +3327,7 @@ function renderSubjects(){
     card.className = "subject-card";
     const chapterCount = Object.keys(examData[name].chapters).length;
 
-    // এই সাবজেক্টে কোনো Study Material আছে কিনা, আর থাকলে এই ডিভাইসে
+    // এই Subjectে কোনো Study Material আছে কিনা, আর থাকলে এই ডিভাইসে
     // এই ব্যাজটা আগে কখনো দেখানো হয়েছে কিনা চেক করো
     const hasMaterials = materialsData[name] && Object.values(materialsData[name]).some(arr => arr && arr.length > 0);
     const badgeKey = "newBadgeSeen_" + name;
@@ -3292,7 +3336,7 @@ function renderSubjects(){
     card.innerHTML = `
       <div class="card-icon">${icons[name] || "📚"}</div>
       <h3>${name}${showBadge ? ' <span class="new-badge">NEW</span>' : ''}</h3>
-      <div class="subject-meta"><span class="pill">${bnNum(chapterCount)}টি অধ্যায়</span></div>
+      <div class="subject-meta"><span class="pill">${bnNum(chapterCount)}টি Chapter</span></div>
       <div class="card-arrow">→</div>`;
     card.addEventListener("click", ()=>showChapters(name));
     grid.appendChild(card);
@@ -3310,7 +3354,7 @@ function renderSubjects(){
   });
 }
 
-// ২. অধ্যায় লিস্ট দেখানো
+// ২. Chapter লিস্ট দেখানো
 function showChapters(subject){
   state.selectedSubject = subject;
   hideAllScreens();
@@ -3329,7 +3373,7 @@ function showChapters(subject){
     card.innerHTML = `
       <div class="card-icon">📚</div>
       <h3>${chapterName}</h3>
-      <div class="subject-meta"><span class="pill">${bnNum(examCount)}টি পরীক্ষা</span></div>
+      <div class="subject-meta"><span class="pill">${bnNum(examCount)}টি Exam</span></div>
       <div class="card-arrow">→</div>`;
     card.addEventListener("click", ()=>showChapterHub(subject, chapterName));
     grid.appendChild(card);
@@ -3337,7 +3381,7 @@ function showChapters(subject){
   pushScreen("chapters", {subject});
 }
 
-// ২.৫ অধ্যায় হাব — পরীক্ষা দাও / স্টাডি ম্যাটেরিয়াল বেছে নেওয়ার পেজ
+// ২.৫ Chapter হাব — Exam দাও / স্টাডি ম্যাটেরিয়াল বেছে নেওয়ার পেজ
 function showChapterHub(subject, chapter){
   state.selectedSubject = subject;
   state.selectedChapter = chapter;
@@ -3349,9 +3393,9 @@ function showChapterHub(subject, chapter){
 
   const examCount = Object.keys(examData[subject].chapters[chapter].exams).length;
   const materialCount = (materialsData[subject] && materialsData[subject][chapter]) ? materialsData[subject][chapter].length : 0;
-  $("hubExamCount").textContent = isAdmin() ? `${bnNum(examCount)}টি উত্তরপত্র` : `${bnNum(examCount)}টি পরীক্ষা`;
+  $("hubExamCount").textContent = isAdmin() ? `${bnNum(examCount)}টি উত্তরপত্র` : `${bnNum(examCount)}টি Exam`;
   $("hubMaterialCount").textContent = materialCount > 0 ? `${bnNum(materialCount)}টি ফাইল (PDF/ভিডিও)` : "এখনো যোগ করা হয়নি";
-  $("hubExamTitle").textContent = isAdmin() ? "উত্তরপত্র দেখো" : "পরীক্ষা দাও";
+  $("hubExamTitle").textContent = isAdmin() ? "উত্তরপত্র দেখো" : "Exam দাও";
 
   pushScreen("chapterhub", {subject, chapter});
 }
@@ -3360,7 +3404,7 @@ $("hubGoExams").addEventListener("click", ()=> showExams(state.selectedSubject, 
 $("hubGoMaterials").addEventListener("click", ()=> showMaterials(state.selectedSubject, state.selectedChapter));
 $("backToChaptersFromHub").addEventListener("click", ()=> showChapters(state.selectedSubject));
 
-// ৩. পরীক্ষা লিস্ট দেখানো
+// ৩. Exam লিস্ট দেখানো
 function showExams(subject, chapter){
   state.selectedChapter = chapter;
   hideAllScreens();
@@ -3407,7 +3451,7 @@ function showMaterials(subject, chapter){
   box.innerHTML = "";
 
   if(items.length === 0){
-    box.innerHTML = `<div class="mat-empty">📭 এই অধ্যায়ের জন্য এখনো কোনো নোট/ভিডিও যোগ করা হয়নি।</div>`;
+    box.innerHTML = `<div class="mat-empty">📭 এই Chapterের জন্য এখনো কোনো নোট/ভিডিও যোগ করা হয়নি।</div>`;
     pushScreen("materials", {subject, chapter});
     return;
   }
@@ -3529,7 +3573,7 @@ async function askForName(subject, chapter, exam){
   if(isAdmin()){ showAnswerKeyForAdmin(); return; }
   if(!authReady()) return;
   const {data:{session}}=await supabaseClient.auth.getSession();
-  if(!session){ openAuthModal("login", {exam}); toast("🔐 পরীক্ষা দিতে আগে লগইন করো","warning",2500); return; }
+  if(!session){ openAuthModal("login", {exam}); toast("🔐 Exam দিতে আগে Log in করো","warning",2500); return; }
   await loadCurrentProfile();
   startExam();
 }
@@ -3632,7 +3676,7 @@ function extractYouTubeId(input){
   return input; // কিছু না মিললে যা দেওয়া হয়েছে সেটাই ব্যবহার করার চেষ্টা করো
 }
 
-// admin নাম দিলে পরীক্ষা না নিয়ে সরাসরি সঠিক উত্তরগুলো দেখানো হয়
+// admin নাম দিলে Exam না নিয়ে সরাসরি Correct Answersগুলো দেখানো হয়
 function showAnswerKeyForAdmin(){
   if(!isAdmin()){ toast("⛔ শুধু admin উত্তরপত্র দেখতে পারবে", "error"); return; }
   hideAllScreens();
@@ -3678,7 +3722,7 @@ function showAnswerKeyForAdmin(){
 $("btnAkBack").addEventListener("click", ()=>{
   hideAllScreens();
   $("screen-subjects").hidden = false;
-  $("topSub").textContent = "সাবজেক্ট বেছে নিয়ে পরীক্ষা শুরু করো";
+  $("topSub").textContent = "Choose a subject to begin";
   pushScreen("subjects", {});
 });
 $("btnAkLeaderboard").addEventListener("click", showLeaderboard);
@@ -3690,7 +3734,7 @@ $("btnCancelName").addEventListener("click", ()=>{
 $("btnStartExam").addEventListener("click", ()=>{
   const name = $("studentName").value.trim();
   if(!name){
-    toast("আগে তোমার নাম লিখো", "warning");
+    toast("আগে Enter your name", "warning");
     $("studentName").focus();
     return;
   }
@@ -3698,7 +3742,7 @@ $("btnStartExam").addEventListener("click", ()=>{
   $("nameModal").hidden = true;
 
   if(name.toLowerCase() === "admin"){
-    // admin এর জন্য পরীক্ষা নেওয়া হবে না, শুধু উত্তরপত্র (সঠিক অপশন) দেখানো হবে
+    // admin এর জন্য Exam নেওয়া হবে না, শুধু উত্তরপত্র (সঠিক অপশন) দেখানো হবে
     showAnswerKeyForAdmin();
   } else {
     startExam();
@@ -3711,7 +3755,7 @@ $("studentName").addEventListener("keypress", (e)=>{
   }
 });
 
-// ৫. পরীক্ষা শুরু
+// ৫. Exam শুরু
 function startExam(){
   const examObj = examData[state.selectedSubject].chapters[state.selectedChapter].exams[state.selectedExam];
   const questions = examObj.questions;
@@ -3731,7 +3775,7 @@ function startExam(){
   startTimer();
   state.examInProgress = true;
   pushScreen("exam", {});
-  toast(`🎯 ${state.studentName}, পরীক্ষা শুরু হয়েছে। শুভকামনা!`, "success", 3500);
+  toast(`🎯 ${state.studentName}, Exam শুরু হয়েছে। শুভকামনা!`, "success", 3500);
 }
 
 function startTimer(){
@@ -3742,7 +3786,7 @@ function startTimer(){
     updateTimerText();
     if(state.timeLeft <= 0){
       clearInterval(state.timerId);
-      toast("সময় শেষ! পরীক্ষা জমা দেওয়া হচ্ছে...", "warning");
+      toast("সময় শেষ! Exam জমা দেওয়া হচ্ছে...", "warning");
       finishExam();
     }
   },1000);
@@ -3754,7 +3798,7 @@ function updateTimerText(){
   $("timerBox").classList.toggle("low", state.timeLeft <= 60);
 }
 
-// শসবগুলো প্রশ্ন একই পেজে রেন্ডার করা (স্কোরযোগ্য/স্ক্রোলযোগ্য)
+// শসবগুলো প্রশ্ন একই পেজে রেন্ডার করা (Scoreযোগ্য/স্ক্রোলযোগ্য)
 function renderAllQuestions(){
   const questions = examData[state.selectedSubject].chapters[state.selectedChapter].exams[state.selectedExam].questions;
   const total = questions.length;
@@ -3823,12 +3867,12 @@ function renderAllQuestions(){
 
 // Exit button click handler (হোমপেজে নিয়ে যাবে)
 $("btnExitExam").addEventListener("click", async ()=>{
-  if(await customConfirm("তুমি কি পরীক্ষাটি বাতিল করে হোমে ফিরে যেতে চাও?", {icon:"🚪"})){
+  if(await customConfirm("তুমি কি Examটি Cancel করে হোমে ফিরে যেতে চাও?", {icon:"🚪"})){
     clearInterval(state.timerId);
     state.examInProgress = false;
     hideAllScreens();
     $("screen-subjects").hidden = false;
-    $("topSub").textContent = "সাবজেক্ট বেছে নিয়ে পরীক্ষা শুরু করো";
+    $("topSub").textContent = "Choose a subject to begin";
     pushScreen("subjects", {});
   }
 });
@@ -3853,7 +3897,7 @@ function showSubmitWarning(unanswered){
       ${bnNum(unanswered)}টি প্রশ্ন
     </strong>
     এর উত্তর এখনো দেওয়া হয়নি।<br>
-    তবুও কি তুমি পরীক্ষাটি জমা দিতে চাও?
+    তবুও কি তুমি Examটি জমা দিতে চাও?
   `;
 
   modal.classList.add("show");
@@ -3868,7 +3912,7 @@ function closeSubmitWarning(){
 
 function submitExamNow(){
   closeSubmitWarning();
-  toast("📤 পরীক্ষা জমা নেওয়া হচ্ছে...", "success");
+  toast("📤 Exam জমা নেওয়া হচ্ছে...", "success");
 
   setTimeout(()=>{
     finishExam();
@@ -3964,7 +4008,7 @@ async function toggleUserBlock(userId, currentlyBlocked, btn){
 async function showProfile(){
   if(!authReady()) return;
   await loadCurrentProfile(); if(!currentProfile){openAuthModal("login"); return;}
-  hideAllScreens(); $("screen-profile").hidden=false; $("topSub").textContent="আমার প্রোফাইল"; pushScreen("profile",{});
+  hideAllScreens(); $("screen-profile").hidden=false; $("topSub").textContent="আমার Profile"; pushScreen("profile",{});
   $("profileUsername").textContent=currentProfile.username; $("profileAvatar").textContent=currentProfile.username.charAt(0).toUpperCase();
   $("profileResults").innerHTML='<div class="empty-profile">⏳ ফলাফল লোড হচ্ছে...</div>';
   const {data,error}=await supabaseClient.from("results").select("subject,chapter,exam,correct,total,percent,status,attempted_at").order("attempted_at",{ascending:true});
@@ -3974,7 +4018,7 @@ async function showProfile(){
 function renderProfileResults(rows){
   const total=rows.length, passed=rows.filter(r=>r.percent>=50).length, failed=total-passed, avg=total?Math.round(rows.reduce((a,r)=>a+Number(r.percent||0),0)/total):0;
   $("profileTotal").textContent=bnNum(total); $("profilePassed").textContent=bnNum(passed); $("profileFailed").textContent=bnNum(failed); $("profileAvg").textContent=bnNum(avg)+"%";
-  const box=$("profileResults"); if(!rows.length){box.innerHTML='<div class="empty-profile">এখনও কোনো পরীক্ষা দেওয়া হয়নি।</div>';return;}
+  const box=$("profileResults"); if(!rows.length){box.innerHTML='<div class="empty-profile">এখনও কোনো Exam দেওয়া হয়নি।</div>';return;}
   box.innerHTML=rows.slice().reverse().map((r,i)=>{const pass=Number(r.percent)>=50;const d=new Date(r.attempted_at);return `<div class="profile-result"><div class="pr-main"><strong>${r.subject} → ${r.exam}</strong><span>${r.chapter} • ${d.toLocaleDateString("bn-BD")}</span></div><div class="pr-score"><strong class="${pass?"pass":"fail"}">${bnNum(r.percent)}% • ${pass?"PASS":"FAIL"}</strong><span>${bnNum(r.correct)} / ${bnNum(r.total)}</span></div></div>`;}).join("");
 }
 function renderPerformanceChart(rows){
@@ -3990,8 +4034,8 @@ function renderPerformanceChart(rows){
   ctx.lineWidth=1; ctx.strokeStyle="rgba(148,163,184,.28)"; ctx.fillStyle="#64748b";
   for(let y=0;y<=100;y+=25){const yy=pad.t+ch-(y/100)*ch;ctx.beginPath();ctx.moveTo(pad.l,yy);ctx.lineTo(w-pad.r,yy);ctx.stroke();ctx.fillText(y+"%",4,yy);}
   const passY=pad.t+ch-.5*ch; ctx.save(); ctx.setLineDash([6,5]); ctx.strokeStyle="rgba(22,163,74,.48)"; ctx.beginPath();ctx.moveTo(pad.l,passY);ctx.lineTo(w-pad.r,passY);ctx.stroke();ctx.restore();
-  ctx.fillStyle="#16a34a"; ctx.font=(mobile?"10px":"11px")+' Hind Siliguri, sans-serif'; ctx.fillText("পাস ৫০%",Math.max(pad.l+4,w-pad.r-58),passY-10);
-  if(!rows.length){ctx.fillStyle="#94a3b8";ctx.textAlign="center";ctx.font=(mobile?"12px":"13px")+' Hind Siliguri, sans-serif';ctx.fillText("পরীক্ষা দিলে এখানে পারফরম্যান্স দেখা যাবে",w/2,h/2);ctx.textAlign="start";return;}
+  ctx.fillStyle="#16a34a"; ctx.font=(mobile?"10px":"11px")+' Hind Siliguri, sans-serif'; ctx.fillText("Passed ৫০%",Math.max(pad.l+4,w-pad.r-58),passY-10);
+  if(!rows.length){ctx.fillStyle="#94a3b8";ctx.textAlign="center";ctx.font=(mobile?"12px":"13px")+' Hind Siliguri, sans-serif';ctx.fillText("Exam দিলে এখানে পারফরম্যান্স দেখা যাবে",w/2,h/2);ctx.textAlign="start";return;}
   const values=rows.map(r=>Math.max(0,Math.min(100,Number(r.percent)||0)));
   const xFor=i=>rows.length===1?pad.l+cw/2:pad.l+(i/(rows.length-1))*cw;
   const yFor=v=>pad.t+ch-(v/100)*ch;
@@ -4059,7 +4103,7 @@ function showResult(){
   else { remark = "📚 চিন্তা করো না। আবার চেষ্টা করো, তুমি পারবে!"; icon = "📚"; }
   $("resultIcon").textContent = icon;
   $("scoreRemark").textContent = remark;
-  $("topSub").textContent = "পরীক্ষার ফলাফল ঠিক আছে";
+  $("topSub").textContent = "Exam Results ঠিক আছে";
 
   const reviewTitle = $("reviewTitle");
   const reviewBox = $("reviewBox");
@@ -4115,10 +4159,10 @@ function showResult(){
   
   const resultText =
 `নাম: ${state.studentName}
-সাবজেক্ট: ${state.selectedSubject}
-অধ্যায়: ${state.selectedChapter}
-পরীক্ষা: ${state.selectedExam}
-স্কোর: ${correct} / ${total} (${percent}%)`;
+Subject: ${state.selectedSubject}
+Chapter: ${state.selectedChapter}
+Exam: ${state.selectedExam}
+Score: ${correct} / ${total} (${percent}%)`;
 
   $("btnCopyResult").onclick = ()=>{
     navigator.clipboard.writeText(resultText)
@@ -4141,7 +4185,7 @@ function showResult(){
 $("backToSubjects").addEventListener("click", ()=>{
   hideAllScreens();
   $("screen-subjects").hidden = false;
-  $("topSub").textContent = "সাবজেক্ট বেছে নিয়ে পরীক্ষা শুরু করো";
+  $("topSub").textContent = "Choose a subject to begin";
   pushScreen("subjects", {});
 });
 
@@ -4152,20 +4196,20 @@ $("backToChapters").addEventListener("click", ()=>{
 $("btnHome").addEventListener("click", ()=>{
   hideAllScreens();
   $("screen-subjects").hidden = false;
-  $("topSub").textContent = "সাবজেক্ট বেছে নিয়ে পরীক্ষা শুরু করো";
+  $("topSub").textContent = "Choose a subject to begin";
   pushScreen("subjects", {});
 });
 
 /* ================================================================
    লিডারবোর্ড (এই ব্রাউজার/ডিভাইসেই জমা থাকে — localStorage)
    [!] গুরুত্বপূর্ণ: এটা static HTML হওয়ায় কোনো সার্ভার নেই।
-   তাই লিডারবোর্ডে শুধু ওই একই ডিভাইস/ব্রাউজারে দেওয়া পরীক্ষার স্কোর জমা হবে।
+   তাই লিডারবোর্ডে শুধু ওই একই ডিভাইস/ব্রাউজারে দেওয়া Examর Score জমা হবে।
    একেক স্টুডেন্ট একেক ফোনে/ব্রাউজারে দিলে, একজনের লিডারবোর্ডে আরেকজনের
-   স্কোর দেখাবে না — সবার স্কোর একসাথে দেখতে হলে একটা শেয়ার্ড
+   Score দেখাবে না — সবার Score একসাথে দেখতে হলে একটা শেয়ার্ড
    অনলাইন স্টোরেজ (যেমন Google Sheet / Firebase) লাগবে।
 ================================================================ */
 /* ================================================================
-   [!] সবার স্কোর একসাথে (সব ফোনে) দেখাতে চাইলে এখানে Google Apps
+   [!] সবার Score একসাথে (সব ফোনে) দেখাতে চাইলে এখানে Google Apps
    Script Web App-এর লিংক বসাও (নিচে ধাপ ধাপ নির্দেশনা দেওয়া আছে)।
    খালি রাখলে লিডারবোর্ড শুধু এই ডিভাইসেই (localStorage) কাজ করবে।
 ================================================================ */
@@ -4209,7 +4253,7 @@ function renderLeaderboardRows(all, noticeText){
   }
 
   if(all.length === 0){
-    box.innerHTML += `<div class="lb-empty">এখনো কেউ এই পরীক্ষা দেয়নি।</div>`;
+    box.innerHTML += `<div class="lb-empty">এখনো কেউ এই Exam দেয়নি।</div>`;
     return;
   }
 
@@ -4284,17 +4328,28 @@ async function showLeaderboard(){
 $("btnLeaderboard").addEventListener("click", showLeaderboard);
 $("brandHomeBtn").addEventListener("click",()=>{
   if(state.examInProgress){ openExitWarning(); return; }
-  hideAllScreens(); $("screen-subjects").hidden=false; $("topSub").textContent="সাবজেক্ট বেছে নিয়ে পরীক্ষা শুরু করো"; pushScreen("subjects",{}); window.scrollTo({top:0,behavior:"smooth"});
+  hideAllScreens(); $("screen-subjects").hidden=false; $("topSub").textContent="Choose a subject to begin"; pushScreen("subjects",{}); window.scrollTo({top:0,behavior:"smooth"});
 });
 $("brandHomeBtn").addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();$("brandHomeBtn").click();}});
-$("authActionBtn").addEventListener("click",()=>currentProfile?showProfile():openAuthModal("login"));
+$("authActionBtn").addEventListener("click",()=>currentProfile?logoutUser():openAuthModal("login"));
 $("profileBtn").addEventListener("click",showProfile);
 $("adminBtn").addEventListener("click",showAdminDashboard);
-$("backFromAdmin").addEventListener("click",()=>{hideAllScreens();$("screen-subjects").hidden=false;$("topSub").textContent="সাবজেক্ট বেছে নিয়ে পরীক্ষা শুরু করো";pushScreen("subjects",{});});
+function openDrawer(){ $("sideDrawer").classList.add("open"); $("drawerBackdrop").hidden=false; requestAnimationFrame(()=>$("drawerBackdrop").classList.add("open")); $("sideDrawer").setAttribute("aria-hidden","false"); $("menuTrigger").setAttribute("aria-expanded","true"); }
+function closeDrawer(){ $("sideDrawer").classList.remove("open"); $("drawerBackdrop").classList.remove("open"); $("sideDrawer").setAttribute("aria-hidden","true"); $("menuTrigger").setAttribute("aria-expanded","false"); setTimeout(()=>{if(!$("drawerBackdrop").classList.contains("open")) $("drawerBackdrop").hidden=true;},250); }
+$("menuTrigger").addEventListener("click",openDrawer); $("drawerClose").addEventListener("click",closeDrawer); $("drawerBackdrop").addEventListener("click",closeDrawer);
+$("drawerHome").addEventListener("click",()=>{closeDrawer(); if(state.examInProgress){openExitWarning();return;} hideAllScreens();$("screen-subjects").hidden=false;$("topSub").textContent="Choose a subject to begin";pushScreen("subjects",{});window.scrollTo({top:0,behavior:"smooth"});});
+$("drawerDashboard").addEventListener("click",()=>{closeDrawer();showProfile();});
+$("drawerProfile").addEventListener("click",()=>{closeDrawer();showProfile();});
+$("drawerAdmin").addEventListener("click",()=>{closeDrawer();showAdminDashboard();});
+$("drawerLeaderboard").addEventListener("click",()=>{closeDrawer();showLeaderboard();});
+$("drawerLogin").addEventListener("click",()=>{closeDrawer();openAuthModal("login");});
+$("drawerLogout").addEventListener("click",()=>{closeDrawer();logoutUser();});
+$("footerYear").textContent=new Date().getFullYear();
+$("backFromAdmin").addEventListener("click",()=>{hideAllScreens();$("screen-subjects").hidden=false;$("topSub").textContent="Choose a subject to begin";pushScreen("subjects",{});});
 $("adminRefreshBtn").addEventListener("click",showAdminDashboard);
-$("adminGoSubjects").addEventListener("click",()=>{hideAllScreens();$("screen-subjects").hidden=false;$("topSub").textContent="সাবজেক্ট বেছে নিয়ে উত্তরপত্র দেখো";pushScreen("subjects",{});});
-$("adminGoLeaderboard").addEventListener("click",()=>{if(state.selectedSubject&&state.selectedChapter&&state.selectedExam) showLeaderboard(); else toast("আগে কোনো পরীক্ষা নির্বাচন করো", "warning", 2500);});
-$("backFromProfile").addEventListener("click",()=>{hideAllScreens();$("screen-subjects").hidden=false;$("topSub").textContent="সাবজেক্ট বেছে নিয়ে পরীক্ষা শুরু করো";pushScreen("subjects",{});});
+$("adminGoSubjects").addEventListener("click",()=>{hideAllScreens();$("screen-subjects").hidden=false;$("topSub").textContent="Subject বেছে নিয়ে উত্তরপত্র দেখো";pushScreen("subjects",{});});
+$("adminGoLeaderboard").addEventListener("click",()=>{if(state.selectedSubject&&state.selectedChapter&&state.selectedExam) showLeaderboard(); else toast("আগে কোনো Exam নির্বাচন করো", "warning", 2500);});
+$("backFromProfile").addEventListener("click",()=>{hideAllScreens();$("screen-subjects").hidden=false;$("topSub").textContent="Choose a subject to begin";pushScreen("subjects",{});});
 $("btnLogout").addEventListener("click",logoutUser);
 $("authTabLogin").addEventListener("click",()=>setAuthMode("login"));
 $("authTabSignup").addEventListener("click",()=>setAuthMode("signup"));
@@ -4305,7 +4360,7 @@ $("btnBackToResult").addEventListener("click", ()=>{
 });
 $("btnClearLeaderboard").addEventListener("click", async ()=>{
   if(!isAdmin()) return; // নিরাপত্তার জন্য দ্বিতীয়বার যাচাই — শুধু admin ডিলিট করতে পারবে
-  if(!(await customConfirm("এই পরীক্ষার লিডারবোর্ড পুরোপুরি মুছে ফেলতে চাও? এটা আর ফিরিয়ে আনা যাবে না।", {icon:"🗑️", okText:"মুছে ফেলো"}))) return;
+  if(!(await customConfirm("এই Examর লিডারবোর্ড পুরোপুরি মুছে Failedতে চাও? এটা আর ফিরিয়ে আনা যাবে না।", {icon:"🗑️", okText:"মুছে Failedো"}))) return;
   const key = getExamKey();
   const remaining = loadLeaderboard().filter(e => e.examKey !== key);
   try{ localStorage.setItem(LB_KEY, JSON.stringify(remaining)); }catch(e){}
@@ -4313,14 +4368,15 @@ $("btnClearLeaderboard").addEventListener("click", async ()=>{
 });
 
 /* ================================================================
-   পরীক্ষা চলাকালীন পাতা রিফ্রেশ/বন্ধ করতে চাইলে কনফার্মেশন দেখানো
-   [!] ব্রাউজার নিরাপত্তার কারণে কাস্টম লেখা ("তুমি কি নিশ্চিত...")
+   Exam চলাকালীন পাতা রিফ্রেশ/বন্ধ করতে চাইলে কনফার্মেশন দেখানো
+   [!] ব্রাউজার নিরাপত্তার কারণে কাস্টম লেখা ("তুমি কি Confirm...")
    দেখাতে দেয় না — ব্রাউজার নিজের ডিফল্ট লেখায় (Leave/Cancel ধরনের)
    একটা কনফার্মেশন বক্স দেখাবে। "Leave"/"ঠিক আছে" চাপলে রিফ্রেশ হবে,
-   "Cancel" চাপলে পরীক্ষাতেই থেকে যাবে।
+   "Cancel" চাপলে Examতেই থেকে যাবে।
 ================================================================ */
 window.addEventListener("beforeunload", function(e){
-  if(state.examInProgress){
+  const onResult = !!($("screen-result") && !$("screen-result").hidden);
+  if(state.examInProgress || onResult){
     e.preventDefault();
     e.returnValue = "";
     return "";
@@ -4337,18 +4393,34 @@ try{
 window.addEventListener("popstate", async function(e){
   const target = e.state || {screen:"subjects"};
 
-  // পরীক্ষা চলাকালীন ব্যাক চাপলে আগে কনফার্ম করো, এমনি এমনি বের হতে দিও না
+  // Ask for confirmation before leaving the result screen with device/browser Back.
+  if($("screen-result") && !$("screen-result").hidden && target.screen !== "result"){
+    historyNavInProgress = true;
+    history.pushState({screen:"result"}, "", "#result");
+    historyNavInProgress = false;
+    if(await customConfirm("Leave this result page? You can find this result later in your profile history.", {icon:"📊", okText:"Leave page", cancelText:"Stay here"})){
+      hideAllScreens();
+      $("screen-subjects").hidden = false;
+      $("topSub").textContent = "Choose a subject to begin";
+      historyNavInProgress = true;
+      history.replaceState({screen:"subjects"}, "", "#subjects");
+      historyNavInProgress = false;
+    }
+    return;
+  }
+
+  // Exam চলাকালীন ব্যাক চাপলে আগে কনফার্ম করো, এমনি এমনি বের হতে দিও না
   if(state.examInProgress && target.screen !== "exam"){
     historyNavInProgress = true;
-    history.pushState({screen:"exam"}, "", "#exam"); // ব্যাক বাতিল করে পরীক্ষাতেই রাখো
+    history.pushState({screen:"exam"}, "", "#exam"); // ব্যাক Cancel করে Examতেই রাখো
     historyNavInProgress = false;
 
-    if(await customConfirm("তুমি কি পরীক্ষাটি বাতিল করে বের হয়ে যেতে চাও? অগ্রগতি সেভ হবে না।", {icon:"🚪"})){
+    if(await customConfirm("তুমি কি Examটি Cancel করে বের হয়ে যেতে চাও? অগ্রগতি সেভ হবে না।", {icon:"🚪"})){
       clearInterval(state.timerId);
       state.examInProgress = false;
       hideAllScreens();
       $("screen-subjects").hidden = false;
-      $("topSub").textContent = "সাবজেক্ট বেছে নিয়ে পরীক্ষা শুরু করো";
+      $("topSub").textContent = "Choose a subject to begin";
       historyNavInProgress = true;
       history.replaceState({screen:"subjects"}, "", "#subjects");
       historyNavInProgress = false;
@@ -4387,17 +4459,17 @@ window.addEventListener("popstate", async function(e){
       if(state.selectedSubject && state.selectedChapter && state.selectedExam) showAnswerKeyForAdmin();
       break;
     case "exam":
-      // পরীক্ষা স্ক্রিনে সরাসরি ব্যাক/ফরোয়ার্ড করা নিরাপদ নয় (টাইমার/উত্তর হারাতে পারে),
+      // Exam স্ক্রিনে সরাসরি ব্যাক/ফরোয়ার্ড করা নিরাপদ নয় (টাইমার/উত্তর হারাতে পারে),
       // তাই হোমেই ফিরিয়ে দাও
       hideAllScreens();
       $("screen-subjects").hidden = false;
-      $("topSub").textContent = "সাবজেক্ট বেছে নিয়ে পরীক্ষা শুরু করো";
+      $("topSub").textContent = "Choose a subject to begin";
       break;
     case "subjects":
     default:
       hideAllScreens();
       $("screen-subjects").hidden = false;
-      $("topSub").textContent = "সাবজেক্ট বেছে নিয়ে পরীক্ষা শুরু করো";
+      $("topSub").textContent = "Choose a subject to begin";
   }
   historyNavInProgress = false;
 });
