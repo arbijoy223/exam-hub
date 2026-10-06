@@ -20,10 +20,10 @@ color-scheme:light only;
 --serif:"Fraunces",Georgia,serif;--sans:"Hind Siliguri","Segoe UI",system-ui,sans-serif
 }
 *{box-sizing:border-box}html{scroll-behavior:smooth}html,body{height:100%}
-body{margin:0;color:var(--text) !important;background-color:var(--bg);font-family:var(--sans);-webkit-font-smoothing:antialiased;
+body{min-height:100vh;display:flex;flex-direction:column;margin:0;color:var(--text) !important;background-color:var(--bg);font-family:var(--sans);-webkit-font-smoothing:antialiased;
 background:radial-gradient(circle at 8% 8%,rgba(99,91,255,.12),transparent 28%),radial-gradient(circle at 92% 18%,rgba(139,92,246,.10),transparent 25%),linear-gradient(135deg,#f8faff,#eef2f8)}
 h1,h2,h3{font-family:var(--serif);font-weight:700;margin:0}button,input{font-family:inherit}[hidden]{display:none!important}
-.wrap{max-width:1050px;margin:0 auto;padding:30px 20px 70px}
+.wrap{flex:1 0 auto;width:100%;box-sizing:border-box;max-width:1050px;margin:0 auto;padding:30px 20px 70px}
 .topbar{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.84);backdrop-filter:blur(18px);
 border-bottom:1px solid rgba(255,255,255,.8);box-shadow:0 5px 25px rgba(15,23,42,.07)}
 .topbar-inner{max-width:1050px;margin:auto;padding:12px 20px;display:flex;align-items:center;justify-content:space-between}
@@ -159,7 +159,7 @@ display:flex;align-items:center;justify-content:center;font-weight:800;font-size
 .toast.show{opacity:1;visibility:visible;transform:translateX(0) scale(1)}.toast.success{background:linear-gradient(135deg,#15803d,#16a34a)}.toast.error{background:linear-gradient(135deg,#b91c1c,#ef4444)}.toast.warning{background:linear-gradient(135deg,#b45309,#f59e0b)}.toast.info{background:linear-gradient(135deg,#4338ca,#635bff)}
 .toast-icon{flex:none;width:35px;height:35px;border-radius:11px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.16);font-weight:900;font-size:17px}.toast-text{flex:1;font-size:14px;line-height:1.45;font-weight:600}
 .footnote{font-size:12.5px;color:var(--muted);margin-top:26px;line-height:1.6}
-/* ফোন dark mode-এ থাকলেও সাইট সবসময় একই (light) রং ব্যবহার করবে, তাই প্রশ্নের লেখা কখনো অদৃশ্য হবে না — তাই dark-mode override ইচ্ছাকৃতভাবে বন্ধ রাখা হলো */
+/* ফোন dark mode-এ থাকলেও সাইট সবসময় একই (light) রং ব্যবহার করবে, তাই Questionের লেখা কখনো অদৃশ্য হবে না — তাই dark-mode override ইচ্ছাকৃতভাবে বন্ধ রাখা হলো */
 @media(max-width:700px){.topbar-inner{padding:10px 14px}.wrap{width:100%;padding:22px 12px 55px}.brand-text{font-size:15px}.brand-sub{font-size:10px}.brand .seal{width:39px;height:39px}.subject-grid{grid-template-columns:1fr;gap:14px}.subject-card{min-height:135px;padding:19px}.lede{margin:20px 0}.lede h2{font-size:29px}.exam-head .subject-name{font-size:17px}.timer{width:100%;min-width:0}.question-card{padding:19px;border-radius:19px}.qtext{font-size:17px}.nav-row{bottom:6px}.nav-row .btn{flex:1;min-width:0;padding-left:10px;padding-right:10px}.score-big{font-size:50px}.result-stat-grid{grid-template-columns:1fr}.toast{left:12px;right:12px;top:76px;min-width:0;max-width:none}.modal{padding:24px}.mat-row{flex-wrap:wrap}.mat-btns{width:100%;justify-content:flex-start}.mat-action{padding:8px 12px;font-size:12.5px}}
 /* Exam Header and Progress/Page Label Sticky Container */
   .exam-sticky-header {
@@ -225,7 +225,7 @@ display:flex;align-items:center;justify-content:center;font-weight:800;font-size
     animation:warningFloat 2s ease-in-out infinite;
   }
 
-  /* প্রশ্ন কার্ডের সাইজ ও প্যাডিং ছোট করা */
+  /* Question কার্ডের সাইজ ও প্যাডিং ছোট করা */
 .question-card{
   background:rgba(255,255,255,.94);
   border:1px solid var(--border);
@@ -235,7 +235,7 @@ display:flex;align-items:center;justify-content:center;font-weight:800;font-size
   box-shadow:0 6px 20px rgba(15,23,42,.05);
 }
 
-/* প্রশ্নের ফন্ট সাইজ ও মার্জিন ছোট করা */
+/* Questionের ফন্ট সাইজ ও মার্জিন ছোট করা */
 .qnum{
   padding:2px 8px;
   font-size:11.5px;
@@ -338,12 +338,12 @@ keyframes warningFloat{
 .menu-trigger{width:44px;height:44px;flex:0 0 44px;border:1px solid #e4e8f2;border-radius:15px;background:rgba(255,255,255,.92);display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px;cursor:pointer;box-shadow:0 6px 18px rgba(15,23,42,.07);transition:.2s}
 .menu-trigger:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(99,91,255,.16);border-color:#c7c5ff}.menu-trigger span{display:block;width:18px;height:2px;border-radius:5px;background:#4338ca;transition:.2s}
 .brand{cursor:pointer;min-width:0}.brand .seal{position:relative;width:48px;height:48px;border-radius:17px;background:linear-gradient(145deg,#4338ca 0%,#7c3aed 58%,#a78bfa 100%);border:1px solid rgba(255,255,255,.65);box-shadow:0 8px 0 rgba(79,70,229,.10),0 12px 25px rgba(99,91,255,.28);font-size:0;flex:0 0 48px;overflow:hidden}.brand .seal:before{content:"";position:absolute;inset:4px;border:1px solid rgba(255,255,255,.45);border-radius:13px}.brand .seal span{font-family:Georgia,serif;font-size:23px;font-weight:900;line-height:1;color:#fff;text-shadow:0 2px 5px rgba(0,0,0,.2);z-index:1}.brand .seal small{position:absolute;bottom:5px;font:700 6px system-ui;letter-spacing:1.3px;color:#ede9fe}
-.account-area{gap:10px}.account-btn{min-height:46px;padding:12px 19px;font-size:14px;border-radius:15px}.account-btn.ghost{background:linear-gradient(135deg,#4f46e5,#7c3aed);border:1px solid rgba(255,255,255,.6);box-shadow:0 9px 24px rgba(79,70,229,.3)}
+.account-area{gap:10px}.account-btn{min-height:48px;padding:13px 20px;font-size:14px;border-radius:15px;font-weight:800}.account-btn.ghost{background:linear-gradient(135deg,#4f46e5,#7c3aed);border:1px solid rgba(255,255,255,.6);box-shadow:0 9px 24px rgba(79,70,229,.3)}
 .drawer-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.44);backdrop-filter:blur(3px);z-index:1000;opacity:0;transition:opacity .25s}.drawer-backdrop.open{opacity:1}.side-drawer{position:fixed;z-index:1001;left:0;top:0;bottom:0;width:min(340px,88vw);padding:20px 16px;background:rgba(255,255,255,.97);backdrop-filter:blur(20px);box-shadow:20px 0 60px rgba(15,23,42,.18);transform:translateX(-105%);transition:transform .28s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column}.side-drawer.open{transform:translateX(0)}.drawer-head{display:flex;align-items:center;gap:12px;padding:10px 4px 22px;border-bottom:1px solid #e9edf5}.drawer-avatar,.footer-mark{width:48px;height:48px;display:grid;place-items:center;border-radius:16px;background:linear-gradient(135deg,#4f46e5,#8b5cf6);color:white;font:900 22px Georgia,serif;box-shadow:0 8px 20px rgba(99,91,255,.22)}.drawer-head strong{display:block;font-size:15px;color:#172033}.drawer-head small{display:block;font-size:11px;color:#7b8497;margin-top:3px}.drawer-close{margin-left:auto;width:34px;height:34px;border:0;border-radius:10px;background:#f1f3f9;color:#475569;font-size:24px;cursor:pointer}.drawer-nav{display:grid;gap:7px;padding:20px 0}.drawer-nav button{width:100%;display:flex;align-items:center;gap:13px;padding:13px 14px;border:1px solid transparent;border-radius:14px;background:transparent;color:#344054;text-align:left;font:700 14px var(--sans);cursor:pointer;transition:.18s}.drawer-nav button span{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;background:#f0efff;color:#5b50db;font-size:16px}.drawer-nav button:hover{background:#f6f5ff;border-color:#e5e3ff;transform:translateX(2px)}.drawer-nav #drawerLogout{color:#b91c1c}.drawer-nav #drawerLogout span{background:#fff0f0;color:#dc2626}.drawer-foot{margin-top:auto;border-top:1px solid #e9edf5;padding:17px 4px 4px;font-size:12px;font-weight:800;color:#475569}.drawer-foot span{display:block;font-size:11px;font-weight:500;color:#8991a3;margin-top:4px}
-.site-footer{margin-top:35px;background:linear-gradient(135deg,#111827,#25234a 65%,#312e81);color:#f8fafc;padding:34px 20px 0}.footer-inner{max-width:1050px;margin:auto;display:grid;grid-template-columns:1fr 1.3fr;gap:36px}.footer-brand{display:flex;align-items:flex-start;gap:13px}.footer-mark{background:linear-gradient(135deg,#635bff,#a78bfa);border:1px solid rgba(255,255,255,.25)}.footer-brand strong{font-size:17px}.footer-brand p{margin:7px 0;color:#cbd5e1;font-size:12px;line-height:1.7}.footer-contact h3{font-size:18px;margin-bottom:7px}.footer-contact p{margin:0 0 13px;color:#e2e8f0;font-size:13px;line-height:1.7}.footer-links{display:flex;flex-wrap:wrap;gap:8px}.footer-links a{color:#eef2ff;text-decoration:none;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.07);padding:8px 11px;border-radius:10px;font-size:12px;transition:.2s}.footer-links a:hover{background:rgba(139,92,246,.35);transform:translateY(-2px)}.footer-edit-note{display:block;margin-top:10px;color:#aab4ca;font-size:10px}.footer-bottom{max-width:1050px;margin:25px auto 0;padding:15px 0;border-top:1px solid rgba(255,255,255,.12);text-align:center;color:#aab4ca;font-size:11px}
+.site-footer{flex-shrink:0;margin-top:35px;background:linear-gradient(135deg,#111827,#25234a 65%,#312e81);color:#f8fafc;padding:34px 20px 0}.footer-inner{max-width:1050px;margin:auto;display:grid;grid-template-columns:1fr 1.3fr;gap:36px}.footer-brand{display:flex;align-items:flex-start;gap:13px}.footer-mark{background:linear-gradient(135deg,#635bff,#a78bfa);border:1px solid rgba(255,255,255,.25)}.footer-brand strong{font-size:17px}.footer-brand p{margin:7px 0;color:#cbd5e1;font-size:12px;line-height:1.7}.footer-contact h3{font-size:18px;margin-bottom:7px}.footer-contact p{margin:0 0 13px;color:#e2e8f0;font-size:13px;line-height:1.7}.footer-links{display:flex;flex-wrap:wrap;gap:8px}.footer-links a{color:#eef2ff;text-decoration:none;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.07);padding:8px 11px;border-radius:10px;font-size:12px;transition:.2s}.footer-links a:hover{background:rgba(139,92,246,.35);transform:translateY(-2px)}.footer-edit-note{display:block;margin-top:10px;color:#aab4ca;font-size:10px}.footer-bottom{max-width:1050px;margin:25px auto 0;padding:15px 0;border-top:1px solid rgba(255,255,255,.12);text-align:center;color:#aab4ca;font-size:11px}
 .auth-modal{position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.8);background:linear-gradient(160deg,#fff 0%,#fbfaff 100%);box-shadow:0 30px 90px rgba(20,20,60,.28);border-radius:28px!important;padding:30px!important}.auth-modal:before{content:"";position:absolute;left:0;top:0;right:0;height:6px;background:linear-gradient(90deg,#4f46e5,#8b5cf6,#c4b5fd)}.auth-modal h3{font-size:27px;letter-spacing:-.5px;margin:4px 0 6px}.auth-tabs{padding:5px;background:#eeedff;border:1px solid #e5e3ff;border-radius:15px}.auth-tab{padding:12px;border-radius:11px}.auth-tab.active{color:#4f46e5;box-shadow:0 5px 15px rgba(79,70,229,.12)}.auth-form{gap:9px}.auth-form label{font-size:12px;color:#344054;letter-spacing:.2px}.auth-form input{min-height:48px;border-radius:13px;border:1px solid #dfe3ee;background:#fff;padding:13px 14px}.auth-note{padding:10px 12px;border-radius:12px;background:#f4f5ff;color:#667085}.auth-form .btn-primary{box-shadow:0 8px 20px rgba(99,91,255,.24)}
-.subject-card{animation:floatCard 5.5s ease-in-out infinite;will-change:transform}.subject-card:nth-child(2n){animation-delay:-1.8s}.subject-card:nth-child(3n){animation-delay:-3.2s}.subject-card:hover{animation-play-state:paused;transform:translateY(-6px)}@keyframes floatCard{0%,100%{translate:0 0}50%{translate:0 -4px}}
-@media(max-width:700px){.topbar-inner{padding:10px 12px;gap:9px}.menu-trigger{width:40px;height:40px;flex-basis:40px;border-radius:13px}.brand{gap:8px;flex:1}.brand .seal{width:42px;height:42px;flex-basis:42px;border-radius:14px}.brand .seal span{font-size:20px}.brand-text{font-size:12px}.brand-sub{font-size:10px}.account-area{gap:5px}.account-btn{padding:10px 11px;min-height:41px;font-size:12px;border-radius:12px}.account-area #profileBtn,.account-area #adminBtn{display:none!important}.footer-inner{grid-template-columns:1fr;gap:20px}.site-footer{padding:27px 16px 0}.auth-modal{padding:26px 20px!important}.auth-modal h3{font-size:23px}}
+.subject-card{animation:floatCard 4.2s ease-in-out infinite;will-change:transform}.subject-card:nth-child(2n){animation-delay:-1.4s}.subject-card:nth-child(3n){animation-delay:-2.7s}.subject-card:hover{animation-play-state:paused;transform:translateY(-8px)}@keyframes floatCard{0%,100%{translate:0 0}50%{translate:0 -9px}}
+@media(max-width:700px){.topbar-inner{padding:10px 12px;gap:9px}.menu-trigger{width:40px;height:40px;flex-basis:40px;border-radius:13px}.brand{gap:8px;flex:1}.brand .seal{width:42px;height:42px;flex-basis:42px;border-radius:14px}.brand .seal span{font-size:20px}.brand-text{font-size:12px}.brand-sub{font-size:10px}.account-area{gap:5px}.account-btn{padding:10px 11px;min-height:41px;font-size:12px;border-radius:12px}.account-area #profileBtn:not([hidden]){display:inline-flex!important;max-width:112px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.account-area #profileBtn[hidden]{display:none!important}.account-area #adminBtn{display:none!important}.footer-inner{grid-template-columns:1fr;gap:20px}.site-footer{padding:27px 16px 0}.auth-modal{padding:26px 20px!important}.auth-modal h3{font-size:23px}}
 @media(prefers-reduced-motion:reduce){.subject-card{animation:none!important}*,*:before,*:after{scroll-behavior:auto!important;transition-duration:.01ms!important}}
 
 </style>
@@ -365,7 +365,7 @@ keyframes warningFloat{
       <div class="seal"><span>B</span><small>EXAM</small></div>
       <div>
         <div class="brand-text">Created By: AR Bijoy</div>
-        <div class="brand-sub" id="topSub">সাবজেক্ট বেছে নিয়ে পরীক্ষা শুরু করো</div>
+        <div class="brand-sub" id="topSub">Choose a subject to begin</div>
       </div>
     </div>
     <div class="account-area">
@@ -383,8 +383,8 @@ keyframes warningFloat{
     <button id="drawerDashboard"><span>▦</span> My Dashboard</button>
     <button id="drawerProfile"><span>♙</span> My Profile</button>
     <button id="drawerAdmin" hidden><span>🛡</span> Admin Dashboard</button>
-    <button id="drawerLeaderboard"><span>🏆</span> Leaderboard</button>
-    <button id="drawerLogin"><span>↪</span> Log in / Sign up</button>
+    <button id="drawerLeaderboard" hidden><span>🏆</span> Leaderboard</button>
+    <button id="drawerLogin"><span>↪</span> Sign in / Sign up</button>
     <button id="drawerLogout" hidden><span>⇥</span> Log out</button>
   </nav>
   <div class="drawer-foot">AR Bijoy Exam Center <span>Learn • Practice • Improve</span></div>
@@ -392,28 +392,28 @@ keyframes warningFloat{
 
 <div class="wrap">
 
-  <!-- স্ক্রিন ১: Subject লিস্ট -->
+  <!-- স্ক্রিন 1: Subject লিস্ট -->
   <section id="screen-subjects">
     <div class="lede">
-      <h2>তোমার Subject বেছে নাও</h2>
-      <p>প্রতিটা Subjectে বিভিন্ন Chapter এবং Exam আছে। তোমার পছন্দের Subject বেছে নাও।</p>
+      <h2>Choose Your Subject</h2>
+      <p>Each subject contains chapters and exams. Choose a subject to get started.</p>
     </div>
     <div class="subject-grid" id="subjectGrid"></div>
   </section>
 
-  <!-- স্ক্রিন ২: Chapter লিস্ট -->
+  <!-- স্ক্রিন 2: Chapter লিস্ট -->
   <section id="screen-chapters" hidden>
-    <button class="back-btn" id="backToSubjects">← Subjectে ফিরে যাও</button>
+    <button class="back-btn" id="backToSubjects">← Back to Subjects</button>
     <div class="lede">
       <h2 id="chapterSubjectName"></h2>
-      <p>নিচের Chapterগুলো থেকে একটি বেছে নাও</p>
+      <p>Choose a chapter below</p>
     </div>
     <div class="subject-grid" id="chapterGrid"></div>
   </section>
 
-  <!-- স্ক্রিন ২.৫: Chapter হাব — Exam দাও / স্টাডি ম্যাটেরিয়াল -->
+  <!-- স্ক্রিন 2.5: Chapter হাব — Take an Exam / Study Materials -->
   <section id="screen-chapterhub" hidden>
-    <button class="back-btn" id="backToChaptersFromHub">← Chapter লিস্টে ফিরে যাও</button>
+    <button class="back-btn" id="backToChaptersFromHub">← Back to Chapters</button>
     <div class="lede">
       <h2 id="hubChapterName"></h2>
       <p id="hubSubtitle"></p>
@@ -422,7 +422,7 @@ keyframes warningFloat{
       <button class="hub-card" id="hubGoExams">
         <div class="hub-icon hub-icon-exam"><i>📝</i></div>
         <div class="hub-text">
-          <h3 id="hubExamTitle">Exam দাও</h3>
+          <h3 id="hubExamTitle">Take an Exam</h3>
           <p id="hubExamCount"></p>
         </div>
         <div class="card-arrow">→</div>
@@ -430,7 +430,7 @@ keyframes warningFloat{
       <button class="hub-card" id="hubGoMaterials">
         <div class="hub-icon hub-icon-material"><i>📚</i></div>
         <div class="hub-text">
-          <h3>স্টাডি ম্যাটেরিয়াল</h3>
+          <h3>Study Materials</h3>
           <p id="hubMaterialCount"></p>
         </div>
         <div class="card-arrow">→</div>
@@ -438,28 +438,28 @@ keyframes warningFloat{
     </div>
   </section>
 
-  <!-- স্ক্রিন ৩: Exam লিস্ট -->
+  <!-- স্ক্রিন 3: Exam লিস্ট -->
   <section id="screen-exams" hidden>
-    <button class="back-btn" id="backToChapters">← Chapterে ফিরে যাও</button>
+    <button class="back-btn" id="backToChapters">← Back to Chapters</button>
     <div class="lede">
       <h2 id="examChapterName"></h2>
-      <p>নিচের Examগুলো থেকে একটি বেছে নাও</p>
+      <p>Choose an exam below</p>
     </div>
     <div class="subject-grid" id="examGrid"></div>
   </section>
 
-  <!-- স্ক্রিন ৩.৫: স্টাডি ম্যাটেরিয়াল (PDF/Video) -->
+  <!-- স্ক্রিন 3.5: Study Materials (PDF/Video) -->
   <section id="screen-materials" hidden>
-    <button class="back-btn" id="backToHubFromMaterials">← ফিরে যাও</button>
+    <button class="back-btn" id="backToHubFromMaterials">← Go Back</button>
     <div class="lede">
       <h2 id="materialsChapterName"></h2>
-      <p>নোট (PDF) পড়ো বা ডাউনলোড করো, ভিডিও দেখো</p>
+      <p>Read or download notes (PDF) and watch videos</p>
     </div>
     <div id="materialsList"></div>
   </section>
 
-  <!-- স্ক্রিন ৪: Exam চলাকালীন -->
-<!-- স্ক্রিন ৪: Exam চলাকালীন -->
+  <!-- স্ক্রিন 4: Exam চলাকালীন -->
+<!-- স্ক্রিন 4: Exam চলাকালীন -->
   <section id="screen-exam" hidden style="padding-top: 5px;">
     <div class="exam-sticky-header" style="padding: 6px 10px 4px; margin-bottom: 8px;">
       <div class="exam-head" style="margin-bottom: 6px;">
@@ -473,29 +473,29 @@ keyframes warningFloat{
     <div id="questionsContainer" style="margin-top: 5px;"></div>
 
     <div class="nav-row" style="margin-top: 10px; padding: 6px;">
-      <button class="btn btn-ghost" id="btnExitExam" style="color:#ef4444; border-color:rgba(239,68,68,0.3); padding: 8px 12px; min-height: 40px;">← হোম (Exit)</button>
+      <button class="btn btn-ghost" id="btnExitExam" style="color:#ef4444; border-color:rgba(239,68,68,0.3); padding: 8px 12px; min-height: 40px;">← Home (Exit)</button>
       <button class="btn btn-submit" id="btnSubmitExam" style="padding: 8px 16px; min-height: 40px;">Submit Exam ✓</button>
     </div>
   </section>
 
-  <!-- স্ক্রিন ৫: ফলাফল -->
+  <!-- স্ক্রিন 5: Results -->
   <section id="screen-result" hidden>
     <div class="score-card">
       <div class="result-icon" id="resultIcon">🏆</div>
-      <div class="score-big" id="scoreBig">০ / ০</div>
+      <div class="score-big" id="scoreBig">0 / 0</div>
       <div class="score-sub" id="scoreSub"></div>
       <div class="score-remark" id="scoreRemark"></div>
       <div class="result-stat-grid">
-        <div class="result-stat"><strong id="statCorrect">০</strong><span>Correct Answers</span></div>
-        <div class="result-stat"><strong id="statWrong">০</strong><span>Wrong Answers</span></div>
-        <div class="result-stat"><strong id="statPercent">০%</strong><span>Percentage</span></div>
+        <div class="result-stat"><strong id="statCorrect">0</strong><span>Correct Answers</span></div>
+        <div class="result-stat"><strong id="statWrong">0</strong><span>Wrong Answers</span></div>
+        <div class="result-stat"><strong id="statPercent">0%</strong><span>Percentage</span></div>
       </div>
     </div>
 
     <div class="action-row">
       <button class="btn btn-primary" id="btnCopyResult">Copy Result</button>
       <button class="btn btn-primary" id="btnLeaderboard">🏆 View Leaderboard</button>
-      <a class="btn" id="btnWhatsapp" href="#" target="_blank" rel="noopener" hidden>WhatsApp-এ পাঠাও</a>
+      <a class="btn" id="btnWhatsapp" href="#" target="_blank" rel="noopener" hidden>Share via WhatsApp</a>
       <button class="btn btn-ghost" id="btnHome">← Back to Home</button>
     </div>
 
@@ -511,10 +511,10 @@ keyframes warningFloat{
       <button class="btn btn-ghost" id="btnLogout">🚪 Log out</button>
     </div>
     <div class="profile-stats">
-      <div class="pstat"><strong id="profileTotal">০</strong><span>Total Exams</span></div>
-      <div class="pstat"><strong id="profilePassed">০</strong><span>Passed</span></div>
-      <div class="pstat"><strong id="profileFailed">০</strong><span>Failed</span></div>
-      <div class="pstat"><strong id="profileAvg">০%</strong><span>Average Score</span></div>
+      <div class="pstat"><strong id="profileTotal">0</strong><span>Total Exams</span></div>
+      <div class="pstat"><strong id="profilePassed">0</strong><span>Passed</span></div>
+      <div class="pstat"><strong id="profileFailed">0</strong><span>Failed</span></div>
+      <div class="pstat"><strong id="profileAvg">0%</strong><span>Average Score</span></div>
     </div>
     <div class="profile-card"><h3>📈 Performance Chart</h3><div class="chart-wrap"><canvas id="performanceChart"></canvas></div></div>
     <div class="profile-card"><h3>📋 Exam History</h3><div id="profileResults"></div></div>
@@ -529,25 +529,25 @@ keyframes warningFloat{
         <h2>Admin Dashboard</h2>
         <p>Monitor every user’s exams, performance, and account status.</p>
       </div>
-      <button class="btn btn-primary" id="adminRefreshBtn">↻ রিফ্রেশ</button>
+      <button class="btn btn-primary" id="adminRefreshBtn">↻ Refresh</button>
     </div>
     <div class="admin-stats">
-      <div class="admin-stat"><span>👥 Total Users</span><strong id="adminTotalUsers">০</strong></div>
-      <div class="admin-stat"><span>📝 Total Exams</span><strong id="adminTotalExams">০</strong></div>
-      <div class="admin-stat"><span>✅ Pass</span><strong id="adminTotalPass">০</strong></div>
-      <div class="admin-stat"><span>❌ Fail</span><strong id="adminTotalFail">০</strong></div>
-      <div class="admin-stat"><span>📈 Overall Average</span><strong id="adminOverallAvg">০%</strong></div>
-      <div class="admin-stat"><span>🚫 Blocked</span><strong id="adminBlockedUsers">০</strong></div>
+      <div class="admin-stat"><span>👥 Total Users</span><strong id="adminTotalUsers">0</strong></div>
+      <div class="admin-stat"><span>📝 Total Exams</span><strong id="adminTotalExams">0</strong></div>
+      <div class="admin-stat"><span>✅ Pass</span><strong id="adminTotalPass">0</strong></div>
+      <div class="admin-stat"><span>❌ Fail</span><strong id="adminTotalFail">0</strong></div>
+      <div class="admin-stat"><span>📈 Overall Average</span><strong id="adminOverallAvg">0%</strong></div>
+      <div class="admin-stat"><span>🚫 Blocked</span><strong id="adminBlockedUsers">0</strong></div>
     </div>
     <div class="profile-card admin-card">
-      <div class="admin-section-title"><div><h3>👥 User Performance</h3><p>প্রতিটি ইউজারের Total Exams, Pass, Fail ও Average score</p></div><span id="adminLoadStatus"></span></div>
+      <div class="admin-section-title"><div><h3>👥 User Performance</h3><p>Total exams, passes, fails, and average score for every user</p></div><span id="adminLoadStatus"></span></div>
       <div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>User</th><th>Exam</th><th>Pass</th><th>Fail</th><th>Average</th><th>Status</th><th>Action</th></tr></thead><tbody id="adminUsersBody"></tbody></table></div>
     </div>
     <div class="profile-card admin-card">
-      <div class="admin-section-title"><div><h3>🏆 Leaderboard</h3><p>কোনো Examর উত্তরপত্র দেখতে Exams section-এ ঢুকে Exam নির্বাচন করো।</p></div></div>
+      <div class="admin-section-title"><div><h3>🏆 Leaderboard</h3><p>To view an answer key, open a subject, choose a chapter, then select an exam.</p></div></div>
       <div class="admin-actions-grid">
-        <button class="admin-action-card" id="adminGoSubjects">📚<span>Exam / Answer Key</span><small>যেকোনো Examর Correct Answers দেখো</small></button>
-        <button class="admin-action-card" id="adminGoLeaderboard">🏆<span>Leaderboard</span><small>সর্বশেষ নির্বাচিত Examর leaderboard</small></button>
+        <button class="admin-action-card" id="adminGoSubjects">📚<span>Exam / Answer Key</span><small>View correct answers for any exam</small></button>
+        <button class="admin-action-card" id="adminGoLeaderboard">🏆<span>Leaderboard</span><small>Leaderboard for the most recently selected exam</small></button>
       </div>
     </div>
   </section>
@@ -555,13 +555,13 @@ keyframes warningFloat{
   <!-- লিডারবোর্ড পেজ (এই নির্দিষ্ট Examর) -->
   <section id="screen-leaderboard" hidden>
     <div class="lb-head">
-      <h2>🏆 লিডারবোর্ড</h2>
+      <h2>🏆 Leaderboard</h2>
       <p id="lbSubtitle"></p>
     </div>
     <div id="lbList"></div>
     <div class="action-row">
-      <button class="btn btn-ghost" id="btnBackToResult">← ফিরে যাও</button>
-      <button class="btn btn-ghost" id="btnClearLeaderboard" hidden>এই লিডারবোর্ড মুছে Failedো (শুধু admin)</button>
+      <button class="btn btn-ghost" id="btnBackToResult">← Go Back</button>
+      <button class="btn btn-ghost" id="btnClearLeaderboard" hidden>এই লিডারবোর্ড Clear leaderboard (Admin only)</button>
     </div>
   </section>
 
@@ -583,15 +583,15 @@ keyframes warningFloat{
 <footer class="site-footer">
   <div class="footer-inner">
     <div class="footer-brand"><div class="footer-mark">B</div><div><strong>AR Bijoy Exam Center</strong><p>Practice with confidence. Improve with every attempt.</p></div></div>
-    <div class="footer-contact"><h3>Need help?</h3><p>কোনো সমস্যা হলে যোগাযোগ করো — আমরা সাহায্য করার চেষ্টা করব।</p>
+    <div class="footer-contact"><h3>Need help?</h3><p>If you have any problems, please contact us. We will do our best to help.</p>
       <div class="footer-links">
-        <a href="https://facebook.com/" target="_blank" rel="noopener">ⓕ Facebook</a>
+        <a href="https://www.facebook.com/share/18FqGFkwdw/" target="_blank" rel="noopener">ⓕ Facebook</a>
         <a href="https://youtube.com/" target="_blank" rel="noopener">▶ YouTube</a>
-        <a href="https://instagram.com/" target="_blank" rel="noopener">◎ Instagram</a>
-        <a href="https://wa.me/8801000000000" target="_blank" rel="noopener">☏ WhatsApp</a>
-        <a href="mailto:your-email@example.com">✉ Email</a>
-        <a href="tel:+8801000000000">☎ +880 1000-000000</a>
-      </div><small class="footer-edit-note">Replace these sample links and phone number with your own contact details.</small>
+        <a href="https://l.facebook.com/l.php?u=https%3A%2F%2Fwww.instagram.com%2Far___bijoy%3Ffbclid%3DIwZXh0bgNhZW0CMTAAcGRvZgVicmlkETFHR0tWNTh4ek1CWms5OXRvc3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MgABHlWkLKhwHGGaEfcyMh1W8twFnGS723ZZOTwXULMgfO8IHUxE7vbrvd4u0xm5_aem_FcVdDolNM2QrRhZnIWzQ-Q&h=AUCNSju86lcPj2_2NeaNiyQr5V8pm-MtN9ASKIQybPLu5L4REM-e3MVnXzfa5c1__VSvhjFzwEp_3mwh_kYE7agB9lVypFZ-Vn-celBjtqls3XL29VaT2SaUmYY1Uojdn8z9" target="_blank" rel="noopener">◎ Instagram</a>
+        <a href="https://wa.me/8801995125480" target="_blank" rel="noopener">☏ WhatsApp</a>
+        <a href="mailto:your-arbijoy223@gmail.com">✉ Email</a>
+        <a href="tel:+8801995125480">☎ +8801995125480</a>
+      </div><small class="footer-edit-note"></small>
     </div>
   </div><div class="footer-bottom">© <span id="footerYear"></span> AR Bijoy Exam Center. All rights reserved.</div>
 </footer>
@@ -599,21 +599,21 @@ keyframes warningFloat{
 <!-- Authentication Modal -->
 <div class="modal-overlay" id="authModal" hidden>
   <div class="modal auth-modal">
-    <h3 id="authTitle">🔐 অ্যাকাউন্টে Log in</h3>
+    <h3 id="authTitle">🔐 Log in to your account</h3>
     <div class="auth-tabs"><button class="auth-tab active" id="authTabLogin">Log in</button><button class="auth-tab" id="authTabSignup">Sign up</button></div>
     <form class="auth-form" id="authForm">
       <label for="authUsername">Username</label>
       <input id="authUsername" type="text" autocomplete="username" placeholder="e.g. bijoy_123" minlength="3" maxlength="20" required>
       <label for="authPassword">Password</label>
       <input id="authPassword" type="password" autocomplete="current-password" placeholder="At least 6 characters" minlength="6" required>
-      <div class="auth-note">Username দিয়ে Log in হবে। Password তোমার সাইটে plain text হিসেবে রাখা হবে না—Supabase Auth এটি নিরাপদভাবে পরিচালনা করবে।</div>
+      <div class="auth-note">Sign in with your username. Your password should be secrete from others.</div>
       <div class="auth-error" id="authError"></div>
       <div class="modal-buttons"><button type="button" class="btn btn-ghost" id="authCancelBtn">Cancel</button><button type="submit" class="btn btn-primary" id="authSubmitBtn">Log in</button></div>
     </form>
   </div>
 </div>
 
-<!-- নাম ইনপুট মডাল -->
+<!-- Name input modal -->
 <div class="modal-overlay" id="confirmModal" hidden>
   <div class="modal confirm-modal">
     <p class="confirm-icon" id="confirmIcon">⚠️</p>
@@ -629,7 +629,7 @@ keyframes warningFloat{
   <div class="modal">
     <h3>Before you begin</h3>
     <label for="studentName">Enter your name</label>
-    <input id="studentName" type="text" placeholder="e.g. Alex" autocomplete="name">
+    <input id="studentName" type="text" placeholder="e.g. Bijoy" autocomplete="name">
     <div class="modal-buttons">
       <button class="btn btn-ghost" id="btnCancelName">Cancel</button>
       <button class="btn btn-primary" id="btnStartExam">Start Exam</button>
@@ -675,7 +675,7 @@ function cleanUsername(v){ return v.trim().toLowerCase(); }
 function validUsername(v){ return /^[a-z0-9_]{3,20}$/.test(v); }
 function authReady(){
   if(supabaseClient) return true;
-  toast("Supabase config এখনো বসানো হয়নি", "warning", 3500);
+  toast("Supabase configuration is missing", "warning", 3500);
   return false;
 }
 
@@ -688,7 +688,7 @@ function openAuthModal(mode="login", pending=null){
 function closeAuthModal(){ $("authModal").hidden=true; pendingExamAfterLogin=null; }
 function setAuthMode(mode){
   authMode=mode;
-  $("authTitle").textContent=mode==="login"?"🔐 অ্যাকাউন্টে Log in":"✨ Create your account";
+  $("authTitle").textContent=mode==="login"?"🔐 Log in to your account":"✨ Create your account";
   $("authSubmitBtn").textContent=mode==="login"?"Log in":"Sign up";
   $("authTabLogin").classList.toggle("active",mode==="login"); $("authTabSignup").classList.toggle("active",mode==="signup");
   $("authPassword").autocomplete=mode==="login"?"current-password":"new-password";
@@ -704,7 +704,7 @@ async function loadCurrentProfile(){
     currentProfile=null;
     await supabaseClient.auth.signOut();
     updateAccountUI();
-    toast("Profile লোড করা যায়নি। আবার Log in করো।", "error", 3500);
+    toast("Could not load your profile. Please log in again.", "error", 3500);
     return null;
   }
   currentProfile={user_id:user.id,username:data.username,is_admin:!!data.is_admin,blocked:!!data.blocked};
@@ -713,16 +713,28 @@ async function loadCurrentProfile(){
     currentProfile=null;
     await supabaseClient.auth.signOut();
     updateAccountUI();
-    toast("🚫 তোমার অ্যাকাউন্টটি Blocked হয়েছে।", "error", 4000);
+    toast("🚫 Your account has been blocked.", "error", 4000);
     return null;
   }
   updateAccountUI(); return currentProfile;
 }
 function updateAccountUI(){
   const logged=!!currentProfile;
+  const admin=!!(logged && currentProfile.is_admin);
   $("profileBtn").hidden=!logged;
-  $("adminBtn").hidden=!(logged && currentProfile.is_admin);
-  $("authActionBtn").textContent=logged?(currentProfile.is_admin?"👤 Admin":"👤 "+currentProfile.username):"🔐 Log in";
+  $("profileBtn").textContent=logged?"👤 "+currentProfile.username:"👤 Profile";
+  $("profileBtn").title=logged?"Open profile":"Profile";
+  $("adminBtn").hidden=!admin;
+  $("authActionBtn").textContent=logged?"↪ Log out":"🔐 Log in";
+  $("drawerName").textContent=logged?currentProfile.username:"Welcome";
+  $("drawerAvatar").textContent=logged?currentProfile.username.charAt(0).toUpperCase():"B";
+  $("drawerRole").textContent=admin?"Administrator":"AR Bijoy Exam Center";
+  $("drawerLogin").hidden=logged;
+  $("drawerLogout").hidden=!logged;
+  $("drawerDashboard").hidden=!logged;
+  $("drawerProfile").hidden=!logged;
+  $("drawerAdmin").hidden=!admin;
+  $("drawerLeaderboard").hidden=!admin;
 }
 
 async function handleAuthSubmit(e){
@@ -730,7 +742,7 @@ async function handleAuthSubmit(e){
   const username=cleanUsername($("authUsername").value); const password=$("authPassword").value;
   $("authError").textContent="";
   if(!validUsername(username)){ $("authError").textContent="Username must be 3–20 characters and use only a-z, 0-9, and underscore (_)."; return; }
-  if(password.length<6){ $("authError").textContent="Password At least 6 charactersের হতে হবে।"; return; }
+  if(password.length<6){ $("authError").textContent="Password must be at least 6 characters."; return; }
   $("authSubmitBtn").disabled=true;
   try{
     let result;
@@ -741,27 +753,27 @@ async function handleAuthSubmit(e){
       $("authError").textContent="Account created successfully। Supabase-এ Email Confirmations বন্ধ করলে username/password দিয়ে সরাসরি Log in হবে।";
       return;
     }
-    await loadCurrentProfile(); closeAuthModal(); toast(authMode==="login"?"👋 সফলভাবে Log in হয়েছে":"🎉 Account created successfully", "success", 2500);
+    await loadCurrentProfile(); closeAuthModal(); toast(authMode==="login"?"👋 Logged in successfully":"🎉 Account created successfully", "success", 2500);
     if(pendingExamAfterLogin){ const p=pendingExamAfterLogin; pendingExamAfterLogin=null; state.selectedExam=p.exam; startExam(); }
-  }catch(err){ console.error(err); $("authError").textContent=err.message||"Log in করা যায়নি।"; }
+  }catch(err){ console.error(err); $("authError").textContent=err.message||"Unable to log in."; }
   finally{ $("authSubmitBtn").disabled=false; }
 }
 
 async function logoutUser(){
   if(!supabaseClient) return;
-  await supabaseClient.auth.signOut(); currentProfile=null; state.studentName=null; updateAccountUI(); toast("👋 Log out হয়েছে","info"); hideAllScreens(); $("screen-subjects").hidden=false; $("topSub").textContent="Choose a subject to begin";
+  await supabaseClient.auth.signOut(); currentProfile=null; state.studentName=null; updateAccountUI(); toast("👋 Logged out successfully","info"); hideAllScreens(); $("screen-subjects").hidden=false; $("topSub").textContent="Choose a subject to begin";
 }
 
 // const examData = { ... };
 const examData = {
   "আইসিটি": {
-  chapters: {
-    "Chapter ২: সংখ্যা পদ্ধতি ও ডিজিটাল ডিভাইস": {
-      exams: {
+ chapters: {
+    "Chapter 2: সংখ্যা পদ্ধতি ও ডিজিটাল ডিভাইস": {
+     exams: {
 
-        "Exam ১": {
+        "Exam 1": {
           examTime: 25,
-          questions: [
+         questions: [
             { q: "সংখ্যা প্রকাশ ও গণনার নির্দিষ্ট নিয়মকে কী বলে?", options: ["সংখ্যা পদ্ধতি","কোড","অ্যালগরিদম","লজিক"], answer: 0 },
             { q: "পজিশনাল সংখ্যা পদ্ধতিতে কোনো অঙ্কের মান কোন বিষয়ের ওপর নির্ভর করে?", options: ["শুধু অঙ্কের ওপর","শুধু বেজের ওপর","অঙ্কের অবস্থান ও বেজের ওপর","শুধু সংখ্যার দৈর্ঘ্যের ওপর"], answer: 2 },
             { q: "বাইনারি সংখ্যা পদ্ধতির ভিত্তি কত?", options: ["2","8","10","16"], answer: 0 },
@@ -797,9 +809,9 @@ const examData = {
           ]
         },
 
-        "Exam ২": {
+        "Exam 2": {
           examTime: 25,
-          questions: [
+         questions: [
             { q: "দশমিক 12-এর বাইনারি মান কত?", options: ["1010","1011","1100","1101"], answer: 2 },
             { q: "দশমিক 20-এর বাইনারি মান কত?", options: ["10100","10010","11000","11100"], answer: 0 },
             { q: "দশমিক 32-এর বাইনারি মান কত?", options: ["100000","10000","110000","11111"], answer: 0 },
@@ -835,9 +847,9 @@ const examData = {
           ]
         },
 
-        "Exam ৩": {
+        "Exam 3": {
           examTime: 25,
-          questions: [
+         questions: [
             { q: "1's complement পদ্ধতিতে 0-এর পরিবর্তে কী বসানো হয়?", options: ["0","1","2","10"], answer: 1 },
             { q: "1's complement নির্ণয়ে 1-এর পরিবর্তে কী বসানো হয়?", options: ["0","1","2","10"], answer: 0 },
             { q: "101010-এর 1's complement কত?", options: ["010101","101010","010110","110101"], answer: 0 },
@@ -876,14 +888,14 @@ const examData = {
       }
     },
     "তথ্য ও যোগাযোগ প্রযুক্তি: বিশ্ব ও বাংলাদেশ প্রেক্ষিত": {
-      exams: {
-        "Exam ১ (বোর্ড প্রশ্নভিত্তিক)": {
+     exams: {
+        "Exam 1 (বোর্ড প্রশ্নভিত্তিক)": {
           examTime: 20,
-          questions: [
+         questions: [
             { q: "ICT শব্দের পূর্ণরূপ কী?", options: ["Information and Communication Technology","Internet and Computer Technology","Information and Computer Transfer","Integrated Communication Terminal"], answer: 0 },
             { q: "তথ্য ও যোগাযোগ প্রযুক্তির মূল ভিত্তি হিসেবে নিচের কোনটিকে ধরা হয়?", options: ["কম্পিউটার ও টেলিযোগাযোগ প্রযুক্তির সমন্বয়","শুধু ইন্টারনেট","শুধু মোবাইল ফোন","শুধু সফটওয়্যার"], answer: 0 },
-            { q: "বাংলাদেশ সরকার কোন সালকে 'ডিজিটাল বাংলাদেশ' গড়ার লক্ষ্যমাত্রা হিসেবে ঘোষণা করেছিল?", options: ["২০১৫","২০২১","২০২৫","২০৩০"], answer: 1 },
-            { q: "ডিজিটাল বাংলাদেশের মূল স্তম্ভ কয়টি?", options: ["২টি","৩টি","৪টি","৫টি"], answer: 2 },
+            { q: "বাংলাদেশ সরকার কোন সালকে 'ডিজিটাল বাংলাদেশ' গড়ার লক্ষ্যমাত্রা হিসেবে ঘোষণা করেছিল?", options: ["2015","2021","2025","2030"], answer: 1 },
+            { q: "ডিজিটাল বাংলাদেশের মূল স্তম্ভ কয়টি?", options: ["2টি","3টি","4টি","5টি"], answer: 2 },
             { q: "ডিজিটাল বাংলাদেশের চারটি স্তম্ভের মধ্যে নেই কোনটি?", options: ["মানবসম্পদ উন্নয়ন","ই-গভর্ন্যান্স","সামরিক শক্তি বৃদ্ধি","সিটিজেন সার্ভিস"], answer: 2 },
             { q: "সরকারি সেবা অনলাইনে দ্রুত ও স্বচ্ছভাবে প্রদান করাকে কী বলে?", options: ["ই-কমার্স","ই-গভর্ন্যান্স","ই-লার্নিং","ই-মেইল"], answer: 1 },
             { q: "দূরবর্তী স্থান থেকে চিকিৎসকের পরামর্শ নেওয়ার প্রযুক্তিকে কী বলা হয়?", options: ["টেলিমেডিসিন","টেলিকনফারেন্স","রোবটিক্স","বায়োমেট্রিক্স"], answer: 0 },
@@ -907,15 +919,15 @@ const examData = {
   }
 },
   "জীববিজ্ঞান": {
-  chapters: {
+ chapters: {
 
-    "Chapter ৮: মানব শারীরতত্ত্ব : সমন্বয় ও নিয়ন্ত্রণ": {
+    "Chapter 8: মানব শারীরতত্ত্ব : সমন্বয় ও নিয়ন্ত্রণ": {
 
-      exams: {
+     exams: {
 
-        "Exam ১": {
+        "Exam 1": {
           examTime: 15,
-          questions: [
+         questions: [
 
             {
               q: "মানবদেহের বিভিন্ন অঙ্গের কাজের মধ্যে সুষ্ঠু সমন্বয় সাধনকে কী বলে?",
@@ -973,7 +985,7 @@ const examData = {
 
             {
               q: "মানুষের অক্ষিগোলকের স্তর কয়টি?",
-              options: ["২টি", "৩টি", "৪টি", "৫টি"],
+              options: ["2টি", "3টি", "4টি", "5টি"],
               answer: 1
             },
 
@@ -1101,9 +1113,9 @@ const examData = {
         },
 
 
-        "Exam ২": {
+        "Exam 2": {
           examTime: 15,
-          questions: [
+         questions: [
 
             {
               q: "মস্তিষ্কের কোন অংশ চিন্তা, স্মৃতি ও বুদ্ধিবৃত্তিক কাজের সঙ্গে বেশি সম্পর্কিত?",
@@ -1289,9 +1301,9 @@ const examData = {
         },
 
 
-        "Exam ৩": {
+        "Exam 3": {
           examTime: 15,
-          questions: [
+         questions: [
 
             {
               q: "মস্তিষ্কের কোন অংশ দেহের তাপমাত্রা নিয়ন্ত্রণে গুরুত্বপূর্ণ?",
@@ -1313,13 +1325,13 @@ const examData = {
 
             {
               q: "করোটিক স্নায়ু কয় জোড়া?",
-              options: ["১০ জোড়া", "১২ জোড়া", "২৪ জোড়া", "৩১ জোড়া"],
+              options: ["10 জোড়া", "12 জোড়া", "24 জোড়া", "31 জোড়া"],
               answer: 1
             },
 
             {
               q: "মেরুরজ্জু থেকে উৎপন্ন স্নায়ু কয় জোড়া?",
-              options: ["১২ জোড়া", "২৪ জোড়া", "৩১ জোড়া", "৪৩ জোড়া"],
+              options: ["12 জোড়া", "24 জোড়া", "31 জোড়া", "43 জোড়া"],
               answer: 2
             },
 
@@ -1487,12 +1499,12 @@ const examData = {
   }
 },
   "রসায়ন": {
-    chapters: {
-          "Chapter ২: গুণগত রসায়ন": {
-        exams: {
-          "Exam ১": {
+   chapters: {
+          "Chapter 2: গুণগত রসায়ন": {
+       exams: {
+          "Exam 1": {
             examTime: 25,
-            questions: [
+           questions: [
               { q: "রাদারফোর্ডের পরমাণু মডেলের প্রধান বৈশিষ্ট্য কোনটি?", options: ["ইলেকট্রন নির্দিষ্ট শক্তিস্তরে থাকে","পরমাণুর অধিকাংশ স্থান ফাঁকা","ইলেকট্রন নিউক্লিয়াসের ভিতরে থাকে","নিউট্রন নেই"], answer: 1 },
               { q: "রাদারফোর্ডের আলফা কণা বিচ্ছুরণ Examয় অধিকাংশ আলফা কণা কী করেছিল?", options: ["সম্পূর্ণ প্রতিফলিত হয়েছিল","নিউক্লিয়াসে আটকে গিয়েছিল","সোজা পথে চলে গিয়েছিল","শোষিত হয়েছিল"], answer: 2 },
               { q: "রাদারফোর্ডের Examয় খুব অল্পসংখ্যক আলফা কণা বড় কোণে বিচ্যুত হওয়ার কারণ কী?", options: ["ইলেকট্রনের আকর্ষণ","নিউক্লিয়াসের উপস্থিতি","নিউট্রনের বিকর্ষণ","পরমাণুর ফাঁকা স্থান"], answer: 1 },
@@ -1526,9 +1538,9 @@ const examData = {
             ]
           },
 
-          "Exam ২": {
+          "Exam 2": {
             examTime: 25,
-            questions: [
+           questions: [
               { q: "n = 4 হলে l-এর সর্বোচ্চ মান কত?", options: ["2","3","4","5"], answer: 1 },
               { q: "l = 0 হলে কোন উপশক্তিস্তর নির্দেশ করে?", options: ["s","p","d","f"], answer: 0 },
               { q: "l = 1 হলে কোন উপশক্তিস্তর নির্দেশ করে?", options: ["s","p","d","f"], answer: 1 },
@@ -1561,9 +1573,9 @@ const examData = {
               { q: "হুন্ডের নীতি কোন ধরনের অরবিটাল পূরণের ক্ষেত্রে গুরুত্বপূর্ণ?", options: ["সমশক্তির অরবিটাল","শুধু s অরবিটাল","নিউক্লিয়াস","শুধু K শেল"], answer: 0 }
             ]
           },
-           "Exam ৩": {
+           "Exam 3": {
             examTime: 25,
-            questions: [
+           questions: [
               { q: "নির্দিষ্ট তাপমাত্রায় নির্দিষ্ট পরিমাণ দ্রাবকে সর্বোচ্চ যে পরিমাণ দ্রব দ্রবীভূত হয়ে সম্পৃক্ত দ্রবণ তৈরি করে তাকে কী বলে?", options: ["দ্রাব্যতা","দ্রাবক","দ্রব","দ্রাব্যতা গুণফল"], answer: 0 },
               { q: "স্বল্প দ্রাব্য লবণের সম্পৃক্ত দ্রবণে আয়নগুলোর ঘনমাত্রার গুণফলকে কী বলে?", options: ["আয়নিক গুণফল","দ্রাব্যতা গুণফল","দ্রাব্যতা","আয়নীকরণ শক্তি"], answer: 1 },
               { q: "দ্রাব্যতা গুণফলের প্রতীক কোনটি?", options: ["Ka","Kb","Ksp","Kw"], answer: 2 },
@@ -1597,9 +1609,9 @@ const examData = {
             ]
           },
 
-          "Exam ৪": {
+          "Exam 4": {
             examTime: 25,
-            questions: [
+           questions: [
               { q: "আয়ন শনাক্তকরণ কোন ধরনের বিশ্লেষণের অন্তর্ভুক্ত?", options: ["গুণগত বিশ্লেষণ","পরিমাণগত বিশ্লেষণ","তাপীয় বিশ্লেষণ","ভৌত বিশ্লেষণ"], answer: 0 },
               { q: "ধনাত্মক আয়নকে কী বলা হয়?", options: ["অ্যানায়ন","ক্যাটায়ন","র‌্যাডিক্যাল","ইলেকট্রন"], answer: 1 },
               { q: "ঋণাত্মক আয়নকে কী বলা হয়?", options: ["ক্যাটায়ন","অ্যানায়ন","প্রোটন","নিউট্রন"], answer: 1 },
@@ -1634,12 +1646,12 @@ const examData = {
           }
         }
       },
-       "Chapter ৩: পরিমাণগত রসায়ন": {
-      exams: {
+       "Chapter 3: পরিমাণগত রসায়ন": {
+     exams: {
 
-        "Exam ১": {
+        "Exam 1": {
           examTime: 25,
-          questions: [
+         questions: [
 
             {
               q: "0.5 M NaOH দ্রবণের 200 mL-এ NaOH-এর মোল সংখ্যা কত?",
@@ -1864,9 +1876,9 @@ const examData = {
           ]
         },
 
-        "Exam ২": {
+        "Exam 2": {
           examTime: 25,
-          questions: [
+         questions: [
 
             {
               q: "0.2 M HCl-এর 250 mL-এ HCl-এর মোল সংখ্যা কত?",
@@ -2101,9 +2113,9 @@ const examData = {
           ]
         },
 
-        "Exam ৩": {
+        "Exam 3": {
           examTime: 25,
-          questions: [
+         questions: [
 
             {
               q: "মোলালিটির সংজ্ঞা কোনটি সঠিক?",
@@ -2348,13 +2360,13 @@ const examData = {
     }
   },
 "পদার্থবিজ্ঞান": {
-  chapters: {
-    "Chapter ২: ভেক্টর": {
-      exams: {
+ chapters: {
+    "Chapter 2: ভেক্টর": {
+     exams: {
 
-        "Exam ১": {
+        "Exam 1": {
           examTime: 25,
-          questions: [
+         questions: [
             {
               q: "নিচের কোনটি স্কেলার রাশি?",
               options: ["বেগ", "সরণ", "দ্রুতি", "ত্বরণ"],
@@ -2508,9 +2520,9 @@ const examData = {
           ]
         },
 
-        "Exam ২": {
+        "Exam 2": {
           examTime: 25,
-          questions: [
+         questions: [
             {
               q: "দুটি ভেক্টরের লব্ধির সূত্র কোনটি?",
               options: ["R²=A²+B²+2AB cosθ", "R=A+B+θ", "R²=A²-B²", "R=AB sinθ"],
@@ -2664,9 +2676,9 @@ const examData = {
           ]
         },
 
-        "Exam ৩": {
+        "Exam 3": {
           examTime: 25,
-          questions: [
+         questions: [
             {
               q: "A⃗ = 2î+3ĵ+6k̂ হলে |A⃗| কত?",
               options: ["5", "6", "7", "11"],
@@ -2819,9 +2831,9 @@ const examData = {
             }
           ]
         },
-        "Exam -৪ ***": {
+        "Exam -4 ***": {
   examTime: 25,
-  questions: [
+ questions: [
     {
       q: "P ও Q দুটি ভেক্টরের মধ্যবর্তী কোণ α হলে তাদের লব্ধির মান কোনটি?",
       options: [
@@ -3044,14 +3056,14 @@ const examData = {
     }
   }
 },
-  "ম্যাথ ১ম পত্র": {
-  chapters: {
-    "Chapter ১: ম্যাট্রিক্স ও নির্ণায়ক": {
-      exams: {
+  "ম্যাথ 1ম পত্র": {
+ chapters: {
+    "Chapter 1: ম্যাট্রিক্স ও নির্ণায়ক": {
+     exams: {
 
-        "Exam ১": {
+        "Exam 1": {
           examTime: 30,
-          questions: [
+         questions: [
             { q: "ম্যাট্রিক্স কী?", options: ["সংখ্যাগুলোকে সারি ও কলামে সাজানো আয়তাকার বিন্যাস","শুধু একটি সংখ্যা","একটি সমীকরণ","একটি জ্যামিতিক চিত্র"], answer: 0 },
             { q: "যে ম্যাট্রিক্সের একটি মাত্র সারি থাকে তাকে কী বলে?", options: ["Column matrix","Row matrix","Square matrix","Null matrix"], answer: 1 },
             { q: "যে ম্যাট্রিক্সের একটি মাত্র কলাম থাকে তাকে কী বলে?", options: ["Row matrix","Column matrix","Unit matrix","Zero matrix"], answer: 1 },
@@ -3087,9 +3099,9 @@ const examData = {
           ]
         },
 
-        "Exam ২": {
+        "Exam 2": {
           examTime: 30,
-          questions: [
+         questions: [
             { q: "det(A) = 5 হলে det(Aᵀ) কত?", options: ["−5","0","5","25"], answer: 2 },
             { q: "det(A) = 3 হলে det(2A) একটি 2 × 2 matrix-এর ক্ষেত্রে কত?", options: ["6","9","12","24"], answer: 2 },
             { q: "একটি determinant-এর দুটি সারি পরস্পর সমান হলে determinant-এর মান কত?", options: ["1","−1","0","2"], answer: 2 },
@@ -3125,10 +3137,10 @@ const examData = {
           ]
         },
 
-        "Exam ৩": {
+        "Exam 3": {
           examTime: 30,
-          questions: [
-            { q: "3 × 3 determinant-এর একটি উপাদানের minor কী?", options: ["উপাদানটি বাদ দিয়ে অবশিষ্ট 2×2 determinant","উপাদানটির দ্বিগুণ","পুরো determinant","শুধু সারির যোগফল"], answer: 0 },
+         questions: [
+            { q: "3 × 3 determinant-এর একটি উপাদানের মিনিটor কী?", options: ["উপাদানটি বাদ দিয়ে অবশিষ্ট 2×2 determinant","উপাদানটির দ্বিগুণ","পুরো determinant","শুধু সারির যোগফল"], answer: 0 },
             { q: "Cofactor নির্ণয়ের সূত্র কোনটি?", options: ["Cᵢⱼ = Mᵢⱼ","Cᵢⱼ = (−1)ⁱ⁺ʲ Mᵢⱼ","Cᵢⱼ = i+j","Cᵢⱼ = Mᵢⱼ²"], answer: 1 },
             { q: "Cofactor-এর sign pattern কী?", options: ["সব +","+ − + / − + − / + − +","সব −","+ + − / − − +"], answer: 1 },
             { q: "3 × 3 determinant-এর প্রথম সারি দিয়ে expansion করলে কয়টি term থাকে?", options: ["2","3","4","6"], answer: 1 },
@@ -3173,26 +3185,26 @@ const examData = {
 const TEACHER_WHATSAPP_NUMBER = "8801995125480"; 
 
 /* ================================================================
-   স্টাডি ম্যাটেরিয়াল (PDF নোট ও ভিডিও) — Chapter অনুযায়ী
+   Study Materials (PDF Notes ও ভিডিও) — Chapter অনুযায়ী
    ================================================================
    - subject ও chapter-এর নাম examData-র সাথে হুবহু মিলতে হবে (বানান,
-     স্পেস, কোলন সব মিলিয়ে), নাহলে ম্যাটেরিয়াল সাইটে দেখাবে না
+     স্পেস, কোলন সব মিলিয়ে), নাহলে Materials সাইটে দেখাবে না
    - type: "pdf" হলে url-এ সরাসরি ফাইলের লিংক দাও (GitHub raw লিংক)
    - type: "video" হলে youtubeId-তে ভিডিও আইডি, পুরো লিংক (youtu.be/
      বা watch?v=, si= সহ হলেও সমস্যা নেই), বা পুরো embed কোড — যেকোনোটা
-     দিলেই চলবে, সাইট নিজে থেকে সঠিক আইডিটা বের করে নেবে
+     দিলেই চলবে, সাইট নিজে থেকে Correct আইডিটা বের করে নেবে
    - [!] একটা chapter-এ একাধিক PDF বা একাধিক Video যোগ করতে চাইলে,
      [ ] এর ভেতরে শুধু আরেকটা { ... } বসিয়ে কমা দিয়ে যোগ করো — নিচে
-     "Chapter ২"-এ দুটো PDF আর দুটো Video দিয়ে উদাহরণ দেওয়া আছে
+     "Chapter 2"-এ দুটো PDF আর দুটো Video দিয়ে উদাহরণ দেওয়া আছে
    - এখন demo লিংক বসানো আছে, আসল লিংক দিয়ে বদলে নিও
 ================================================================ */
 const materialsData = {
   "আইসিটি": {
-    "Chapter ২: সংখ্যা পদ্ধতি ও ডিজিটাল ডিভাইস": [
-    //  { type:"pdf", title:"Chapterের নোট — ১ম অংশ (demo)", url:"https://raw.githubusercontent.com/username/repo/main/materials/demo-note-1.pdf" },
-     // { type:"pdf", title:"Chapterের নোট — ২য় অংশ (demo)", url:"https://raw.githubusercontent.com/username/repo/main/materials/demo-note-2.pdf" },
-      { type:"video", title:"Chapterের ভিডিও — পার্ট ১ ", youtubeId:"https://youtu.be/6jnR74aAwx8?si=PvgQQ16cHJaNZF8J" },
-     // { type:"video", title:"Chapterের ভিডিও — পার্ট ২ (demo)", youtubeId:"dQw4w9WgXcQ" }
+    "Chapter 2: সংখ্যা পদ্ধতি ও ডিজিটাল ডিভাইস": [
+    //  { type:"pdf", title:"Chapterের নোট — 1ম অংশ (demo)", url:"https://raw.githubusercontent.com/username/repo/main/materials/demo-note-1.pdf" },
+     // { type:"pdf", title:"Chapterের নোট — 2য় অংশ (demo)", url:"https://raw.githubusercontent.com/username/repo/main/materials/demo-note-2.pdf" },
+      { type:"video", title:"Chapterের ভিডিও — পার্ট 1 ", youtubeId:"https://youtu.be/6jnR74aAwx8?si=PvgQQ16cHJaNZF8J" },
+     // { type:"video", title:"Chapterের ভিডিও — পার্ট 2 (demo)", youtubeId:"dQw4w9WgXcQ" }
     ],
     "তথ্য ও যোগাযোগ প্রযুক্তি: বিশ্ব ও বাংলাদেশ প্রেক্ষিত": [
       { type:"pdf", title:"Chapterের নোট (PDF)", url:"https://raw.githubusercontent.com/arbijoy223/Materials/main/ICT/%E0%A7%A7%E0%A6%AE%20%E0%A6%85%E0%A6%A7%E0%A7%8D%E0%A6%AF%E0%A6%BE%E0%A7%9F/ict-1st%20chapter.pdf" },
@@ -3200,31 +3212,31 @@ const materialsData = {
     ]
   },
   "জীববিজ্ঞান": {
-    "Chapter ৮: মানব শারীরতত্ত্ব : সমন্বয় ও নিয়ন্ত্রণ": [
+    "Chapter 8: মানব শারীরতত্ত্ব : সমন্বয় ও নিয়ন্ত্রণ": [
       { type:"pdf", title:"Chapterের নোট (demo — নিজের লিংক দিয়ে বদলাও)", url:"https://raw.githubusercontent.com/username/repo/main/materials/demo-note.pdf" },
       { type:"video", title:"Chapterের ভিডিও (demo — নিজের লিংক/আইডি দিয়ে বদলাও)", youtubeId:"" }
     ]
   },
   "রসায়ন": {
-    "Chapter ২: গুণগত রসায়ন": [
+    "Chapter 2: গুণগত রসায়ন": [
       { type:"pdf", title:"Chapterের নোট (demo — নিজের লিংক দিয়ে বদলাও)", url:"https://raw.githubusercontent.com/username/repo/main/materials/demo-note.pdf" },
       { type:"video", title:"Chapterের ভিডিও (demo — নিজের লিংক/আইডি দিয়ে বদলাও)", youtubeId:"" }
     ],
-    "Chapter ৩: পরিমাণগত রসায়ন": [
+    "Chapter 3: পরিমাণগত রসায়ন": [
       { type:"pdf", title:"Chapterের নোট (PDF)", url:"https://raw.githubusercontent.com/arbijoy223/Materials/main/Chemistry-2nd%20papaer/%E0%A6%AA%E0%A6%B0%E0%A6%BF%E0%A6%AE%E0%A6%BE%E0%A6%A8%E0%A6%97%E0%A6%A4%20%E0%A6%B0%E0%A6%B8%E0%A6%BE%E0%A7%9F%E0%A6%A8.pdf" },
       { type:"video", title:"Chapterের ব্যাখ্যা ভিডিও", youtubeId:"https://youtu.be/e5daed87jRs?si=xpTkMLow7f2Tt6Ag" }
     ]
   },
   "পদার্থবিজ্ঞান": {
-    "Chapter ২: ভেক্টর": [
+    "Chapter 2: ভেক্টর": [
       { type:"pdf", title:"Chapterের নোট (demo — নিজের লিংক দিয়ে বদলাও)", url:"https://raw.githubusercontent.com/username/repo/main/materials/demo-note.pdf" },
      // { type:"video", title:"Chapterের ভিডিও (demo — নিজের লিংক/আইডি দিয়ে বদলাও)", youtubeId:"" }
     ]
   },
-  "ম্যাথ ১ম পত্র": {
-    "Chapter ১: ম্যাট্রিক্স ও নির্ণায়ক": [
-      { type:"pdf", title:"Chapter ১ — নোট", url:"https://raw.githubusercontent.com/username/repo/main/materials/math/chapter1/note.pdf" },
-      { type:"video", title:"Chapter ১ — ব্যাখ্যা ভিডিও", youtubeId:"" }
+  "ম্যাথ 1ম পত্র": {
+    "Chapter 1: ম্যাট্রিক্স ও নির্ণায়ক": [
+      { type:"pdf", title:"Chapter 1 — নোট", url:"https://raw.githubusercontent.com/username/repo/main/materials/math/chapter1/note.pdf" },
+      { type:"video", title:"Chapter 1 — ব্যাখ্যা ভিডিও", youtubeId:"" }
     ]
   }
 };
@@ -3247,7 +3259,7 @@ let state = {
    ফোনের ব্যাক বাটন চাপলে যেন সাইট থেকে বের হয়ে না যায়, বরং
    আগের স্ক্রিনে ফিরে আসে — তার জন্য ব্রাউজার History API ব্যবহার
    করা হচ্ছে। প্রতিটা নতুন স্ক্রিনে গেলে pushScreen() কল হয়, আর
-   ফোনের ব্যাক বাটন চাপলে popstate ইভেন্ট ধরে সঠিক স্ক্রিন দেখানো হয়।
+   ফোনের ব্যাক বাটন চাপলে popstate ইভেন্ট ধরে Correct স্ক্রিন দেখানো হয়।
 ================================================================ */
 let historyNavInProgress = false;
 function pushScreen(name, extra){
@@ -3296,8 +3308,8 @@ function toast(msg, type="info", duration=2800){
 }
 
 function bnNum(n){
-  const map = {"0":"০","1":"১","2":"২","3":"৩","4":"৪","5":"৫","6":"৬","7":"৭","8":"৮","9":"৯"};
-  return String(n).split("").map(c=>map[c]!==undefined?map[c]:c).join("");
+  // Keep all interface numbers in Western/English digits.
+  return String(n).replace(/[\u09E6-\u09EF]/g, d => String(d.charCodeAt(0) - 0x09E6));
 }
 
 function hideAllScreens(){
@@ -3315,7 +3327,7 @@ function hideAllScreens(){
   $("screen-answerkey").hidden = true;
 }
 
-// ১. Subject লিস্ট রেন্ডার
+// 1. Subject লিস্ট রেন্ডার
 function renderSubjects(){
   const grid = $("subjectGrid");
   grid.innerHTML = "";
@@ -3336,7 +3348,7 @@ function renderSubjects(){
     card.innerHTML = `
       <div class="card-icon">${icons[name] || "📚"}</div>
       <h3>${name}${showBadge ? ' <span class="new-badge">NEW</span>' : ''}</h3>
-      <div class="subject-meta"><span class="pill">${bnNum(chapterCount)}টি Chapter</span></div>
+      <div class="subject-meta"><span class="pill">${bnNum(chapterCount)} chapters</span></div>
       <div class="card-arrow">→</div>`;
     card.addEventListener("click", ()=>showChapters(name));
     grid.appendChild(card);
@@ -3349,12 +3361,12 @@ function renderSubjects(){
           b.classList.add("fade-out");
           setTimeout(()=> b.remove(), 400);
         }
-      }, 10000); // ১০ সেকেন্ড পর মুছে যাবে
+      }, 10000); // 10 সেকেন্ড পর মুছে যাবে
     }
   });
 }
 
-// ২. Chapter লিস্ট দেখানো
+// 2. Chapter লিস্ট দেখানো
 function showChapters(subject){
   state.selectedSubject = subject;
   hideAllScreens();
@@ -3373,7 +3385,7 @@ function showChapters(subject){
     card.innerHTML = `
       <div class="card-icon">📚</div>
       <h3>${chapterName}</h3>
-      <div class="subject-meta"><span class="pill">${bnNum(examCount)}টি Exam</span></div>
+      <div class="subject-meta"><span class="pill">${bnNum(examCount)} exams</span></div>
       <div class="card-arrow">→</div>`;
     card.addEventListener("click", ()=>showChapterHub(subject, chapterName));
     grid.appendChild(card);
@@ -3381,7 +3393,7 @@ function showChapters(subject){
   pushScreen("chapters", {subject});
 }
 
-// ২.৫ Chapter হাব — Exam দাও / স্টাডি ম্যাটেরিয়াল বেছে নেওয়ার পেজ
+// 2.5 Chapter হাব — Take an Exam / Study Materials বেছে নেওয়ার পেজ
 function showChapterHub(subject, chapter){
   state.selectedSubject = subject;
   state.selectedChapter = chapter;
@@ -3393,9 +3405,9 @@ function showChapterHub(subject, chapter){
 
   const examCount = Object.keys(examData[subject].chapters[chapter].exams).length;
   const materialCount = (materialsData[subject] && materialsData[subject][chapter]) ? materialsData[subject][chapter].length : 0;
-  $("hubExamCount").textContent = isAdmin() ? `${bnNum(examCount)}টি উত্তরপত্র` : `${bnNum(examCount)}টি Exam`;
-  $("hubMaterialCount").textContent = materialCount > 0 ? `${bnNum(materialCount)}টি ফাইল (PDF/ভিডিও)` : "এখনো যোগ করা হয়নি";
-  $("hubExamTitle").textContent = isAdmin() ? "উত্তরপত্র দেখো" : "Exam দাও";
+  $("hubExamCount").textContent = isAdmin() ? `${bnNum(examCount)} answer keys` : `${bnNum(examCount)} exams`;
+  $("hubMaterialCount").textContent = materialCount > 0 ? `${bnNum(materialCount)} files (PDF/video)` : "Not added yet";
+  $("hubExamTitle").textContent = isAdmin() ? "View Answer Key" : "Take an Exam";
 
   pushScreen("chapterhub", {subject, chapter});
 }
@@ -3404,7 +3416,7 @@ $("hubGoExams").addEventListener("click", ()=> showExams(state.selectedSubject, 
 $("hubGoMaterials").addEventListener("click", ()=> showMaterials(state.selectedSubject, state.selectedChapter));
 $("backToChaptersFromHub").addEventListener("click", ()=> showChapters(state.selectedSubject));
 
-// ৩. Exam লিস্ট দেখানো
+// 3. Exam লিস্ট দেখানো
 function showExams(subject, chapter){
   state.selectedChapter = chapter;
   hideAllScreens();
@@ -3427,8 +3439,8 @@ function showExams(subject, chapter){
       <div class="card-icon">${isAdmin()?"📋":"📝"}</div>
       <h3>${examName}</h3>
       <div class="subject-meta">
-        <span class="pill">${bnNum(qCount)}টি প্রশ্ন</span>
-        <span class="pill">⏱ ${bnNum(timeInMinutes)} মিনিট</span>
+        <span class="pill">${bnNum(qCount)} questions</span>
+        <span class="pill">⏱ ${bnNum(timeInMinutes)} min</span>
       </div>
       <div class="card-arrow">→</div>`;
     card.addEventListener("click", ()=>askForName(subject, chapter, examName));
@@ -3437,21 +3449,21 @@ function showExams(subject, chapter){
   pushScreen("exams", {subject, chapter});
 }
 
-// ৩.৫ স্টাডি ম্যাটেরিয়াল (PDF/ভিডিও) দেখানো
+// 3.5 Study Materials (PDF/ভিডিও) দেখানো
 function showMaterials(subject, chapter){
   state.selectedSubject = subject;
   state.selectedChapter = chapter;
   hideAllScreens();
   $("screen-materials").hidden = false;
   $("materialsChapterName").textContent = `${subject} → ${chapter}`;
-  $("topSub").textContent = subject + " → " + chapter + " → ম্যাটেরিয়াল";
+  $("topSub").textContent = subject + " → " + chapter + " → Materials";
 
   const items = (materialsData[subject] && materialsData[subject][chapter]) || [];
   const box = $("materialsList");
   box.innerHTML = "";
 
   if(items.length === 0){
-    box.innerHTML = `<div class="mat-empty">📭 এই Chapterের জন্য এখনো কোনো নোট/ভিডিও যোগ করা হয়নি।</div>`;
+    box.innerHTML = `<div class="mat-empty">📭 No notes or videos have been added for this chapter yet.</div>`;
     pushScreen("materials", {subject, chapter});
     return;
   }
@@ -3466,11 +3478,11 @@ function showMaterials(subject, chapter){
         <div class="mat-icon mat-icon-pdf">📄</div>
         <div class="mat-text">
           <p class="mat-title">${item.title}</p>
-          <p class="mat-sub">PDF নোট</p>
+          <p class="mat-sub">PDF Notes</p>
         </div>
         <div class="mat-btns">
-          <button class="mat-action" data-view="${idx}">👁️ পড়ো</button>
-          <a class="mat-action" href="${isDemo ? '#' : item.url}"${isDemo ? '' : ' download target="_blank" rel="noopener"'}>⬇️ ডাউনলোড</a>
+          <button class="mat-action" data-view="${idx}">👁️ Preview</button>
+          <a class="mat-action" href="${isDemo ? '#' : item.url}"${isDemo ? '' : ' download target="_blank" rel="noopener"'}>⬇️ Download</a>
         </div>`;
       box.appendChild(row);
 
@@ -3479,11 +3491,11 @@ function showMaterials(subject, chapter){
       box.appendChild(frameHolder);
 
       row.querySelector("[data-view]").addEventListener("click", (e)=>{
-        if(isDemo){ toast("এই ফাইলটা এখনো যোগ করা হয়নি", "warning"); return; }
+        if(isDemo){ toast("This file has not been added yet", "warning"); return; }
         const holder = $("mat-frame-" + idx);
         if(holder.innerHTML){
           holder.innerHTML = ""; // আবার ক্লিক করলে বন্ধ হয়ে যাবে
-          e.target.textContent = "👁️ পড়ো";
+          e.target.textContent = "👁️ Preview";
         } else {
           // GitHub raw PDF-কে সরাসরি <iframe>-এ দিলে অনেক সময় সাদা পেজ দেখায় বা
           // ডাউনলোড হয়ে যায় (GitHub raw ফাইলের content-type এর একটা পরিচিত সমস্যা),
@@ -3491,14 +3503,14 @@ function showMaterials(subject, chapter){
           // PDF লিংক নির্ভরযোগ্যভাবে পেজের ভেতরেই পুরোটা পড়া যায়
           const viewerUrl = "https://docs.google.com/viewer?url=" + encodeURIComponent(item.url) + "&embedded=true";
           holder.innerHTML = `<div class="mat-pdf-frame"><iframe src="${viewerUrl}" title="${item.title}"></iframe></div>`;
-          e.target.textContent = "🔽 লুকাও";
+          e.target.textContent = "🔽 Hide";
         }
       });
 
       if(isDemo){
         row.querySelector("a.mat-action").addEventListener("click", (e)=>{
           e.preventDefault();
-          toast("এই ফাইলটা এখনো যোগ করা হয়নি", "warning");
+          toast("This file has not been added yet", "warning");
         });
       }
     } else if(item.type === "video"){
@@ -3508,7 +3520,7 @@ function showMaterials(subject, chapter){
           <p class="mat-title">${item.title}</p>
           <p class="mat-sub">ভিডিও <span class="mat-views" id="mat-views-${idx}"></span></p>
         </div>
-        <button class="mat-action" data-play="${idx}">দেখো</button>`;
+        <button class="mat-action" data-play="${idx}">Watch</button>`;
       box.appendChild(row);
 
       const frameHolder = document.createElement("div");
@@ -3518,13 +3530,13 @@ function showMaterials(subject, chapter){
       const ytId = extractYouTubeId(item.youtubeId);
       let localViewCount = null;
 
-      // আসল YouTube ভিউ (API key দেওয়া থাকলে), নাহলে সাইটের নিজস্ব "দেখো" কাউন্টার
+      // আসল YouTube views (API key দেওয়া থাকলে), নাহলে সাইটের নিজস্ব "Watch" কাউন্টার
       if(YOUTUBE_API_KEY.trim()){
         fetchYouTubeViews(ytId).then(views=>{
           if(views !== null){
             localViewCount = views;
             const el = $("mat-views-" + idx);
-            if(el) el.textContent = "· 👁️ " + formatViews(views) + " ভিউ";
+            if(el) el.textContent = "· 👁️ " + formatViews(views) + " views";
           }
         });
       } else if(LEADERBOARD_API_URL.trim()){
@@ -3532,7 +3544,7 @@ function showMaterials(subject, chapter){
           if(count !== null){
             localViewCount = count;
             const el = $("mat-views-" + idx);
-            if(el) el.textContent = "· 👁️ " + formatViews(count) + " বার দেখা হয়েছে";
+            if(el) el.textContent = "· 👁️ " + formatViews(count) + " views";
           }
         });
       }
@@ -3541,18 +3553,18 @@ function showMaterials(subject, chapter){
         const holder = $("mat-frame-" + idx);
         if(holder.innerHTML){
           holder.innerHTML = ""; // আবার ক্লিক করলে ভিডিও বন্ধ হয়ে যাবে
-          e.target.textContent = "দেখো";
+          e.target.textContent = "Watch";
         } else {
           holder.innerHTML = `<div class="mat-video-frame"><iframe src="https://www.youtube.com/embed/${ytId}" title="${item.title}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`;
-          e.target.textContent = "লুকাও";
+          e.target.textContent = "Hide";
 
-          // YouTube API key না থাকলে, প্রতিবার "দেখো" চাপলে সাইটের নিজস্ব কাউন্টার বাড়াও
+          // YouTube API key না থাকলে, প্রতিবার "Watch" চাপলে সাইটের নিজস্ব কাউন্টার বাড়াও
           if(!YOUTUBE_API_KEY.trim() && LEADERBOARD_API_URL.trim()){
             incrementSiteViewCount(ytId);
             if(localViewCount !== null){
               localViewCount++;
               const el = $("mat-views-" + idx);
-              if(el) el.textContent = "· 👁️ " + formatViews(localViewCount) + " বার দেখা হয়েছে";
+              if(el) el.textContent = "· 👁️ " + formatViews(localViewCount) + " views";
             }
           }
         }
@@ -3567,13 +3579,13 @@ $("backToHubFromMaterials").addEventListener("click", ()=>{
   showChapterHub(state.selectedSubject, state.selectedChapter);
 });
 
-// ৪. নাম চাওয়া
+// 4. নাম চাওয়া
 async function askForName(subject, chapter, exam){
   state.selectedExam = exam;
   if(isAdmin()){ showAnswerKeyForAdmin(); return; }
   if(!authReady()) return;
   const {data:{session}}=await supabaseClient.auth.getSession();
-  if(!session){ openAuthModal("login", {exam}); toast("🔐 Exam দিতে আগে Log in করো","warning",2500); return; }
+  if(!session){ openAuthModal("login", {exam}); toast("🔐 Please log in before taking an exam","warning",2500); return; }
   await loadCurrentProfile();
   startExam();
 }
@@ -3581,11 +3593,11 @@ async function askForName(subject, chapter, exam){
 function isAdmin(){ return !!(currentProfile && currentProfile.is_admin === true); }
 
 // youtubeId ফিল্ডে বসানো যেকোনো ফরম্যাট (শুধু আইডি, পুরো লিংক, বা পুরো embed কোড)
-// থেকে সঠিক YouTube ভিডিও আইডিটা বের করে আনে
+// থেকে Correct YouTube ভিডিও আইডিটা বের করে আনে
 /* ================================================================
    [!] ভিডিওর view count (চোখ 👁️ আইকনসহ) দেখাতে চাইলে এখানে একটা
    ফ্রি YouTube Data API v3 key বসাও (Google Cloud Console থেকে)।
-   খালি রাখলে view count দেখাবে না, বাকি সব স্বাভাবিক কাজ করবে।
+   খালি রাখলে view count দেখাবে না, Remaining সব স্বাভাবিক কাজ করবে।
 ================================================================ */
 const YOUTUBE_API_KEY = "";
 
@@ -3597,7 +3609,7 @@ async function fetchYouTubeViews(videoId){
   const cacheKey = "ytViews_" + videoId;
   try{
     const cached = JSON.parse(localStorage.getItem(cacheKey));
-    if(cached && (Date.now() - cached.t < 3600000)){ // ১ ঘণ্টা cache, বারবার API কল না করতে
+    if(cached && (Date.now() - cached.t < 3600000)){ // 1 ঘণ্টা cache, বারবার API কল না করতে
       ytViewsCache[videoId] = cached.v;
       return cached.v;
     }
@@ -3623,13 +3635,13 @@ function isPlaceholderMaterial(url){
 }
 
 /* ================================================================
-   ভিডিও ভিউ কাউন্টের সহজ বিকল্প — YouTube API key না থাকলে এটা
+   ভিডিও views কাউন্টের সহজ বিকল্প — YouTube API key না থাকলে এটা
    ব্যবহার হয়। YOUTUBE_API_KEY এর মতো আলাদা কিছু বসাতে হবে না —
    লিডারবোর্ডের জন্য আগে যে LEADERBOARD_API_URL বসিয়েছ, এটা সেটাই
-   reuse করে। এটা আসল YouTube ভিউ না, শুধু এই সাইট থেকে কতবার
-   "দেখো" চাপা হয়েছে তার হিসাব। কাজ করতে হলে সেই Apps Script কোডে
+   reuse করে। এটা আসল YouTube views না, শুধু এই সাইট থেকে কতবার
+   "Watch" চাপা হয়েছে তার হিসাব। কাজ করতে হলে সেই Apps Script কোডে
    doGet/doPost-এ view-কাউন্টের অংশটুকু যোগ করে নিতে হবে (নিচের
-   নির্দেশনা দেখো)।
+   নির্দেশনা Watch)।
 ================================================================ */
 async function getSiteViewCount(videoId){
   if(!LEADERBOARD_API_URL.trim() || !videoId) return null;
@@ -3678,7 +3690,7 @@ function extractYouTubeId(input){
 
 // admin নাম দিলে Exam না নিয়ে সরাসরি Correct Answersগুলো দেখানো হয়
 function showAnswerKeyForAdmin(){
-  if(!isAdmin()){ toast("⛔ শুধু admin উত্তরপত্র দেখতে পারবে", "error"); return; }
+  if(!isAdmin()){ toast("⛔ Only admins can view answer keys", "error"); return; }
   hideAllScreens();
   $("screen-answerkey").hidden = false;
 
@@ -3696,7 +3708,7 @@ function showAnswerKeyForAdmin(){
 
     const qNumDiv = document.createElement("div");
     qNumDiv.className = "qnum";
-    qNumDiv.textContent = `প্রশ্ন ${bnNum(i+1)} / ${bnNum(questions.length)}`;
+    qNumDiv.textContent = `Question ${bnNum(i+1)} / ${bnNum(questions.length)}`;
 
     const qTextDiv = document.createElement("div");
     qTextDiv.className = "qtext";
@@ -3734,7 +3746,7 @@ $("btnCancelName").addEventListener("click", ()=>{
 $("btnStartExam").addEventListener("click", ()=>{
   const name = $("studentName").value.trim();
   if(!name){
-    toast("আগে Enter your name", "warning");
+    toast("Enter your name first", "warning");
     $("studentName").focus();
     return;
   }
@@ -3742,7 +3754,7 @@ $("btnStartExam").addEventListener("click", ()=>{
   $("nameModal").hidden = true;
 
   if(name.toLowerCase() === "admin"){
-    // admin এর জন্য Exam নেওয়া হবে না, শুধু উত্তরপত্র (সঠিক অপশন) দেখানো হবে
+    // admin এর জন্য Exam নেওয়া হবে না, শুধু উত্তরপত্র (Correct অপশন) দেখানো হবে
     showAnswerKeyForAdmin();
   } else {
     startExam();
@@ -3755,7 +3767,7 @@ $("studentName").addEventListener("keypress", (e)=>{
   }
 });
 
-// ৫. Exam শুরু
+// 5. Exam শুরু
 function startExam(){
   const examObj = examData[state.selectedSubject].chapters[state.selectedChapter].exams[state.selectedExam];
   const questions = examObj.questions;
@@ -3775,7 +3787,7 @@ function startExam(){
   startTimer();
   state.examInProgress = true;
   pushScreen("exam", {});
-  toast(`🎯 ${state.studentName}, Exam শুরু হয়েছে। শুভকামনা!`, "success", 3500);
+  toast(`🎯 ${state.studentName}, Your exam has started. Good luck!`, "success", 3500);
 }
 
 function startTimer(){
@@ -3786,7 +3798,7 @@ function startTimer(){
     updateTimerText();
     if(state.timeLeft <= 0){
       clearInterval(state.timerId);
-      toast("সময় শেষ! Exam জমা দেওয়া হচ্ছে...", "warning");
+      toast("Time is up! Submitting your exam...", "warning");
       finishExam();
     }
   },1000);
@@ -3798,7 +3810,7 @@ function updateTimerText(){
   $("timerBox").classList.toggle("low", state.timeLeft <= 60);
 }
 
-// শসবগুলো প্রশ্ন একই পেজে রেন্ডার করা (Scoreযোগ্য/স্ক্রোলযোগ্য)
+// শসবগুলো Question একই পেজে রেন্ডার করা (Scoreযোগ্য/স্ক্রোলযোগ্য)
 function renderAllQuestions(){
   const questions = examData[state.selectedSubject].chapters[state.selectedChapter].exams[state.selectedExam].questions;
   const total = questions.length;
@@ -3815,7 +3827,7 @@ function renderAllQuestions(){
     
     const qNumDiv = document.createElement("div");
     qNumDiv.className = "qnum";
-    qNumDiv.textContent = `প্রশ্ন ${bnNum(i+1)} / ${bnNum(total)}`;
+    qNumDiv.textContent = `Question ${bnNum(i+1)} / ${bnNum(total)}`;
     
     const qTextDiv = document.createElement("div");
     qTextDiv.className = "qtext";
@@ -3846,7 +3858,7 @@ function renderAllQuestions(){
         const answeredCount = state.answers.filter(a => a !== null).length;
         $("progressFill").style.width = (answeredCount/total*100)+"%";
         const unansweredCount = total - answeredCount;
-        $("pageLabel").textContent = `উত্তর দেওয়া ${bnNum(answeredCount)}টি • বাকি ${bnNum(unansweredCount)}টি`;
+        $("pageLabel").textContent = `Answered ${bnNum(answeredCount)}টি • Remaining ${bnNum(unansweredCount)}টি`;
       });
       optionsBox.appendChild(b);
     });
@@ -3860,14 +3872,14 @@ function renderAllQuestions(){
   const answeredCount = state.answers.filter(a => a !== null).length;
   $("progressFill").style.width = (answeredCount/total*100)+"%";
   const unansweredCount = total - answeredCount;
-  $("pageLabel").textContent = `উত্তর দেওয়া ${bnNum(answeredCount)}টি • বাকি ${bnNum(unansweredCount)}টি`;
+  $("pageLabel").textContent = `Answered ${bnNum(answeredCount)}টি • Remaining ${bnNum(unansweredCount)}টি`;
   
   window.scrollTo(0, 0);
 }
 
 // Exit button click handler (হোমপেজে নিয়ে যাবে)
 $("btnExitExam").addEventListener("click", async ()=>{
-  if(await customConfirm("তুমি কি Examটি Cancel করে হোমে ফিরে যেতে চাও?", {icon:"🚪"})){
+  if(await customConfirm("Cancel this exam and return home?", {icon:"🚪"})){
     clearInterval(state.timerId);
     state.examInProgress = false;
     hideAllScreens();
@@ -3894,10 +3906,10 @@ function showSubmitWarning(unanswered){
 
   text.innerHTML = `
     <strong style="color:#ef4444;">
-      ${bnNum(unanswered)}টি প্রশ্ন
+      ${bnNum(unanswered)} questions
     </strong>
-    এর উত্তর এখনো দেওয়া হয়নি।<br>
-    তবুও কি তুমি Examটি জমা দিতে চাও?
+    These questions are still unanswered.<br>
+    Do you still want to submit the exam?
   `;
 
   modal.classList.add("show");
@@ -3912,7 +3924,7 @@ function closeSubmitWarning(){
 
 function submitExamNow(){
   closeSubmitWarning();
-  toast("📤 Exam জমা নেওয়া হচ্ছে...", "success");
+  toast("📤 Submitting exam...", "success");
 
   setTimeout(()=>{
     finishExam();
@@ -3952,8 +3964,8 @@ async function showAdminDashboard(){
   $("screen-admin").hidden=false;
   $("topSub").textContent="Admin Dashboard";
   pushScreen("admin",{});
-  $("adminLoadStatus").textContent="⏳ লোড হচ্ছে...";
-  $("adminUsersBody").innerHTML='<tr><td colspan="7" class="admin-empty">⏳ ডেটা লোড হচ্ছে...</td></tr>';
+  $("adminLoadStatus").textContent="⏳ Loading...";
+  $("adminUsersBody").innerHTML='<tr><td colspan="7" class="admin-empty">⏳ Loading data...</td></tr>';
   try{
     const [{data:users,error:userErr},{data:results,error:resultErr}] = await Promise.all([
       supabaseClient.from("profiles").select("user_id,username,is_admin,blocked,created_at").order("created_at",{ascending:true}),
@@ -3976,7 +3988,7 @@ async function showAdminDashboard(){
     $("adminOverallAvg").textContent=bnNum(overallAvg)+"%";
     $("adminBlockedUsers").textContent=bnNum(allUsers.filter(u=>u.blocked).length);
     const body=$("adminUsersBody"); body.innerHTML="";
-    if(!nonAdminUsers.length){ body.innerHTML='<tr><td colspan="7" class="admin-empty">এখনো কোনো student user নেই।</td></tr>'; }
+    if(!nonAdminUsers.length){ body.innerHTML='<tr><td colspan="7" class="admin-empty">No student accounts yet.</td></tr>'; }
     else nonAdminUsers.sort((a,b)=>b.avg-a.avg || b.total-a.total).forEach(u=>{
       const tr=document.createElement("tr");
       const statusText=u.is_admin?"ADMIN":(u.blocked?"BLOCKED":"ACTIVE");
@@ -3986,40 +3998,40 @@ async function showAdminDashboard(){
       body.appendChild(tr);
     });
     body.querySelectorAll(".admin-block-btn").forEach(btn=>btn.addEventListener("click",()=>toggleUserBlock(btn.dataset.userId,btn.dataset.blocked==="true",btn)));
-    $("adminLoadStatus").textContent=`${bnNum(allUsers.length)} জন user`;
+    $("adminLoadStatus").textContent=`${bnNum(allUsers.length)}  users`;
   }catch(err){
-    console.error(err); $("adminLoadStatus").textContent=""; $("adminUsersBody").innerHTML=`<tr><td colspan="7" class="admin-empty">❌ ডেটা লোড করা যায়নি। RLS/SQL setup চেক করো।</td></tr>`;
-    toast("Admin data load failed", "error", 3500);
+    console.error(err); $("adminLoadStatus").textContent=""; $("adminUsersBody").innerHTML=`<tr><td colspan="7" class="admin-empty">❌ Could not load data. Check your RLS/SQL setup.</td></tr>`;
+    toast("Could not load admin data", "error", 3500);
   }
 }
 
 async function toggleUserBlock(userId, currentlyBlocked, btn){
   if(!isAdmin() || !supabaseClient) return;
   const action=currentlyBlocked?"unblock":"block";
-  if(!(await customConfirm(currentlyBlocked?"এই user-কে আবার unblock করতে চাও?":"এই user-কে block করতে চাও?",{icon:currentlyBlocked?"🔓":"🚫",okText:currentlyBlocked?"Unblock":"Block"}))) return;
+  if(!(await customConfirm(currentlyBlocked?"Do you want to unblock this user?":"Do you want to block this user?",{icon:currentlyBlocked?"🔓":"🚫",okText:currentlyBlocked?"Unblock":"Block"}))) return;
   btn.disabled=true;
   const {error}=await supabaseClient.rpc("admin_set_user_blocked",{target_user_id:userId,should_block:!currentlyBlocked});
   btn.disabled=false;
-  if(error){ console.error(error); toast("User status change করা যায়নি", "error", 3000); return; }
-  toast(currentlyBlocked?"🔓 User unblock হয়েছে":"🚫 User block হয়েছে", "success", 2200);
+  if(error){ console.error(error); toast("Could not change user status", "error", 3000); return; }
+  toast(currentlyBlocked?"🔓 User unblocked":"🚫 User blocked", "success", 2200);
   showAdminDashboard();
 }
 
 async function showProfile(){
   if(!authReady()) return;
   await loadCurrentProfile(); if(!currentProfile){openAuthModal("login"); return;}
-  hideAllScreens(); $("screen-profile").hidden=false; $("topSub").textContent="আমার Profile"; pushScreen("profile",{});
+  hideAllScreens(); $("screen-profile").hidden=false; $("topSub").textContent="My Profile"; pushScreen("profile",{});
   $("profileUsername").textContent=currentProfile.username; $("profileAvatar").textContent=currentProfile.username.charAt(0).toUpperCase();
-  $("profileResults").innerHTML='<div class="empty-profile">⏳ ফলাফল লোড হচ্ছে...</div>';
+  $("profileResults").innerHTML='<div class="empty-profile">⏳ Loading results...</div>';
   const {data,error}=await supabaseClient.from("results").select("subject,chapter,exam,correct,total,percent,status,attempted_at").order("attempted_at",{ascending:true});
-  if(error){ console.error(error); $("profileResults").innerHTML='<div class="empty-profile">ফলাফল লোড করা যায়নি।</div>'; return; }
+  if(error){ console.error(error); $("profileResults").innerHTML='<div class="empty-profile">Could not load results.</div>'; return; }
   renderProfileResults(data||[]); renderPerformanceChart(data||[]);
 }
 function renderProfileResults(rows){
   const total=rows.length, passed=rows.filter(r=>r.percent>=50).length, failed=total-passed, avg=total?Math.round(rows.reduce((a,r)=>a+Number(r.percent||0),0)/total):0;
   $("profileTotal").textContent=bnNum(total); $("profilePassed").textContent=bnNum(passed); $("profileFailed").textContent=bnNum(failed); $("profileAvg").textContent=bnNum(avg)+"%";
-  const box=$("profileResults"); if(!rows.length){box.innerHTML='<div class="empty-profile">এখনও কোনো Exam দেওয়া হয়নি।</div>';return;}
-  box.innerHTML=rows.slice().reverse().map((r,i)=>{const pass=Number(r.percent)>=50;const d=new Date(r.attempted_at);return `<div class="profile-result"><div class="pr-main"><strong>${r.subject} → ${r.exam}</strong><span>${r.chapter} • ${d.toLocaleDateString("bn-BD")}</span></div><div class="pr-score"><strong class="${pass?"pass":"fail"}">${bnNum(r.percent)}% • ${pass?"PASS":"FAIL"}</strong><span>${bnNum(r.correct)} / ${bnNum(r.total)}</span></div></div>`;}).join("");
+  const box=$("profileResults"); if(!rows.length){box.innerHTML='<div class="empty-profile">No exams taken yet.</div>';return;}
+  box.innerHTML=rows.slice().reverse().map((r,i)=>{const pass=Number(r.percent)>=50;const d=new Date(r.attempted_at);return `<div class="profile-result"><div class="pr-main"><strong>${r.subject} → ${r.exam}</strong><span>${r.chapter} • ${d.toLocaleDateString("en-GB")}</span></div><div class="pr-score"><strong class="${pass?"pass":"fail"}">${bnNum(r.percent)}% • ${pass?"PASS":"FAIL"}</strong><span>${bnNum(r.correct)} / ${bnNum(r.total)}</span></div></div>`;}).join("");
 }
 function renderPerformanceChart(rows){
   const canvas=$("performanceChart"), ctx=canvas.getContext("2d");
@@ -4034,8 +4046,8 @@ function renderPerformanceChart(rows){
   ctx.lineWidth=1; ctx.strokeStyle="rgba(148,163,184,.28)"; ctx.fillStyle="#64748b";
   for(let y=0;y<=100;y+=25){const yy=pad.t+ch-(y/100)*ch;ctx.beginPath();ctx.moveTo(pad.l,yy);ctx.lineTo(w-pad.r,yy);ctx.stroke();ctx.fillText(y+"%",4,yy);}
   const passY=pad.t+ch-.5*ch; ctx.save(); ctx.setLineDash([6,5]); ctx.strokeStyle="rgba(22,163,74,.48)"; ctx.beginPath();ctx.moveTo(pad.l,passY);ctx.lineTo(w-pad.r,passY);ctx.stroke();ctx.restore();
-  ctx.fillStyle="#16a34a"; ctx.font=(mobile?"10px":"11px")+' Hind Siliguri, sans-serif'; ctx.fillText("Passed ৫০%",Math.max(pad.l+4,w-pad.r-58),passY-10);
-  if(!rows.length){ctx.fillStyle="#94a3b8";ctx.textAlign="center";ctx.font=(mobile?"12px":"13px")+' Hind Siliguri, sans-serif';ctx.fillText("Exam দিলে এখানে পারফরম্যান্স দেখা যাবে",w/2,h/2);ctx.textAlign="start";return;}
+  ctx.fillStyle="#16a34a"; ctx.font=(mobile?"10px":"11px")+' Hind Siliguri, sans-serif'; ctx.fillText("Passed 50%",Math.max(pad.l+4,w-pad.r-58),passY-10);
+  if(!rows.length){ctx.fillStyle="#94a3b8";ctx.textAlign="center";ctx.font=(mobile?"12px":"13px")+' Hind Siliguri, sans-serif';ctx.fillText("Your performance will appear here after you take exams",w/2,h/2);ctx.textAlign="start";return;}
   const values=rows.map(r=>Math.max(0,Math.min(100,Number(r.percent)||0)));
   const xFor=i=>rows.length===1?pad.l+cw/2:pad.l+(i/(rows.length-1))*cw;
   const yFor=v=>pad.t+ch-(v/100)*ch;
@@ -4096,11 +4108,11 @@ function showResult(){
 
   let remark = "";
   let icon = "🏆";
-  if(percent >= 90){ remark = "🏆 অসাধারণ! তোমার প্রস্তুতি দারুণ।"; icon = "🏆"; }
-  else if(percent >= 80){ remark = "🎉 চমৎকার! খুব ভালো করেছো।"; icon = "🎉"; }
-  else if(percent >= 70){ remark = "🔥 দারুণ! আরেকটু practice করলে আরও ভালো হবে।"; icon = "🔥"; }
-  else if(percent >= 50){ remark = "👍 ভালো চেষ্টা। ভুলগুলো দেখে আবার practice করো।"; icon = "👍"; }
-  else { remark = "📚 চিন্তা করো না। আবার চেষ্টা করো, তুমি পারবে!"; icon = "📚"; }
+  if(percent >= 90){ remark = "🏆 Excellent! Your preparation is impressive."; icon = "🏆"; }
+  else if(percent >= 80){ remark = "🎉 Great job! You did very well."; icon = "🎉"; }
+  else if(percent >= 70){ remark = "🔥 Great work! More practice can improve your score."; icon = "🔥"; }
+  else if(percent >= 50){ remark = "👍 Good effort. Review your mistakes and practice again."; icon = "👍"; }
+  else { remark = "📚 Do not worry. Try again—you can do it!"; icon = "📚"; }
   $("resultIcon").textContent = icon;
   $("scoreRemark").textContent = remark;
   $("topSub").textContent = "Exam Results ঠিক আছে";
@@ -4114,8 +4126,8 @@ function showResult(){
 
   const tags = ["ক","খ","গ","ঘ"];
 
-  // উত্তরপত্র একেবারে প্রশ্ন পেজের মতো ডেসক্রিপশনসহ রেন্ডার করা (সঠিক সবুজ, ভুল লাল)
- // উত্তরপত্র একেবারে প্রশ্ন পেজের মতো রেন্ডার করা (সঠিক সবুজ, ভুল লাল, আর উত্তর না দিলে লাইট ইয়েলো)
+  // উত্তরপত্র একেবারে Question পেজের মতো ডেসক্রিপশনসহ রেন্ডার করা (Correct সবুজ, Incorrect লাল)
+ // উত্তরপত্র একেবারে Question পেজের মতো রেন্ডার করা (Correct সবুজ, Incorrect লাল, আর উত্তর না দিলে লাইট ইয়েলো)
   questions.forEach((q,i)=>{
     const userAns = state.answers[i];
     const correctAns = q.answer;
@@ -4126,7 +4138,7 @@ function showResult(){
     
     const qNumDiv = document.createElement("div");
     qNumDiv.className = "qnum";
-    qNumDiv.textContent = `প্রশ্ন ${bnNum(i+1)} / ${bnNum(total)}`;
+    qNumDiv.textContent = `Question ${bnNum(i+1)} / ${bnNum(total)}`;
     
     const qTextDiv = document.createElement("div");
     qTextDiv.className = "qtext";
@@ -4139,12 +4151,12 @@ function showResult(){
       
       if(optIdx === correctAns){
         if(skipped){
-          b.classList.add("unanswered-ans"); // উত্তর দেওয়া হয়নি: সঠিক অপশন হালকা হলুদ
+          b.classList.add("unanswered-ans"); // Answered হয়নি: Correct অপশন হালকা হলুদ
         } else {
-          b.classList.add("correct-ans"); // উত্তর দেওয়া হয়েছে: সঠিক অপশন সবুজ
+          b.classList.add("correct-ans"); // Answered হয়েছে: Correct অপশন সবুজ
         }
       } else if(!skipped && optIdx === userAns){
-        b.classList.add("wrong-ans"); // স্টুডেন্টের বাছা ভুল অপশন লাল
+        b.classList.add("wrong-ans"); // স্টুডেন্টের বাছা Incorrect অপশন লাল
       }
 
       b.innerHTML = `<span class="opt-tag">${tags[optIdx]}</span><span>${opt}</span>`;
@@ -4158,7 +4170,7 @@ function showResult(){
   });
   
   const resultText =
-`নাম: ${state.studentName}
+`Name: ${state.studentName}
 Subject: ${state.selectedSubject}
 Chapter: ${state.selectedChapter}
 Exam: ${state.selectedExam}
@@ -4166,8 +4178,8 @@ Score: ${correct} / ${total} (${percent}%)`;
 
   $("btnCopyResult").onclick = ()=>{
     navigator.clipboard.writeText(resultText)
-      .then(()=>toast("📋 ফলাফল কপি হয়েছে", "success"))
-      .catch(()=>toast("কপি করা যায়নি", "error"));
+      .then(()=>toast("📋 Results copied", "success"))
+      .catch(()=>toast("Could not copy results", "error"));
   };
 
   const waBtn = $("btnWhatsapp");
@@ -4179,7 +4191,7 @@ Score: ${correct} / ${total} (${percent}%)`;
     waBtn.hidden = true;
   }
 
-  toast(`🎉 ${state.studentName}, তোমার ফলাফল প্রস্তুত!`, "success", 3500);
+  toast(`🎉 ${state.studentName}, Your results are ready!`, "success", 3500);
 }
 
 $("backToSubjects").addEventListener("click", ()=>{
@@ -4253,7 +4265,7 @@ function renderLeaderboardRows(all, noticeText){
   }
 
   if(all.length === 0){
-    box.innerHTML += `<div class="lb-empty">এখনো কেউ এই Exam দেয়নি।</div>`;
+    box.innerHTML += `<div class="lb-empty">No one has taken this exam yet.</div>`;
     return;
   }
 
@@ -4268,7 +4280,7 @@ function renderLeaderboardRows(all, noticeText){
     const medal = rank===1?"🥇":rank===2?"🥈":rank===3?"🥉":bnNum(rank);
     row.innerHTML = `
       <div class="lb-rank ${rankCls}">${medal}</div>
-      <div class="lb-name"><strong>${e.name}</strong><span>${new Date(e.time).toLocaleDateString("bn-BD")}</span></div>
+      <div class="lb-name"><strong>${e.name}</strong><span>${new Date(e.time).toLocaleDateString("en-GB")}</span></div>
       <div class="lb-score"><strong>${bnNum(e.correct)}/${bnNum(e.total)}</strong><span>${bnNum(e.percent)}%</span></div>`;
     box.appendChild(row);
   });
@@ -4285,42 +4297,42 @@ function setLbCache(key, rows){
 async function showLeaderboard(){
   hideAllScreens();
   $("screen-leaderboard").hidden = false;
-  $("btnClearLeaderboard").hidden = !isAdmin(); // শুধু admin ডিলিট করতে পারবে
+  $("btnClearLeaderboard").hidden = !isAdmin(); // Admin only ডিলিট করতে পারবে
   pushScreen("leaderboard", {});
 
   const key = getExamKey();
   const localAll = loadLeaderboard().filter(e => e.examKey === key);
 
   if(!LEADERBOARD_API_URL.trim()){
-    // কোনো শেয়ার্ড শিট কনফিগার করা নেই — শুধু এই ডিভাইসের ফলাফল দেখাও
-    renderLeaderboardRows(localAll, "📱 এখন শুধু এই ডিভাইসের ফলাফল দেখানো হচ্ছে।");
+    // কোনো শেয়ার্ড শিট কনফিগার করা নেই — শুধু এই ডিভাইসের Results দেখাও
+    renderLeaderboardRows(localAll, "📱 Showing results from this device only.");
     return;
   }
 
-  // ধাপ ১: আগে cache করা ডেটা থাকলে সাথে সাথে দেখাও (instant feel)
+  // ধাপ 1: আগে cache করা ডেটা থাকলে সাথে সাথে দেখাও (instant feel)
   const cached = getLbCache(key);
   if(cached && cached.length){
-    renderLeaderboardRows(cached, "🔄 সবশেষ সেভ করা তথ্য দেখানো হচ্ছে, হালনাগাদ করা হচ্ছে...");
+    renderLeaderboardRows(cached, "🔄 Showing cached results while updating...");
   } else {
-    $("lbList").innerHTML = `<div class="lb-empty">⏳ লিডারবোর্ড লোড হচ্ছে...</div>`;
+    $("lbList").innerHTML = `<div class="lb-empty">⏳ Loading leaderboard...</div>`;
   }
 
-  // ধাপ ২: background-এ আসল/নতুন ডেটা আনো, এসে গেলে চুপচাপ বদলে দাও
+  // ধাপ 2: background-এ আসল/নতুন ডেটা আনো, এসে গেলে চুপচাপ বদলে দাও
   try{
     const res = await fetch(`${LEADERBOARD_API_URL}?examKey=${encodeURIComponent(key)}`);
     const data = await res.json();
     const sharedAll = Array.isArray(data) ? data : (data.rows || []);
     setLbCache(key, sharedAll);
-    // ইউজার এর মধ্যে অন্য পেজে চলে গেলে যেন ভুল জায়গায় রেন্ডার না হয়
+    // ইউজার এর মধ্যে অন্য পেজে চলে গেলে যেন Incorrect জায়গায় রেন্ডার না হয়
     if(!$("screen-leaderboard").hidden){
       renderLeaderboardRows(sharedAll, null);
     }
   }catch(err){
     if($("screen-leaderboard").hidden) return;
     if(cached && cached.length){
-      renderLeaderboardRows(cached, "⚠️ নতুন তথ্য আনা যায়নি, সবশেষ সেভ করা তথ্য দেখানো হচ্ছে।");
+      renderLeaderboardRows(cached, "⚠️ Could not fetch new data. Showing cached results.");
     } else {
-      renderLeaderboardRows(localAll, "⚠️ শেয়ার্ড লিডারবোর্ড লোড করা যায়নি (ইন্টারনেট/শিট চেক করো)। আপাতত এই ডিভাইসের ফলাফল দেখানো হচ্ছে।");
+      renderLeaderboardRows(localAll, "⚠️ Could not load the shared leaderboard. Showing results from this device.");
     }
   }
 }
@@ -4345,10 +4357,11 @@ $("drawerLeaderboard").addEventListener("click",()=>{closeDrawer();showLeaderboa
 $("drawerLogin").addEventListener("click",()=>{closeDrawer();openAuthModal("login");});
 $("drawerLogout").addEventListener("click",()=>{closeDrawer();logoutUser();});
 $("footerYear").textContent=new Date().getFullYear();
+updateAccountUI();
 $("backFromAdmin").addEventListener("click",()=>{hideAllScreens();$("screen-subjects").hidden=false;$("topSub").textContent="Choose a subject to begin";pushScreen("subjects",{});});
 $("adminRefreshBtn").addEventListener("click",showAdminDashboard);
-$("adminGoSubjects").addEventListener("click",()=>{hideAllScreens();$("screen-subjects").hidden=false;$("topSub").textContent="Subject বেছে নিয়ে উত্তরপত্র দেখো";pushScreen("subjects",{});});
-$("adminGoLeaderboard").addEventListener("click",()=>{if(state.selectedSubject&&state.selectedChapter&&state.selectedExam) showLeaderboard(); else toast("আগে কোনো Exam নির্বাচন করো", "warning", 2500);});
+$("adminGoSubjects").addEventListener("click",()=>{hideAllScreens();$("screen-subjects").hidden=false;$("topSub").textContent="Choose a subject to view answer keys";pushScreen("subjects",{});});
+$("adminGoLeaderboard").addEventListener("click",()=>{if(state.selectedSubject&&state.selectedChapter&&state.selectedExam) showLeaderboard(); else toast("Select an exam first", "warning", 2500);});
 $("backFromProfile").addEventListener("click",()=>{hideAllScreens();$("screen-subjects").hidden=false;$("topSub").textContent="Choose a subject to begin";pushScreen("subjects",{});});
 $("btnLogout").addEventListener("click",logoutUser);
 $("authTabLogin").addEventListener("click",()=>setAuthMode("login"));
@@ -4356,11 +4369,11 @@ $("authTabSignup").addEventListener("click",()=>setAuthMode("signup"));
 $("authCancelBtn").addEventListener("click",closeAuthModal);
 $("authForm").addEventListener("submit",handleAuthSubmit);
 $("btnBackToResult").addEventListener("click", ()=>{
-  history.back(); // যেখান থেকে লিডারবোর্ডে এসেছিলে (ফলাফল বা admin উত্তরপত্র) সেখানেই ফিরিয়ে দেবে
+  history.back(); // যেখান থেকে লিডারবোর্ডে এসেছিলে (Results বা admin উত্তরপত্র) সেখানেই ফিরিয়ে দেবে
 });
 $("btnClearLeaderboard").addEventListener("click", async ()=>{
-  if(!isAdmin()) return; // নিরাপত্তার জন্য দ্বিতীয়বার যাচাই — শুধু admin ডিলিট করতে পারবে
-  if(!(await customConfirm("এই Examর লিডারবোর্ড পুরোপুরি মুছে Failedতে চাও? এটা আর ফিরিয়ে আনা যাবে না।", {icon:"🗑️", okText:"মুছে Failedো"}))) return;
+  if(!isAdmin()) return; // নিরাপত্তার জন্য দ্বিতীয়বার যাচাই — Admin only ডিলিট করতে পারবে
+  if(!(await customConfirm("Permanently clear this exam leaderboard? This cannot be undone.", {icon:"🗑️", okText:"Clear leaderboard"}))) return;
   const key = getExamKey();
   const remaining = loadLeaderboard().filter(e => e.examKey !== key);
   try{ localStorage.setItem(LB_KEY, JSON.stringify(remaining)); }catch(e){}
@@ -4368,10 +4381,10 @@ $("btnClearLeaderboard").addEventListener("click", async ()=>{
 });
 
 /* ================================================================
-   Exam চলাকালীন পাতা রিফ্রেশ/বন্ধ করতে চাইলে কনফার্মেশন দেখানো
+   Exam চলাকালীন পাতা Refresh/বন্ধ করতে চাইলে কনফার্মেশন দেখানো
    [!] ব্রাউজার নিরাপত্তার কারণে কাস্টম লেখা ("তুমি কি Confirm...")
    দেখাতে দেয় না — ব্রাউজার নিজের ডিফল্ট লেখায় (Leave/Cancel ধরনের)
-   একটা কনফার্মেশন বক্স দেখাবে। "Leave"/"ঠিক আছে" চাপলে রিফ্রেশ হবে,
+   একটা কনফার্মেশন বক্স দেখাবে। "Leave"/"ঠিক আছে" চাপলে Refresh হবে,
    "Cancel" চাপলে Examতেই থেকে যাবে।
 ================================================================ */
 window.addEventListener("beforeunload", function(e){
@@ -4415,7 +4428,7 @@ window.addEventListener("popstate", async function(e){
     history.pushState({screen:"exam"}, "", "#exam"); // ব্যাক Cancel করে Examতেই রাখো
     historyNavInProgress = false;
 
-    if(await customConfirm("তুমি কি Examটি Cancel করে বের হয়ে যেতে চাও? অগ্রগতি সেভ হবে না।", {icon:"🚪"})){
+    if(await customConfirm("Exit this exam? Your progress will not be saved.", {icon:"🚪"})){
       clearInterval(state.timerId);
       state.examInProgress = false;
       hideAllScreens();
