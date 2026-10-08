@@ -3695,38 +3695,50 @@ async function toggleWrittenExam(id,active){const {error}=await supabaseClient.f
 async function deleteWrittenExam(id){if(!(await customConfirm("Delete this written exam and its submissions?",{icon:"🗑️",okText:"Delete"})))return;const {error}=await supabaseClient.from("written_exams").delete().eq("id",id);if(error){console.error(error);toast("Could not delete exam","error");return;}toast("Written exam deleted","success");await loadWrittenAdminList();}
 
 async function showAdminUserProfile(userId){
-  if(!isAdmin()) return; hideAllScreens(); $("screen-admin-user").hidden=false; $("topSub").textContent="User Profile"; state.adminViewedUserId=userId; pushScreen("admin-user",{userId}); $("adminUserResults").innerHTML='<div class="empty-profile">⏳ Loading...</div>'; $("adminUserWritten").innerHTML='<div class="empty-profile">⏳ Loading...</div>';
-  const [{data:user,error:ue},{data:results,error:re},{data:subs,error:se}]=await Promise.all([
+  if(!isAdmin()) return;
+  hideAllScreens();
+  $("screen-admin-user").hidden=false;
+  $("topSub").textContent="User Profile";
+  state.adminViewedUserId=userId;
+  pushScreen("admin-user",{userId});
+  $("adminUserResults").innerHTML='<div class="empty-profile">⏳ Loading...</div>';
+  $("adminUserWritten").innerHTML='<div class="empty-profile">⏳ Loading...</div>';
+
+  const [{data:user,error:ue},{data:results,error:re},{data:writtenRows,error:we}]=await Promise.all([
     supabaseClient.from("profiles").select("user_id,username,is_admin,blocked,created_at").eq("user_id",userId).single(),
     supabaseClient.from("results").select("subject,chapter,exam,correct,total,percent,status,attempted_at").eq("user_id",userId).order("attempted_at",{ascending:false}),
-    supabaseClient.from("written_submissions").select("id,exam_id,answers,status,score,feedback,submitted_at,graded_at").eq("user_id",userId).order("submitted_at",{ascending:false})
+    supabaseClient.rpc("admin_get_user_written_submissions",{target_user_id:userId})
   ]);
-  if(ue||re||se){console.error("Admin user profile load:",ue||re||se);toast("Could not load user profile","error");return;}
-
-  // Load written exams separately instead of relying on Supabase's nested relation.
-  // This is more reliable when the FK relationship is not exposed in the PostgREST schema cache.
-  let subsWithExams=subs||[];
-  const examIds=[...new Set((subs||[]).map(x=>x.exam_id).filter(Boolean))];
-  if(examIds.length){
-    const {data:exams,error:ee}=await supabaseClient.from("written_exams").select("id,title,subject,chapter,total_marks,questions").in("id",examIds);
-    if(ee){console.error("Written exam lookup:",ee);toast("Could not load written exam details","error");}
-    else { const em=new Map((exams||[]).map(x=>[x.id,x])); subsWithExams=(subs||[]).map(x=>({...x,written_exams:em.get(x.exam_id)||null})); }
+  if(ue||re){
+    console.error("Admin user profile load:",ue||re);
+    toast("Could not load user profile","error");
+    return;
+  }
+  if(we){
+    console.error("Admin written submissions RPC:",we);
+    toast("CQ record could not be loaded. Run the latest CQ SQL in Supabase.","error",4200);
   }
 
-  $("adminUserUsername").textContent=user.username; $("adminUserAvatar").textContent=user.username.charAt(0).toUpperCase(); $("adminUserStatusText").textContent=user.is_admin?"Administrator":(user.blocked?"Blocked account":"Student account"); const blockBtn=$("adminUserBlockBtn"); blockBtn.textContent=user.blocked?"🔓 Unblock":"🚫 Block"; blockBtn.onclick=()=>toggleUserBlock(user.user_id,!!user.blocked,blockBtn);
-  renderAdminUserResults(results||[]); renderAdminWrittenSubmissions(subsWithExams);
+  $("adminUserUsername").textContent=user.username;
+  $("adminUserAvatar").textContent=user.username.charAt(0).toUpperCase();
+  $("adminUserStatusText").textContent=user.is_admin?"Administrator":(user.blocked?"Blocked account":"Student account");
+  const blockBtn=$("adminUserBlockBtn");
+  blockBtn.textContent=user.blocked?"🔓 Unblock":"🚫 Block";
+  blockBtn.onclick=()=>toggleUserBlock(user.user_id,!!user.blocked,blockBtn);
+  renderAdminUserResults(results||[]);
+  renderAdminWrittenSubmissions(Array.isArray(writtenRows)?writtenRows:[]);
 }
 function renderAdminUserResults(rows){const total=rows.length,passed=rows.filter(r=>Number(r.percent)>=50).length,failed=total-passed,avg=total?Math.round(rows.reduce((a,r)=>a+Number(r.percent||0),0)/total):0;$("adminUserTotal").textContent=bnNum(total);$("adminUserPassed").textContent=bnNum(passed);$("adminUserFailed").textContent=bnNum(failed);$("adminUserAvg").textContent=bnNum(avg)+"%";const box=$("adminUserResults");box.innerHTML=rows.length?rows.map(r=>`<div class="profile-result"><div class="pr-main"><strong>${r.subject} → ${r.exam}</strong><span>${r.chapter} • ${new Date(r.attempted_at).toLocaleDateString("en-GB")}</span></div><div class="pr-score"><strong class="${Number(r.percent)>=50?"pass":"fail"}">${bnNum(r.percent)}% • ${Number(r.percent)>=50?"PASS":"FAIL"}</strong><span>${bnNum(r.correct)} / ${bnNum(r.total)}</span></div></div>`).join(""):'<div class="empty-profile">No objective exam results yet.</div>';}
 function renderAdminWrittenSubmissions(rows){
   const box=$("adminUserWritten"); if(!rows.length){box.innerHTML='<div class="empty-profile">No written submissions yet.</div>';return;} box.innerHTML="";
-  rows.forEach(r=>{const ex=r.written_exams||{};const card=document.createElement("div");card.className="written-submit-card";const title=document.createElement("h4");title.textContent=ex.title||"Written Exam";const p=document.createElement("p");p.textContent=`${ex.subject||""} → ${ex.chapter||""} • Submitted ${new Date(r.submitted_at).toLocaleString("en-GB")} • Max ${ex.total_marks||0} marks`;card.append(title,p);
+  rows.forEach(r=>{const ex=r.written_exams||r;const card=document.createElement("div");card.className="written-submit-card";const title=document.createElement("h4");title.textContent=ex.title||"Written Exam";const p=document.createElement("p");p.textContent=`${ex.subject||""} → ${ex.chapter||""} • Submitted ${new Date(r.submitted_at).toLocaleString("en-GB")} • Max ${ex.total_marks||0} marks`;card.append(title,p);
     const qs=Array.isArray(ex.questions)?ex.questions:[], ans=Array.isArray(r.answers)?r.answers:[];
     if(qs.length){const answersBox=document.createElement("div");qs.forEach((q,i)=>{const qa=document.createElement("div");qa.className="written-question";const qh=document.createElement("strong");qh.textContent=`Question ${i+1}: ${q}`;const a=document.createElement("div");a.style.cssText="margin-top:8px;white-space:pre-wrap;line-height:1.7;color:#475569;font-size:13px";a.textContent=ans[i]||"(No answer)";qa.append(qh,a);answersBox.appendChild(qa);});card.appendChild(answersBox);}
     if(r.status==="graded"){const g=document.createElement("div");g.className="written-graded";g.innerHTML=`<strong>Score: ${bnNum(r.score)} / ${bnNum(ex.total_marks||0)}</strong><br>${r.feedback?`Feedback: ${r.feedback}`:"No feedback added."}`;card.appendChild(g);}else{const row=document.createElement("div");row.className="grade-row";row.innerHTML=`<label>Marks (max ${ex.total_marks||0})<input type="number" min="0" max="${Number(ex.total_marks)||0}" step="0.5" value=""></label><button class="btn btn-primary">Grade Submission</button>`;const fb=document.createElement("textarea");fb.className="grade-feedback";fb.placeholder="Optional feedback for the student";card.append(row,fb);row.querySelector("button").addEventListener("click",()=>gradeWrittenSubmission(r.id,Number(ex.total_marks)||0,row.querySelector("input").value,fb.value));} box.appendChild(card);
   });
 }
 
-async function gradeWrittenSubmission(id,max,score,feedback){if(!isAdmin())return;const n=Number(score);if(!Number.isFinite(n)||n<0||n>max){toast(`Enter a score from 0 to ${max}.`,"warning");return;}const {data:{user}}=await supabaseClient.auth.getUser();const {error}=await supabaseClient.from("written_submissions").update({score:n,status:"graded",feedback:String(feedback||""),graded_at:new Date().toISOString(),graded_by:user.id}).eq("id",id);if(error){console.error(error);toast("Could not save marks","error",3000);return;}toast("Marks saved to the user's profile","success",2600);await showAdminUserProfile(state.adminViewedUserId);}
+async function gradeWrittenSubmission(id,max,score,feedback){if(!isAdmin())return;const n=Number(score);if(!Number.isFinite(n)||n<0||n>max){toast(`Enter a score from 0 to ${max}.`,"warning");return;}const {error}=await supabaseClient.rpc("admin_grade_written_submission",{submission_id:id,new_score:n,new_feedback:String(feedback||"")});if(error){console.error(error);toast("Could not save marks. Run the latest CQ SQL in Supabase.","error",3800);return;}toast("Marks saved to the user's profile","success",2600);await showAdminUserProfile(state.adminViewedUserId);}
 
 // 4. নাম চাওয়া
 async function askForName(subject, chapter, exam){
@@ -4143,11 +4155,13 @@ async function showAdminDashboard(){
       const statusText=u.is_admin?"ADMIN":(u.blocked?"BLOCKED":"ACTIVE");
       const statusClass=u.is_admin?"admin":(u.blocked?"blocked":"active");
       const action=u.is_admin?"—":`<button class="admin-block-btn ${u.blocked?"unblock":""}" data-user-id="${u.user_id}" data-blocked="${u.blocked}">${u.blocked?"↗ Unblock":"🚫 Block"}</button>`;
-      tr.innerHTML=`<td><strong>${u.username}</strong></td><td>${bnNum(u.total)}</td><td class="pass">${bnNum(u.pass)}</td><td class="fail">${bnNum(u.fail)}</td><td><strong>${bnNum(u.avg)}%</strong></td><td><span class="user-status ${statusClass}">${statusText}</span></td><td>${action}</td>`;
+      const profileBtn=`<button type="button" class="user-link" data-user-id="${u.user_id}" title="Open ${u.username}'s profile">${u.username}</button>`;
+      const profileAction=`<button type="button" class="admin-block-btn" data-profile-user-id="${u.user_id}">👤 Profile</button>`;
+      tr.innerHTML=`<td>${profileBtn}</td><td>${bnNum(u.total)}</td><td class="pass">${bnNum(u.pass)}</td><td class="fail">${bnNum(u.fail)}</td><td><strong>${bnNum(u.avg)}%</strong></td><td><span class="user-status ${statusClass}">${statusText}</span></td><td>${profileAction} ${action}</td>`;
       body.appendChild(tr);
     });
-    body.querySelectorAll(".admin-block-btn").forEach(btn=>btn.addEventListener("click",()=>toggleUserBlock(btn.dataset.userId,btn.dataset.blocked==="true",btn)));
-    body.querySelectorAll(".user-link").forEach(btn=>btn.addEventListener("click",()=>showAdminUserProfile(btn.dataset.userId)));
+    body.querySelectorAll(".admin-block-btn[data-user-id]").forEach(btn=>btn.addEventListener("click",()=>toggleUserBlock(btn.dataset.userId,btn.dataset.blocked==="true",btn)));
+    body.querySelectorAll(".user-link, .admin-block-btn[data-profile-user-id]").forEach(btn=>btn.addEventListener("click",()=>showAdminUserProfile(btn.dataset.userId || btn.dataset.profileUserId)));
     $("adminLoadStatus").textContent=`${bnNum(allUsers.length)}  users`;
   }catch(err){
     console.error(err); $("adminLoadStatus").textContent=""; $("adminUsersBody").innerHTML=`<tr><td colspan="7" class="admin-empty">❌ Could not load data. Check your RLS/SQL setup.</td></tr>`;
@@ -4198,7 +4212,7 @@ async function showProfile(){
 function renderProfileWrittenResults(rows){
   const box=$("profileWrittenResults"); if(!rows.length){box.innerHTML='<div class="empty-profile">No written exams submitted yet.</div>';return;}
   box.innerHTML="";
-  rows.forEach(r=>{const ex=r.written_exams||{};const card=document.createElement("div");card.className="written-submit-card";const title=document.createElement("h4");title.textContent=ex.title||"Written Exam";const p=document.createElement("p");p.textContent=`${ex.subject||""} → ${ex.chapter||""} • Submitted ${new Date(r.submitted_at).toLocaleDateString("en-GB")}`;card.append(title,p);if(r.status==="graded"){const g=document.createElement("div");g.className="written-graded";g.innerHTML=`<strong>Marks: ${bnNum(r.score)} / ${bnNum(ex.total_marks||0)}</strong><br>${r.feedback?`Feedback: ${r.feedback}`:"No feedback added."}`;card.appendChild(g);}else{const g=document.createElement("div");g.className="written-pending";g.innerHTML='<strong>Pending admin marking.</strong><br>Your final marks will appear here after the admin grades this submission.';card.appendChild(g);}box.appendChild(card);});
+  rows.forEach(r=>{const ex=r.written_exams||r;const card=document.createElement("div");card.className="written-submit-card";const title=document.createElement("h4");title.textContent=ex.title||"Written Exam";const p=document.createElement("p");p.textContent=`${ex.subject||""} → ${ex.chapter||""} • Submitted ${new Date(r.submitted_at).toLocaleDateString("en-GB")}`;card.append(title,p);if(r.status==="graded"){const g=document.createElement("div");g.className="written-graded";g.innerHTML=`<strong>Marks: ${bnNum(r.score)} / ${bnNum(ex.total_marks||0)}</strong><br>${r.feedback?`Feedback: ${r.feedback}`:"No feedback added."}`;card.appendChild(g);}else{const g=document.createElement("div");g.className="written-pending";g.innerHTML='<strong>Pending admin marking.</strong><br>Your final marks will appear here after the admin grades this submission.';card.appendChild(g);}box.appendChild(card);});
 }
 
 function renderProfileResults(rows){
