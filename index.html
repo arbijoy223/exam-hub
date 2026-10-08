@@ -648,7 +648,7 @@ keyframes warningFloat{
     <div class="footer-contact"><h3>Need help?</h3><p>If you have any problems, please contact us. We will do our best to help.</p>
       <div class="footer-links">
         <a href="https://www.facebook.com/share/18FqGFkwdw/" target="_blank" rel="noopener">ⓕ Facebook</a>
-        <a href="https://youtube.com/" target="_blank" rel="noopener">▶ YouTube</a>
+        <a href="https://youtube.com/@abdurrahmanbijoy3999?si=9vNfOdc9zPTD6CpG" target="_blank" rel="noopener">▶ YouTube</a>
         <a href="https://l.facebook.com/l.php?u=https%3A%2F%2Fwww.instagram.com%2Far___bijoy%3Ffbclid%3DIwZXh0bgNhZW0CMTAAcGRvZgVicmlkETFHR0tWNTh4ek1CWms5OXRvc3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MgABHlWkLKhwHGGaEfcyMh1W8twFnGS723ZZOTwXULMgfO8IHUxE7vbrvd4u0xm5_aem_FcVdDolNM2QrRhZnIWzQ-Q&h=AUCNSju86lcPj2_2NeaNiyQr5V8pm-MtN9ASKIQybPLu5L4REM-e3MVnXzfa5c1__VSvhjFzwEp_3mwh_kYE7agB9lVypFZ-Vn-celBjtqls3XL29VaT2SaUmYY1Uojdn8z9" target="_blank" rel="noopener">◎ Instagram</a>
         <a href="https://wa.me/8801995125480" target="_blank" rel="noopener">☏ WhatsApp</a>
         <a href="mailto:arbijoy223@gmail.com">✉ Email</a>
@@ -3694,50 +3694,65 @@ async function saveWrittenExam(){ if(!isAdmin()) return; const questions=$("writ
 async function toggleWrittenExam(id,active){const {error}=await supabaseClient.from("written_exams").update({active:!active}).eq("id",id);if(error){console.error(error);toast("Could not update exam","error");return;}await loadWrittenAdminList();}
 async function deleteWrittenExam(id){if(!(await customConfirm("Delete this written exam and its submissions?",{icon:"🗑️",okText:"Delete"})))return;const {error}=await supabaseClient.from("written_exams").delete().eq("id",id);if(error){console.error(error);toast("Could not delete exam","error");return;}toast("Written exam deleted","success");await loadWrittenAdminList();}
 
+function escapeHtml(v){return String(v??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[ch]));}
+
+async function loadWrittenSubmissionsForUser(userId){
+  const direct=await supabaseClient.from("written_submissions").select("id,exam_id,user_id,answers,status,score,feedback,submitted_at,graded_at,graded_by").eq("user_id",userId).order("submitted_at",{ascending:false});
+  if(!direct.error){
+    const subs=direct.data||[], examIds=[...new Set(subs.map(x=>x.exam_id).filter(Boolean))];
+    if(!examIds.length) return subs;
+    const {data:exams,error:ee}=await supabaseClient.from("written_exams").select("id,title,subject,chapter,total_marks,questions").in("id",examIds);
+    if(ee) throw ee;
+    const em=new Map((exams||[]).map(x=>[x.id,x]));
+    return subs.map(x=>({...x,written_exams:em.get(x.exam_id)||null}));
+  }
+  // Fallback for older RLS setups: the admin RPC can still read the rows.
+  const rpc=await supabaseClient.rpc("admin_get_user_written_submissions",{target_user_id:userId});
+  if(rpc.error) throw direct.error;
+  return rpc.data||[];
+}
+function getWrittenStats(rows){
+  const graded=(rows||[]).filter(r=>String(r.status||"").toLowerCase()==="graded" && r.score!==null && r.score!==undefined);
+  let total=0,passed=0,failed=0,points=0,maxPoints=0;
+  graded.forEach(r=>{const ex=r.written_exams||r,max=Number(ex.total_marks||0),score=Number(r.score||0);if(max<=0)return;total++;points+=score;maxPoints+=max;if(score/max*100>=50)passed++;else failed++;});
+  return {total,passed,failed,avg:maxPoints?Math.round(points/maxPoints*100):0};
+}
+function combineStats(objectiveRows,writtenRows){
+  const o=objectiveRows||[], w=(writtenRows||[]).filter(r=>String(r.status||"").toLowerCase()==="graded" && r.score!==null && r.score!==undefined);
+  const objectivePassed=o.filter(r=>Number(r.percent)>=50).length;
+  const writtenPercents=w.map(r=>{const ex=r.written_exams||r,max=Number(ex.total_marks||0);return max>0?(Number(r.score||0)/max)*100:null;}).filter(v=>v!==null);
+  const allPercents=o.map(r=>Number(r.percent||0)).concat(writtenPercents);
+  return {total:allPercents.length,passed:objectivePassed+writtenPercents.filter(v=>v>=50).length,failed:(o.length-objectivePassed)+writtenPercents.filter(v=>v<50).length,avg:allPercents.length?Math.round(allPercents.reduce((a,v)=>a+v,0)/allPercents.length):0};
+}
+
 async function showAdminUserProfile(userId){
   if(!isAdmin()) return;
-  hideAllScreens();
-  $("screen-admin-user").hidden=false;
-  $("topSub").textContent="User Profile";
-  state.adminViewedUserId=userId;
-  pushScreen("admin-user",{userId});
-  $("adminUserResults").innerHTML='<div class="empty-profile">⏳ Loading...</div>';
-  $("adminUserWritten").innerHTML='<div class="empty-profile">⏳ Loading...</div>';
-
-  const [{data:user,error:ue},{data:results,error:re},{data:writtenRows,error:we}]=await Promise.all([
-    supabaseClient.from("profiles").select("user_id,username,is_admin,blocked,created_at").eq("user_id",userId).single(),
-    supabaseClient.from("results").select("subject,chapter,exam,correct,total,percent,status,attempted_at").eq("user_id",userId).order("attempted_at",{ascending:false}),
-    supabaseClient.rpc("admin_get_user_written_submissions",{target_user_id:userId})
-  ]);
-  if(ue||re){
-    console.error("Admin user profile load:",ue||re);
-    toast("Could not load user profile","error");
-    return;
-  }
-  if(we){
-    console.error("Admin written submissions RPC:",we);
-    toast("CQ record could not be loaded. Run the latest CQ SQL in Supabase.","error",4200);
-  }
-
-  $("adminUserUsername").textContent=user.username;
-  $("adminUserAvatar").textContent=user.username.charAt(0).toUpperCase();
-  $("adminUserStatusText").textContent=user.is_admin?"Administrator":(user.blocked?"Blocked account":"Student account");
-  const blockBtn=$("adminUserBlockBtn");
-  blockBtn.textContent=user.blocked?"🔓 Unblock":"🚫 Block";
-  blockBtn.onclick=()=>toggleUserBlock(user.user_id,!!user.blocked,blockBtn);
-  renderAdminUserResults(results||[]);
-  renderAdminWrittenSubmissions(Array.isArray(writtenRows)?writtenRows:[]);
+  hideAllScreens(); $("screen-admin-user").hidden=false; $("topSub").textContent="User Profile"; state.adminViewedUserId=userId; pushScreen("admin-user",{userId});
+  $("adminUserResults").innerHTML='<div class="empty-profile">⏳ Loading...</div>'; $("adminUserWritten").innerHTML='<div class="empty-profile">⏳ Loading...</div>';
+  try{
+    const [{data:user,error:ue},{data:results,error:re},writtenRows]=await Promise.all([
+      supabaseClient.from("profiles").select("user_id,username,is_admin,blocked,created_at").eq("user_id",userId).single(),
+      supabaseClient.from("results").select("subject,chapter,exam,correct,total,percent,status,attempted_at").eq("user_id",userId).order("attempted_at",{ascending:false}),
+      loadWrittenSubmissionsForUser(userId)
+    ]);
+    if(ue) throw ue; if(re) throw re;
+    $("adminUserUsername").textContent=user.username; $("adminUserAvatar").textContent=user.username.charAt(0).toUpperCase(); $("adminUserStatusText").textContent=user.is_admin?"Administrator":(user.blocked?"Blocked account":"Student account");
+    const blockBtn=$("adminUserBlockBtn"); blockBtn.textContent=user.blocked?"🔓 Unblock":"🚫 Block"; blockBtn.onclick=()=>toggleUserBlock(user.user_id,!!user.blocked,blockBtn);
+    renderAdminUserResults(results||[],writtenRows||[]); renderAdminWrittenSubmissions(writtenRows||[]);
+  }catch(err){console.error("Admin user profile load:",err);$("adminUserResults").innerHTML='<div class="empty-profile">Could not load this user profile.</div>';$("adminUserWritten").innerHTML='<div class="empty-profile">Could not load CQ / Written submissions.</div>';toast("Could not load user profile. Check Supabase/RLS.","error",3800);}
 }
-function renderAdminUserResults(rows){const total=rows.length,passed=rows.filter(r=>Number(r.percent)>=50).length,failed=total-passed,avg=total?Math.round(rows.reduce((a,r)=>a+Number(r.percent||0),0)/total):0;$("adminUserTotal").textContent=bnNum(total);$("adminUserPassed").textContent=bnNum(passed);$("adminUserFailed").textContent=bnNum(failed);$("adminUserAvg").textContent=bnNum(avg)+"%";const box=$("adminUserResults");box.innerHTML=rows.length?rows.map(r=>`<div class="profile-result"><div class="pr-main"><strong>${r.subject} → ${r.exam}</strong><span>${r.chapter} • ${new Date(r.attempted_at).toLocaleDateString("en-GB")}</span></div><div class="pr-score"><strong class="${Number(r.percent)>=50?"pass":"fail"}">${bnNum(r.percent)}% • ${Number(r.percent)>=50?"PASS":"FAIL"}</strong><span>${bnNum(r.correct)} / ${bnNum(r.total)}</span></div></div>`).join(""):'<div class="empty-profile">No objective exam results yet.</div>';}
+function renderAdminUserResults(rows,writtenRows=[]){
+  const c=combineStats(rows,writtenRows); $("adminUserTotal").textContent=bnNum(c.total); $("adminUserPassed").textContent=bnNum(c.passed); $("adminUserFailed").textContent=bnNum(c.failed); $("adminUserAvg").textContent=bnNum(c.avg)+"%";
+  const box=$("adminUserResults"); if(!rows.length){box.innerHTML='<div class="empty-profile">No objective exam results yet.</div>';return;}
+  const groups=new Map(); rows.forEach(r=>{const key=`${r.subject}|||${r.chapter}|||${r.exam}`;if(!groups.has(key))groups.set(key,{subject:r.subject,chapter:r.chapter,exam:r.exam,rows:[]});groups.get(key).rows.push(r);});
+  const list=[...groups.values()].map(g=>{const avg=Math.round(g.rows.reduce((a,r)=>a+Number(r.percent||0),0)/g.rows.length),latest=g.rows.slice().sort((a,b)=>new Date(b.attempted_at)-new Date(a.attempted_at))[0],pass=g.rows.filter(r=>Number(r.percent)>=50).length;return {...g,avg,latest,pass,fail:g.rows.length-pass,attempts:g.rows.length};}).sort((a,b)=>new Date(b.latest.attempted_at)-new Date(a.latest.attempted_at));
+  box.innerHTML=list.map(g=>`<button type="button" class="profile-result admin-exam-result" data-subject="${escapeHtml(g.subject)}" data-chapter="${escapeHtml(g.chapter)}" data-exam="${escapeHtml(g.exam)}" style="width:100%;text-align:left;border:0;cursor:pointer"><div class="pr-main"><strong>${escapeHtml(g.subject)} → ${escapeHtml(g.exam)}</strong><span>${escapeHtml(g.chapter)} • ${bnNum(g.attempts)} attempt${g.attempts===1?"":"s"} • Avg ${bnNum(g.avg)}%</span></div><div class="pr-score"><strong class="${g.avg>=50?"pass":"fail"}">${bnNum(g.avg)}% • ${g.avg>=50?"PASS":"FAIL"}</strong><span>${bnNum(g.pass)} pass • ${bnNum(g.fail)} fail</span></div></button>`).join("");
+  box.querySelectorAll(".admin-exam-result").forEach(btn=>btn.addEventListener("click",()=>{state.selectedSubject=btn.dataset.subject;state.selectedChapter=btn.dataset.chapter;state.selectedExam=btn.dataset.exam;showLeaderboard();}));
+}
 function renderAdminWrittenSubmissions(rows){
   const box=$("adminUserWritten"); if(!rows.length){box.innerHTML='<div class="empty-profile">No written submissions yet.</div>';return;} box.innerHTML="";
-  rows.forEach(r=>{const ex=r.written_exams||r;const card=document.createElement("div");card.className="written-submit-card";const title=document.createElement("h4");title.textContent=ex.title||"Written Exam";const p=document.createElement("p");p.textContent=`${ex.subject||""} → ${ex.chapter||""} • Submitted ${new Date(r.submitted_at).toLocaleString("en-GB")} • Max ${ex.total_marks||0} marks`;card.append(title,p);
-    const qs=Array.isArray(ex.questions)?ex.questions:[], ans=Array.isArray(r.answers)?r.answers:[];
-    if(qs.length){const answersBox=document.createElement("div");qs.forEach((q,i)=>{const qa=document.createElement("div");qa.className="written-question";const qh=document.createElement("strong");qh.textContent=`Question ${i+1}: ${q}`;const a=document.createElement("div");a.style.cssText="margin-top:8px;white-space:pre-wrap;line-height:1.7;color:#475569;font-size:13px";a.textContent=ans[i]||"(No answer)";qa.append(qh,a);answersBox.appendChild(qa);});card.appendChild(answersBox);}
-    if(r.status==="graded"){const g=document.createElement("div");g.className="written-graded";g.innerHTML=`<strong>Score: ${bnNum(r.score)} / ${bnNum(ex.total_marks||0)}</strong><br>${r.feedback?`Feedback: ${r.feedback}`:"No feedback added."}`;card.appendChild(g);}else{const row=document.createElement("div");row.className="grade-row";row.innerHTML=`<label>Marks (max ${ex.total_marks||0})<input type="number" min="0" max="${Number(ex.total_marks)||0}" step="0.5" value=""></label><button class="btn btn-primary">Grade Submission</button>`;const fb=document.createElement("textarea");fb.className="grade-feedback";fb.placeholder="Optional feedback for the student";card.append(row,fb);row.querySelector("button").addEventListener("click",()=>gradeWrittenSubmission(r.id,Number(ex.total_marks)||0,row.querySelector("input").value,fb.value));} box.appendChild(card);
-  });
+  rows.forEach(r=>{const ex=r.written_exams||r,card=document.createElement("div");card.className="written-submit-card";const title=document.createElement("h4");title.textContent=ex.title||"Written Exam";const p=document.createElement("p");p.textContent=`${ex.subject||""} → ${ex.chapter||""} • Submitted ${new Date(r.submitted_at).toLocaleString("en-GB")} • Max ${ex.total_marks||0} marks`;card.append(title,p);const qs=Array.isArray(ex.questions)?ex.questions:[],ans=Array.isArray(r.answers)?r.answers:[];if(qs.length){const answersBox=document.createElement("div");qs.forEach((q,i)=>{const qa=document.createElement("div");qa.className="written-question";const qh=document.createElement("strong");qh.textContent=`Question ${i+1}: ${q}`;const a=document.createElement("div");a.style.cssText="margin-top:8px;white-space:pre-wrap;line-height:1.65";a.textContent=ans[i]||"(No answer)";qa.append(qh,a);answersBox.appendChild(qa);});card.appendChild(answersBox);}if(r.status==="graded"){const g=document.createElement("div");g.className="written-graded";g.innerHTML=`<strong>Score: ${bnNum(r.score)} / ${bnNum(ex.total_marks||0)}</strong><br>${r.feedback?`Feedback: ${escapeHtml(r.feedback)}`:"No feedback added."}`;card.appendChild(g);}else{const row=document.createElement("div");row.className="grade-row";row.innerHTML=`<label>Marks (max ${ex.total_marks||0})<input type="number" min="0" max="${Number(ex.total_marks)||0}" step="0.5" value=""></label><button class="btn btn-primary">Grade Submission</button>`;const fb=document.createElement("textarea");fb.className="grade-feedback";fb.placeholder="Optional feedback for the student";row.appendChild(fb);card.appendChild(row);row.querySelector("button").addEventListener("click",()=>gradeWrittenSubmission(r.id,Number(ex.total_marks)||0,row.querySelector("input").value,fb.value));}box.appendChild(card);});
 }
-
 async function gradeWrittenSubmission(id,max,score,feedback){if(!isAdmin())return;const n=Number(score);if(!Number.isFinite(n)||n<0||n>max){toast(`Enter a score from 0 to ${max}.`,"warning");return;}const {error}=await supabaseClient.rpc("admin_grade_written_submission",{submission_id:id,new_score:n,new_feedback:String(feedback||"")});if(error){console.error(error);toast("Could not save marks. Run the latest CQ SQL in Supabase.","error",3800);return;}toast("Marks saved to the user's profile","success",2600);await showAdminUserProfile(state.adminViewedUserId);}
 
 // 4. নাম চাওয়া
@@ -4121,54 +4136,43 @@ async function saveUserResult(entry){
 
 async function showAdminDashboard(){
   if(!isAdmin()){ toast("⛔ Admin access only", "error"); return; }
-  hideAllScreens();
-  $("screen-admin").hidden=false;
-  $("topSub").textContent="Admin Dashboard";
-  pushScreen("admin",{});
-  $("adminLoadStatus").textContent="⏳ Loading...";
-  $("adminUsersBody").innerHTML='<tr><td colspan="7" class="admin-empty">⏳ Loading data...</td></tr>';
+  hideAllScreens(); $("screen-admin").hidden=false; $("topSub").textContent="Admin Dashboard"; pushScreen("admin",{});
+  $("adminLoadStatus").textContent="⏳ Loading..."; $("adminUsersBody").innerHTML='<tr><td colspan="7" class="admin-empty">⏳ Loading data...</td></tr>';
   try{
-    const [{data:users,error:userErr},{data:results,error:resultErr}] = await Promise.all([
+    const [{data:users,error:userErr},{data:results,error:resultErr},{data:written,error:writtenErr}]=await Promise.all([
       supabaseClient.from("profiles").select("user_id,username,is_admin,blocked,created_at").order("created_at",{ascending:true}),
-      supabaseClient.from("results").select("user_id,subject,chapter,exam,correct,total,percent,status,attempted_at").order("attempted_at",{ascending:false})
+      supabaseClient.from("results").select("user_id,subject,chapter,exam,correct,total,percent,status,attempted_at").order("attempted_at",{ascending:false}),
+      supabaseClient.from("written_submissions").select("user_id,exam_id,status,score,submitted_at").eq("status","graded").order("submitted_at",{ascending:false})
     ]);
-    if(userErr) throw userErr;
-    if(resultErr) throw resultErr;
-    const allUsers=users||[], allResults=results||[];
-    const map={};
-    allUsers.forEach(u=>map[u.user_id]={...u,total:0,pass:0,fail:0,avg:0,results:[]});
-    allResults.forEach(r=>{ if(!map[r.user_id]) return; const m=map[r.user_id]; m.total++; if(Number(r.percent)>=50)m.pass++;else m.fail++; m.results.push(r); });
-    Object.values(map).forEach(m=>m.avg=m.total?Math.round(m.results.reduce((a,r)=>a+Number(r.percent||0),0)/m.total):0);
+    if(userErr) throw userErr; if(resultErr) throw resultErr; if(writtenErr) throw writtenErr;
+    const allUsers=users||[], allResults=results||[], allWritten=written||[];
+    const examIds=[...new Set(allWritten.map(x=>x.exam_id).filter(Boolean))];
+    let writtenExams=[];
+    if(examIds.length){const {data:ex,error:ee}=await supabaseClient.from("written_exams").select("id,total_marks").in("id",examIds);if(ee)throw ee;writtenExams=ex||[];}
+    const em=new Map(writtenExams.map(x=>[x.id,x]));
+    const map={}; allUsers.forEach(u=>map[u.user_id]={...u,total:0,pass:0,fail:0,avg:0,percentages:[]});
+    allResults.forEach(r=>{if(!map[r.user_id])return;const m=map[r.user_id],pct=Number(r.percent||0);m.total++;m.percentages.push(pct);if(pct>=50)m.pass++;else m.fail++;});
+    allWritten.forEach(r=>{if(!map[r.user_id])return;const max=Number((em.get(r.exam_id)||{}).total_marks||0),score=Number(r.score||0);if(max<=0)return;const m=map[r.user_id],pct=score/max*100;m.total++;m.percentages.push(pct);if(pct>=50)m.pass++;else m.fail++;});
+    Object.values(map).forEach(m=>m.avg=m.percentages.length?Math.round(m.percentages.reduce((a,v)=>a+v,0)/m.percentages.length):0);
     const nonAdminUsers=Object.values(map);
-    const totalExams=allResults.length, totalPass=allResults.filter(r=>Number(r.percent)>=50).length, totalFail=totalExams-totalPass;
-    const overallAvg=totalExams?Math.round(allResults.reduce((a,r)=>a+Number(r.percent||0),0)/totalExams):0;
-    $("adminTotalUsers").textContent=bnNum(allUsers.length);
-    $("adminTotalExams").textContent=bnNum(totalExams);
-    $("adminTotalPass").textContent=bnNum(totalPass);
-    $("adminTotalFail").textContent=bnNum(totalFail);
-    $("adminOverallAvg").textContent=bnNum(overallAvg)+"%";
-    $("adminBlockedUsers").textContent=bnNum(allUsers.filter(u=>u.blocked).length);
+    const allPercents=allResults.map(r=>Number(r.percent||0));
+    allWritten.forEach(r=>{const max=Number((em.get(r.exam_id)||{}).total_marks||0);if(max>0)allPercents.push(Number(r.score||0)/max*100);});
+    const totalExams=allPercents.length,totalPass=allPercents.filter(v=>v>=50).length,totalFail=totalExams-totalPass,overallAvg=totalExams?Math.round(allPercents.reduce((a,v)=>a+v,0)/totalExams):0;
+    $("adminTotalUsers").textContent=bnNum(allUsers.length); $("adminTotalExams").textContent=bnNum(totalExams); $("adminTotalPass").textContent=bnNum(totalPass); $("adminTotalFail").textContent=bnNum(totalFail); $("adminOverallAvg").textContent=bnNum(overallAvg)+"%"; $("adminBlockedUsers").textContent=bnNum(allUsers.filter(u=>u.blocked).length);
     const body=$("adminUsersBody"); body.innerHTML="";
-    if(!nonAdminUsers.length){ body.innerHTML='<tr><td colspan="7" class="admin-empty">No student accounts yet.</td></tr>'; }
-    else nonAdminUsers.sort((a,b)=>b.avg-a.avg || b.total-a.total).forEach(u=>{
-      const tr=document.createElement("tr");
-      const statusText=u.is_admin?"ADMIN":(u.blocked?"BLOCKED":"ACTIVE");
-      const statusClass=u.is_admin?"admin":(u.blocked?"blocked":"active");
+    if(!nonAdminUsers.length) body.innerHTML='<tr><td colspan="7" class="admin-empty">No student accounts yet.</td></tr>';
+    else nonAdminUsers.sort((a,b)=>b.avg-a.avg||b.total-a.total).forEach(u=>{
+      const tr=document.createElement("tr"),statusText=u.is_admin?"ADMIN":(u.blocked?"BLOCKED":"ACTIVE"),statusClass=u.is_admin?"admin":(u.blocked?"blocked":"active");
       const action=u.is_admin?"—":`<button class="admin-block-btn ${u.blocked?"unblock":""}" data-user-id="${u.user_id}" data-blocked="${u.blocked}">${u.blocked?"↗ Unblock":"🚫 Block"}</button>`;
-      const profileBtn=`<button type="button" class="user-link" data-user-id="${u.user_id}" title="Open ${u.username}'s profile">${u.username}</button>`;
+      const profileBtn=`<button type="button" class="user-link" data-user-id="${u.user_id}" title="Open ${escapeHtml(u.username)}'s profile">${escapeHtml(u.username)}</button>`;
       const profileAction=`<button type="button" class="admin-block-btn" data-profile-user-id="${u.user_id}">👤 Profile</button>`;
-      tr.innerHTML=`<td>${profileBtn}</td><td>${bnNum(u.total)}</td><td class="pass">${bnNum(u.pass)}</td><td class="fail">${bnNum(u.fail)}</td><td><strong>${bnNum(u.avg)}%</strong></td><td><span class="user-status ${statusClass}">${statusText}</span></td><td>${profileAction} ${action}</td>`;
-      body.appendChild(tr);
+      tr.innerHTML=`<td>${profileBtn}</td><td>${bnNum(u.total)}</td><td class="pass">${bnNum(u.pass)}</td><td class="fail">${bnNum(u.fail)}</td><td><strong>${bnNum(u.avg)}%</strong></td><td><span class="user-status ${statusClass}">${statusText}</span></td><td>${profileAction} ${action}</td>`; body.appendChild(tr);
     });
     body.querySelectorAll(".admin-block-btn[data-user-id]").forEach(btn=>btn.addEventListener("click",()=>toggleUserBlock(btn.dataset.userId,btn.dataset.blocked==="true",btn)));
-    body.querySelectorAll(".user-link, .admin-block-btn[data-profile-user-id]").forEach(btn=>btn.addEventListener("click",()=>showAdminUserProfile(btn.dataset.userId || btn.dataset.profileUserId)));
-    $("adminLoadStatus").textContent=`${bnNum(allUsers.length)}  users`;
-  }catch(err){
-    console.error(err); $("adminLoadStatus").textContent=""; $("adminUsersBody").innerHTML=`<tr><td colspan="7" class="admin-empty">❌ Could not load data. Check your RLS/SQL setup.</td></tr>`;
-    toast("Could not load admin data", "error", 3500);
-  }
+    body.querySelectorAll(".user-link, .admin-block-btn[data-profile-user-id]").forEach(btn=>btn.addEventListener("click",()=>showAdminUserProfile(btn.dataset.userId||btn.dataset.profileUserId)));
+    $("adminLoadStatus").textContent=`${bnNum(allUsers.length)} users • ${bnNum(totalExams)} combined exams`;
+  }catch(err){console.error(err);$("adminLoadStatus").textContent="";$("adminUsersBody").innerHTML='<tr><td colspan="7" class="admin-empty">❌ Could not load data. Check your RLS/SQL setup.</td></tr>';toast("Could not load admin data","error",3500);}
 }
-
 async function toggleUserBlock(userId, currentlyBlocked, btn){
   if(!isAdmin() || !supabaseClient) return;
   const action=currentlyBlocked?"unblock":"block";
@@ -4182,32 +4186,20 @@ async function toggleUserBlock(userId, currentlyBlocked, btn){
 }
 
 async function showProfile(){
-  if(!authReady()) return;
-  await loadCurrentProfile(); if(!currentProfile){openAuthModal("login"); return;}
+  if(!authReady()) return; await loadCurrentProfile(); if(!currentProfile){openAuthModal("login");return;}
   hideAllScreens(); $("screen-profile").hidden=false; $("topSub").textContent="My Profile"; pushScreen("profile",{});
-  $("profileUsername").textContent=currentProfile.username; $("profileAvatar").textContent=currentProfile.username.charAt(0).toUpperCase();
-  $("profileResults").innerHTML='<div class="empty-profile">⏳ Loading results...</div>';
-  $("profileWrittenResults").innerHTML='<div class="empty-profile">⏳ Loading written results...</div>';
-  const {data:{user}}=await supabaseClient.auth.getUser(); if(!user) return;
-  const {data,error}=await supabaseClient.from("results").select("subject,chapter,exam,correct,total,percent,status,attempted_at").order("attempted_at",{ascending:true});
-  if(error){ console.error(error); $("profileResults").innerHTML='<div class="empty-profile">Could not load objective results.</div>'; }
-  else { renderProfileResults(data||[]); renderPerformanceChart(data||[]); }
-
-  // Load written submissions and their exams in two explicit queries.
-  const {data:written,error:writtenError}=await supabaseClient.from("written_submissions").select("id,exam_id,status,score,feedback,submitted_at,graded_at").eq("user_id",user.id).order("submitted_at",{ascending:false});
-  if(writtenError){
-    console.error("Written results load:",writtenError);
-    $("profileWrittenResults").innerHTML='<div class="empty-profile">Could not load written results.</div>';
-  } else {
-    const examIds=[...new Set((written||[]).map(x=>x.exam_id).filter(Boolean))];
-    let rows=written||[];
-    if(examIds.length){
-      const {data:exams,error:ee}=await supabaseClient.from("written_exams").select("id,title,subject,chapter,total_marks").in("id",examIds);
-      if(ee) console.error("Written exam details load:",ee);
-      else { const em=new Map((exams||[]).map(x=>[x.id,x])); rows=rows.map(x=>({...x,written_exams:em.get(x.exam_id)||null})); }
-    }
-    renderProfileWrittenResults(rows);
-  }
+  $("profileUsername").textContent=currentProfile.username; $("profileAvatar").textContent=currentProfile.username.charAt(0).toUpperCase(); $("profileResults").innerHTML='<div class="empty-profile">⏳ Loading results...</div>'; $("profileWrittenResults").innerHTML='<div class="empty-profile">⏳ Loading written results...</div>';
+  const {data:{user}}=await supabaseClient.auth.getUser(); if(!user)return;
+  const [{data,error},{data:written,error:writtenError}]=await Promise.all([
+    supabaseClient.from("results").select("subject,chapter,exam,correct,total,percent,status,attempted_at").order("attempted_at",{ascending:true}),
+    supabaseClient.from("written_submissions").select("id,exam_id,status,score,feedback,submitted_at,graded_at").eq("user_id",user.id).order("submitted_at",{ascending:false})
+  ]);
+  if(error){console.error(error);$("profileResults").innerHTML='<div class="empty-profile">Could not load objective results.</div>';}
+  if(writtenError){console.error("Written results load:",writtenError);$("profileWrittenResults").innerHTML='<div class="empty-profile">Could not load written results.</div>';if(!error)renderProfileResults(data||[],[]);return;}
+  const examIds=[...new Set((written||[]).map(x=>x.exam_id).filter(Boolean))]; let rows=written||[];
+  if(examIds.length){const {data:exams,error:ee}=await supabaseClient.from("written_exams").select("id,title,subject,chapter,total_marks,questions").in("id",examIds);if(ee)console.error("Written exam details load:",ee);else{const em=new Map((exams||[]).map(x=>[x.id,x]));rows=rows.map(x=>({...x,written_exams:em.get(x.exam_id)||null}));}}
+  renderProfileWrittenResults(rows);
+  if(!error){renderProfileResults(data||[],rows);renderPerformanceChart(data||[]);}
 }
 function renderProfileWrittenResults(rows){
   const box=$("profileWrittenResults"); if(!rows.length){box.innerHTML='<div class="empty-profile">No written exams submitted yet.</div>';return;}
@@ -4215,12 +4207,12 @@ function renderProfileWrittenResults(rows){
   rows.forEach(r=>{const ex=r.written_exams||r;const card=document.createElement("div");card.className="written-submit-card";const title=document.createElement("h4");title.textContent=ex.title||"Written Exam";const p=document.createElement("p");p.textContent=`${ex.subject||""} → ${ex.chapter||""} • Submitted ${new Date(r.submitted_at).toLocaleDateString("en-GB")}`;card.append(title,p);if(r.status==="graded"){const g=document.createElement("div");g.className="written-graded";g.innerHTML=`<strong>Marks: ${bnNum(r.score)} / ${bnNum(ex.total_marks||0)}</strong><br>${r.feedback?`Feedback: ${r.feedback}`:"No feedback added."}`;card.appendChild(g);}else{const g=document.createElement("div");g.className="written-pending";g.innerHTML='<strong>Pending admin marking.</strong><br>Your final marks will appear here after the admin grades this submission.';card.appendChild(g);}box.appendChild(card);});
 }
 
-function renderProfileResults(rows){
-  const total=rows.length, passed=rows.filter(r=>r.percent>=50).length, failed=total-passed, avg=total?Math.round(rows.reduce((a,r)=>a+Number(r.percent||0),0)/total):0;
-  $("profileTotal").textContent=bnNum(total); $("profilePassed").textContent=bnNum(passed); $("profileFailed").textContent=bnNum(failed); $("profileAvg").textContent=bnNum(avg)+"%";
-  const box=$("profileResults"); if(!rows.length){box.innerHTML='<div class="empty-profile">No exams taken yet.</div>';return;}
-  box.innerHTML=rows.slice().reverse().map((r,i)=>{const pass=Number(r.percent)>=50;const d=new Date(r.attempted_at);return `<div class="profile-result"><div class="pr-main"><strong>${r.subject} → ${r.exam}</strong><span>${r.chapter} • ${d.toLocaleDateString("en-GB")}</span></div><div class="pr-score"><strong class="${pass?"pass":"fail"}">${bnNum(r.percent)}% • ${pass?"PASS":"FAIL"}</strong><span>${bnNum(r.correct)} / ${bnNum(r.total)}</span></div></div>`;}).join("");
+function renderProfileResults(rows,writtenRows=[]){
+  const c=combineStats(rows,writtenRows); $("profileTotal").textContent=bnNum(c.total); $("profilePassed").textContent=bnNum(c.passed); $("profileFailed").textContent=bnNum(c.failed); $("profileAvg").textContent=bnNum(c.avg)+"%";
+  const box=$("profileResults"); if(!rows.length){box.innerHTML='<div class="empty-profile">No objective exam results yet.</div>';return;}
+  box.innerHTML=rows.slice().reverse().map(r=>{const pass=Number(r.percent)>=50,d=new Date(r.attempted_at);return `<div class="profile-result"><div class="pr-main"><strong>${escapeHtml(r.subject)} → ${escapeHtml(r.exam)}</strong><span>${escapeHtml(r.chapter)} • ${d.toLocaleDateString("en-GB")}</span></div><div class="pr-score"><strong class="${pass?"pass":"fail"}">${bnNum(r.percent)}% • ${pass?"PASS":"FAIL"}</strong><span>${bnNum(r.correct)} / ${bnNum(r.total)}</span></div></div>`;}).join("");
 }
+
 function renderPerformanceChart(rows){
   const canvas=$("performanceChart"), ctx=canvas.getContext("2d");
   const rect=canvas.getBoundingClientRect(), dpr=Math.min(window.devicePixelRatio||1,2);
