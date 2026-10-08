@@ -3696,10 +3696,25 @@ async function deleteWrittenExam(id){if(!(await customConfirm("Delete this writt
 
 async function showAdminUserProfile(userId){
   if(!isAdmin()) return; hideAllScreens(); $("screen-admin-user").hidden=false; $("topSub").textContent="User Profile"; state.adminViewedUserId=userId; pushScreen("admin-user",{userId}); $("adminUserResults").innerHTML='<div class="empty-profile">⏳ Loading...</div>'; $("adminUserWritten").innerHTML='<div class="empty-profile">⏳ Loading...</div>';
-  const [{data:user,error:ue},{data:results,error:re},{data:subs,error:se}]=await Promise.all([supabaseClient.from("profiles").select("user_id,username,is_admin,blocked,created_at").eq("user_id",userId).single(),supabaseClient.from("results").select("subject,chapter,exam,correct,total,percent,status,attempted_at").eq("user_id",userId).order("attempted_at",{ascending:false}),supabaseClient.from("written_submissions").select("id,exam_id,answers,status,score,feedback,submitted_at,graded_at,written_exams(title,subject,chapter,total_marks,questions)").eq("user_id",userId).order("submitted_at",{ascending:false})]);
-  if(ue||re||se){console.error(ue||re||se);toast("Could not load user profile","error");return;}
+  const [{data:user,error:ue},{data:results,error:re},{data:subs,error:se}]=await Promise.all([
+    supabaseClient.from("profiles").select("user_id,username,is_admin,blocked,created_at").eq("user_id",userId).single(),
+    supabaseClient.from("results").select("subject,chapter,exam,correct,total,percent,status,attempted_at").eq("user_id",userId).order("attempted_at",{ascending:false}),
+    supabaseClient.from("written_submissions").select("id,exam_id,answers,status,score,feedback,submitted_at,graded_at").eq("user_id",userId).order("submitted_at",{ascending:false})
+  ]);
+  if(ue||re||se){console.error("Admin user profile load:",ue||re||se);toast("Could not load user profile","error");return;}
+
+  // Load written exams separately instead of relying on Supabase's nested relation.
+  // This is more reliable when the FK relationship is not exposed in the PostgREST schema cache.
+  let subsWithExams=subs||[];
+  const examIds=[...new Set((subs||[]).map(x=>x.exam_id).filter(Boolean))];
+  if(examIds.length){
+    const {data:exams,error:ee}=await supabaseClient.from("written_exams").select("id,title,subject,chapter,total_marks,questions").in("id",examIds);
+    if(ee){console.error("Written exam lookup:",ee);toast("Could not load written exam details","error");}
+    else { const em=new Map((exams||[]).map(x=>[x.id,x])); subsWithExams=(subs||[]).map(x=>({...x,written_exams:em.get(x.exam_id)||null})); }
+  }
+
   $("adminUserUsername").textContent=user.username; $("adminUserAvatar").textContent=user.username.charAt(0).toUpperCase(); $("adminUserStatusText").textContent=user.is_admin?"Administrator":(user.blocked?"Blocked account":"Student account"); const blockBtn=$("adminUserBlockBtn"); blockBtn.textContent=user.blocked?"🔓 Unblock":"🚫 Block"; blockBtn.onclick=()=>toggleUserBlock(user.user_id,!!user.blocked,blockBtn);
-  renderAdminUserResults(results||[]); renderAdminWrittenSubmissions(subs||[]);
+  renderAdminUserResults(results||[]); renderAdminWrittenSubmissions(subsWithExams);
 }
 function renderAdminUserResults(rows){const total=rows.length,passed=rows.filter(r=>Number(r.percent)>=50).length,failed=total-passed,avg=total?Math.round(rows.reduce((a,r)=>a+Number(r.percent||0),0)/total):0;$("adminUserTotal").textContent=bnNum(total);$("adminUserPassed").textContent=bnNum(passed);$("adminUserFailed").textContent=bnNum(failed);$("adminUserAvg").textContent=bnNum(avg)+"%";const box=$("adminUserResults");box.innerHTML=rows.length?rows.map(r=>`<div class="profile-result"><div class="pr-main"><strong>${r.subject} → ${r.exam}</strong><span>${r.chapter} • ${new Date(r.attempted_at).toLocaleDateString("en-GB")}</span></div><div class="pr-score"><strong class="${Number(r.percent)>=50?"pass":"fail"}">${bnNum(r.percent)}% • ${Number(r.percent)>=50?"PASS":"FAIL"}</strong><span>${bnNum(r.correct)} / ${bnNum(r.total)}</span></div></div>`).join(""):'<div class="empty-profile">No objective exam results yet.</div>';}
 function renderAdminWrittenSubmissions(rows){
@@ -4160,14 +4175,25 @@ async function showProfile(){
   $("profileResults").innerHTML='<div class="empty-profile">⏳ Loading results...</div>';
   $("profileWrittenResults").innerHTML='<div class="empty-profile">⏳ Loading written results...</div>';
   const {data:{user}}=await supabaseClient.auth.getUser(); if(!user) return;
-  const [{data,error},{data:written,error:writtenError}]=await Promise.all([
-    supabaseClient.from("results").select("subject,chapter,exam,correct,total,percent,status,attempted_at").order("attempted_at",{ascending:true}),
-    supabaseClient.from("written_submissions").select("id,status,score,feedback,submitted_at,graded_at,written_exams(title,subject,chapter,total_marks)").eq("user_id",user.id).order("submitted_at",{ascending:false})
-  ]);
+  const {data,error}=await supabaseClient.from("results").select("subject,chapter,exam,correct,total,percent,status,attempted_at").order("attempted_at",{ascending:true});
   if(error){ console.error(error); $("profileResults").innerHTML='<div class="empty-profile">Could not load objective results.</div>'; }
   else { renderProfileResults(data||[]); renderPerformanceChart(data||[]); }
-  if(writtenError){ console.error(writtenError); $("profileWrittenResults").innerHTML='<div class="empty-profile">Could not load written results.</div>'; }
-  else renderProfileWrittenResults(written||[]);
+
+  // Load written submissions and their exams in two explicit queries.
+  const {data:written,error:writtenError}=await supabaseClient.from("written_submissions").select("id,exam_id,status,score,feedback,submitted_at,graded_at").eq("user_id",user.id).order("submitted_at",{ascending:false});
+  if(writtenError){
+    console.error("Written results load:",writtenError);
+    $("profileWrittenResults").innerHTML='<div class="empty-profile">Could not load written results.</div>';
+  } else {
+    const examIds=[...new Set((written||[]).map(x=>x.exam_id).filter(Boolean))];
+    let rows=written||[];
+    if(examIds.length){
+      const {data:exams,error:ee}=await supabaseClient.from("written_exams").select("id,title,subject,chapter,total_marks").in("id",examIds);
+      if(ee) console.error("Written exam details load:",ee);
+      else { const em=new Map((exams||[]).map(x=>[x.id,x])); rows=rows.map(x=>({...x,written_exams:em.get(x.exam_id)||null})); }
+    }
+    renderProfileWrittenResults(rows);
+  }
 }
 function renderProfileWrittenResults(rows){
   const box=$("profileWrittenResults"); if(!rows.length){box.innerHTML='<div class="empty-profile">No written exams submitted yet.</div>';return;}
