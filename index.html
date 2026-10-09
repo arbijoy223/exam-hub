@@ -351,7 +351,8 @@ keyframes warningFloat{
 .written-card{background:var(--card);border:1px solid var(--border);border-radius:22px;padding:20px;margin:16px 0;box-shadow:var(--shadow)}
 .written-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.written-question{background:#f8fafc;border:1px solid var(--border);border-radius:14px;padding:14px;margin:10px 0}.written-question textarea{width:100%;min-height:120px;border:1px solid var(--border);border-radius:12px;padding:12px;resize:vertical;font:500 14px/1.6 var(--sans)}
 .written-admin-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.written-admin-grid .full{grid-column:1/-1}.written-admin-grid label{display:grid;gap:6px;font-size:12px;font-weight:800;color:#475569}.written-admin-grid input,.written-admin-grid textarea,.written-admin-grid select{width:100%;border:1px solid var(--border);border-radius:12px;background:#fff;padding:12px;font:500 14px/1.5 var(--sans);outline:none}.written-admin-grid textarea{min-height:150px;resize:vertical}.written-admin-grid input:focus,.written-admin-grid textarea:focus,.written-admin-grid select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(99,91,255,.09)}
-.written-submit-card{background:linear-gradient(135deg,#fff,#f8faff);border:1px solid var(--border);border-radius:20px;padding:18px;margin-bottom:14px}.written-submit-card h4{margin:0 0 5px;font-size:16px}.written-submit-card p{margin:0;color:var(--muted);font-size:12px;line-height:1.6}.written-answer-box{width:100%;min-height:150px;border:1px solid var(--border);border-radius:15px;padding:13px;background:#fff;font:500 14px/1.7 var(--sans);resize:vertical}.written-pending{padding:20px;border-radius:18px;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;line-height:1.7}.written-graded{padding:20px;border-radius:18px;background:#ecfdf5;border:1px solid #bbf7d0;color:#166534;line-height:1.7}.user-link{border:0;background:transparent;color:var(--primary);font:800 13px var(--sans);cursor:pointer;padding:0;text-decoration:underline;text-underline-offset:2px}.admin-user-detail-head{display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap}.admin-user-detail-head .profile-user{margin:0}.grade-row{display:grid;grid-template-columns:1fr 150px;gap:10px;align-items:end;margin-top:12px}.grade-row label{font-size:12px;font-weight:800;color:#475569}.grade-row input{width:100%;height:44px;border:1px solid var(--border);border-radius:11px;padding:10px;font:700 14px var(--sans)}.grade-feedback{width:100%;min-height:80px;margin-top:10px;border:1px solid var(--border);border-radius:11px;padding:10px;font:500 13px/1.5 var(--sans);resize:vertical}
+.written-submit-card{background:linear-gradient(135deg,#fff,#f8faff);border:1px solid var(--border);border-radius:20px;padding:18px;margin-bottom:14px}.written-submit-card h4{margin:0 0 5px;font-size:16px}.written-submit-card p{margin:0;color:var(--muted);font-size:12px;line-height:1.6}#screen-written-exam .exam-head{position:sticky;top:8px;z-index:20;background:var(--card-bg, #fff);padding:10px;border-radius:14px;box-shadow:0 8px 24px rgba(15,23,42,.12)}
+.written-answer-box{width:100%;min-height:150px;border:1px solid var(--border);border-radius:15px;padding:13px;background:#fff;font:500 14px/1.7 var(--sans);resize:vertical}.written-pending{padding:20px;border-radius:18px;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;line-height:1.7}.written-graded{padding:20px;border-radius:18px;background:#ecfdf5;border:1px solid #bbf7d0;color:#166534;line-height:1.7}.user-link{border:0;background:transparent;color:var(--primary);font:800 13px var(--sans);cursor:pointer;padding:0;text-decoration:underline;text-underline-offset:2px}.admin-user-detail-head{display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap}.admin-user-detail-head .profile-user{margin:0}.grade-row{display:grid;grid-template-columns:1fr 150px;gap:10px;align-items:end;margin-top:12px}.grade-row label{font-size:12px;font-weight:800;color:#475569}.grade-row input{width:100%;height:44px;border:1px solid var(--border);border-radius:11px;padding:10px;font:700 14px var(--sans)}.grade-feedback{width:100%;min-height:80px;margin-top:10px;border:1px solid var(--border);border-radius:11px;padding:10px;font:500 13px/1.5 var(--sans);resize:vertical}
 @media(max-width:700px){.written-admin-grid{grid-template-columns:1fr}.written-admin-grid .full{grid-column:auto}.grade-row{grid-template-columns:1fr}.written-card{padding:14px}}
 
 </style>
@@ -552,6 +553,7 @@ keyframes warningFloat{
       <div class="admin-section-title"><div><h3>👥 User Performance</h3><p>Total exams, passes, fails, and average score for every user</p></div><span id="adminLoadStatus"></span></div>
       <div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>User</th><th>Exam</th><th>Pass</th><th>Fail</th><th>Average</th><th>Status</th><th>Action</th></tr></thead><tbody id="adminUsersBody"></tbody></table></div>
     </div>
+    <div class="profile-card admin-card"><div class="admin-section-title"><div><h3>📝 Pending CQ Marking</h3><p>All users’ ungraded submissions, newest first. Grading removes an item from this queue.</p></div><button class="btn btn-ghost" id="refreshPendingCqBtn">↻ Refresh</button></div><div id="adminPendingCqList"><div class="empty-profile">Loading pending submissions…</div></div></div>
     <div class="profile-card admin-card">
       <div class="admin-section-title"><div><h3>🏆 Leaderboard</h3><p>To view an answer key, open a subject, choose a chapter, then select an exam.</p></div></div>
       <div class="admin-actions-grid">
@@ -608,8 +610,7 @@ keyframes warningFloat{
   <!-- Admin view of a particular user's profile -->
   <section id="screen-admin-user" hidden>
     <button class="back-btn" id="backFromAdminUser">← Back to Admin</button>
-    <div class="profile-card admin-user-detail-head"><div class="profile-user"><div class="profile-avatar" id="adminUserAvatar">U</div><div><h2 id="adminUserUsername">User</h2><p id="adminUserStatusText">Admin Profile · selected user</p></div></div><button class="btn btn-ghost" id="adminUserBlockBtn">🚫 Block</button></div>
-    <div class="profile-card"><div class="admin-section-title"><div><h3>🕒 All Users — Pending CQ Marking</h3><p>Every ungraded CQ submission appears here, regardless of which user profile you opened. Graded submissions disappear from this queue.</p></div><button class="btn btn-ghost" id="refreshAdminPendingCQ">↻ Refresh</button></div><div id="adminPendingCQList"><div class="empty-profile">Loading pending submissions…</div></div></div>
+    <div class="profile-card admin-user-detail-head"><div class="profile-user"><div class="profile-avatar" id="adminUserAvatar">U</div><div><h2 id="adminUserUsername">User</h2><p id="adminUserStatusText">Student profile</p></div></div><button class="btn btn-ghost" id="adminUserBlockBtn">🚫 Block</button></div>
     <div class="profile-stats"><div class="pstat"><strong id="adminUserTotal">0</strong><span>Total Exams</span></div><div class="pstat"><strong id="adminUserPassed">0</strong><span>Passed</span></div><div class="pstat"><strong id="adminUserFailed">0</strong><span>Failed</span></div><div class="pstat"><strong id="adminUserAvg">0%</strong><span>Average</span></div></div>
     <div class="profile-card"><h3>📋 Objective Exam History</h3><div id="adminUserResults"></div></div>
     <div class="profile-card"><h3>✍️ Written / CQ Submissions</h3><div id="adminUserWritten"></div></div>
@@ -649,7 +650,7 @@ keyframes warningFloat{
     <div class="footer-contact"><h3>Need help?</h3><p>If you have any problems, please contact us. We will do our best to help.</p>
       <div class="footer-links">
         <a href="https://www.facebook.com/share/18FqGFkwdw/" target="_blank" rel="noopener">ⓕ Facebook</a>
-        <a href="https://youtube.com/@abdurrahmanbijoy3999?si=9vNfOdc9zPTD6CpG" target="_blank" rel="noopener">▶ YouTube</a>
+        <a href="https://youtube.com/" target="_blank" rel="noopener">▶ YouTube</a>
         <a href="https://l.facebook.com/l.php?u=https%3A%2F%2Fwww.instagram.com%2Far___bijoy%3Ffbclid%3DIwZXh0bgNhZW0CMTAAcGRvZgVicmlkETFHR0tWNTh4ek1CWms5OXRvc3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MgABHlWkLKhwHGGaEfcyMh1W8twFnGS723ZZOTwXULMgfO8IHUxE7vbrvd4u0xm5_aem_FcVdDolNM2QrRhZnIWzQ-Q&h=AUCNSju86lcPj2_2NeaNiyQr5V8pm-MtN9ASKIQybPLu5L4REM-e3MVnXzfa5c1__VSvhjFzwEp_3mwh_kYE7agB9lVypFZ-Vn-celBjtqls3XL29VaT2SaUmYY1Uojdn8z9" target="_blank" rel="noopener">◎ Instagram</a>
         <a href="https://wa.me/8801995125480" target="_blank" rel="noopener">☏ WhatsApp</a>
         <a href="mailto:arbijoy223@gmail.com">✉ Email</a>
@@ -3126,117 +3127,15 @@ const examData = {
 
         "Exam 1": {
           examTime: 30,
-         questions: [
-            { q: "ম্যাট্রিক্স কী?", options: ["সংখ্যাগুলোকে সারি ও কলামে সাজানো আয়তাকার বিন্যাস","শুধু একটি সংখ্যা","একটি সমীকরণ","একটি জ্যামিতিক চিত্র"], answer: 0 },
-            { q: "যে ম্যাট্রিক্সের একটি মাত্র সারি থাকে তাকে কী বলে?", options: ["Column matrix","Row matrix","Square matrix","Null matrix"], answer: 1 },
-            { q: "যে ম্যাট্রিক্সের একটি মাত্র কলাম থাকে তাকে কী বলে?", options: ["Row matrix","Column matrix","Unit matrix","Zero matrix"], answer: 1 },
-            { q: "যে ম্যাট্রিক্সের সারি ও কলামের সংখ্যা সমান তাকে কী বলে?", options: ["Row matrix","Column matrix","Square matrix","Rectangular matrix"], answer: 2 },
-            { q: "2 × 3 ম্যাট্রিক্সে মোট কয়টি উপাদান থাকে?", options: ["5","6","8","9"], answer: 1 },
-            { q: "3 × 3 ম্যাট্রিক্সে মোট কয়টি উপাদান থাকে?", options: ["6","8","9","12"], answer: 2 },
-            { q: "সব উপাদান শূন্য এমন ম্যাট্রিক্সকে কী বলে?", options: ["Unit matrix","Null matrix","Scalar matrix","Identity matrix"], answer: 1 },
-            { q: "একক ম্যাট্রিক্সের প্রধান কর্ণের উপাদানগুলো কী?", options: ["0","1","−1","2"], answer: 1 },
-            { q: "একক ম্যাট্রিক্সের কর্ণের বাইরের উপাদানগুলো কী?", options: ["1","2","0","−1"], answer: 2 },
-            { q: "একটি 2 × 2 একক ম্যাট্রিক্স কোনটি?", options: ["[[1,0],[0,1]]","[[0,1],[1,0]]","[[1,1],[0,1]]","[[0,0],[0,0]]"], answer: 0 },
-
-            { q: "দুটি ম্যাট্রিক্স সমান হওয়ার জন্য কী প্রয়োজন?", options: ["শুধু একই সারি থাকতে হবে","শুধু একই কলাম থাকতে হবে","ক্রম ও সংশ্লিষ্ট উপাদান সমান হতে হবে","শুধু determinant সমান হতে হবে"], answer: 2 },
-            { q: "A + B নির্ণয় করা সম্ভব কখন?", options: ["যেকোনো দুটি ম্যাট্রিক্সে","একই ক্রমের ম্যাট্রিক্স হলে","শুধু square matrix হলে","শুধু 2×2 হলে"], answer: 1 },
-            { q: "A − B নির্ণয় করতে হলে A ও B-এর কী একই হতে হবে?", options: ["determinant","ক্রম","উপাদানের যোগফল","rank"], answer: 1 },
-            { q: "A = [[1,2],[3,4]] এবং B = [[2,1],[4,3]] হলে A+B কত?", options: ["[[3,3],[7,7]]","[[1,1],[1,1]]","[[2,2],[4,4]]","[[3,2],[7,6]]"], answer: 0 },
-            { q: "A = [[5,4],[3,2]] এবং B = [[2,1],[1,1]] হলে A−B কত?", options: ["[[3,3],[2,1]]","[[7,5],[4,3]]","[[2,3],[1,2]]","[[3,2],[2,3]]"], answer: 0 },
-            { q: "A = [[1,2],[3,4]] হলে 2A কত?", options: ["[[2,4],[6,8]]","[[1,4],[3,8]]","[[2,2],[4,4]]","[[3,4],[5,6]]"], answer: 0 },
-            { q: "A = [[2,1],[0,3]] হলে 3A কত?", options: ["[[6,3],[0,9]]","[[5,4],[0,6]]","[[6,1],[0,9]]","[[2,3],[0,9]]"], answer: 0 },
-            { q: "ম্যাট্রিক্সের transpose-এ কী করা হয়?", options: ["প্রতিটি উপাদান দ্বিগুণ করা হয়","সারি ও কলাম অদলবদল করা হয়","সব উপাদান শূন্য করা হয়","determinant নেওয়া হয়"], answer: 1 },
-            { q: "A-এর transpose কোন প্রতীক দ্বারা প্রকাশ করা হয়?", options: ["A⁻¹","Aᵀ","|A|","2A"], answer: 1 },
-            { q: "A = [[1,2],[3,4]] হলে Aᵀ কত?", options: ["[[1,2],[3,4]]","[[1,3],[2,4]]","[[4,3],[2,1]]","[[2,1],[4,3]]"], answer: 1 },
-
-            { q: "2 × 3 ম্যাট্রিক্সের transpose-এর ক্রম কত হবে?", options: ["2 × 3","3 × 2","2 × 2","3 × 3"], answer: 1 },
-            { q: "A-এর inverse-এর প্রতীক কোনটি?", options: ["Aᵀ","A⁻¹","|A|","A²"], answer: 1 },
-            { q: "কোন ম্যাট্রিক্সের inverse থাকে?", options: ["শুধু null matrix","শুধু singular matrix","non-singular square matrix","সব matrix"], answer: 2 },
-            { q: "2 × 2 ম্যাট্রিক্স [[a,b],[c,d]]-এর determinant কত?", options: ["ab−cd","ad−bc","ac−bd","a+b+c+d"], answer: 1 },
-            { q: "[[2,3],[1,4]]-এর determinant কত?", options: ["5","6","7","8"], answer: 0 },
-            { q: "[[1,2],[3,4]]-এর determinant কত?", options: ["−2","2","−4","4"], answer: 0 },
-            { q: "একটি determinant-এর মান 0 হলে matrix-টি কী?", options: ["Unit","Singular","Identity","Scalar"], answer: 1 },
-            { q: "det(A) ≠ 0 হলে A কী ধরনের matrix?", options: ["Singular","Null","Non-singular","Zero"], answer: 2 },
-            { q: "একটি 2 × 2 matrix-এর determinant নির্ণয়ে কয়টি diagonal product ব্যবহৃত হয়?", options: ["1","2","3","4"], answer: 1 },
-            { q: "det [[3,0],[0,5]] কত?", options: ["8","15","10","0"], answer: 1 }
-          ]
-        },
-
+      
+},
         "Exam 2": {
           examTime: 30,
-         questions: [
-            { q: "det(A) = 5 হলে det(Aᵀ) কত?", options: ["−5","0","5","25"], answer: 2 },
-            { q: "det(A) = 3 হলে det(2A) একটি 2 × 2 matrix-এর ক্ষেত্রে কত?", options: ["6","9","12","24"], answer: 2 },
-            { q: "একটি determinant-এর দুটি সারি পরস্পর সমান হলে determinant-এর মান কত?", options: ["1","−1","0","2"], answer: 2 },
-            { q: "একটি determinant-এর দুটি কলাম পরস্পর সমান হলে determinant-এর মান কত?", options: ["0","1","2","−1"], answer: 0 },
-            { q: "একটি determinant-এর কোনো একটি সারির সব উপাদান 0 হলে determinant কত?", options: ["1","−1","0","2"], answer: 2 },
-            { q: "det(A) = 4 এবং det(B) = 5 হলে det(AB) কত?", options: ["9","20","1","25"], answer: 1 },
-            { q: "det(A) = 6 হলে det(A⁻¹) কত?", options: ["6","−6","1/6","0"], answer: 2 },
-            { q: "A ও B একই order-এর matrix হলে AB সবসময় কী?", options: ["সংজ্ঞায়িত নয়","সংজ্ঞায়িত","শূন্য","একক matrix"], answer: 1 },
-            { q: "A-এর order 2×3 এবং B-এর order 3×2 হলে AB-এর order কত?", options: ["2×2","3×3","2×3","3×2"], answer: 0 },
-            { q: "A-এর order 3×2 এবং B-এর order 2×4 হলে AB-এর order কত?", options: ["2×3","3×4","4×3","2×4"], answer: 1 },
-
-            { q: "A-এর order 2×3 এবং B-এর order 2×3 হলে AB কি সংজ্ঞায়িত?", options: ["হ্যাঁ","না","শুধু A=B হলে","শুধু determinant থাকলে"], answer: 1 },
-            { q: "Matrix multiplication সাধারণত কোন ধর্ম মেনে চলে না?", options: ["যোগের বিনিময় ধর্ম","গুণের বিনিময় ধর্ম","যোগের সংযোগ ধর্ম","গুণের সংযোগ ধর্ম"], answer: 1 },
-            { q: "A(B+C) = AB+AC কোন ধর্মের উদাহরণ?", options: ["বণ্টন ধর্ম","বিনিময় ধর্ম","সংযোগ ধর্ম","পরিচয় ধর্ম"], answer: 0 },
-            { q: "(AB)C = A(BC) কোন ধর্ম?", options: ["বিনিময়","সংযোগ","বণ্টন","বিপরীত"], answer: 1 },
-            { q: "AB ≠ BA সাধারণত কোন বিষয়ে প্রযোজ্য?", options: ["Matrix multiplication","Matrix addition","Scalar addition","Determinant addition"], answer: 0 },
-            { q: "A = [[1,2],[0,1]], B = [[2,0],[1,3]] হলে AB কত?", options: ["[[4,6],[1,3]]","[[2,6],[1,3]]","[[3,6],[1,2]]","[[4,3],[2,1]]"], answer: 0 },
-            { q: "A = [[1,0],[2,1]], B = [[3,1],[0,2]] হলে AB কত?", options: ["[[3,1],[6,4]]","[[3,1],[6,3]]","[[1,3],[2,4]]","[[3,2],[6,1]]"], answer: 0 },
-            { q: "A = [[2,1],[1,1]], B = [[1,0],[2,3]] হলে AB কত?", options: ["[[4,3],[3,3]]","[[2,3],[3,4]]","[[4,2],[3,1]]","[[3,4],[3,2]]"], answer: 0 },
-            { q: "[[1,2],[3,4]] × [[1,0],[0,1]] = ?", options: ["[[1,2],[3,4]]","[[0,0],[0,0]]","[[1,3],[2,4]]","[[2,1],[4,3]]"], answer: 0 },
-            { q: "A × I = ?", options: ["I","A","0","A⁻¹"], answer: 1 },
-
-            { q: "একটি square matrix-এর principal diagonal কোনটি?", options: ["উপরের সারি","বাম কলাম","বাম-উপর থেকে ডান-নিচ","ডান-উপর থেকে বাম-নিচ"], answer: 2 },
-            { q: "যে square matrix-এর diagonal-এর বাইরে সব উপাদান 0 তাকে কী বলা হয়?", options: ["Diagonal matrix","Row matrix","Column matrix","Null matrix"], answer: 0 },
-            { q: "Diagonal matrix-এর সব diagonal element 1 হলে সেটি কী?", options: ["Null matrix","Identity matrix","Row matrix","Singular matrix"], answer: 1 },
-            { q: "একটি scalar matrix-এ diagonal-এর উপাদানগুলো কেমন?", options: ["সব আলাদা","সব সমান","সব 0","সব 1 অবশ্যই"], answer: 1 },
-            { q: "A = [[2,0],[0,2]] কোন ধরনের matrix?", options: ["Scalar matrix","Row matrix","Column matrix","Null matrix"], answer: 0 },
-            { q: "A = [[0,1],[1,0]]-এর determinant কত?", options: ["0","1","−1","2"], answer: 2 },
-            { q: "A = [[4,2],[2,1]] singular কি না?", options: ["হ্যাঁ, কারণ determinant 0","না, determinant 1","না, determinant 2","হ্যাঁ, determinant 4"], answer: 0 },
-            { q: "A = [[2,1],[1,1]]-এর determinant কত?", options: ["0","1","2","3"], answer: 1 },
-            { q: "A = [[5,2],[3,1]]-এর determinant কত?", options: ["−1","1","5","−5"], answer: 0 },
-            { q: "A = [[4,1],[2,3]]-এর determinant কত?", options: ["8","10","12","14"], answer: 1 }
-          ]
-        },
+      },
 
         "Exam 3": {
           examTime: 30,
-         questions: [
-            { q: "3 × 3 determinant-এর একটি উপাদানের মিনিটor কী?", options: ["উপাদানটি বাদ দিয়ে অবশিষ্ট 2×2 determinant","উপাদানটির দ্বিগুণ","পুরো determinant","শুধু সারির যোগফল"], answer: 0 },
-            { q: "Cofactor নির্ণয়ের সূত্র কোনটি?", options: ["Cᵢⱼ = Mᵢⱼ","Cᵢⱼ = (−1)ⁱ⁺ʲ Mᵢⱼ","Cᵢⱼ = i+j","Cᵢⱼ = Mᵢⱼ²"], answer: 1 },
-            { q: "Cofactor-এর sign pattern কী?", options: ["সব +","+ − + / − + − / + − +","সব −","+ + − / − − +"], answer: 1 },
-            { q: "3 × 3 determinant-এর প্রথম সারি দিয়ে expansion করলে কয়টি term থাকে?", options: ["2","3","4","6"], answer: 1 },
-            { q: "যদি কোনো determinant-এর একটি সারির প্রতিটি উপাদান k দ্বারা গুণ করা হয়, determinant কী হবে?", options: ["k গুণ হবে","k² গুণ হবে","অপরিবর্তিত থাকবে","0 হবে"], answer: 0 },
-            { q: "একটি determinant-এর দুটি সারি অদলবদল করলে কী হয়?", options: ["মান অপরিবর্তিত","চিহ্ন পরিবর্তিত হয়","মান 0 হয়","দ্বিগুণ হয়"], answer: 1 },
-            { q: "একটি determinant-এর একটি সারির সাথে অন্য সারির k গুণ যোগ করলে determinant-এর কী হয়?", options: ["পরিবর্তন হয় না","0 হয়","k গুণ হয়","চিহ্ন বদলে যায়"], answer: 0 },
-            { q: "3 × 3 identity matrix-এর determinant কত?", options: ["0","1","3","9"], answer: 1 },
-            { q: "একটি singular matrix-এর determinant কত?", options: ["1","−1","0","অসংজ্ঞায়িত"], answer: 2 },
-            { q: "A⁻¹ নির্ণয়ের জন্য কোন শর্তটি দরকার?", options: ["det(A)=0","det(A)≠0","A=0","A=I শুধু"], answer: 1 },
-
-            { q: "2×2 matrix A = [[a,b],[c,d]]-এর adjoint কীভাবে পাওয়া যায়?", options: ["diagonal element অদলবদল ও অন্য দুটির sign পরিবর্তন করে","সব element যোগ করে","সব element বর্গ করে","transpose নিয়ে"], answer: 0 },
-            { q: "A = [[2,1],[3,4]] হলে det(A) কত?", options: ["5","6","7","8"], answer: 0 },
-            { q: "উপরের A-এর inverse-এর denominator কী হবে?", options: ["2","3","5","7"], answer: 2 },
-            { q: "A = [[2,1],[3,4]] হলে A⁻¹ কোনটি?", options: ["1/5 [[4,-1],[-3,2]]","1/5 [[2,-1],[-3,4]]","1/7 [[4,-1],[-3,2]]","[[4,-1],[-3,2]]"], answer: 0 },
-            { q: "A = [[1,2],[3,5]]-এর determinant কত?", options: ["−1","1","2","−2"], answer: 0 },
-            { q: "A = [[1,2],[3,5]] singular কি?", options: ["হ্যাঁ","না","শুধু transpose করলে","শুধু inverse নিলে"], answer: 0 },
-            { q: "Cramer's Rule কোন ধরনের সমীকরণ সমাধানে ব্যবহৃত হয়?", options: ["রৈখিক সমীকরণের জোট","শুধু দ্বিঘাত সমীকরণ","শুধু ত্রিকোণমিতিক সমীকরণ","শুধু সূচকীয় সমীকরণ"], answer: 0 },
-            { q: "x + y = 5 এবং x − y = 1 হলে x কত?", options: ["2","3","4","5"], answer: 1 },
-            { q: "x + y = 5 এবং x − y = 1 হলে y কত?", options: ["1","2","3","4"], answer: 1 },
-            { q: "2x + y = 7 এবং x + y = 5 হলে x কত?", options: ["1","2","3","4"], answer: 1 },
-
-            { q: "2x + y = 7 এবং x + y = 5 হলে y কত?", options: ["2","3","4","5"], answer: 1 },
-            { q: "x + 2y = 8 এবং x − y = 2 হলে y কত?", options: ["1","2","3","4"], answer: 1 },
-            { q: "x + 2y = 8 এবং x − y = 2 হলে x কত?", options: ["2","3","4","5"], answer: 2 },
-            { q: "x + y = 6 এবং 2x − y = 3 হলে x কত?", options: ["2","3","4","5"], answer: 1 },
-            { q: "x + y = 6 এবং 2x − y = 3 হলে y কত?", options: ["2","3","4","5"], answer: 2 },
-            { q: "A = [[3,1],[2,1]] হলে det(A) কত?", options: ["1","2","3","5"], answer: 0 },
-            { q: "A = [[1,2],[2,4]] হলে matrix-টি কী?", options: ["Non-singular","Singular","Identity","Scalar"], answer: 1 },
-            { q: "A = [[1,2],[3,6]]-এর determinant কত?", options: ["0","1","3","6"], answer: 0 },
-            { q: "det(A)=−2 হলে det(Aᵀ) কত?", options: ["2","−2","4","−4"], answer: 1 },
-            { q: "det(A)=4 এবং det(B)=2 হলে det(AB) কত?", options: ["2","6","8","16"], answer: 2 }
-          ]
-        }
+          }
 
       }
     }
@@ -3726,40 +3625,11 @@ function combineStats(objectiveRows,writtenRows){
   return {total:allPercents.length,passed:objectivePassed+writtenPercents.filter(v=>v>=50).length,failed:(o.length-objectivePassed)+writtenPercents.filter(v=>v<50).length,avg:allPercents.length?Math.round(allPercents.reduce((a,v)=>a+v,0)/allPercents.length):0};
 }
 
-async function loadAllPendingCQForAdmin(){
-  const box=$("adminPendingCQList"); if(!box||!isAdmin())return;
-  box.innerHTML='<div class="empty-profile">⏳ Loading all pending CQ submissions…</div>';
-  try{
-    const {data:subs,error}=await supabaseClient.from("written_submissions").select("id,exam_id,user_id,answers,status,submitted_at").eq("status","submitted").order("submitted_at",{ascending:false});
-    if(error)throw error;
-    if(!subs||!subs.length){box.innerHTML='<div class="empty-profile">No unmarked CQ submissions right now.</div>';return;}
-    const userIds=[...new Set(subs.map(x=>x.user_id).filter(Boolean))],examIds=[...new Set(subs.map(x=>x.exam_id).filter(Boolean))];
-    const [{data:users,error:ue},{data:exams,error:ee}]=await Promise.all([
-      supabaseClient.from("profiles").select("user_id,username").in("user_id",userIds),
-      supabaseClient.from("written_exams").select("id,title,subject,chapter,total_marks,questions").in("id",examIds)
-    ]);
-    if(ue)throw ue;if(ee)throw ee;
-    const um=new Map((users||[]).map(x=>[x.user_id,x.username])),em=new Map((exams||[]).map(x=>[x.id,x]));
-    box.innerHTML="";
-    subs.forEach(r=>{
-      const ex=em.get(r.exam_id)||{},card=document.createElement("div");card.className="written-submit-card";
-      const head=document.createElement("h4");head.textContent=(um.get(r.user_id)||"Unknown user")+" — "+(ex.title||"CQ Exam");
-      const meta=document.createElement("p");meta.textContent=`${ex.subject||""} → ${ex.chapter||""} • Submitted ${r.submitted_at?new Date(r.submitted_at).toLocaleString("en-GB"):"time unavailable"} • Max ${ex.total_marks||0} marks`;
-      card.append(head,meta);
-      (Array.isArray(ex.questions)?ex.questions:[]).forEach((q,i)=>{const qa=document.createElement("div");qa.className="written-question";const qh=document.createElement("strong");qh.textContent=`Question ${i+1}: ${q}`;const ans=document.createElement("div");ans.style.cssText="margin-top:8px;white-space:pre-wrap;line-height:1.65";ans.textContent=(Array.isArray(r.answers)?r.answers[i]:"")||"(No answer)";qa.append(qh,ans);card.append(qa);});
-      const row=document.createElement("div");row.className="grade-row";row.innerHTML=`<label>Marks (max ${Number(ex.total_marks)||0})<input type="number" min="0" max="${Number(ex.total_marks)||0}" step="0.5"></label><button type="button" class="btn btn-primary">Save Grade</button>`;
-      const fb=document.createElement("textarea");fb.className="grade-feedback";fb.placeholder="Optional feedback for the student";row.append(fb);row.querySelector("button").addEventListener("click",async()=>{await gradeWrittenSubmission(r.id,Number(ex.total_marks)||0,row.querySelector("input").value,fb.value);await loadAllPendingCQForAdmin();});card.append(row);
-      const open=document.createElement("button");open.type="button";open.className="btn btn-ghost";open.textContent="Open user profile";open.addEventListener("click",()=>showAdminUserProfile(r.user_id));card.append(open);box.append(card);
-    });
-  }catch(err){console.error("Pending CQ queue:",err);box.innerHTML='<div class="empty-profile">Could not load pending CQ. Check Supabase permissions / RLS.</div>';}
-}
-
 async function showAdminUserProfile(userId){
   if(!isAdmin()) return;
   hideAllScreens(); $("screen-admin-user").hidden=false; $("topSub").textContent="User Profile"; state.adminViewedUserId=userId; pushScreen("admin-user",{userId});
   $("adminUserResults").innerHTML='<div class="empty-profile">⏳ Loading...</div>'; $("adminUserWritten").innerHTML='<div class="empty-profile">⏳ Loading...</div>';
   try{
-    loadAllPendingCQForAdmin();
     const [{data:user,error:ue},{data:results,error:re},writtenRows]=await Promise.all([
       supabaseClient.from("profiles").select("user_id,username,is_admin,blocked,created_at").eq("user_id",userId).single(),
       supabaseClient.from("results").select("subject,chapter,exam,correct,total,percent,status,attempted_at").eq("user_id",userId).order("attempted_at",{ascending:false}),
@@ -3776,14 +3646,14 @@ function renderAdminUserResults(rows,writtenRows=[]){
   const box=$("adminUserResults"); if(!rows.length){box.innerHTML='<div class="empty-profile">No objective exam results yet.</div>';return;}
   const groups=new Map(); rows.forEach(r=>{const key=`${r.subject}|||${r.chapter}|||${r.exam}`;if(!groups.has(key))groups.set(key,{subject:r.subject,chapter:r.chapter,exam:r.exam,rows:[]});groups.get(key).rows.push(r);});
   const list=[...groups.values()].map(g=>{const avg=Math.round(g.rows.reduce((a,r)=>a+Number(r.percent||0),0)/g.rows.length),latest=g.rows.slice().sort((a,b)=>new Date(b.attempted_at)-new Date(a.attempted_at))[0],pass=g.rows.filter(r=>Number(r.percent)>=50).length;return {...g,avg,latest,pass,fail:g.rows.length-pass,attempts:g.rows.length};}).sort((a,b)=>new Date(b.latest.attempted_at)-new Date(a.latest.attempted_at));
-  box.innerHTML=list.map(g=>`<button type="button" class="profile-result admin-exam-result" data-subject="${escapeHtml(g.subject)}" data-chapter="${escapeHtml(g.chapter)}" data-exam="${escapeHtml(g.exam)}" style="width:100%;text-align:left;border:0;cursor:pointer"><div class="pr-main"><strong>${escapeHtml(g.subject)} → ${escapeHtml(g.exam)}</strong><span>${escapeHtml(g.chapter)} • ${bnNum(g.attempts)} attempt${g.attempts===1?"":"s"} • Avg ${bnNum(g.avg)}%</span></div><div class="pr-score"><strong class="${g.avg>=50?"pass":"fail"}">${bnNum(g.avg)}% • ${g.avg>=50?"PASS":"FAIL"}</strong><span>${bnNum(g.pass)} pass • ${bnNum(g.fail)} fail</span></div></button>`).join("");
+  box.innerHTML=list.map(g=>`<button type="button" class="profile-result admin-exam-result" data-subject="${escapeHtml(g.subject)}" data-chapter="${escapeHtml(g.chapter)}" data-exam="${escapeHtml(g.exam)}" style="width:100%;text-align:left;border:0;cursor:pointer"><div class="pr-main"><strong>${escapeHtml(g.subject)} → ${escapeHtml(g.exam)}</strong><span>${escapeHtml(g.chapter)} • Latest: ${escapeHtml($("adminUserUsername").textContent)} — ${bnNum(g.latest.percent)}% • ${bnNum(g.attempts)} attempt${g.attempts===1?"":"s"} • Avg ${bnNum(g.avg)}%</span></div><div class="pr-score"><strong class="${g.avg>=50?"pass":"fail"}">${bnNum(g.avg)}% • ${g.avg>=50?"PASS":"FAIL"}</strong><span>${bnNum(g.pass)} pass • ${bnNum(g.fail)} fail</span></div></button>`).join("");
   box.querySelectorAll(".admin-exam-result").forEach(btn=>btn.addEventListener("click",()=>{state.selectedSubject=btn.dataset.subject;state.selectedChapter=btn.dataset.chapter;state.selectedExam=btn.dataset.exam;showLeaderboard();}));
 }
 function renderAdminWrittenSubmissions(rows){
   const box=$("adminUserWritten"); if(!rows.length){box.innerHTML='<div class="empty-profile">No written submissions yet.</div>';return;} box.innerHTML="";
   rows.forEach(r=>{const ex=r.written_exams||r,card=document.createElement("div");card.className="written-submit-card";const title=document.createElement("h4");title.textContent=ex.title||"Written Exam";const p=document.createElement("p");p.textContent=`${ex.subject||""} → ${ex.chapter||""} • Submitted ${new Date(r.submitted_at).toLocaleString("en-GB")} • Max ${ex.total_marks||0} marks`;card.append(title,p);const qs=Array.isArray(ex.questions)?ex.questions:[],ans=Array.isArray(r.answers)?r.answers:[];if(qs.length){const answersBox=document.createElement("div");qs.forEach((q,i)=>{const qa=document.createElement("div");qa.className="written-question";const qh=document.createElement("strong");qh.textContent=`Question ${i+1}: ${q}`;const a=document.createElement("div");a.style.cssText="margin-top:8px;white-space:pre-wrap;line-height:1.65";a.textContent=ans[i]||"(No answer)";qa.append(qh,a);answersBox.appendChild(qa);});card.appendChild(answersBox);}if(r.status==="graded"){const g=document.createElement("div");g.className="written-graded";g.innerHTML=`<strong>Score: ${bnNum(r.score)} / ${bnNum(ex.total_marks||0)}</strong><br>${r.feedback?`Feedback: ${escapeHtml(r.feedback)}`:"No feedback added."}`;card.appendChild(g);}else{const row=document.createElement("div");row.className="grade-row";row.innerHTML=`<label>Marks (max ${ex.total_marks||0})<input type="number" min="0" max="${Number(ex.total_marks)||0}" step="0.5" value=""></label><button class="btn btn-primary">Grade Submission</button>`;const fb=document.createElement("textarea");fb.className="grade-feedback";fb.placeholder="Optional feedback for the student";row.appendChild(fb);card.appendChild(row);row.querySelector("button").addEventListener("click",()=>gradeWrittenSubmission(r.id,Number(ex.total_marks)||0,row.querySelector("input").value,fb.value));}box.appendChild(card);});
 }
-async function gradeWrittenSubmission(id,max,score,feedback){if(!isAdmin())return;const n=Number(score);if(!Number.isFinite(n)||n<0||n>max){toast(`Enter a score from 0 to ${max}.`,"warning");return;}const {error}=await supabaseClient.rpc("admin_grade_written_submission",{submission_id:id,new_score:n,new_feedback:String(feedback||"")});if(error){console.error(error);toast("Could not save marks. Run the latest CQ SQL in Supabase.","error",3800);return;}toast("Marks saved to the user's profile","success",2600);await showAdminUserProfile(state.adminViewedUserId);}
+async function gradeWrittenSubmission(id,max,score,feedback){if(!isAdmin())return;const n=Number(score);if(!Number.isFinite(n)||n<0||n>max){toast(`Enter a score from 0 to ${max}.`,"warning");return;}const {error}=await supabaseClient.rpc("admin_grade_written_submission",{submission_id:id,new_score:n,new_feedback:String(feedback||"")});if(error){console.error(error);toast("Could not save marks. Run the latest CQ SQL in Supabase.","error",3800);return;}toast("Marks saved. The CQ was removed from pending marking and the student will see the graded result.","success",3200);await loadAdminPendingCqQueue();if(state.adminViewedUserId) await showAdminUserProfile(state.adminViewedUserId);}
 
 // 4. নাম চাওয়া
 async function askForName(subject, chapter, exam){
@@ -4172,10 +4042,11 @@ async function showAdminDashboard(){
     const [{data:users,error:userErr},{data:results,error:resultErr},{data:written,error:writtenErr}]=await Promise.all([
       supabaseClient.from("profiles").select("user_id,username,is_admin,blocked,created_at").order("created_at",{ascending:true}),
       supabaseClient.from("results").select("user_id,subject,chapter,exam,correct,total,percent,status,attempted_at").order("attempted_at",{ascending:false}),
-      supabaseClient.from("written_submissions").select("user_id,exam_id,status,score,submitted_at").eq("status","graded").order("submitted_at",{ascending:false})
+      supabaseClient.from("written_submissions").select("id,user_id,exam_id,status,score,feedback,answers,submitted_at,graded_at").order("submitted_at",{ascending:false})
     ]);
     if(userErr) throw userErr; if(resultErr) throw resultErr; if(writtenErr) throw writtenErr;
-    const allUsers=users||[], allResults=results||[], allWritten=written||[];
+    const allUsers=users||[], allResults=results||[], allWritten=(written||[]).filter(x=>x.status==="graded" && x.score!==null);
+    await loadAdminPendingCqQueue(written||[],allUsers);
     const examIds=[...new Set(allWritten.map(x=>x.exam_id).filter(Boolean))];
     let writtenExams=[];
     if(examIds.length){const {data:ex,error:ee}=await supabaseClient.from("written_exams").select("id,total_marks").in("id",examIds);if(ee)throw ee;writtenExams=ex||[];}
@@ -4203,6 +4074,33 @@ async function showAdminDashboard(){
     $("adminLoadStatus").textContent=`${bnNum(allUsers.length)} users • ${bnNum(totalExams)} combined exams`;
   }catch(err){console.error(err);$("adminLoadStatus").textContent="";$("adminUsersBody").innerHTML='<tr><td colspan="7" class="admin-empty">❌ Could not load data. Check your RLS/SQL setup.</td></tr>';toast("Could not load admin data","error",3500);}
 }
+async function loadAdminPendingCqQueue(seedRows=null, seedUsers=null){
+  const box=$("adminPendingCqList"); if(!box || !isAdmin()) return;
+  box.innerHTML='<div class="empty-profile">⏳ Loading pending CQ submissions…</div>';
+  try{
+    let rows=seedRows;
+    if(!rows){const q=await supabaseClient.from("written_submissions").select("id,user_id,exam_id,status,score,answers,submitted_at,feedback").eq("status","submitted").order("submitted_at",{ascending:false});if(q.error)throw q.error;rows=q.data||[];}
+    rows=(rows||[]).filter(r=>r.status==="submitted");
+    if(!rows.length){box.innerHTML='<div class="empty-profile">🎉 No pending CQ submissions. All caught up!</div>';return;}
+    const userIds=[...new Set(rows.map(r=>r.user_id).filter(Boolean))], examIds=[...new Set(rows.map(r=>r.exam_id).filter(Boolean))];
+    let users=seedUsers;
+    if(!users){const q=await supabaseClient.from("profiles").select("user_id,username").in("user_id",userIds);if(q.error)throw q.error;users=q.data||[];}
+    const uq=users.filter(u=>userIds.includes(u.user_id));
+    const exq=await supabaseClient.from("written_exams").select("id,title,subject,chapter,total_marks,questions").in("id",examIds);if(exq.error)throw exq.error;
+    const um=new Map(uq.map(u=>[u.user_id,u])), em=new Map((exq.data||[]).map(e=>[e.id,e]));
+    box.innerHTML='';
+    rows.sort((a,b)=>new Date(b.submitted_at)-new Date(a.submitted_at)).forEach(r=>{
+      const ex=em.get(r.exam_id)||{}, u=um.get(r.user_id)||{username:'Unknown user'}, card=document.createElement('div');card.className='written-submit-card';
+      const h=document.createElement('h4');h.textContent=`${u.username} — ${ex.title||'CQ / Written Exam'}`;
+      const meta=document.createElement('p');meta.textContent=`${ex.subject||''} → ${ex.chapter||''} • ${new Date(r.submitted_at).toLocaleString('en-GB')} • Max ${ex.total_marks||0} marks`;
+      const open=document.createElement('button');open.className='btn btn-ghost';open.textContent='👤 Open user profile';open.addEventListener('click',()=>showAdminUserProfile(r.user_id));card.append(h,meta,open);
+      (Array.isArray(ex.questions)?ex.questions:[]).forEach((q,i)=>{const qa=document.createElement('div');qa.className='written-question';const qh=document.createElement('strong');qh.textContent=`Question ${i+1}: ${q}`;const a=document.createElement('div');a.style.cssText='white-space:pre-wrap;margin-top:6px';a.textContent=(r.answers||[])[i]||'(No answer)';qa.append(qh,a);card.appendChild(qa);});
+      const row=document.createElement('div');row.className='grade-row';row.innerHTML=`<label>Marks (max ${Number(ex.total_marks)||0})<input type="number" min="0" max="${Number(ex.total_marks)||0}" step="0.5"></label><button class="btn btn-primary">Grade & notify user</button>`;
+      const fb=document.createElement('textarea');fb.className='grade-feedback';fb.placeholder='Optional feedback';row.appendChild(fb);row.querySelector('button').addEventListener('click',async()=>{const inp=row.querySelector('input');if(inp.value===''){toast('Enter marks first.','warning');return;}await gradeWrittenSubmission(r.id,Number(ex.total_marks)||0,inp.value,fb.value);await loadAdminPendingCqQueue();});card.appendChild(row);box.appendChild(card);
+    });
+  }catch(e){console.error('Pending CQ queue:',e);box.innerHTML='<div class="empty-profile">Could not load pending submissions. Check Supabase RLS permissions.</div>';}
+}
+
 async function toggleUserBlock(userId, currentlyBlocked, btn){
   if(!isAdmin() || !supabaseClient) return;
   const action=currentlyBlocked?"unblock":"block";
@@ -4229,21 +4127,36 @@ async function showProfile(){
   const examIds=[...new Set((written||[]).map(x=>x.exam_id).filter(Boolean))]; let rows=written||[];
   if(examIds.length){const {data:exams,error:ee}=await supabaseClient.from("written_exams").select("id,title,subject,chapter,total_marks,questions").in("id",examIds);if(ee)console.error("Written exam details load:",ee);else{const em=new Map((exams||[]).map(x=>[x.id,x]));rows=rows.map(x=>({...x,written_exams:em.get(x.exam_id)||null}));}}
   renderProfileWrittenResults(rows);
-  if(!error){renderProfileResults(data||[],rows);renderPerformanceChart(data||[]);}
+  if(!error){renderProfileResults(data||[],rows);renderPerformanceChart(data||[],rows);}
+}
+let cqNotificationPollStarted=false;
+function startCqNotificationPolling(){
+  if(cqNotificationPollStarted)return;cqNotificationPollStarted=true;
+  setInterval(async()=>{try{if(!currentProfile||!supabaseClient||$("screen-profile").hidden)return;const uid=currentProfile.user_id||currentProfile.id;if(!uid)return;const q=await supabaseClient.from("written_submissions").select("id,exam_id,status,score,feedback,submitted_at,graded_at").eq("user_id",uid).eq("status","graded").not("score","is",null).order("graded_at",{ascending:false}).limit(10);if(q.error||!q.data)return;const ids=[...new Set(q.data.map(r=>r.exam_id).filter(Boolean))];let rows=q.data;if(ids.length){const e=await supabaseClient.from("written_exams").select("id,title,subject,chapter,total_marks,questions").in("id",ids);if(!e.error){const m=new Map((e.data||[]).map(x=>[x.id,x]));rows=rows.map(r=>({...r,written_exams:m.get(r.exam_id)||null}));}}renderProfileWrittenResults(rows);}catch(e){console.debug("CQ notification check skipped",e);}},20000);
 }
 function renderProfileWrittenResults(rows){
+  try{const key="cq_notified_"+(currentProfile&&currentProfile.user_id||currentProfile&&currentProfile.id||"user");const seen=new Set(JSON.parse(localStorage.getItem(key)||"[]"));const fresh=(rows||[]).filter(r=>r.status==="graded"&&r.graded_at&&Date.now()-new Date(r.graded_at).getTime()<7*24*60*60*1000&&!seen.has(r.id));if(fresh.length){const r=fresh.sort((a,b)=>new Date(b.graded_at)-new Date(a.graded_at))[0],ex=r.written_exams||r;setTimeout(()=>toast(`✍️ CQ result published: ${ex.title||"Written Exam"} — ${r.score}/${ex.total_marks||"?"} marks${r.feedback?" • "+r.feedback:""}`,"success",7000),350);fresh.forEach(x=>seen.add(x.id));localStorage.setItem(key,JSON.stringify([...seen].slice(-200)));}}catch(e){}
   const box=$("profileWrittenResults"); if(!rows.length){box.innerHTML='<div class="empty-profile">No written exams submitted yet.</div>';return;}
   box.innerHTML="";
-  rows.forEach(r=>{const ex=r.written_exams||r;const card=document.createElement("div");card.className="written-submit-card";const title=document.createElement("h4");title.textContent=ex.title||"Written Exam";const p=document.createElement("p");p.textContent=`${ex.subject||""} → ${ex.chapter||""} • Submitted ${new Date(r.submitted_at).toLocaleDateString("en-GB")}`;card.append(title,p);if(r.status==="graded"){const g=document.createElement("div");g.className="written-graded";g.innerHTML=`<strong>Marks: ${bnNum(r.score)} / ${bnNum(ex.total_marks||0)}</strong><br>${r.feedback?`Feedback: ${r.feedback}`:"No feedback added."}`;card.appendChild(g);}else{const g=document.createElement("div");g.className="written-pending";g.innerHTML='<strong>Pending admin marking.</strong><br>Your final marks will appear here after the admin grades this submission.';card.appendChild(g);}box.appendChild(card);});
+  rows.forEach(r=>{const ex=r.written_exams||r;const card=document.createElement("div");card.className="written-submit-card";const title=document.createElement("h4");title.textContent=ex.title||"Written Exam";const p=document.createElement("p");p.textContent=`${ex.subject||""} → ${ex.chapter||""} • Submitted ${new Date(r.submitted_at).toLocaleDateString("en-GB")}`;card.append(title,p);card.style.cursor="pointer";card.title="Open CQ leaderboard";card.addEventListener("click",()=>showWrittenLeaderboard(r.exam_id,ex));if(r.status==="graded"){const g=document.createElement("div");g.className="written-graded";g.innerHTML=`<strong>Marks: ${bnNum(r.score)} / ${bnNum(ex.total_marks||0)}</strong><br>${r.feedback?`Feedback: ${r.feedback}`:"No feedback added."}`;card.appendChild(g);}else{const g=document.createElement("div");g.className="written-pending";g.innerHTML='<strong>Pending admin marking.</strong><br>Your final marks will appear here after the admin grades this submission.';card.appendChild(g);}box.appendChild(card);});
+}
+
+async function showWrittenLeaderboard(examId, examInfo=null){
+  if(!examId)return; hideAllScreens(); const box=$("screen-leaderboard");box.hidden=false;pushScreen("leaderboard",{});$("lbSubtitle").textContent=`✍️ CQ Leaderboard • ${(examInfo&&examInfo.title)||'Written Exam'}`;$("lbList").innerHTML='<div class="lb-empty">⏳ Loading CQ leaderboard…</div>';$("btnClearLeaderboard").hidden=true;
+  try{const q=await supabaseClient.from("written_submissions").select("user_id,score,status,submitted_at").eq("exam_id",examId).eq("status","graded").not("score","is",null).order("score",{ascending:false});if(q.error)throw q.error;const rows=q.data||[];const ids=[...new Set(rows.map(r=>r.user_id))];let users=[];if(ids.length){const u=await supabaseClient.from("profiles").select("user_id,username").in("user_id",ids);if(u.error)throw u.error;users=u.data||[];}const names=new Map(users.map(u=>[u.user_id,u.username]));$("lbList").innerHTML=rows.length?rows.map((r,i)=>`<div class="profile-result"><div class="pr-main"><strong>#${i+1} ${escapeHtml(names.get(r.user_id)||'Student')}</strong><span>${new Date(r.submitted_at).toLocaleDateString('en-GB')}</span></div><div class="pr-score"><strong>${bnNum(r.score)} / ${bnNum((examInfo&&examInfo.total_marks)||0)}</strong></div></div>`).join(''):'<div class="lb-empty">No graded CQ results yet.</div>';
+  }catch(e){console.error(e);$("lbList").innerHTML='<div class="lb-empty">Could not load CQ leaderboard. Check Supabase permissions.</div>';}
 }
 
 function renderProfileResults(rows,writtenRows=[]){
   const c=combineStats(rows,writtenRows); $("profileTotal").textContent=bnNum(c.total); $("profilePassed").textContent=bnNum(c.passed); $("profileFailed").textContent=bnNum(c.failed); $("profileAvg").textContent=bnNum(c.avg)+"%";
   const box=$("profileResults"); if(!rows.length){box.innerHTML='<div class="empty-profile">No objective exam results yet.</div>';return;}
-  box.innerHTML=rows.slice().reverse().map(r=>{const pass=Number(r.percent)>=50,d=new Date(r.attempted_at);return `<div class="profile-result"><div class="pr-main"><strong>${escapeHtml(r.subject)} → ${escapeHtml(r.exam)}</strong><span>${escapeHtml(r.chapter)} • ${d.toLocaleDateString("en-GB")}</span></div><div class="pr-score"><strong class="${pass?"pass":"fail"}">${bnNum(r.percent)}% • ${pass?"PASS":"FAIL"}</strong><span>${bnNum(r.correct)} / ${bnNum(r.total)}</span></div></div>`;}).join("");
+  const groups=new Map();rows.forEach(r=>{const k=`${r.subject}|||${r.chapter}|||${r.exam}`;if(!groups.has(k))groups.set(k,[]);groups.get(k).push(r);});
+  const list=[...groups.values()].map(a=>{a.sort((x,y)=>new Date(y.attempted_at)-new Date(x.attempted_at));const latest=a[0],avg=Math.round(a.reduce((n,r)=>n+Number(r.percent||0),0)/a.length);return {latest,avg,count:a.length};}).sort((a,b)=>new Date(b.latest.attempted_at)-new Date(a.latest.attempted_at));
+  box.innerHTML=list.map(g=>{const r=g.latest,pass=Number(r.percent)>=50;return `<button type="button" class="profile-result profile-objective-click" data-subject="${escapeHtml(r.subject)}" data-chapter="${escapeHtml(r.chapter)}" data-exam="${escapeHtml(r.exam)}" style="width:100%;text-align:left;border:0;cursor:pointer"><div class="pr-main"><strong>${escapeHtml(r.subject)} → ${escapeHtml(r.exam)}</strong><span>${escapeHtml(r.chapter)} • Latest: ${bnNum(r.percent)}% • ${g.count} attempt${g.count===1?'':'s'}</span></div><div class="pr-score"><strong class="${pass?'pass':'fail'}">${escapeHtml(currentProfile.username)} • ${bnNum(r.percent)}%</strong><span>Avg ${bnNum(g.avg)}%</span></div></button>`;}).join('');
+  box.querySelectorAll('.profile-objective-click').forEach(b=>b.addEventListener('click',()=>{state.selectedSubject=b.dataset.subject;state.selectedChapter=b.dataset.chapter;state.selectedExam=b.dataset.exam;showLeaderboard();}));
 }
 
-function renderPerformanceChart(rows){
+function renderPerformanceChart(rows,writtenRows=[]){
   const canvas=$("performanceChart"), ctx=canvas.getContext("2d");
   const rect=canvas.getBoundingClientRect(), dpr=Math.min(window.devicePixelRatio||1,2);
   const w=Math.max(260,rect.width), h=Math.max(240,rect.height), mobile=w<560;
@@ -4257,18 +4170,19 @@ function renderPerformanceChart(rows){
   for(let y=0;y<=100;y+=25){const yy=pad.t+ch-(y/100)*ch;ctx.beginPath();ctx.moveTo(pad.l,yy);ctx.lineTo(w-pad.r,yy);ctx.stroke();ctx.fillText(y+"%",4,yy);}
   const passY=pad.t+ch-.5*ch; ctx.save(); ctx.setLineDash([6,5]); ctx.strokeStyle="rgba(22,163,74,.48)"; ctx.beginPath();ctx.moveTo(pad.l,passY);ctx.lineTo(w-pad.r,passY);ctx.stroke();ctx.restore();
   ctx.fillStyle="#16a34a"; ctx.font=(mobile?"10px":"11px")+' Hind Siliguri, sans-serif'; ctx.fillText("Passed 50%",Math.max(pad.l+4,w-pad.r-58),passY-10);
-  if(!rows.length){ctx.fillStyle="#94a3b8";ctx.textAlign="center";ctx.font=(mobile?"12px":"13px")+' Hind Siliguri, sans-serif';ctx.fillText("Your performance will appear here after you take exams",w/2,h/2);ctx.textAlign="start";return;}
-  const values=rows.map(r=>Math.max(0,Math.min(100,Number(r.percent)||0)));
-  const xFor=i=>rows.length===1?pad.l+cw/2:pad.l+(i/(rows.length-1))*cw;
+  const chartRows=(rows||[]).map(r=>({percent:Number(r.percent)||0,attempted_at:r.attempted_at,label:"MCQ"})).concat((writtenRows||[]).filter(r=>r.status==="graded"&&r.score!==null).map(r=>({percent:(Number(r.score)||0)/Math.max(1,Number((r.written_exams||r).total_marks)||1)*100,attempted_at:r.graded_at||r.submitted_at,label:"CQ"}))).sort((a,b)=>new Date(a.attempted_at)-new Date(b.attempted_at));
+  if(!chartRows.length){ctx.fillStyle="#94a3b8";ctx.textAlign="center";ctx.font=(mobile?"12px":"13px")+' Hind Siliguri, sans-serif';ctx.fillText("Your performance will appear here after you take exams",w/2,h/2);ctx.textAlign="start";return;}
+  const values=chartRows.map(r=>Math.max(0,Math.min(100,Number(r.percent)||0)));
+  const xFor=i=>chartRows.length===1?pad.l+cw/2:pad.l+(i/(chartRows.length-1))*cw;
   const yFor=v=>pad.t+ch-(v/100)*ch;
   const pts=values.map((v,i)=>[xFor(i),yFor(v)]);
   ctx.strokeStyle="#635bff";ctx.lineWidth=mobile?3:3.5;ctx.lineJoin="round";ctx.lineCap="round";ctx.beginPath();
   pts.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.stroke();
   pts.forEach((p,i)=>{ctx.beginPath();ctx.fillStyle=values[i]>=50?"#16a34a":"#ef4444";ctx.arc(p[0],p[1],mobile?4.5:5.5,0,Math.PI*2);ctx.fill();ctx.lineWidth=2;ctx.strokeStyle="#fff";ctx.stroke();});
   ctx.fillStyle="#64748b";ctx.font=(mobile?"9px":"10px")+' Hind Siliguri, sans-serif';ctx.textAlign="center";
-  const labelStep=rows.length<=6?1:rows.length<=12?2:Math.ceil(rows.length/6);
-  for(let i=0;i<rows.length;i+=labelStep)ctx.fillText("#"+(i+1),pts[i][0],h-17);
-  if((rows.length-1)%labelStep!==0)ctx.fillText("#"+rows.length,pts[rows.length-1][0],h-17);
+  const labelStep=chartRows.length<=6?1:chartRows.length<=12?2:Math.ceil(chartRows.length/6);
+  for(let i=0;i<chartRows.length;i+=labelStep)ctx.fillText(chartRows[i].label+" "+(i+1),pts[i][0],h-17);
+  if((chartRows.length-1)%labelStep!==0)ctx.fillText(chartRows[chartRows.length-1].label+" "+chartRows.length,pts[chartRows.length-1][0],h-17);
   ctx.textAlign="start";
 }
 
@@ -4569,7 +4483,9 @@ $("drawerLogout").addEventListener("click",()=>{closeDrawer();logoutUser();});
 $("footerYear").textContent=new Date().getFullYear();
 updateAccountUI();
 $("backFromAdmin").addEventListener("click",()=>{hideAllScreens();$("screen-subjects").hidden=false;$("topSub").textContent="Choose a subject to begin";pushScreen("subjects",{});});
+startCqNotificationPolling();
 $("adminRefreshBtn").addEventListener("click",showAdminDashboard);
+$("refreshPendingCqBtn").addEventListener("click",()=>loadAdminPendingCqQueue());
 $("adminGoSubjects").addEventListener("click",()=>{hideAllScreens();$("screen-subjects").hidden=false;$("topSub").textContent="Choose a subject to view answer keys";pushScreen("subjects",{});});
 $("adminGoLeaderboard").addEventListener("click",()=>{if(state.selectedSubject&&state.selectedChapter&&state.selectedExam) showLeaderboard(); else toast("Select an exam first", "warning", 2500);});
 $("backFromProfile").addEventListener("click",()=>{hideAllScreens();$("screen-subjects").hidden=false;$("topSub").textContent="Choose a subject to begin";pushScreen("subjects",{});});
@@ -4709,7 +4625,6 @@ $("writtenSubjectSelect").addEventListener("change",updateWrittenChapterOptions)
 $("saveWrittenExamBtn").addEventListener("click",saveWrittenExam);
 $("cancelWrittenEditBtn").addEventListener("click",resetWrittenForm);
 $("refreshWrittenAdminBtn").addEventListener("click",loadWrittenAdminList);
-if($("refreshAdminPendingCQ")) $("refreshAdminPendingCQ").addEventListener("click",loadAllPendingCQForAdmin);
 $("backFromWrittenAdmin").addEventListener("click",showAdminDashboard);
 $("backFromAdminUser").addEventListener("click",showAdminDashboard);
 $("adminGoWritten").addEventListener("click",showWrittenAdmin);
