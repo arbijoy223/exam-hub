@@ -343,10 +343,11 @@ display:flex;align-items:center;justify-content:center;font-weight:800;font-size
 .site-footer{flex-shrink:0;margin-top:35px;background:linear-gradient(135deg,#111827,#25234a 65%,#312e81);color:#f8fafc;padding:34px 20px 0}.footer-inner{max-width:1050px;margin:auto;display:grid;grid-template-columns:1fr 1.3fr;gap:36px}.footer-brand{display:flex;align-items:flex-start;gap:13px}.footer-mark{background:linear-gradient(135deg,#635bff,#a78bfa);border:1px solid rgba(255,255,255,.25)}.footer-brand strong{font-size:17px}.footer-brand p{margin:7px 0;color:#cbd5e1;font-size:12px;line-height:1.7}.footer-contact h3{font-size:18px;margin-bottom:7px}.footer-contact p{margin:0 0 13px;color:#e2e8f0;font-size:13px;line-height:1.7}.footer-links{display:flex;flex-wrap:wrap;gap:8px}.footer-links a{color:#eef2ff;text-decoration:none;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.07);padding:8px 11px;border-radius:10px;font-size:12px;transition:.2s}.footer-links a:hover{background:rgba(139,92,246,.35);transform:translateY(-2px)}.footer-edit-note{display:block;margin-top:10px;color:#aab4ca;font-size:10px}.footer-bottom{max-width:1050px;margin:25px auto 0;padding:15px 0;border-top:1px solid rgba(255,255,255,.12);text-align:center;color:#aab4ca;font-size:11px}
 .auth-modal{position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.8);background:linear-gradient(160deg,#fff 0%,#fbfaff 100%);box-shadow:0 30px 90px rgba(20,20,60,.28);border-radius:28px!important;padding:30px!important}.auth-modal:before{content:"";position:absolute;left:0;top:0;right:0;height:6px;background:linear-gradient(90deg,#4f46e5,#8b5cf6,#c4b5fd)}.auth-modal h3{font-size:27px;letter-spacing:-.5px;margin:4px 0 6px}.auth-tabs{padding:5px;background:#eeedff;border:1px solid #e5e3ff;border-radius:15px}.auth-tab{padding:12px;border-radius:11px}.auth-tab.active{color:#4f46e5;box-shadow:0 5px 15px rgba(79,70,229,.12)}.auth-form{gap:9px}.auth-form label{font-size:12px;color:#344054;letter-spacing:.2px}.auth-form input{min-height:48px;border-radius:13px;border:1px solid #dfe3ee;background:#fff;padding:13px 14px}.auth-note{padding:10px 12px;border-radius:12px;background:#f4f5ff;color:#667085}.auth-form .btn-primary{box-shadow:0 8px 20px rgba(99,91,255,.24)}
 .subject-card{animation:floatCard 4.2s ease-in-out infinite;will-change:transform}.subject-card:nth-child(2n){animation-delay:-1.4s}.subject-card:nth-child(3n){animation-delay:-2.7s}.subject-card:hover{animation-play-state:paused;transform:translateY(-8px)}@keyframes floatCard{0%,100%{translate:0 0}50%{translate:0 -9px}}
-@media(max-width:700px){.topbar-inner{padding:10px 12px;gap:9px}.menu-trigger{width:40px;height:40px;flex-basis:40px;border-radius:13px}.brand{gap:8px;flex:1}.brand .seal{width:42px;height:42px;flex-basis:42px;border-radius:14px}.brand .seal span{font-size:20px}.brand-text{font-size:12px}.brand-sub{font-size:10px}.account-area{gap:5px}.account-btn{padding:10px 11px;min-height:41px;font-size:12px;border-radius:12px}.account-area #profileBtn:not([hidden]){display:inline-flex!important;max-width:112px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.account-area #profileBtn[hidden]{display:none!important}.account-area #adminBtn{display:none!important}.footer-inner{grid-template-columns:1fr;gap:20px}.site-footer{padding:27px 16px 0}.auth-modal{padding:26px 20px!important}.auth-modal h3{font-size:23px}}
+@media(max-width:700px){.topbar-inner{padding:10px 12px;gap:9px}.menu-trigger{width:40px;height:40px;flex-basis:40px;border-radius:13px}.brand{gap:8px;flex:1}.brand .seal{width:42px;height:42px;flex-basis:42px;border-radius:14px}.brand .seal span{font-size:20px}.brand-text{font-size:12px}.brand-sub{font-size:10px}.account-area{gap:5px}.account-btn{padding:10px 11px;min-height:41px;font-size:12px;border-radius:12px}.account-area #profileBtn:not([hidden]){display:inline-flex!important;max-width:112px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.account-area #profileBtn[hidden]{display:none!important}.account-area #adminBtn:not([hidden]){display:inline-flex!important;max-width:42px;min-width:38px;justify-content:center;overflow:hidden;padding:9px 8px!important;font-size:0!important}.account-area #adminBtn[hidden]{display:none!important}.account-area #adminBtn::first-letter{font-size:17px}.footer-inner{grid-template-columns:1fr;gap:20px}.site-footer{padding:27px 16px 0}.auth-modal{padding:26px 20px!important}.auth-modal h3{font-size:23px}}
 @media(prefers-reduced-motion:reduce){.subject-card{animation:none!important}*,*:before,*:after{scroll-behavior:auto!important;transition-duration:.01ms!important}}
 
 
+.admin-stat-click{width:100%;text-align:left;cursor:pointer;color:var(--text);font-family:inherit;background:var(--card);border:1px solid var(--border);border-radius:18px;padding:16px}.admin-stat-click small{display:block;margin-top:5px;color:var(--muted);font-size:10px}.admin-stat-click:hover{border-color:var(--primary);transform:translateY(-2px)}
 /* ===== CQ / Written Exam + Admin User Detail ===== */
 .written-card{background:var(--card);border:1px solid var(--border);border-radius:22px;padding:20px;margin:16px 0;box-shadow:var(--shadow)}
 .written-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.written-question{background:#f8fafc;border:1px solid var(--border);border-radius:14px;padding:14px;margin:10px 0}.written-question textarea{width:100%;min-height:120px;border:1px solid var(--border);border-radius:12px;padding:12px;resize:vertical;font:500 14px/1.6 var(--sans)}
@@ -566,20 +567,16 @@ display:flex;align-items:center;justify-content:center;font-weight:800;font-size
       <button class="btn btn-primary" id="adminRefreshBtn">↻ Refresh</button>
     </div>
     <div class="admin-stats">
-      <div class="admin-stat"><span>👥 Total Users</span><strong id="adminTotalUsers">0</strong></div>
+      <button type="button" class="admin-stat admin-stat-click" id="adminStatUsers"><span>👥 Total Users</span><strong id="adminTotalUsers">0</strong><small>Click to manage users</small></button>
       <div class="admin-stat"><span>📝 Total Exams</span><strong id="adminTotalExams">0</strong></div>
-      <div class="admin-stat"><span>✅ Pass</span><strong id="adminTotalPass">0</strong></div>
-      <div class="admin-stat"><span>❌ Fail</span><strong id="adminTotalFail">0</strong></div>
-      <div class="admin-stat"><span>📈 Overall Average</span><strong id="adminOverallAvg">0%</strong></div>
-      <div class="admin-stat"><span>🚫 Blocked</span><strong id="adminBlockedUsers">0</strong></div>
+      <button type="button" class="admin-stat admin-stat-click" id="adminStatPass"><span>✅ Pass</span><strong id="adminTotalPass">0</strong><small>View passed exams</small></button>
+      <button type="button" class="admin-stat admin-stat-click" id="adminStatFail"><span>❌ Fail</span><strong id="adminTotalFail">0</strong><small>View failed exams</small></button>
+      <button type="button" class="admin-stat admin-stat-click" id="adminStatAverage"><span>📈 Overall Average</span><strong id="adminOverallAvg">0%</strong><small>Open overall graph</small></button>
+      <button type="button" class="admin-stat admin-stat-click" id="adminStatBlocked"><span>🚫 Blocked</span><strong id="adminBlockedUsers">0</strong><small>View blocked users</small></button>
     </div>
     <div class="profile-card admin-card"><div class="admin-section-title"><div><h3>📝 Pending CQ Marking <span class="pending-count" id="adminPendingCount">0</span></h3><p>Newest submissions first. Once you mark a submission it disappears from this list and the student is notified instantly.</p></div><button class="btn btn-ghost" id="refreshPendingCqBtn">↻ Refresh</button></div><div id="adminPendingCqList"><div class="empty-profile">Loading pending submissions…</div></div></div>
     <div class="profile-card admin-card"><div class="admin-section-title"><div><h3>📋 Objective Exam History</h3><p>Each exam appears once, most recently attempted first. Tap an exam to open its latest leaderboard.</p></div></div><div id="adminObjectiveHistory" class="scroll-list"><div class="empty-profile">Loading…</div></div></div>
-    <div class="profile-card admin-card"><div class="admin-section-title"><div><h3>📈 Overall Performance</h3><p>Daily average of all users (MCQ + graded CQ)</p></div></div><div class="chart-wrap"><canvas id="adminOverallChart"></canvas></div></div>
-    <div class="profile-card admin-card">
-      <div class="admin-section-title"><div><h3>👥 User Performance</h3><p>Total exams, passes, fails, and average score for every user</p></div><span id="adminLoadStatus"></span></div>
-      <div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>User</th><th>Exam</th><th>Pass</th><th>Fail</th><th>Average</th><th>Status</th><th>Action</th></tr></thead><tbody id="adminUsersBody"></tbody></table></div>
-    </div>
+
     
     <div class="profile-card admin-card">
       <div class="admin-section-title"><div><h3>🏆 Leaderboard</h3><p>To view an answer key, open a subject, choose a chapter, then select an exam.</p></div></div>
@@ -591,6 +588,13 @@ display:flex;align-items:center;justify-content:center;font-weight:800;font-size
     </div>
   </section>
 
+
+  <section id="screen-admin-performance" hidden>
+    <button class="back-btn" id="backFromAdminPerformance">← Back to Admin Dashboard</button>
+    <div class="admin-head"><div><span class="admin-badge">🛡️ ADMIN REPORTS</span><h2 id="adminReportTitle">User Performance</h2><p id="adminReportDescription">Review user results and account status.</p></div><button class="btn btn-primary" id="refreshAdminReport">↻ Refresh</button></div>
+    <div class="profile-card" id="adminReportChartCard" hidden><h3>📈 Overall Performance</h3><div class="chart-wrap"><canvas id="adminReportChart"></canvas></div></div>
+    <div class="profile-card"><div id="adminReportContent"><div class="empty-profile">Choose a report.</div></div></div>
+  </section>
 
   <!-- CQ / Written Exam for students -->
   <section id="screen-written-exam" hidden>
@@ -3339,6 +3343,7 @@ function hideAllScreens(){
   if($("screen-written-result")) $("screen-written-result").hidden = true;
   if($("screen-written-admin")) $("screen-written-admin").hidden = true;
   if($("screen-admin-user")) $("screen-admin-user").hidden = true;
+  if($("screen-admin-performance")) $("screen-admin-performance").hidden = true;
   if($("screen-profile")) $("screen-profile").hidden = true;
   if($("screen-admin")) $("screen-admin").hidden = true;
   if($("screen-cq-leaderboard")) $("screen-cq-leaderboard").hidden = true;
@@ -3438,7 +3443,9 @@ $("backToChaptersFromHub").addEventListener("click", ()=> showChapters(state.sel
 // 3. Exam লিস্ট দেখানো
 async function getActiveWrittenExams(subject, chapter){
   if(!supabaseClient) return [];
-  const {data,error}=await supabaseClient.from("written_exams").select("id,subject,chapter,title,time_minutes,total_marks,questions,active,created_at,updated_at").eq("subject",subject).eq("chapter",chapter).eq("active",true).order("created_at",{ascending:true});
+  let q=supabaseClient.from("written_exams").select("id,subject,chapter,title,time_minutes,total_marks,questions,active,created_at,updated_at").eq("subject",subject).eq("chapter",chapter).order("created_at",{ascending:true});
+  if(!isAdmin()) q=q.eq("active",true);
+  const {data,error}=await q;
   if(error){ console.error("Written exam load failed",error); return []; }
   return data||[];
 }
@@ -3452,7 +3459,7 @@ async function showExams(subject, chapter){
   const grid = $("examGrid");
   grid.innerHTML = '<div class="mat-empty">⏳ Loading exams...</div>';
   const exams = Object.keys(examData[subject].chapters[chapter].exams);
-  const written = isAdmin() ? [] : await getActiveWrittenExams(subject,chapter);
+  const written = await getActiveWrittenExams(subject,chapter);
   grid.innerHTML = "";
   exams.forEach((examName,i)=>{
     const examObj = examData[subject].chapters[chapter].exams[examName];
@@ -3462,10 +3469,10 @@ async function showExams(subject, chapter){
     card.innerHTML=`<div class="card-icon">${isAdmin()?"📋":"📝"}</div><h3>${examName}</h3><div class="subject-meta"><span class="pill">${bnNum(qCount)} questions</span><span class="pill">⏱ ${bnNum(timeInMinutes)} min</span></div><div class="card-arrow">→</div>`;
     card.addEventListener("click",()=>askForName(subject,chapter,examName)); grid.appendChild(card);
   });
-  if(!isAdmin()) written.forEach((exam,i)=>{
+  written.forEach((exam,i)=>{
     const card=document.createElement("button"); card.className="subject-card"; card.style.setProperty("--card-accent",accentPalette[(exams.length+i)%accentPalette.length]);
     card.innerHTML=`<div class="card-icon">✍️</div><h3>${exam.title}</h3><div class="subject-meta"><span class="pill">CQ / Written</span><span class="pill">${bnNum(Array.isArray(exam.questions)?exam.questions.length:0)} questions</span><span class="pill">⏱ ${bnNum(exam.time_minutes)} min</span><span class="pill">${bnNum(exam.total_marks)} marks</span></div><div class="card-arrow">→</div>`;
-    card.addEventListener("click",()=>startWrittenExam(exam)); grid.appendChild(card);
+    card.addEventListener("click",()=>isAdmin()?showWrittenLeaderboard(exam.id,{id:exam.id,title:exam.title,subject:exam.subject,chapter:exam.chapter,total_marks:exam.total_marks}):startWrittenExam(exam)); grid.appendChild(card);
   });
   if(!grid.children.length) grid.innerHTML='<div class="mat-empty">No exams are available for this chapter yet.</div>';
   pushScreen("exams", {subject, chapter});
@@ -4197,8 +4204,6 @@ async function showAdminDashboard(silent){
   const quiet=(silent===true);
   if(!quiet){
     hideAllScreens(); $("screen-admin").hidden=false; $("topSub").textContent="Admin Dashboard"; pushScreen("admin",{});
-    $("adminLoadStatus").textContent="⏳ Loading...";
-    $("adminUsersBody").innerHTML='<tr><td colspan="7" class="admin-empty">⏳ Loading data...</td></tr>';
     $("adminObjectiveHistory").innerHTML='<div class="empty-profile">⏳ Loading...</div>';
   }
   try{
@@ -4243,23 +4248,9 @@ async function showAdminDashboard(silent){
       hist.querySelectorAll(".admin-exam-result").forEach(btn=>btn.addEventListener("click",()=>{state.selectedSubject=btn.dataset.subject;state.selectedChapter=btn.dataset.chapter;state.selectedExam=btn.dataset.exam;showLeaderboard();}));
     }
 
-    // Overall chart (daily average, MCQ + CQ)
-    const pts=[...daily.keys()].sort().slice(-30).map(k=>{const a=daily.get(k),d=new Date(k+"T00:00:00");return {percent:a.reduce((x,y)=>x+y,0)/a.length,label:String(d.getDate()).padStart(2,"0")+"/"+String(d.getMonth()+1).padStart(2,"0")};});
-    drawPerformanceChart("adminOverallChart",pts,"No exam data yet");
-
-    const body=$("adminUsersBody"); body.innerHTML="";
-    if(!nonAdminUsers.length) body.innerHTML='<tr><td colspan="7" class="admin-empty">No student accounts yet.</td></tr>';
-    else nonAdminUsers.sort((a,b)=>b.avg-a.avg||b.total-a.total).forEach(u=>{
-      const tr=document.createElement("tr"),statusText=u.is_admin?"ADMIN":(u.blocked?"BLOCKED":"ACTIVE"),statusClass=u.is_admin?"admin":(u.blocked?"blocked":"active");
-      const action=u.is_admin?"—":`<button class="admin-block-btn ${u.blocked?"unblock":""}" data-user-id="${u.user_id}" data-blocked="${u.blocked}">${u.blocked?"↗ Unblock":"🚫 Block"}</button>`;
-      const profileBtn=`<button type="button" class="user-link" data-user-id="${u.user_id}" title="Open ${escapeHtml(u.username)}'s profile">${escapeHtml(u.username)}</button>`;
-      const profileAction=`<button type="button" class="admin-block-btn" data-profile-user-id="${u.user_id}">👤 Profile</button>`;
-      tr.innerHTML=`<td>${profileBtn}</td><td>${bnNum(u.total)}</td><td class="pass">${bnNum(u.pass)}</td><td class="fail">${bnNum(u.fail)}</td><td><strong>${bnNum(u.avg)}%</strong></td><td><span class="user-status ${statusClass}">${statusText}</span></td><td>${profileAction} ${action}</td>`; body.appendChild(tr);
-    });
-    body.querySelectorAll(".admin-block-btn[data-user-id]").forEach(btn=>btn.addEventListener("click",()=>toggleUserBlock(btn.dataset.userId,btn.dataset.blocked==="true",btn)));
-    body.querySelectorAll(".user-link, .admin-block-btn[data-profile-user-id]").forEach(btn=>btn.addEventListener("click",()=>showAdminUserProfile(btn.dataset.userId||btn.dataset.profileUserId)));
-    $("adminLoadStatus").textContent=`${bnNum(allUsers.length)} users • ${bnNum(totalExams)} combined exams`;
-  }catch(err){console.error(err);$("adminLoadStatus").textContent="";$("adminUsersBody").innerHTML='<tr><td colspan="7" class="admin-empty">❌ Could not load data. Check your RLS/SQL setup.</td></tr>';toast("Could not load admin data","error",3500);}
+    /* User Performance and overall graph are loaded on their separate report screen. */
+    const body=$("adminUsersBody"); if(body) body.innerHTML="";
+  }catch(err){console.error(err);toast("Could not load admin data. Check your RLS/SQL setup.","error",3500);}
 }
 
 async function loadAdminPendingCqQueue(seedRows=null, seedUsers=null){
@@ -4282,8 +4273,8 @@ async function loadAdminPendingCqQueue(seedRows=null, seedUsers=null){
       const isNew=Date.now()-new Date(r.submitted_at).getTime()<86400000;
       const h=document.createElement('h4');h.innerHTML=`${escapeHtml(u.username)} — ${escapeHtml(ex.title||'CQ / Written Exam')}${isNew?' <span class="new-badge">NEW</span>':''}`;
       const meta=document.createElement('p');meta.textContent=`${ex.subject||''} → ${ex.chapter||''} • Submitted ${timeAgo(r.submitted_at)} (${new Date(r.submitted_at).toLocaleString('en-GB')}) • Max ${ex.total_marks||0} marks`;
-      const open=document.createElement('button');open.className='btn btn-ghost';open.style.margin='8px 0';open.textContent='👤 Open user profile';open.addEventListener('click',()=>showAdminUserProfile(r.user_id));
-      card.append(h,meta,open);
+      const open=document.createElement('button');open.className='btn btn-ghost';open.style.margin='8px 6px 8px 0';open.textContent='👤 Open user profile';open.addEventListener('click',()=>showAdminUserProfile(r.user_id));const cancel=document.createElement('button');cancel.className='btn btn-ghost';cancel.style.cssText='margin:8px 0;color:#b91c1c;border-color:#fecaca';cancel.textContent='🗑 Cancel / Delete Answer';cancel.addEventListener('click',()=>cancelPendingCq(r));
+      card.append(h,meta,open,cancel);
       const qs=Array.isArray(ex.questions)?ex.questions:[];
       const det=document.createElement('details');const sum=document.createElement('summary');sum.textContent=`View answers (${qs.length})`;det.appendChild(sum);
       qs.forEach((q,i)=>{const qa=document.createElement('div');qa.className='written-question';const qh=document.createElement('strong');qh.textContent=`Question ${i+1}: ${q}`;const a=document.createElement('div');a.style.cssText='white-space:pre-wrap;margin-top:6px';a.textContent=(r.answers||[])[i]||'(No answer)';qa.append(qh,a);det.appendChild(qa);});
@@ -4294,6 +4285,14 @@ async function loadAdminPendingCqQueue(seedRows=null, seedUsers=null){
       card.appendChild(row);box.appendChild(card);
     });
   }catch(e){console.error('Pending CQ queue:',e);box.innerHTML='<div class="empty-profile">Could not load pending submissions. Check Supabase RLS permissions.</div>';}
+}
+
+async function cancelPendingCq(r){
+  if(!isAdmin()||!r||r.status!=="submitted")return;
+  if(!(await customConfirm("Cancel this CQ answer? The student will be notified that their answer was deleted by admin.",{icon:"🗑️",okText:"Cancel answer"})))return;
+  const {error}=await supabaseClient.from("written_submissions").update({status:"cancelled",feedback:"Answer deleted by admin"}).eq("id",r.id).eq("status","submitted");
+  if(error){console.error(error);toast("Could not cancel answer. Check admin UPDATE permission/RLS.","error",3800);return;}
+  toast("CQ answer cancelled. Student will be notified.","success",3000);await loadAdminPendingCqQueue();
 }
 
 async function toggleUserBlock(userId, currentlyBlocked, btn){
@@ -4343,6 +4342,8 @@ async function checkCqNotifications(){
   const modal=$("cqResultModal"); if(!modal || modal.classList.contains("show")) return;
   cqNotifyBusy=true;
   try{
+    const cancelled=await supabaseClient.from("written_submissions").select("id,exam_id,status,feedback,submitted_at,graded_at").eq("user_id",currentProfile.user_id).eq("status","cancelled").order("submitted_at",{ascending:false}).limit(20);
+    if(!cancelled.error && cancelled.data){const seen=getCqSeen();const freshCancelled=cancelled.data.filter(r=>!seen.has(r.id));if(freshCancelled.length){const ids=[...new Set(freshCancelled.map(r=>r.exam_id).filter(Boolean))];let em=new Map();if(ids.length){const e=await supabaseClient.from("written_exams").select("id,title,subject,chapter").in("id",ids);if(!e.error)em=new Map((e.data||[]).map(x=>[x.id,x]));}const modal=$("cqResultModal");$("cqResultTitle").textContent="CQ answer cancelled by admin";$("cqResultBody").innerHTML=freshCancelled.map(r=>{const ex=em.get(r.exam_id)||{};return `<div class="cq-result-item"><strong>${escapeHtml(ex.title||"CQ / Written Exam")}</strong><span>${escapeHtml(ex.subject||"")}${ex.chapter?" → "+escapeHtml(ex.chapter):""}</span><p class="cq-fb">🗑️ Your answer was deleted by admin.</p></div>`;}).join("");modal.classList.add("show");modal.setAttribute("aria-hidden","false");freshCancelled.forEach(r=>seen.add(r.id));saveCqSeen(seen);return;}}
     const q=await supabaseClient.from("written_submissions").select("id,exam_id,status,score,feedback,submitted_at,graded_at").eq("user_id",currentProfile.user_id).eq("status","graded").not("score","is",null).order("graded_at",{ascending:false}).limit(20);
     if(q.error||!q.data) return;
     const seen=getCqSeen();
@@ -4465,7 +4466,7 @@ function renderProfileResults(rows,writtenRows=[]){
   const box=$("profileResults"); if(!rows.length){box.innerHTML='<div class="empty-profile">No objective exam results yet.</div>';return;}
   const groups=new Map();rows.forEach(r=>{const k=`${r.subject}|||${r.chapter}|||${r.exam}`;if(!groups.has(k))groups.set(k,[]);groups.get(k).push(r);});
   const list=[...groups.values()].map(a=>{a.sort((x,y)=>new Date(y.attempted_at)-new Date(x.attempted_at));const latest=a[0],avg=Math.round(a.reduce((n,r)=>n+Number(r.percent||0),0)/a.length);return {latest,avg,count:a.length};}).sort((a,b)=>new Date(b.latest.attempted_at)-new Date(a.latest.attempted_at));
-  box.innerHTML=list.map(g=>{const r=g.latest,pass=Number(r.percent)>=50;return `<button type="button" class="profile-result profile-objective-click" data-subject="${escapeHtml(r.subject)}" data-chapter="${escapeHtml(r.chapter)}" data-exam="${escapeHtml(r.exam)}" style="width:100%;text-align:left;border:0;cursor:pointer"><div class="pr-main"><strong>${escapeHtml(r.subject)} → ${escapeHtml(r.exam)}</strong><span>${escapeHtml(r.chapter)} • Latest: ${bnNum(r.percent)}% • ${g.count} attempt${g.count===1?'':'s'}</span></div><div class="pr-score"><strong class="${pass?'pass':'fail'}">${escapeHtml(currentProfile.username)} • ${bnNum(r.percent)}%</strong><span>Avg ${bnNum(g.avg)}%</span></div></button>`;}).join('');
+  box.innerHTML=list.map(g=>{const r=g.latest,pass=Number(r.percent)>=50;return `<button type="button" class="profile-result profile-objective-click" data-subject="${escapeHtml(r.subject)}" data-chapter="${escapeHtml(r.chapter)}" data-exam="${escapeHtml(r.exam)}" style="width:100%;text-align:left;border:0;cursor:pointer"><div class="pr-main"><strong>${escapeHtml(r.subject)} → ${escapeHtml(r.exam)}</strong><span>${escapeHtml(r.chapter)} • Latest: ${bnNum(r.correct)}/${bnNum(r.total)} marks (${bnNum(r.percent)}%) • ${g.count} attempt${g.count===1?'':'s'}</span></div><div class="pr-score"><strong class="${pass?'pass':'fail'}">${escapeHtml(currentProfile.username)} • ${bnNum(r.percent)}%</strong><span>Avg ${bnNum(g.avg)}%</span></div></button>`;}).join('');
   box.querySelectorAll('.profile-objective-click').forEach(b=>b.addEventListener('click',()=>{state.selectedSubject=b.dataset.subject;state.selectedChapter=b.dataset.chapter;state.selectedExam=b.dataset.exam;showLeaderboard();}));
 }
 
@@ -4798,6 +4799,37 @@ $("brandHomeBtn").addEventListener("click",()=>{
 $("brandHomeBtn").addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();$("brandHomeBtn").click();}});
 $("authActionBtn").addEventListener("click",()=>currentProfile?logoutUser():openAuthModal("login"));
 $("profileBtn").addEventListener("click",showProfile);
+
+async function openAdminReport(kind){
+  if(!isAdmin())return;
+  hideAllScreens();$("screen-admin-performance").hidden=false;pushScreen("admin-performance",{kind});
+  const title=$("adminReportTitle"),desc=$("adminReportDescription"),content=$("adminReportContent"),chart=$("adminReportChartCard");
+  content.innerHTML='<div class="empty-profile">⏳ Loading report…</div>';chart.hidden=true;
+  try{
+    const [{data:users,error:ue},{data:results,error:re},{data:written,error:we}]=await Promise.all([
+      supabaseClient.from("profiles").select("user_id,username,is_admin,blocked,created_at").order("created_at",{ascending:true}),
+      supabaseClient.from("results").select("user_id,subject,chapter,exam,correct,total,percent,status,attempted_at").order("attempted_at",{ascending:false}),
+      supabaseClient.from("written_submissions").select("id,user_id,exam_id,status,score,submitted_at,graded_at").order("submitted_at",{ascending:false})
+    ]);if(ue)throw ue;if(re)throw re;if(we)throw we;
+    const us=users||[], rs=results||[], ws=(written||[]).filter(x=>x.status==="graded"&&x.score!==null);const name=new Map(us.map(u=>[u.user_id,u.username]));
+    const ids=[...new Set(ws.map(x=>x.exam_id).filter(Boolean))];let exs=[];if(ids.length){const e=await supabaseClient.from("written_exams").select("id,total_marks,title,subject,chapter").in("id",ids);if(e.error)throw e.error;exs=e.data||[];}const em=new Map(exs.map(x=>[x.id,x]));
+    if(kind==="users"){
+      title.textContent="User Performance";desc.textContent="Review user statistics or permanently delete an account from the server.";
+      const groups=new Map(us.map(u=>[u.user_id,{...u,total:0,pass:0,fail:0,perc:[]} ]));rs.forEach(r=>{const m=groups.get(r.user_id);if(!m)return;const p=Number(r.percent)||0;m.total++;m.perc.push(p);p>=50?m.pass++:m.fail++;});ws.forEach(r=>{const m=groups.get(r.user_id),ex=em.get(r.exam_id),max=Number(ex?.total_marks)||0;if(!m||max<=0)return;const p=Number(r.score||0)/max*100;m.total++;m.perc.push(p);p>=50?m.pass++:m.fail++;});
+      content.innerHTML='<div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>User</th><th>Exams</th><th>Pass</th><th>Fail</th><th>Average</th><th>Status</th><th>Actions</th></tr></thead><tbody>'+[...groups.values()].map(u=>{const avg=u.perc.length?Math.round(u.perc.reduce((a,b)=>a+b,0)/u.perc.length):0;return `<tr><td>${escapeHtml(u.username)}</td><td>${bnNum(u.total)}</td><td class="pass">${bnNum(u.pass)}</td><td class="fail">${bnNum(u.fail)}</td><td>${bnNum(avg)}%</td><td>${u.blocked?"BLOCKED":u.is_admin?"ADMIN":"ACTIVE"}</td><td><button class="admin-block-btn" data-open-profile="${u.user_id}">Profile</button> ${u.is_admin?"":`<button class="admin-block-btn" style="background:#fee2e2;color:#b91c1c" data-delete-user="${u.user_id}" data-username="${escapeHtml(u.username)}">🗑 Delete</button>`}</td></tr>`}).join('')+'</tbody></table></div>';
+      content.querySelectorAll('[data-open-profile]').forEach(b=>b.addEventListener('click',()=>showAdminUserProfile(b.dataset.openProfile)));
+      content.querySelectorAll('[data-delete-user]').forEach(b=>b.addEventListener('click',()=>deleteServerUser(b.dataset.deleteUser,b.dataset.username)));
+    }else if(kind==="pass"||kind==="fail"){
+      const want=kind==="pass";title.textContent=want?"Passed Exams":"Failed Exams";desc.textContent="Users and the subject/exam they passed or failed.";const items=rs.filter(r=>(Number(r.percent)>=50)===want).map(r=>({username:name.get(r.user_id)||"Unknown",subject:r.subject,chapter:r.chapter,exam:r.exam,score:`${bnNum(r.correct)}/${bnNum(r.total)} (${bnNum(r.percent)}%)`,at:r.attempted_at}));ws.forEach(r=>{const ex=em.get(r.exam_id);if(!ex)return;const pct=Number(ex.total_marks)?Number(r.score)/Number(ex.total_marks)*100:0;if((pct>=50)!==want)return;items.push({username:name.get(r.user_id)||"Unknown",subject:ex.subject,chapter:ex.chapter,exam:ex.title,score:`${bnNum(r.score)}/${bnNum(ex.total_marks)} (${bnNum(Math.round(pct))}%)`,at:r.graded_at||r.submitted_at});});items.sort((a,b)=>new Date(b.at)-new Date(a.at));content.innerHTML=items.length?items.map(x=>`<div class="profile-result"><div class="pr-main"><strong>${escapeHtml(x.username)} — ${escapeHtml(x.subject||"")} → ${escapeHtml(x.exam||"")}</strong><span>${escapeHtml(x.chapter||"")} • ${new Date(x.at).toLocaleString("en-GB")}</span></div><div class="pr-score"><strong class="${want?"pass":"fail"}">${escapeHtml(x.score)}</strong></div></div>`).join(''):'<div class="empty-profile">No matching exam results.</div>';
+    }else if(kind==="average"){
+      title.textContent="Overall Performance";desc.textContent="Daily average of all users (MCQ + graded CQ).";chart.hidden=false;const daily=new Map();const add=(at,p)=>{const d=new Date(at);if(isNaN(d))return;const k=d.toISOString().slice(0,10);if(!daily.has(k))daily.set(k,[]);daily.get(k).push(p)};rs.forEach(r=>add(r.attempted_at,Number(r.percent)||0));ws.forEach(r=>{const max=Number(em.get(r.exam_id)?.total_marks)||0;if(max>0)add(r.graded_at||r.submitted_at,Number(r.score||0)/max*100)});const pts=[...daily.keys()].sort().slice(-30).map(k=>{const a=daily.get(k),d=new Date(k+"T00:00:00");return {percent:a.reduce((x,y)=>x+y,0)/a.length,label:String(d.getDate()).padStart(2,"0")+"/"+String(d.getMonth()+1).padStart(2,"0")}});drawPerformanceChart("adminReportChart",pts,"No exam data yet");content.innerHTML='<div class="empty-profile">Graph shows the daily average of objective exams and graded CQ results.</div>';
+    }else if(kind==="blocked"){
+      title.textContent="Blocked Users";desc.textContent="Accounts currently blocked by admin.";const blocked=us.filter(u=>u.blocked);content.innerHTML=blocked.length?blocked.map(u=>`<div class="profile-result"><div class="pr-main"><strong>${escapeHtml(u.username)}</strong><span>Blocked account</span></div><div class="pr-score"><button class="admin-block-btn unblock" data-unblock="${u.user_id}">🔓 Unblock</button></div></div>`).join(''):'<div class="empty-profile">No blocked users.</div>';content.querySelectorAll('[data-unblock]').forEach(b=>b.addEventListener('click',()=>toggleUserBlock(b.dataset.unblock,true,b)));
+    }
+  }catch(e){console.error('Admin report:',e);content.innerHTML='<div class="empty-profile">Could not load report. Check Supabase permissions/RLS.</div>';}
+}
+async function deleteServerUser(userId,username){if(!isAdmin())return;if(!(await customConfirm(`Permanently delete ${username} and their server account/data? This cannot be undone.`,{icon:"🗑️",okText:"Delete user"})))return;const {error}=await supabaseClient.rpc("admin_delete_user",{target_user_id:userId});if(error){console.error(error);toast("Server delete failed. Add the admin_delete_user SQL RPC in Supabase first.","error",4500);return;}toast("User and server account deleted.","success",3000);openAdminReport("users");}
+
 $("adminBtn").addEventListener("click",showAdminDashboard);
 function openDrawer(){ $("sideDrawer").classList.add("open"); $("drawerBackdrop").hidden=false; requestAnimationFrame(()=>$("drawerBackdrop").classList.add("open")); $("sideDrawer").setAttribute("aria-hidden","false"); $("menuTrigger").setAttribute("aria-expanded","true"); }
 function closeDrawer(){ $("sideDrawer").classList.remove("open"); $("drawerBackdrop").classList.remove("open"); $("sideDrawer").setAttribute("aria-hidden","true"); $("menuTrigger").setAttribute("aria-expanded","false"); setTimeout(()=>{if(!$("drawerBackdrop").classList.contains("open")) $("drawerBackdrop").hidden=true;},250); }
@@ -4814,6 +4846,8 @@ updateAccountUI();
 $("backFromAdmin").addEventListener("click",()=>{hideAllScreens();$("screen-subjects").hidden=false;$("topSub").textContent="Choose a subject to begin";pushScreen("subjects",{});});
 startCqNotificationPolling();
 $("adminRefreshBtn").addEventListener("click",showAdminDashboard);
+$("adminStatUsers").addEventListener("click",()=>openAdminReport("users"));$("adminStatPass").addEventListener("click",()=>openAdminReport("pass"));$("adminStatFail").addEventListener("click",()=>openAdminReport("fail"));$("adminStatAverage").addEventListener("click",()=>openAdminReport("average"));$("adminStatBlocked").addEventListener("click",()=>openAdminReport("blocked"));
+$("backFromAdminPerformance").addEventListener("click",showAdminDashboard);$("refreshAdminReport").addEventListener("click",()=>{const t=$("adminReportTitle").textContent;const kind=t==="Passed Exams"?"pass":t==="Failed Exams"?"fail":t==="Overall Performance"?"average":t==="Blocked Users"?"blocked":"users";openAdminReport(kind);});
 $("refreshPendingCqBtn").addEventListener("click",()=>loadAdminPendingCqQueue());
 $("adminGoSubjects").addEventListener("click",()=>{hideAllScreens();$("screen-subjects").hidden=false;$("topSub").textContent="Choose a subject to view answer keys";pushScreen("subjects",{});});
 $("adminGoLeaderboard").addEventListener("click",()=>{if(state.selectedSubject&&state.selectedChapter&&state.selectedExam) showLeaderboard(); else toast("Select an exam first", "warning", 2500);});
