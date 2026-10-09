@@ -249,7 +249,7 @@ display:flex;align-items:center;justify-content:center;font-weight:800;font-size
   font-weight:700;
 }
 
-keyframes warningFloat{
+@keyframes warningFloat{
     0%,100%{transform:translateY(0)}
     50%{transform:translateY(-5px)}
   }
@@ -355,6 +355,30 @@ keyframes warningFloat{
 .written-answer-box{width:100%;min-height:150px;border:1px solid var(--border);border-radius:15px;padding:13px;background:#fff;font:500 14px/1.7 var(--sans);resize:vertical}.written-pending{padding:20px;border-radius:18px;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;line-height:1.7}.written-graded{padding:20px;border-radius:18px;background:#ecfdf5;border:1px solid #bbf7d0;color:#166534;line-height:1.7}.user-link{border:0;background:transparent;color:var(--primary);font:800 13px var(--sans);cursor:pointer;padding:0;text-decoration:underline;text-underline-offset:2px}.admin-user-detail-head{display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap}.admin-user-detail-head .profile-user{margin:0}.grade-row{display:grid;grid-template-columns:1fr 150px;gap:10px;align-items:end;margin-top:12px}.grade-row label{font-size:12px;font-weight:800;color:#475569}.grade-row input{width:100%;height:44px;border:1px solid var(--border);border-radius:11px;padding:10px;font:700 14px var(--sans)}.grade-feedback{width:100%;min-height:80px;margin-top:10px;border:1px solid var(--border);border-radius:11px;padding:10px;font:500 13px/1.5 var(--sans);resize:vertical}
 @media(max-width:700px){.written-admin-grid{grid-template-columns:1fr}.written-admin-grid .full{grid-column:auto}.grade-row{grid-template-columns:1fr}.written-card{padding:14px}}
 
+
+/* ===== v2 additions ===== */
+#screen-written-exam .exam-head{position:sticky!important;top:70px!important;z-index:95;background:rgba(244,247,251,.94)!important;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);padding:8px 12px!important;margin:0 -6px 12px!important;border-radius:0 0 18px 18px!important;box-shadow:0 8px 20px rgba(15,23,42,.08)!important}
+#screen-written-exam .exam-head .subject-name{font-size:17px}
+#screen-written-exam .exam-head .timer{padding:6px 12px;font-size:16px;min-width:100px}
+.pending-count{display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:24px;padding:0 8px;border-radius:999px;background:#ef4444;color:#fff;font:800 12px var(--sans);vertical-align:middle;margin-left:6px}
+.nav-badge{display:inline-flex;min-width:20px;height:20px;padding:0 6px;border-radius:999px;background:#ef4444;color:#fff;font-size:11px;font-weight:800;align-items:center;justify-content:center;margin-left:5px;font-style:normal}
+.scroll-list{max-height:480px;overflow-y:auto}
+.admin-exam-result{background:transparent;font-family:inherit;color:inherit}
+.admin-exam-result:hover{background:rgba(99,91,255,.05)}
+.lb-hint{margin-top:8px;font-size:12px;color:var(--primary);font-weight:700}
+.card-hint{margin:-6px 0 10px;font-size:12px;color:var(--muted)}
+.lb-row .admin-block-btn{margin-left:8px;flex-shrink:0}
+.written-submit-card details{margin:10px 0}
+.written-submit-card summary{cursor:pointer;font-weight:800;font-size:13px;color:var(--primary)}
+.cq-result-box{max-height:86vh;overflow-y:auto}
+.cq-icon{background:linear-gradient(135deg,#ecfdf5,#d1fae5)!important;box-shadow:0 10px 30px rgba(22,163,74,.2)!important}
+.cq-result-item{text-align:left;background:#f8fafc;border:1px solid var(--border);border-radius:14px;padding:12px 14px;margin:0 0 10px}
+.cq-result-item strong{display:block;font-size:15px}
+.cq-result-item span{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+.cq-score{font-size:22px;font-weight:900;margin-top:6px}
+.cq-score small{font-size:13px;font-weight:700;color:var(--muted)}
+.cq-fb{margin:6px 0 0!important;font-size:13px!important;color:#475569!important;max-width:none!important;text-align:left}
+#cqResultBody{margin-bottom:18px}
 </style>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#635bff">
@@ -526,8 +550,8 @@ keyframes warningFloat{
       <div class="pstat"><strong id="profileAvg">0%</strong><span>Average Score</span></div>
     </div>
     <div class="profile-card"><h3>📈 Performance Chart</h3><div class="chart-wrap"><canvas id="performanceChart"></canvas></div></div>
-    <div class="profile-card"><h3>📋 Objective Exam History</h3><div id="profileResults"></div></div>
-    <div class="profile-card"><h3>✍️ CQ / Written Exam Results</h3><div id="profileWrittenResults"></div></div>
+    <div class="profile-card"><h3>📋 Objective Exam History</h3><p class="card-hint">Tap an exam to view its leaderboard</p><div id="profileResults"></div></div>
+    <div class="profile-card"><h3>✍️ CQ / Written Exam Results</h3><p class="card-hint">Tap a CQ exam to view its CQ leaderboard</p><div id="profileWrittenResults"></div></div>
   </section>
 
   <!-- Admin Dashboard -->
@@ -549,11 +573,14 @@ keyframes warningFloat{
       <div class="admin-stat"><span>📈 Overall Average</span><strong id="adminOverallAvg">0%</strong></div>
       <div class="admin-stat"><span>🚫 Blocked</span><strong id="adminBlockedUsers">0</strong></div>
     </div>
+    <div class="profile-card admin-card"><div class="admin-section-title"><div><h3>📝 Pending CQ Marking <span class="pending-count" id="adminPendingCount">0</span></h3><p>Newest submissions first. Once you mark a submission it disappears from this list and the student is notified instantly.</p></div><button class="btn btn-ghost" id="refreshPendingCqBtn">↻ Refresh</button></div><div id="adminPendingCqList"><div class="empty-profile">Loading pending submissions…</div></div></div>
+    <div class="profile-card admin-card"><div class="admin-section-title"><div><h3>📋 Objective Exam History</h3><p>Each exam appears once, most recently attempted first. Tap an exam to open its latest leaderboard.</p></div></div><div id="adminObjectiveHistory" class="scroll-list"><div class="empty-profile">Loading…</div></div></div>
+    <div class="profile-card admin-card"><div class="admin-section-title"><div><h3>📈 Overall Performance</h3><p>Daily average of all users (MCQ + graded CQ)</p></div></div><div class="chart-wrap"><canvas id="adminOverallChart"></canvas></div></div>
     <div class="profile-card admin-card">
       <div class="admin-section-title"><div><h3>👥 User Performance</h3><p>Total exams, passes, fails, and average score for every user</p></div><span id="adminLoadStatus"></span></div>
       <div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>User</th><th>Exam</th><th>Pass</th><th>Fail</th><th>Average</th><th>Status</th><th>Action</th></tr></thead><tbody id="adminUsersBody"></tbody></table></div>
     </div>
-    <div class="profile-card admin-card"><div class="admin-section-title"><div><h3>📝 Pending CQ Marking</h3><p>All users’ ungraded submissions, newest first. Grading removes an item from this queue.</p></div><button class="btn btn-ghost" id="refreshPendingCqBtn">↻ Refresh</button></div><div id="adminPendingCqList"><div class="empty-profile">Loading pending submissions…</div></div></div>
+    
     <div class="profile-card admin-card">
       <div class="admin-section-title"><div><h3>🏆 Leaderboard</h3><p>To view an answer key, open a subject, choose a chapter, then select an exam.</p></div></div>
       <div class="admin-actions-grid">
@@ -612,8 +639,21 @@ keyframes warningFloat{
     <button class="back-btn" id="backFromAdminUser">← Back to Admin</button>
     <div class="profile-card admin-user-detail-head"><div class="profile-user"><div class="profile-avatar" id="adminUserAvatar">U</div><div><h2 id="adminUserUsername">User</h2><p id="adminUserStatusText">Student profile</p></div></div><button class="btn btn-ghost" id="adminUserBlockBtn">🚫 Block</button></div>
     <div class="profile-stats"><div class="pstat"><strong id="adminUserTotal">0</strong><span>Total Exams</span></div><div class="pstat"><strong id="adminUserPassed">0</strong><span>Passed</span></div><div class="pstat"><strong id="adminUserFailed">0</strong><span>Failed</span></div><div class="pstat"><strong id="adminUserAvg">0%</strong><span>Average</span></div></div>
+    <div class="profile-card"><h3>📈 Performance Chart (MCQ + CQ)</h3><div class="chart-wrap"><canvas id="adminUserChart"></canvas></div></div>
     <div class="profile-card"><h3>📋 Objective Exam History</h3><div id="adminUserResults"></div></div>
     <div class="profile-card"><h3>✍️ Written / CQ Submissions</h3><div id="adminUserWritten"></div></div>
+  </section>
+
+  <section id="screen-cq-leaderboard" hidden>
+    <div class="lb-head">
+      <h2>🏆 CQ Leaderboard</h2>
+      <p id="cqLbSubtitle"></p>
+    </div>
+    <div id="cqLbList"></div>
+    <div class="action-row">
+      <button class="btn btn-ghost" id="btnCqLbBack">← Go Back</button>
+      <button class="btn btn-ghost" id="btnCqLbClear" hidden style="color:#dc2626">🗑 Clear CQ leaderboard (Admin only)</button>
+    </div>
   </section>
 
   <!-- লিডারবোর্ড পেজ (এই নির্দিষ্ট Examর) -->
@@ -710,6 +750,18 @@ keyframes warningFloat{
     <div class="fancy-modal-actions">
       <button class="modal-cancel" id="btnCancelSubmit">← Keep Working</button>
       <button class="modal-submit" id="btnConfirmSubmit">✓ Submit Anyway</button>
+    </div>
+  </div>
+</div>
+
+<div class="fancy-modal" id="cqResultModal" aria-hidden="true">
+  <div class="fancy-modal-box cq-result-box" role="dialog" aria-modal="true" aria-labelledby="cqResultTitle">
+    <div class="fancy-modal-icon cq-icon">✍️</div>
+    <h3 id="cqResultTitle">Your CQ result is ready</h3>
+    <div id="cqResultBody"></div>
+    <div class="fancy-modal-actions">
+      <button class="modal-cancel" id="cqResultClose">Close</button>
+      <button class="modal-submit" id="cqResultView">View in Profile</button>
     </div>
   </div>
 </div>
@@ -817,7 +869,7 @@ async function handleAuthSubmit(e){
       $("authError").textContent="Account created successfully। Supabase-এ Email Confirmations বন্ধ করলে username/password দিয়ে সরাসরি Log in হবে।";
       return;
     }
-    await loadCurrentProfile(); closeAuthModal(); toast(authMode==="login"?"👋 Logged in successfully":"🎉 Account created successfully", "success", 2500);
+    await loadCurrentProfile(); closeAuthModal(); setTimeout(()=>{checkCqNotifications();checkAdminPending();},1200); toast(authMode==="login"?"👋 Logged in successfully":"🎉 Account created successfully", "success", 2500);
     if(pendingExamAfterLogin){ const p=pendingExamAfterLogin; pendingExamAfterLogin=null; state.selectedExam=p.exam; startExam(); }
   }catch(err){ console.error(err); $("authError").textContent=err.message||"Unable to log in."; }
   finally{ $("authSubmitBtn").disabled=false; }
@@ -3289,6 +3341,7 @@ function hideAllScreens(){
   if($("screen-admin-user")) $("screen-admin-user").hidden = true;
   if($("screen-profile")) $("screen-profile").hidden = true;
   if($("screen-admin")) $("screen-admin").hidden = true;
+  if($("screen-cq-leaderboard")) $("screen-cq-leaderboard").hidden = true;
   $("screen-leaderboard").hidden = true;
   $("screen-answerkey").hidden = true;
 }
@@ -3550,26 +3603,91 @@ $("backToHubFromMaterials").addEventListener("click", ()=>{
 
 
 // ===== CQ / Written Exam =====
+function updateWrittenProgress(){
+  const ans=state.writtenAnswers||[];
+  const done=ans.filter(v=>String(v||"").trim()!=="").length;
+  const el=$("writtenProgressPill");
+  if(el) el.textContent=`Answered ${bnNum(done)} / ${bnNum(ans.length)}`;
+}
+function runWrittenTimer(){
+  clearInterval(state.writtenTimerId);
+  updateWrittenTimer();
+  state.writtenTimerId=setInterval(()=>{
+    state.timeLeft--;
+    updateWrittenTimer();
+    if(state.timeLeft<=0){
+      clearInterval(state.writtenTimerId);
+      toast("Time is up! Submitting your written exam...","warning",2500);
+      submitWrittenExam(true);
+    }
+  },1000);
+}
 function startWrittenExam(exam){
   if(!currentProfile){ openAuthModal("login"); toast("🔐 Please log in before taking a written exam","warning",2500); return; }
   if(isAdmin()){ toast("Admin accounts cannot take exams.","info"); return; }
-  state.writtenExamId=exam.id; state.writtenExamObj=exam; state.writtenAnswers=new Array((exam.questions||[]).length).fill(""); state.finished=false; state.writtenTimerId=null;
-  hideAllScreens(); $("screen-written-exam").hidden=false; $("topSub").textContent=currentProfile.username; $("writtenExamTitle").textContent=exam.title;
-  $("writtenExamMeta").innerHTML=`<span class="pill">${bnNum(exam.questions.length)} questions</span><span class="pill">⏱ ${bnNum(exam.time_minutes)} min</span><span class="pill">${bnNum(exam.total_marks)} marks</span>`;
+  clearInterval(state.writtenTimerId);
+  state.writtenExamId=exam.id; state.writtenExamObj=exam;
+  state.writtenAnswers=new Array((exam.questions||[]).length).fill("");
+  state.finished=false; state.writtenInProgress=true;
+  hideAllScreens(); $("screen-written-exam").hidden=false;
+  $("topSub").textContent=currentProfile.username; $("writtenExamTitle").textContent=exam.title;
+  $("writtenExamMeta").innerHTML=`<span class="pill">${bnNum(exam.questions.length)} questions</span><span class="pill">⏱ ${bnNum(exam.time_minutes)} min</span><span class="pill">${bnNum(exam.total_marks)} marks</span><span class="pill" id="writtenProgressPill"></span>`;
   $("writtenExamNotice").textContent="Write your answers clearly. When the time ends, your submission will be sent automatically. Your marks will be added to your profile after the admin checks it.";
   const box=$("writtenQuestionsContainer"); box.innerHTML="";
-  exam.questions.forEach((q,i)=>{ const card=document.createElement("div"); card.className="written-question"; const label=document.createElement("div"); label.className="qnum"; label.textContent=`Question ${bnNum(i+1)} / ${bnNum(exam.questions.length)}`; const text=document.createElement("div"); text.className="qtext"; text.textContent=q; const ta=document.createElement("textarea"); ta.className="written-answer-box"; ta.placeholder="Write your answer here..."; ta.addEventListener("input",()=>state.writtenAnswers[i]=ta.value); card.append(label,text,ta); box.appendChild(card); });
-  state.timeLeft=Math.max(1,Number(exam.time_minutes||60))*60; updateWrittenTimer(); clearInterval(state.writtenTimerId); state.writtenTimerId=setInterval(()=>{state.timeLeft--; updateWrittenTimer(); if(state.timeLeft<=0){clearInterval(state.writtenTimerId); toast("Time is up! Submitting your written exam...","warning",2500); submitWrittenExam(true);}},1000);
-  pushScreen("written-exam", {subject:exam.subject,chapter:exam.chapter});
+  exam.questions.forEach((q,i)=>{
+    const card=document.createElement("div"); card.className="written-question";
+    const label=document.createElement("div"); label.className="qnum"; label.textContent=`Question ${bnNum(i+1)} / ${bnNum(exam.questions.length)}`;
+    const text=document.createElement("div"); text.className="qtext"; text.textContent=q;
+    const ta=document.createElement("textarea"); ta.className="written-answer-box"; ta.placeholder="Write your answer here...";
+    ta.addEventListener("input",()=>{state.writtenAnswers[i]=ta.value; updateWrittenProgress();});
+    card.append(label,text,ta); box.appendChild(card);
+  });
+  updateWrittenProgress();
+  state.timeLeft=Math.max(1,Number(exam.time_minutes||60))*60;
+  runWrittenTimer();
+  pushScreen("written-exam",{subject:exam.subject,chapter:exam.chapter});
+  toast(`🎯 ${currentProfile.username}, your written exam has started. Good luck!`,"success",3500);
 }
-function updateWrittenTimer(){ const m=Math.floor(state.timeLeft/60),s=state.timeLeft%60; $("writtenTimerText").textContent=String(m).padStart(2,"0")+":"+String(s).padStart(2,"0"); $("writtenTimerBox").classList.toggle("low",state.timeLeft<=60); }
+function updateWrittenTimer(){
+  const m=Math.floor(state.timeLeft/60),s=state.timeLeft%60;
+  $("writtenTimerText").textContent=String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
+  $("writtenTimerBox").classList.toggle("low",state.timeLeft<=60);
+}
 async function submitWrittenExam(auto=false){
-  if(state.finished || !state.writtenExamId || !currentProfile) return; state.finished=true; clearInterval(state.writtenTimerId);
-  const {data:{user}}=await supabaseClient.auth.getUser(); if(!user) return;
+  if(state.finished || !state.writtenExamId || !currentProfile) return;
+  if(!auto){
+    const empty=state.writtenAnswers.filter(v=>String(v||"").trim()==="").length;
+    const msg=empty>0?`${empty} question(s) are still unanswered. Submit anyway?`:"Submit your written exam now?";
+    if(!(await customConfirm(msg,{icon:empty>0?"⚠️":"✍️",okText:"Submit"}))) return;
+    if(state.finished) return;
+  } else {
+    $("confirmModal").hidden=true;
+  }
+  state.finished=true; clearInterval(state.writtenTimerId);
+  const failBack=(msg)=>{
+    state.finished=false;
+    toast(msg,"error",3500);
+    if(state.timeLeft>0) runWrittenTimer();
+  };
+  const {data:{user}}=await supabaseClient.auth.getUser();
+  if(!user){ failBack("You are logged out. Please log in again."); return; }
   const payload={exam_id:state.writtenExamId,user_id:user.id,answers:state.writtenAnswers.map(v=>String(v||"")),status:"submitted",score:null,feedback:null,submitted_at:new Date().toISOString()};
-  const {data,error}=await supabaseClient.from("written_submissions").insert(payload).select("id,submitted_at,status,score,feedback").single();
-  if(error){console.error(error);state.finished=false;toast("Could not submit written exam. Please try again.","error",3500);return;}
-  hideAllScreens(); $("screen-written-result").hidden=false; $("writtenResultSub").textContent=`${state.writtenExamObj.title} • ${bnNum(state.writtenExamObj.total_marks)} marks • ${auto?"Time ended":"Submitted successfully"}`; $("writtenResultBox").innerHTML='<div class="written-pending">✅ Your written exam has been submitted.<br><strong>Result: Pending admin marking.</strong><br>Your final marks will appear in your profile after the admin grades this submission.</div>'; pushScreen("written-result",{});
+  const {error}=await supabaseClient.from("written_submissions").insert(payload).select("id,submitted_at,status,score,feedback").single();
+  if(error){ console.error(error); failBack("Could not submit written exam. Please try again."); return; }
+  state.writtenInProgress=false;
+  hideAllScreens(); $("screen-written-result").hidden=false;
+  $("writtenResultSub").textContent=`${state.writtenExamObj.title} • ${bnNum(state.writtenExamObj.total_marks)} marks • ${auto?"Time ended":"Submitted successfully"}`;
+  $("writtenResultBox").innerHTML='<div class="written-pending">✅ Your written exam has been submitted.<br><strong>Result: Pending admin marking.</strong><br>You will get a notification as soon as the admin grades it, and the marks will appear in your profile.</div>';
+  pushScreen("written-result",{});
+}
+async function openExitWarning(target){
+  const written=!!state.writtenInProgress;
+  const ok=await customConfirm(written?"Exit this written exam? Your answers will not be submitted.":"Exit this exam? Your progress will not be saved.",{icon:"🚪",okText:"Exit"});
+  if(!ok) return;
+  if(written){ clearInterval(state.writtenTimerId); state.writtenInProgress=false; state.finished=true; }
+  else { clearInterval(state.timerId); state.examInProgress=false; }
+  if(written && target==="exams" && state.writtenExamObj){ showExams(state.writtenExamObj.subject,state.writtenExamObj.chapter); return; }
+  hideAllScreens(); $("screen-subjects").hidden=false; $("topSub").textContent="Choose a subject to begin"; pushScreen("subjects",{});
 }
 async function showWrittenAdmin(){
   if(!isAdmin()) return; hideAllScreens(); $("screen-written-admin").hidden=false; $("topSub").textContent="CQ / Written Exams"; pushScreen("written-admin",{}); populateWrittenFormSubjects(); await loadWrittenAdminList();
@@ -3583,8 +3701,8 @@ async function loadWrittenAdminList(){
   const {data,error}=await supabaseClient.from("written_exams").select("id,subject,chapter,title,time_minutes,total_marks,questions,active,created_at,updated_at").order("created_at",{ascending:false});
   if(error){console.error(error);box.innerHTML='<div class="empty-profile">Could not load written exams. Check SQL/RLS setup.</div>';return;}
   if(!data.length){box.innerHTML='<div class="empty-profile">No written exams created yet.</div>';return;}
-  box.innerHTML=""; data.forEach(ex=>{const card=document.createElement("div");card.className="written-submit-card"; const h=document.createElement("h4");h.textContent=ex.title;const p=document.createElement("p");p.textContent=`${ex.subject} → ${ex.chapter} • ${ex.questions.length} questions • ${ex.time_minutes} min • ${ex.total_marks} marks • ${ex.active?"Active":"Hidden"}`;const actions=document.createElement("div");actions.className="action-row";actions.style.margin="12px 0 0";actions.innerHTML=`<button class="btn btn-ghost" data-edit="${ex.id}">✏️ Edit</button><button class="btn btn-ghost" data-toggle="${ex.id}">${ex.active?"Hide":"Activate"}</button><button class="btn" data-delete="${ex.id}" style="color:#dc2626">Delete</button>`;card.append(h,p,actions);box.appendChild(card);});
-  box.querySelectorAll('[data-edit]').forEach(b=>b.addEventListener('click',()=>editWrittenExam(data.find(x=>x.id===b.dataset.edit))));
+  box.innerHTML=""; data.forEach(ex=>{const card=document.createElement("div");card.className="written-submit-card"; const h=document.createElement("h4");h.textContent=ex.title;const p=document.createElement("p");p.textContent=`${ex.subject} → ${ex.chapter} • ${ex.questions.length} questions • ${ex.time_minutes} min • ${ex.total_marks} marks • ${ex.active?"Active":"Hidden"}`;const actions=document.createElement("div");actions.className="action-row";actions.style.margin="12px 0 0";actions.innerHTML=`<button class="btn btn-ghost" data-lb="${ex.id}">🏆 Leaderboard</button><button class="btn btn-ghost" data-edit="${ex.id}">✏️ Edit</button><button class="btn btn-ghost" data-toggle="${ex.id}">${ex.active?"Hide":"Activate"}</button><button class="btn" data-delete="${ex.id}" style="color:#dc2626">Delete</button>`;card.append(h,p,actions);box.appendChild(card);});
+  box.querySelectorAll('[data-lb]').forEach(b=>b.addEventListener('click',()=>showWrittenLeaderboard(b.dataset.lb,data.find(x=>x.id===b.dataset.lb))));box.querySelectorAll('[data-edit]').forEach(b=>b.addEventListener('click',()=>editWrittenExam(data.find(x=>x.id===b.dataset.edit))));
   box.querySelectorAll('[data-toggle]').forEach(b=>b.addEventListener('click',()=>toggleWrittenExam(b.dataset.toggle,data.find(x=>x.id===b.dataset.toggle).active)));
   box.querySelectorAll('[data-delete]').forEach(b=>b.addEventListener('click',()=>deleteWrittenExam(b.dataset.delete)));
 }
@@ -3625,10 +3743,10 @@ function combineStats(objectiveRows,writtenRows){
   return {total:allPercents.length,passed:objectivePassed+writtenPercents.filter(v=>v>=50).length,failed:(o.length-objectivePassed)+writtenPercents.filter(v=>v<50).length,avg:allPercents.length?Math.round(allPercents.reduce((a,v)=>a+v,0)/allPercents.length):0};
 }
 
-async function showAdminUserProfile(userId){
+async function showAdminUserProfile(userId,silent){
   if(!isAdmin()) return;
-  hideAllScreens(); $("screen-admin-user").hidden=false; $("topSub").textContent="User Profile"; state.adminViewedUserId=userId; pushScreen("admin-user",{userId});
-  $("adminUserResults").innerHTML='<div class="empty-profile">⏳ Loading...</div>'; $("adminUserWritten").innerHTML='<div class="empty-profile">⏳ Loading...</div>';
+  state.adminViewedUserId=userId; if(silent!==true){hideAllScreens(); $("screen-admin-user").hidden=false; $("topSub").textContent="User Profile"; pushScreen("admin-user",{userId});}
+  if(silent!==true){$("adminUserResults").innerHTML='<div class="empty-profile">⏳ Loading...</div>'; $("adminUserWritten").innerHTML='<div class="empty-profile">⏳ Loading...</div>';}
   try{
     const [{data:user,error:ue},{data:results,error:re},writtenRows]=await Promise.all([
       supabaseClient.from("profiles").select("user_id,username,is_admin,blocked,created_at").eq("user_id",userId).single(),
@@ -3638,7 +3756,7 @@ async function showAdminUserProfile(userId){
     if(ue) throw ue; if(re) throw re;
     $("adminUserUsername").textContent=user.username; $("adminUserAvatar").textContent=user.username.charAt(0).toUpperCase(); $("adminUserStatusText").textContent=user.is_admin?"Administrator":(user.blocked?"Blocked account":"Student account");
     const blockBtn=$("adminUserBlockBtn"); blockBtn.textContent=user.blocked?"🔓 Unblock":"🚫 Block"; blockBtn.onclick=()=>toggleUserBlock(user.user_id,!!user.blocked,blockBtn);
-    renderAdminUserResults(results||[],writtenRows||[]); renderAdminWrittenSubmissions(writtenRows||[]);
+    renderAdminUserResults(results||[],writtenRows||[]); renderAdminWrittenSubmissions(writtenRows||[]); renderPerformanceChart(results||[],writtenRows||[],"adminUserChart");
   }catch(err){console.error("Admin user profile load:",err);$("adminUserResults").innerHTML='<div class="empty-profile">Could not load this user profile.</div>';$("adminUserWritten").innerHTML='<div class="empty-profile">Could not load CQ / Written submissions.</div>';toast("Could not load user profile. Check Supabase/RLS.","error",3800);}
 }
 function renderAdminUserResults(rows,writtenRows=[]){
@@ -3651,9 +3769,22 @@ function renderAdminUserResults(rows,writtenRows=[]){
 }
 function renderAdminWrittenSubmissions(rows){
   const box=$("adminUserWritten"); if(!rows.length){box.innerHTML='<div class="empty-profile">No written submissions yet.</div>';return;} box.innerHTML="";
-  rows.forEach(r=>{const ex=r.written_exams||r,card=document.createElement("div");card.className="written-submit-card";const title=document.createElement("h4");title.textContent=ex.title||"Written Exam";const p=document.createElement("p");p.textContent=`${ex.subject||""} → ${ex.chapter||""} • Submitted ${new Date(r.submitted_at).toLocaleString("en-GB")} • Max ${ex.total_marks||0} marks`;card.append(title,p);const qs=Array.isArray(ex.questions)?ex.questions:[],ans=Array.isArray(r.answers)?r.answers:[];if(qs.length){const answersBox=document.createElement("div");qs.forEach((q,i)=>{const qa=document.createElement("div");qa.className="written-question";const qh=document.createElement("strong");qh.textContent=`Question ${i+1}: ${q}`;const a=document.createElement("div");a.style.cssText="margin-top:8px;white-space:pre-wrap;line-height:1.65";a.textContent=ans[i]||"(No answer)";qa.append(qh,a);answersBox.appendChild(qa);});card.appendChild(answersBox);}if(r.status==="graded"){const g=document.createElement("div");g.className="written-graded";g.innerHTML=`<strong>Score: ${bnNum(r.score)} / ${bnNum(ex.total_marks||0)}</strong><br>${r.feedback?`Feedback: ${escapeHtml(r.feedback)}`:"No feedback added."}`;card.appendChild(g);}else{const row=document.createElement("div");row.className="grade-row";row.innerHTML=`<label>Marks (max ${ex.total_marks||0})<input type="number" min="0" max="${Number(ex.total_marks)||0}" step="0.5" value=""></label><button class="btn btn-primary">Grade Submission</button>`;const fb=document.createElement("textarea");fb.className="grade-feedback";fb.placeholder="Optional feedback for the student";row.appendChild(fb);card.appendChild(row);row.querySelector("button").addEventListener("click",()=>gradeWrittenSubmission(r.id,Number(ex.total_marks)||0,row.querySelector("input").value,fb.value));}box.appendChild(card);});
+  rows.forEach(r=>{const ex=r.written_exams||r,card=document.createElement("div");card.className="written-submit-card";const title=document.createElement("h4");title.textContent=ex.title||"Written Exam";const p=document.createElement("p");p.textContent=`${ex.subject||""} → ${ex.chapter||""} • Submitted ${new Date(r.submitted_at).toLocaleString("en-GB")} • Max ${ex.total_marks||0} marks`;card.append(title,p);{const lb=document.createElement("button");lb.className="btn btn-ghost";lb.style.margin="8px 0";lb.textContent="🏆 CQ Leaderboard";lb.addEventListener("click",()=>showWrittenLeaderboard(r.exam_id,{id:r.exam_id,title:ex.title,subject:ex.subject,chapter:ex.chapter,total_marks:ex.total_marks}));card.appendChild(lb);}const qs=Array.isArray(ex.questions)?ex.questions:[],ans=Array.isArray(r.answers)?r.answers:[];if(qs.length){const answersBox=document.createElement("div");qs.forEach((q,i)=>{const qa=document.createElement("div");qa.className="written-question";const qh=document.createElement("strong");qh.textContent=`Question ${i+1}: ${q}`;const a=document.createElement("div");a.style.cssText="margin-top:8px;white-space:pre-wrap;line-height:1.65";a.textContent=ans[i]||"(No answer)";qa.append(qh,a);answersBox.appendChild(qa);});card.appendChild(answersBox);}if(r.status==="graded"){const g=document.createElement("div");g.className="written-graded";g.innerHTML=`<strong>Score: ${bnNum(r.score)} / ${bnNum(ex.total_marks||0)}</strong><br>${r.feedback?`Feedback: ${escapeHtml(r.feedback)}`:"No feedback added."}`;card.appendChild(g);}else{const row=document.createElement("div");row.className="grade-row";row.innerHTML=`<label>Marks (max ${ex.total_marks||0})<input type="number" min="0" max="${Number(ex.total_marks)||0}" step="0.5" value=""></label><button class="btn btn-primary">Grade Submission</button>`;const fb=document.createElement("textarea");fb.className="grade-feedback";fb.placeholder="Optional feedback for the student";row.appendChild(fb);card.appendChild(row);row.querySelector("button").addEventListener("click",()=>gradeWrittenSubmission(r.id,Number(ex.total_marks)||0,row.querySelector("input").value,fb.value));}box.appendChild(card);});
 }
-async function gradeWrittenSubmission(id,max,score,feedback){if(!isAdmin())return;const n=Number(score);if(!Number.isFinite(n)||n<0||n>max){toast(`Enter a score from 0 to ${max}.`,"warning");return;}const {error}=await supabaseClient.rpc("admin_grade_written_submission",{submission_id:id,new_score:n,new_feedback:String(feedback||"")});if(error){console.error(error);toast("Could not save marks. Run the latest CQ SQL in Supabase.","error",3800);return;}toast("Marks saved. The CQ was removed from pending marking and the student will see the graded result.","success",3200);await loadAdminPendingCqQueue();if(state.adminViewedUserId) await showAdminUserProfile(state.adminViewedUserId);}
+async function gradeWrittenSubmission(id,max,score,feedback){
+  if(!isAdmin()) return false;
+  const n=Number(score);
+  if(score===""||score===null||!Number.isFinite(n)||n<0||n>max){ toast(`Enter a score from 0 to ${max}.`,"warning"); return false; }
+  const {error}=await supabaseClient.rpc("admin_grade_written_submission",{submission_id:id,new_score:n,new_feedback:String(feedback||"")});
+  if(error){ console.error(error); toast("Could not save marks. Run the latest CQ SQL in Supabase.","error",3800); return false; }
+  toast("✅ Marks saved. Removed from pending marking — the student will be notified.","success",3200);
+  try{
+    if(!$("screen-admin").hidden) await showAdminDashboard(true);
+    else if(!$("screen-admin-user").hidden && state.adminViewedUserId){ await showAdminUserProfile(state.adminViewedUserId,true); await loadAdminPendingCqQueue(); }
+    else await loadAdminPendingCqQueue();
+  }catch(e){ console.error(e); }
+  return true;
+}
 
 // 4. নাম চাওয়া
 async function askForName(subject, chapter, exam){
@@ -4034,10 +4165,42 @@ async function saveUserResult(entry){
   if(error) console.error("Result save failed:",error);
 }
 
-async function showAdminDashboard(){
+function timeAgo(v){
+  const s=Math.max(0,(Date.now()-new Date(v).getTime())/1000);
+  if(s<60) return "just now";
+  if(s<3600) return Math.floor(s/60)+" min ago";
+  if(s<86400) return Math.floor(s/3600)+" h ago";
+  return Math.floor(s/86400)+" d ago";
+}
+function setAdminPendingBadge(n){
+  n=Number(n)||0; state.adminPendingKnown=n;
+  const c=$("adminPendingCount"); if(c){ c.textContent=String(n); c.hidden=(n===0); }
+  const b=$("adminBtn"); if(b) b.innerHTML="🛡️ Admin"+(n?` <b class="nav-badge">${n}</b>`:"");
+  const d=$("drawerAdmin"); if(d) d.innerHTML='<span>🛡</span> Admin Dashboard'+(n?` <b class="nav-badge">${n}</b>`:"");
+}
+async function checkAdminPending(){
+  if(!isAdmin()||!supabaseClient) return;
+  try{
+    const {count,error}=await supabaseClient.from("written_submissions").select("id",{count:"exact",head:true}).eq("status","submitted");
+    if(error) return;
+    const prev=state.adminPendingKnown, n=count||0;
+    setAdminPendingBadge(n);
+    if(typeof prev==="number" && n>prev){
+      toast(`📝 New CQ submission waiting for marking (${n} pending)`,"info",5000);
+      if($("screen-admin") && !$("screen-admin").hidden) loadAdminPendingCqQueue();
+    }
+  }catch(e){ console.debug("pending check skipped",e); }
+}
+
+async function showAdminDashboard(silent){
   if(!isAdmin()){ toast("⛔ Admin access only", "error"); return; }
-  hideAllScreens(); $("screen-admin").hidden=false; $("topSub").textContent="Admin Dashboard"; pushScreen("admin",{});
-  $("adminLoadStatus").textContent="⏳ Loading..."; $("adminUsersBody").innerHTML='<tr><td colspan="7" class="admin-empty">⏳ Loading data...</td></tr>';
+  const quiet=(silent===true);
+  if(!quiet){
+    hideAllScreens(); $("screen-admin").hidden=false; $("topSub").textContent="Admin Dashboard"; pushScreen("admin",{});
+    $("adminLoadStatus").textContent="⏳ Loading...";
+    $("adminUsersBody").innerHTML='<tr><td colspan="7" class="admin-empty">⏳ Loading data...</td></tr>';
+    $("adminObjectiveHistory").innerHTML='<div class="empty-profile">⏳ Loading...</div>';
+  }
   try{
     const [{data:users,error:userErr},{data:results,error:resultErr},{data:written,error:writtenErr}]=await Promise.all([
       supabaseClient.from("profiles").select("user_id,username,is_admin,blocked,created_at").order("created_at",{ascending:true}),
@@ -4045,21 +4208,45 @@ async function showAdminDashboard(){
       supabaseClient.from("written_submissions").select("id,user_id,exam_id,status,score,feedback,answers,submitted_at,graded_at").order("submitted_at",{ascending:false})
     ]);
     if(userErr) throw userErr; if(resultErr) throw resultErr; if(writtenErr) throw writtenErr;
-    const allUsers=users||[], allResults=results||[], allWritten=(written||[]).filter(x=>x.status==="graded" && x.score!==null);
-    await loadAdminPendingCqQueue(written||[],allUsers);
+    const allUsers=users||[], allResults=results||[], allWrittenRaw=written||[];
+    const allWritten=allWrittenRaw.filter(x=>x.status==="graded" && x.score!==null);
+    await loadAdminPendingCqQueue(allWrittenRaw,allUsers);
     const examIds=[...new Set(allWritten.map(x=>x.exam_id).filter(Boolean))];
     let writtenExams=[];
     if(examIds.length){const {data:ex,error:ee}=await supabaseClient.from("written_exams").select("id,total_marks").in("id",examIds);if(ee)throw ee;writtenExams=ex||[];}
     const em=new Map(writtenExams.map(x=>[x.id,x]));
+    const nameOf=new Map(allUsers.map(u=>[u.user_id,u.username]));
+
     const map={}; allUsers.forEach(u=>map[u.user_id]={...u,total:0,pass:0,fail:0,avg:0,percentages:[]});
     allResults.forEach(r=>{if(!map[r.user_id])return;const m=map[r.user_id],pct=Number(r.percent||0);m.total++;m.percentages.push(pct);if(pct>=50)m.pass++;else m.fail++;});
-    allWritten.forEach(r=>{if(!map[r.user_id])return;const max=Number((em.get(r.exam_id)||{}).total_marks||0),score=Number(r.score||0);if(max<=0)return;const m=map[r.user_id],pct=score/max*100;m.total++;m.percentages.push(pct);if(pct>=50)m.pass++;else m.fail++;});
+    const daily=new Map();
+    const addDay=(at,pct)=>{const d=new Date(at);if(isNaN(d))return;const k=d.toISOString().slice(0,10);if(!daily.has(k))daily.set(k,[]);daily.get(k).push(pct);};
+    allResults.forEach(r=>addDay(r.attempted_at,Number(r.percent||0)));
+    allWritten.forEach(r=>{const max=Number((em.get(r.exam_id)||{}).total_marks||0),score=Number(r.score||0);if(max<=0)return;const m=map[r.user_id],pct=score/max*100;addDay(r.graded_at||r.submitted_at,pct);if(!m)return;m.total++;m.percentages.push(pct);if(pct>=50)m.pass++;else m.fail++;});
     Object.values(map).forEach(m=>m.avg=m.percentages.length?Math.round(m.percentages.reduce((a,v)=>a+v,0)/m.percentages.length):0);
     const nonAdminUsers=Object.values(map);
     const allPercents=allResults.map(r=>Number(r.percent||0));
     allWritten.forEach(r=>{const max=Number((em.get(r.exam_id)||{}).total_marks||0);if(max>0)allPercents.push(Number(r.score||0)/max*100);});
     const totalExams=allPercents.length,totalPass=allPercents.filter(v=>v>=50).length,totalFail=totalExams-totalPass,overallAvg=totalExams?Math.round(allPercents.reduce((a,v)=>a+v,0)/totalExams):0;
     $("adminTotalUsers").textContent=bnNum(allUsers.length); $("adminTotalExams").textContent=bnNum(totalExams); $("adminTotalPass").textContent=bnNum(totalPass); $("adminTotalFail").textContent=bnNum(totalFail); $("adminOverallAvg").textContent=bnNum(overallAvg)+"%"; $("adminBlockedUsers").textContent=bnNum(allUsers.filter(u=>u.blocked).length);
+
+    // Objective exam history: one row per exam, latest attempt first
+    const groups=new Map();
+    allResults.forEach(r=>{const k=`${r.subject}|||${r.chapter}|||${r.exam}`;if(!groups.has(k))groups.set(k,{latest:r,attempts:0,users:new Set()});const g=groups.get(k);g.attempts++;g.users.add(r.user_id);});
+    const hist=$("adminObjectiveHistory");
+    if(!groups.size) hist.innerHTML='<div class="empty-profile">No objective exams taken yet.</div>';
+    else{
+      hist.innerHTML=[...groups.values()].sort((a,b)=>new Date(b.latest.attempted_at)-new Date(a.latest.attempted_at)).map(g=>{
+        const r=g.latest,pct=Number(r.percent||0),uname=nameOf.get(r.user_id)||"Unknown";
+        return `<button type="button" class="profile-result admin-exam-result" data-subject="${escapeHtml(r.subject)}" data-chapter="${escapeHtml(r.chapter)}" data-exam="${escapeHtml(r.exam)}" style="width:100%;text-align:left;border:0;cursor:pointer"><div class="pr-main"><strong>${escapeHtml(r.subject)} → ${escapeHtml(r.exam)} (${escapeHtml(uname)} — ${bnNum(pct)}%)</strong><span>${escapeHtml(r.chapter)} • ${timeAgo(r.attempted_at)} • ${bnNum(g.attempts)} attempt${g.attempts===1?"":"s"} by ${bnNum(g.users.size)} student${g.users.size===1?"":"s"}</span></div><div class="pr-score"><strong class="${pct>=50?"pass":"fail"}">${bnNum(pct)}%</strong><span>🏆 Leaderboard</span></div></button>`;
+      }).join("");
+      hist.querySelectorAll(".admin-exam-result").forEach(btn=>btn.addEventListener("click",()=>{state.selectedSubject=btn.dataset.subject;state.selectedChapter=btn.dataset.chapter;state.selectedExam=btn.dataset.exam;showLeaderboard();}));
+    }
+
+    // Overall chart (daily average, MCQ + CQ)
+    const pts=[...daily.keys()].sort().slice(-30).map(k=>{const a=daily.get(k),d=new Date(k+"T00:00:00");return {percent:a.reduce((x,y)=>x+y,0)/a.length,label:String(d.getDate()).padStart(2,"0")+"/"+String(d.getMonth()+1).padStart(2,"0")};});
+    drawPerformanceChart("adminOverallChart",pts,"No exam data yet");
+
     const body=$("adminUsersBody"); body.innerHTML="";
     if(!nonAdminUsers.length) body.innerHTML='<tr><td colspan="7" class="admin-empty">No student accounts yet.</td></tr>';
     else nonAdminUsers.sort((a,b)=>b.avg-a.avg||b.total-a.total).forEach(u=>{
@@ -4074,29 +4261,37 @@ async function showAdminDashboard(){
     $("adminLoadStatus").textContent=`${bnNum(allUsers.length)} users • ${bnNum(totalExams)} combined exams`;
   }catch(err){console.error(err);$("adminLoadStatus").textContent="";$("adminUsersBody").innerHTML='<tr><td colspan="7" class="admin-empty">❌ Could not load data. Check your RLS/SQL setup.</td></tr>';toast("Could not load admin data","error",3500);}
 }
+
 async function loadAdminPendingCqQueue(seedRows=null, seedUsers=null){
   const box=$("adminPendingCqList"); if(!box || !isAdmin()) return;
-  box.innerHTML='<div class="empty-profile">⏳ Loading pending CQ submissions…</div>';
+  if(!seedRows) box.innerHTML='<div class="empty-profile">⏳ Loading pending CQ submissions…</div>';
   try{
     let rows=seedRows;
     if(!rows){const q=await supabaseClient.from("written_submissions").select("id,user_id,exam_id,status,score,answers,submitted_at,feedback").eq("status","submitted").order("submitted_at",{ascending:false});if(q.error)throw q.error;rows=q.data||[];}
-    rows=(rows||[]).filter(r=>r.status==="submitted");
+    rows=(rows||[]).filter(r=>r.status==="submitted").sort((a,b)=>new Date(b.submitted_at)-new Date(a.submitted_at));
+    setAdminPendingBadge(rows.length);
     if(!rows.length){box.innerHTML='<div class="empty-profile">🎉 No pending CQ submissions. All caught up!</div>';return;}
     const userIds=[...new Set(rows.map(r=>r.user_id).filter(Boolean))], examIds=[...new Set(rows.map(r=>r.exam_id).filter(Boolean))];
     let users=seedUsers;
     if(!users){const q=await supabaseClient.from("profiles").select("user_id,username").in("user_id",userIds);if(q.error)throw q.error;users=q.data||[];}
-    const uq=users.filter(u=>userIds.includes(u.user_id));
     const exq=await supabaseClient.from("written_exams").select("id,title,subject,chapter,total_marks,questions").in("id",examIds);if(exq.error)throw exq.error;
-    const um=new Map(uq.map(u=>[u.user_id,u])), em=new Map((exq.data||[]).map(e=>[e.id,e]));
+    const um=new Map((users||[]).map(u=>[u.user_id,u])), em=new Map((exq.data||[]).map(e=>[e.id,e]));
     box.innerHTML='';
-    rows.sort((a,b)=>new Date(b.submitted_at)-new Date(a.submitted_at)).forEach(r=>{
+    rows.forEach(r=>{
       const ex=em.get(r.exam_id)||{}, u=um.get(r.user_id)||{username:'Unknown user'}, card=document.createElement('div');card.className='written-submit-card';
-      const h=document.createElement('h4');h.textContent=`${u.username} — ${ex.title||'CQ / Written Exam'}`;
-      const meta=document.createElement('p');meta.textContent=`${ex.subject||''} → ${ex.chapter||''} • ${new Date(r.submitted_at).toLocaleString('en-GB')} • Max ${ex.total_marks||0} marks`;
-      const open=document.createElement('button');open.className='btn btn-ghost';open.textContent='👤 Open user profile';open.addEventListener('click',()=>showAdminUserProfile(r.user_id));card.append(h,meta,open);
-      (Array.isArray(ex.questions)?ex.questions:[]).forEach((q,i)=>{const qa=document.createElement('div');qa.className='written-question';const qh=document.createElement('strong');qh.textContent=`Question ${i+1}: ${q}`;const a=document.createElement('div');a.style.cssText='white-space:pre-wrap;margin-top:6px';a.textContent=(r.answers||[])[i]||'(No answer)';qa.append(qh,a);card.appendChild(qa);});
+      const isNew=Date.now()-new Date(r.submitted_at).getTime()<86400000;
+      const h=document.createElement('h4');h.innerHTML=`${escapeHtml(u.username)} — ${escapeHtml(ex.title||'CQ / Written Exam')}${isNew?' <span class="new-badge">NEW</span>':''}`;
+      const meta=document.createElement('p');meta.textContent=`${ex.subject||''} → ${ex.chapter||''} • Submitted ${timeAgo(r.submitted_at)} (${new Date(r.submitted_at).toLocaleString('en-GB')}) • Max ${ex.total_marks||0} marks`;
+      const open=document.createElement('button');open.className='btn btn-ghost';open.style.margin='8px 0';open.textContent='👤 Open user profile';open.addEventListener('click',()=>showAdminUserProfile(r.user_id));
+      card.append(h,meta,open);
+      const qs=Array.isArray(ex.questions)?ex.questions:[];
+      const det=document.createElement('details');const sum=document.createElement('summary');sum.textContent=`View answers (${qs.length})`;det.appendChild(sum);
+      qs.forEach((q,i)=>{const qa=document.createElement('div');qa.className='written-question';const qh=document.createElement('strong');qh.textContent=`Question ${i+1}: ${q}`;const a=document.createElement('div');a.style.cssText='white-space:pre-wrap;margin-top:6px';a.textContent=(r.answers||[])[i]||'(No answer)';qa.append(qh,a);det.appendChild(qa);});
+      card.appendChild(det);
       const row=document.createElement('div');row.className='grade-row';row.innerHTML=`<label>Marks (max ${Number(ex.total_marks)||0})<input type="number" min="0" max="${Number(ex.total_marks)||0}" step="0.5"></label><button class="btn btn-primary">Grade & notify user</button>`;
-      const fb=document.createElement('textarea');fb.className='grade-feedback';fb.placeholder='Optional feedback';row.appendChild(fb);row.querySelector('button').addEventListener('click',async()=>{const inp=row.querySelector('input');if(inp.value===''){toast('Enter marks first.','warning');return;}await gradeWrittenSubmission(r.id,Number(ex.total_marks)||0,inp.value,fb.value);await loadAdminPendingCqQueue();});card.appendChild(row);box.appendChild(card);
+      const fb=document.createElement('textarea');fb.className='grade-feedback';fb.placeholder='Optional feedback';row.appendChild(fb);
+      row.querySelector('button').addEventListener('click',async(ev)=>{const btn=ev.currentTarget,inp=row.querySelector('input');if(inp.value===''){toast('Enter marks first.','warning');return;}btn.disabled=true;const ok=await gradeWrittenSubmission(r.id,Number(ex.total_marks)||0,inp.value,fb.value);if(!ok)btn.disabled=false;});
+      card.appendChild(row);box.appendChild(card);
     });
   }catch(e){console.error('Pending CQ queue:',e);box.innerHTML='<div class="empty-profile">Could not load pending submissions. Check Supabase RLS permissions.</div>';}
 }
@@ -4130,21 +4325,139 @@ async function showProfile(){
   if(!error){renderProfileResults(data||[],rows);renderPerformanceChart(data||[],rows);}
 }
 let cqNotificationPollStarted=false;
+let cqNotifyBusy=false;
 function startCqNotificationPolling(){
-  if(cqNotificationPollStarted)return;cqNotificationPollStarted=true;
-  setInterval(async()=>{try{if(!currentProfile||!supabaseClient||$("screen-profile").hidden)return;const uid=currentProfile.user_id||currentProfile.id;if(!uid)return;const q=await supabaseClient.from("written_submissions").select("id,exam_id,status,score,feedback,submitted_at,graded_at").eq("user_id",uid).eq("status","graded").not("score","is",null).order("graded_at",{ascending:false}).limit(10);if(q.error||!q.data)return;const ids=[...new Set(q.data.map(r=>r.exam_id).filter(Boolean))];let rows=q.data;if(ids.length){const e=await supabaseClient.from("written_exams").select("id,title,subject,chapter,total_marks,questions").in("id",ids);if(!e.error){const m=new Map((e.data||[]).map(x=>[x.id,x]));rows=rows.map(r=>({...r,written_exams:m.get(r.exam_id)||null}));}}renderProfileWrittenResults(rows);}catch(e){console.debug("CQ notification check skipped",e);}},20000);
+  if(cqNotificationPollStarted)return; cqNotificationPollStarted=true;
+  const tick=()=>{ checkCqNotifications(); checkAdminPending(); };
+  setInterval(tick,15000);
+  document.addEventListener("visibilitychange",()=>{ if(!document.hidden) tick(); });
+  setTimeout(tick,2000);
 }
-function renderProfileWrittenResults(rows){
-  try{const key="cq_notified_"+(currentProfile&&currentProfile.user_id||currentProfile&&currentProfile.id||"user");const seen=new Set(JSON.parse(localStorage.getItem(key)||"[]"));const fresh=(rows||[]).filter(r=>r.status==="graded"&&r.graded_at&&Date.now()-new Date(r.graded_at).getTime()<7*24*60*60*1000&&!seen.has(r.id));if(fresh.length){const r=fresh.sort((a,b)=>new Date(b.graded_at)-new Date(a.graded_at))[0],ex=r.written_exams||r;setTimeout(()=>toast(`✍️ CQ result published: ${ex.title||"Written Exam"} — ${r.score}/${ex.total_marks||"?"} marks${r.feedback?" • "+r.feedback:""}`,"success",7000),350);fresh.forEach(x=>seen.add(x.id));localStorage.setItem(key,JSON.stringify([...seen].slice(-200)));}}catch(e){}
-  const box=$("profileWrittenResults"); if(!rows.length){box.innerHTML='<div class="empty-profile">No written exams submitted yet.</div>';return;}
-  box.innerHTML="";
-  rows.forEach(r=>{const ex=r.written_exams||r;const card=document.createElement("div");card.className="written-submit-card";const title=document.createElement("h4");title.textContent=ex.title||"Written Exam";const p=document.createElement("p");p.textContent=`${ex.subject||""} → ${ex.chapter||""} • Submitted ${new Date(r.submitted_at).toLocaleDateString("en-GB")}`;card.append(title,p);card.style.cursor="pointer";card.title="Open CQ leaderboard";card.addEventListener("click",()=>showWrittenLeaderboard(r.exam_id,ex));if(r.status==="graded"){const g=document.createElement("div");g.className="written-graded";g.innerHTML=`<strong>Marks: ${bnNum(r.score)} / ${bnNum(ex.total_marks||0)}</strong><br>${r.feedback?`Feedback: ${r.feedback}`:"No feedback added."}`;card.appendChild(g);}else{const g=document.createElement("div");g.className="written-pending";g.innerHTML='<strong>Pending admin marking.</strong><br>Your final marks will appear here after the admin grades this submission.';card.appendChild(g);}box.appendChild(card);});
+function cqSeenKey(){ return "cq_notified_"+((currentProfile&&currentProfile.user_id)||"user"); }
+function getCqSeen(){ try{ return new Set(JSON.parse(localStorage.getItem(cqSeenKey())||"[]")); }catch(e){ return new Set(); } }
+function saveCqSeen(set){ try{ localStorage.setItem(cqSeenKey(),JSON.stringify([...set].slice(-300))); }catch(e){} }
+
+async function checkCqNotifications(){
+  if(cqNotifyBusy||!currentProfile||!supabaseClient||isAdmin()) return;
+  if(state.examInProgress||state.writtenInProgress) return;
+  const modal=$("cqResultModal"); if(!modal || modal.classList.contains("show")) return;
+  cqNotifyBusy=true;
+  try{
+    const q=await supabaseClient.from("written_submissions").select("id,exam_id,status,score,feedback,submitted_at,graded_at").eq("user_id",currentProfile.user_id).eq("status","graded").not("score","is",null).order("graded_at",{ascending:false}).limit(20);
+    if(q.error||!q.data) return;
+    const seen=getCqSeen();
+    const fresh=q.data.filter(r=>r.graded_at && Date.now()-new Date(r.graded_at).getTime()<7*86400000 && !seen.has(r.id));
+    if(!fresh.length) return;
+    const ids=[...new Set(fresh.map(r=>r.exam_id).filter(Boolean))];
+    let em=new Map();
+    if(ids.length){ const e=await supabaseClient.from("written_exams").select("id,title,subject,chapter,total_marks").in("id",ids); if(!e.error) em=new Map((e.data||[]).map(x=>[x.id,x])); }
+    showCqResultModal(fresh.map(r=>({r,ex:em.get(r.exam_id)||{}})));
+    fresh.forEach(r=>seen.add(r.id)); saveCqSeen(seen);
+  }catch(e){ console.debug("CQ notification check skipped",e); }
+  finally{ cqNotifyBusy=false; }
+}
+function showCqResultModal(items){
+  const modal=$("cqResultModal");
+  $("cqResultTitle").textContent=items.length>1?`${items.length} CQ results are ready`:"Your CQ result is ready";
+  $("cqResultBody").innerHTML=items.slice(0,5).map(({r,ex})=>{
+    const max=Number(ex.total_marks)||0, pct=max?Math.round(Number(r.score)/max*100):0;
+    return `<div class="cq-result-item"><strong>${escapeHtml(ex.title||"Written Exam")}</strong><span>${escapeHtml(ex.subject||"")}${ex.chapter?" → "+escapeHtml(ex.chapter):""}</span><div class="cq-score ${pct>=50?"pass":"fail"}">${bnNum(r.score)} / ${bnNum(max)} <small>(${bnNum(pct)}%)</small></div>${r.feedback?`<p class="cq-fb">💬 ${escapeHtml(r.feedback)}</p>`:""}</div>`;
+  }).join("")+(items.length>5?`<p class="cq-fb">+${items.length-5} more in your profile</p>`:"");
+  modal.classList.add("show"); modal.setAttribute("aria-hidden","false");
+  try{ if(navigator.vibrate) navigator.vibrate([120,60,120]); }catch(e){}
+}
+function closeCqResultModal(){
+  const modal=$("cqResultModal"); modal.classList.remove("show"); modal.setAttribute("aria-hidden","true");
+  if($("screen-profile") && !$("screen-profile").hidden) showProfile();
 }
 
-async function showWrittenLeaderboard(examId, examInfo=null){
-  if(!examId)return; hideAllScreens(); const box=$("screen-leaderboard");box.hidden=false;pushScreen("leaderboard",{});$("lbSubtitle").textContent=`✍️ CQ Leaderboard • ${(examInfo&&examInfo.title)||'Written Exam'}`;$("lbList").innerHTML='<div class="lb-empty">⏳ Loading CQ leaderboard…</div>';$("btnClearLeaderboard").hidden=true;
-  try{const q=await supabaseClient.from("written_submissions").select("user_id,score,status,submitted_at").eq("exam_id",examId).eq("status","graded").not("score","is",null).order("score",{ascending:false});if(q.error)throw q.error;const rows=q.data||[];const ids=[...new Set(rows.map(r=>r.user_id))];let users=[];if(ids.length){const u=await supabaseClient.from("profiles").select("user_id,username").in("user_id",ids);if(u.error)throw u.error;users=u.data||[];}const names=new Map(users.map(u=>[u.user_id,u.username]));$("lbList").innerHTML=rows.length?rows.map((r,i)=>`<div class="profile-result"><div class="pr-main"><strong>#${i+1} ${escapeHtml(names.get(r.user_id)||'Student')}</strong><span>${new Date(r.submitted_at).toLocaleDateString('en-GB')}</span></div><div class="pr-score"><strong>${bnNum(r.score)} / ${bnNum((examInfo&&examInfo.total_marks)||0)}</strong></div></div>`).join(''):'<div class="lb-empty">No graded CQ results yet.</div>';
-  }catch(e){console.error(e);$("lbList").innerHTML='<div class="lb-empty">Could not load CQ leaderboard. Check Supabase permissions.</div>';}
+function renderProfileWrittenResults(rows){
+  const box=$("profileWrittenResults");
+  if(!rows.length){box.innerHTML='<div class="empty-profile">No written exams submitted yet.</div>';return;}
+  // everything graded that is visible here counts as seen
+  try{ const seen=getCqSeen(); rows.filter(r=>r.status==="graded").forEach(r=>seen.add(r.id)); saveCqSeen(seen); }catch(e){}
+  box.innerHTML="";
+  rows.forEach(r=>{
+    const ex=r.written_exams||r;
+    const card=document.createElement("div"); card.className="written-submit-card";
+    const title=document.createElement("h4"); title.textContent=ex.title||"Written Exam";
+    const p=document.createElement("p"); p.textContent=`${ex.subject||""} → ${ex.chapter||""} • Submitted ${new Date(r.submitted_at).toLocaleDateString("en-GB")}`;
+    card.append(title,p);
+    card.style.cursor="pointer"; card.title="Open CQ leaderboard";
+    card.addEventListener("click",()=>showWrittenLeaderboard(r.exam_id,{id:r.exam_id,title:ex.title,subject:ex.subject,chapter:ex.chapter,total_marks:ex.total_marks}));
+    if(r.status==="graded"){
+      const g=document.createElement("div"); g.className="written-graded";
+      g.innerHTML=`<strong>Marks: ${bnNum(r.score)} / ${bnNum(ex.total_marks||0)}</strong><br>${r.feedback?`Feedback: ${escapeHtml(r.feedback)}`:"No feedback added."}`;
+      card.appendChild(g);
+    }else{
+      const g=document.createElement("div"); g.className="written-pending";
+      g.innerHTML='<strong>Pending admin marking.</strong><br>Your final marks will appear here after the admin grades this submission.';
+      card.appendChild(g);
+    }
+    const hint=document.createElement("div"); hint.className="lb-hint"; hint.textContent="🏆 Tap to view CQ leaderboard"; card.appendChild(hint);
+    box.appendChild(card);
+  });
+}
+
+async function fetchCqLeaderboardRows(examId){
+  const rpc=await supabaseClient.rpc("get_written_leaderboard",{target_exam_id:examId});
+  if(!rpc.error) return rpc.data||[];
+  console.warn("get_written_leaderboard RPC unavailable, using fallback",rpc.error);
+  const q=await supabaseClient.from("written_submissions").select("id,user_id,score,submitted_at,graded_at").eq("exam_id",examId).eq("status","graded").not("score","is",null).order("score",{ascending:false});
+  if(q.error) throw q.error;
+  const rows=q.data||[], ids=[...new Set(rows.map(r=>r.user_id))];
+  let names=new Map();
+  if(ids.length){ const u=await supabaseClient.from("profiles").select("user_id,username").in("user_id",ids); if(!u.error) names=new Map((u.data||[]).map(x=>[x.user_id,x.username])); }
+  return rows.map(r=>({submission_id:r.id,user_id:r.user_id,username:names.get(r.user_id)||"Student",score:r.score,submitted_at:r.submitted_at,graded_at:r.graded_at}));
+}
+function renderCqLeaderboard(rows,examInfo){
+  const box=$("cqLbList"), admin=isAdmin(), me=currentProfile&&currentProfile.user_id;
+  if(!rows.length){ box.innerHTML='<div class="lb-empty">No graded CQ results yet.</div>'; return; }
+  box.innerHTML=rows.map((r,i)=>{
+    const rank=i+1, cls=rank===1?"top1":rank===2?"top2":rank===3?"top3":"", medal=rank===1?"🥇":rank===2?"🥈":rank===3?"🥉":bnNum(rank);
+    const max=Number(r.total_marks||(examInfo&&examInfo.total_marks)||0), pct=max?Math.round(Number(r.score)/max*100):0;
+    const when=new Date(r.submitted_at||r.graded_at).toLocaleDateString("en-GB");
+    return `<div class="lb-row${r.user_id===me?" me":""}"><div class="lb-rank ${cls}">${medal}</div><div class="lb-name"><strong>${escapeHtml(r.username||"Student")}</strong><span>${when}</span></div><div class="lb-score"><strong>${bnNum(r.score)}/${bnNum(max)}</strong><span>${bnNum(pct)}%</span></div>${admin?`<button class="admin-block-btn" data-del-sub="${r.submission_id}" title="Delete this result">🗑</button>`:""}</div>`;
+  }).join("");
+  box.querySelectorAll("[data-del-sub]").forEach(b=>b.addEventListener("click",()=>deleteCqLeaderboardEntry(b.dataset.delSub)));
+}
+async function showWrittenLeaderboard(examId, examInfo=null, silent=false){
+  if(!examId) return;
+  state.cqLbExamId=examId; state.cqLbExamInfo=examInfo;
+  if(silent!==true){
+    hideAllScreens(); $("screen-cq-leaderboard").hidden=false; $("topSub").textContent="CQ Leaderboard";
+    pushScreen("cq-leaderboard",{examId});
+    $("cqLbList").innerHTML='<div class="lb-empty">⏳ Loading CQ leaderboard…</div>';
+  }
+  $("btnCqLbClear").hidden=!isAdmin();
+  try{
+    if(!examInfo || examInfo.total_marks===undefined){
+      const e=await supabaseClient.from("written_exams").select("id,title,subject,chapter,total_marks").eq("id",examId).maybeSingle();
+      if(!e.error && e.data){ examInfo=e.data; state.cqLbExamInfo=examInfo; }
+    }
+    const rows=await fetchCqLeaderboardRows(examId);
+    if(!examInfo && rows.length) examInfo={title:rows[0].title,total_marks:rows[0].total_marks};
+    $("cqLbSubtitle").textContent=examInfo?`✍️ ${examInfo.title||"Written Exam"}${examInfo.subject?" • "+examInfo.subject+" → "+(examInfo.chapter||""):""}${examInfo.total_marks?" • "+bnNum(examInfo.total_marks)+" marks":""}`:"✍️ Written Exam";
+    renderCqLeaderboard(rows,examInfo);
+  }catch(e){ console.error(e); $("cqLbList").innerHTML='<div class="lb-empty">Could not load CQ leaderboard. Run the latest SQL in Supabase.</div>'; }
+}
+async function deleteCqLeaderboardEntry(subId){
+  if(!isAdmin()) return;
+  if(!(await customConfirm("Remove this CQ result? It will also disappear from the student's profile and performance chart.",{icon:"🗑️",okText:"Delete"}))) return;
+  let r=await supabaseClient.rpc("admin_delete_written_submission",{submission_id:subId});
+  if(r.error) r=await supabaseClient.from("written_submissions").delete().eq("id",subId);
+  if(r.error){ console.error(r.error); toast("Could not delete this result.","error",3200); return; }
+  toast("🗑️ CQ result deleted","success");
+  showWrittenLeaderboard(state.cqLbExamId,state.cqLbExamInfo,true);
+}
+async function clearCqLeaderboard(){
+  if(!isAdmin()||!state.cqLbExamId) return;
+  if(!(await customConfirm("Permanently clear ALL graded results of this CQ exam? Students' marks for it will be removed. This cannot be undone.",{icon:"🗑️",okText:"Clear leaderboard"}))) return;
+  let r=await supabaseClient.rpc("admin_clear_written_leaderboard",{target_exam_id:state.cqLbExamId});
+  if(r.error) r=await supabaseClient.from("written_submissions").delete().eq("exam_id",state.cqLbExamId).eq("status","graded");
+  if(r.error){ console.error(r.error); toast("Could not clear leaderboard.","error",3200); return; }
+  toast("🗑️ CQ leaderboard cleared","success");
+  showWrittenLeaderboard(state.cqLbExamId,state.cqLbExamInfo,true);
 }
 
 function renderProfileResults(rows,writtenRows=[]){
@@ -4156,8 +4469,21 @@ function renderProfileResults(rows,writtenRows=[]){
   box.querySelectorAll('.profile-objective-click').forEach(b=>b.addEventListener('click',()=>{state.selectedSubject=b.dataset.subject;state.selectedChapter=b.dataset.chapter;state.selectedExam=b.dataset.exam;showLeaderboard();}));
 }
 
-function renderPerformanceChart(rows,writtenRows=[]){
-  const canvas=$("performanceChart"), ctx=canvas.getContext("2d");
+function buildChartPoints(rows,writtenRows){
+  const items=(rows||[]).map(r=>({percent:Number(r.percent)||0,at:r.attempted_at,kind:"MCQ"}))
+    .concat((writtenRows||[]).filter(r=>String(r.status||"").toLowerCase()==="graded"&&r.score!==null&&r.score!==undefined).map(r=>{
+      const ex=r.written_exams||r, max=Number(ex.total_marks)||0;
+      return max>0?{percent:(Number(r.score)||0)/max*100,at:r.graded_at||r.submitted_at,kind:"CQ"}:null;
+    }).filter(Boolean))
+    .sort((a,b)=>new Date(a.at)-new Date(b.at));
+  return items.map((it,i)=>({percent:it.percent,label:it.kind+" "+(i+1),kind:it.kind}));
+}
+function renderPerformanceChart(rows,writtenRows=[],canvasId="performanceChart"){
+  drawPerformanceChart(canvasId,buildChartPoints(rows,writtenRows));
+}
+function drawPerformanceChart(canvasId,points,emptyText){
+  const canvas=$(canvasId); if(!canvas) return;
+  const ctx=canvas.getContext("2d");
   const rect=canvas.getBoundingClientRect(), dpr=Math.min(window.devicePixelRatio||1,2);
   const w=Math.max(260,rect.width), h=Math.max(240,rect.height), mobile=w<560;
   canvas.width=Math.round(w*dpr); canvas.height=Math.round(h*dpr);
@@ -4165,24 +4491,27 @@ function renderPerformanceChart(rows,writtenRows=[]){
   ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,w,h);
   const pad={l:mobile?42:48,r:mobile?12:22,t:20,b:mobile?40:34};
   const cw=Math.max(10,w-pad.l-pad.r), ch=Math.max(10,h-pad.t-pad.b);
-  ctx.font=(mobile?"11px":"12px")+' Hind Siliguri, sans-serif'; ctx.textBaseline="middle";
+  ctx.font=(mobile?"11px":"12px")+' Hind Siliguri, sans-serif'; ctx.textBaseline="middle"; ctx.textAlign="start";
   ctx.lineWidth=1; ctx.strokeStyle="rgba(148,163,184,.28)"; ctx.fillStyle="#64748b";
   for(let y=0;y<=100;y+=25){const yy=pad.t+ch-(y/100)*ch;ctx.beginPath();ctx.moveTo(pad.l,yy);ctx.lineTo(w-pad.r,yy);ctx.stroke();ctx.fillText(y+"%",4,yy);}
   const passY=pad.t+ch-.5*ch; ctx.save(); ctx.setLineDash([6,5]); ctx.strokeStyle="rgba(22,163,74,.48)"; ctx.beginPath();ctx.moveTo(pad.l,passY);ctx.lineTo(w-pad.r,passY);ctx.stroke();ctx.restore();
   ctx.fillStyle="#16a34a"; ctx.font=(mobile?"10px":"11px")+' Hind Siliguri, sans-serif'; ctx.fillText("Passed 50%",Math.max(pad.l+4,w-pad.r-58),passY-10);
-  const chartRows=(rows||[]).map(r=>({percent:Number(r.percent)||0,attempted_at:r.attempted_at,label:"MCQ"})).concat((writtenRows||[]).filter(r=>r.status==="graded"&&r.score!==null).map(r=>({percent:(Number(r.score)||0)/Math.max(1,Number((r.written_exams||r).total_marks)||1)*100,attempted_at:r.graded_at||r.submitted_at,label:"CQ"}))).sort((a,b)=>new Date(a.attempted_at)-new Date(b.attempted_at));
-  if(!chartRows.length){ctx.fillStyle="#94a3b8";ctx.textAlign="center";ctx.font=(mobile?"12px":"13px")+' Hind Siliguri, sans-serif';ctx.fillText("Your performance will appear here after you take exams",w/2,h/2);ctx.textAlign="start";return;}
+  const chartRows=points||[];
+  if(!chartRows.length){ctx.fillStyle="#94a3b8";ctx.textAlign="center";ctx.font=(mobile?"12px":"13px")+' Hind Siliguri, sans-serif';ctx.fillText(emptyText||"Your performance will appear here after you take exams",w/2,h/2);ctx.textAlign="start";return;}
   const values=chartRows.map(r=>Math.max(0,Math.min(100,Number(r.percent)||0)));
   const xFor=i=>chartRows.length===1?pad.l+cw/2:pad.l+(i/(chartRows.length-1))*cw;
   const yFor=v=>pad.t+ch-(v/100)*ch;
   const pts=values.map((v,i)=>[xFor(i),yFor(v)]);
   ctx.strokeStyle="#635bff";ctx.lineWidth=mobile?3:3.5;ctx.lineJoin="round";ctx.lineCap="round";ctx.beginPath();
   pts.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.stroke();
-  pts.forEach((p,i)=>{ctx.beginPath();ctx.fillStyle=values[i]>=50?"#16a34a":"#ef4444";ctx.arc(p[0],p[1],mobile?4.5:5.5,0,Math.PI*2);ctx.fill();ctx.lineWidth=2;ctx.strokeStyle="#fff";ctx.stroke();});
+  pts.forEach((p,i)=>{
+    ctx.beginPath();ctx.fillStyle=values[i]>=50?"#16a34a":"#ef4444";ctx.arc(p[0],p[1],mobile?4.5:5.5,0,Math.PI*2);ctx.fill();
+    ctx.lineWidth=2;ctx.strokeStyle=chartRows[i].kind==="CQ"?"#8b5cf6":"#fff";ctx.stroke();
+  });
   ctx.fillStyle="#64748b";ctx.font=(mobile?"9px":"10px")+' Hind Siliguri, sans-serif';ctx.textAlign="center";
   const labelStep=chartRows.length<=6?1:chartRows.length<=12?2:Math.ceil(chartRows.length/6);
-  for(let i=0;i<chartRows.length;i+=labelStep)ctx.fillText(chartRows[i].label+" "+(i+1),pts[i][0],h-17);
-  if((chartRows.length-1)%labelStep!==0)ctx.fillText(chartRows[chartRows.length-1].label+" "+chartRows.length,pts[chartRows.length-1][0],h-17);
+  for(let i=0;i<chartRows.length;i+=labelStep)ctx.fillText(chartRows[i].label,pts[i][0],h-17);
+  if((chartRows.length-1)%labelStep!==0)ctx.fillText(chartRows[chartRows.length-1].label,pts[chartRows.length-1][0],h-17);
   ctx.textAlign="start";
 }
 
@@ -4463,7 +4792,7 @@ async function showLeaderboard(){
 
 $("btnLeaderboard").addEventListener("click", showLeaderboard);
 $("brandHomeBtn").addEventListener("click",()=>{
-  if(state.examInProgress){ openExitWarning(); return; }
+  if(state.examInProgress||state.writtenInProgress){ openExitWarning(); return; }
   hideAllScreens(); $("screen-subjects").hidden=false; $("topSub").textContent="Choose a subject to begin"; pushScreen("subjects",{}); window.scrollTo({top:0,behavior:"smooth"});
 });
 $("brandHomeBtn").addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();$("brandHomeBtn").click();}});
@@ -4473,7 +4802,7 @@ $("adminBtn").addEventListener("click",showAdminDashboard);
 function openDrawer(){ $("sideDrawer").classList.add("open"); $("drawerBackdrop").hidden=false; requestAnimationFrame(()=>$("drawerBackdrop").classList.add("open")); $("sideDrawer").setAttribute("aria-hidden","false"); $("menuTrigger").setAttribute("aria-expanded","true"); }
 function closeDrawer(){ $("sideDrawer").classList.remove("open"); $("drawerBackdrop").classList.remove("open"); $("sideDrawer").setAttribute("aria-hidden","true"); $("menuTrigger").setAttribute("aria-expanded","false"); setTimeout(()=>{if(!$("drawerBackdrop").classList.contains("open")) $("drawerBackdrop").hidden=true;},250); }
 $("menuTrigger").addEventListener("click",openDrawer); $("drawerClose").addEventListener("click",closeDrawer); $("drawerBackdrop").addEventListener("click",closeDrawer);
-$("drawerHome").addEventListener("click",()=>{closeDrawer(); if(state.examInProgress){openExitWarning();return;} hideAllScreens();$("screen-subjects").hidden=false;$("topSub").textContent="Choose a subject to begin";pushScreen("subjects",{});window.scrollTo({top:0,behavior:"smooth"});});
+$("drawerHome").addEventListener("click",()=>{closeDrawer(); if(state.examInProgress||state.writtenInProgress){openExitWarning();return;} hideAllScreens();$("screen-subjects").hidden=false;$("topSub").textContent="Choose a subject to begin";pushScreen("subjects",{});window.scrollTo({top:0,behavior:"smooth"});});
 $("drawerDashboard").addEventListener("click",()=>{closeDrawer();showProfile();});
 $("drawerProfile").addEventListener("click",()=>{closeDrawer();showProfile();});
 $("drawerAdmin").addEventListener("click",()=>{closeDrawer();showAdminDashboard();});
@@ -4515,7 +4844,7 @@ $("btnClearLeaderboard").addEventListener("click", async ()=>{
 ================================================================ */
 window.addEventListener("beforeunload", function(e){
   const onResult = !!($("screen-result") && !$("screen-result").hidden);
-  if(state.examInProgress || onResult){
+  if(state.examInProgress || state.writtenInProgress || onResult){
     e.preventDefault();
     e.returnValue = "";
     return "";
@@ -4538,6 +4867,25 @@ window.addEventListener("popstate", async function(e){
     history.pushState({screen:"result"}, "", "#result");
     historyNavInProgress = false;
     if(await customConfirm("Leave this result page? You can find this result later in your profile history.", {icon:"📊", okText:"Leave page", cancelText:"Stay here"})){
+      hideAllScreens();
+      $("screen-subjects").hidden = false;
+      $("topSub").textContent = "Choose a subject to begin";
+      historyNavInProgress = true;
+      history.replaceState({screen:"subjects"}, "", "#subjects");
+      historyNavInProgress = false;
+    }
+    return;
+  }
+
+  // Written (CQ) exam: confirm before leaving with Back
+  if(state.writtenInProgress && target.screen !== "written-exam"){
+    historyNavInProgress = true;
+    history.pushState({screen:"written-exam"}, "", "#written-exam");
+    historyNavInProgress = false;
+    if(await customConfirm("Exit this written exam? Your answers will not be submitted.", {icon:"🚪", okText:"Exit"})){
+      clearInterval(state.writtenTimerId);
+      state.writtenInProgress = false;
+      state.finished = true;
       hideAllScreens();
       $("screen-subjects").hidden = false;
       $("topSub").textContent = "Choose a subject to begin";
@@ -4600,6 +4948,9 @@ window.addEventListener("popstate", async function(e){
     case "admin-user":
       if(target.userId) showAdminUserProfile(target.userId);
       break;
+    case "cq-leaderboard":
+      if(target.examId) showWrittenLeaderboard(target.examId);
+      break;
     case "answerkey":
       if(state.selectedSubject && state.selectedChapter && state.selectedExam) showAnswerKeyForAdmin();
       break;
@@ -4628,8 +4979,12 @@ $("refreshWrittenAdminBtn").addEventListener("click",loadWrittenAdminList);
 $("backFromWrittenAdmin").addEventListener("click",showAdminDashboard);
 $("backFromAdminUser").addEventListener("click",showAdminDashboard);
 $("adminGoWritten").addEventListener("click",showWrittenAdmin);
-$("backFromWrittenExam").addEventListener("click",()=>{clearInterval(state.writtenTimerId);state.finished=true;showExams(state.selectedSubject,state.selectedChapter);});
-$("btnExitWrittenExam").addEventListener("click",async()=>{if(await customConfirm("Exit this written exam? Your answers will not be submitted.",{icon:"🚪",okText:"Exit"})){clearInterval(state.writtenTimerId);state.finished=true;showExams(state.selectedSubject,state.selectedChapter);}});
+$("backFromWrittenExam").addEventListener("click",()=>openExitWarning("exams"));
+$("btnExitWrittenExam").addEventListener("click",()=>openExitWarning("exams"));
+$("btnCqLbBack").addEventListener("click",()=>history.back());
+$("btnCqLbClear").addEventListener("click",clearCqLeaderboard);
+$("cqResultClose").addEventListener("click",closeCqResultModal);
+$("cqResultView").addEventListener("click",()=>{ const m=$("cqResultModal"); m.classList.remove("show"); m.setAttribute("aria-hidden","true"); showProfile(); });
 $("btnSubmitWrittenExam").addEventListener("click",()=>submitWrittenExam(false));
 $("btnWrittenResultProfile").addEventListener("click",showProfile);
 $("btnWrittenResultHome").addEventListener("click",()=>{hideAllScreens();$("screen-subjects").hidden=false;$("topSub").textContent="Choose a subject to begin";pushScreen("subjects",{});});
