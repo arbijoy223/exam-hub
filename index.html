@@ -380,6 +380,47 @@ display:flex;align-items:center;justify-content:center;font-weight:800;font-size
 .cq-score small{font-size:13px;font-weight:700;color:var(--muted)}
 .cq-fb{margin:6px 0 0!important;font-size:13px!important;color:#475569!important;max-width:none!important;text-align:left}
 #cqResultBody{margin-bottom:18px}
+
+/* Professional, roomier education-site navigation */
+.topbar{background:rgba(255,255,255,.96);border-bottom:1px solid #e2e8f0;box-shadow:0 8px 28px rgba(15,23,42,.09)}
+.topbar-inner{max-width:1200px;min-height:78px;padding:15px 24px;gap:16px}
+.brand{gap:13px;min-width:0}
+.brand .seal{width:48px;height:48px;flex:0 0 48px;border-radius:16px}
+.brand .seal span{font-size:22px}
+.brand-text{font-size:18px;letter-spacing:-.2px;line-height:1.25}
+.brand-sub{font-size:12px;margin-top:3px}
+.menu-trigger{width:48px;height:48px;flex:0 0 48px;border-radius:15px;background:#f8f9ff;border-color:#dfe3f0}
+.account-area{gap:9px;flex-shrink:0}
+.account-btn{min-height:48px;padding:12px 17px;border-radius:14px;font-size:14px;font-weight:800;white-space:nowrap}
+.account-area #profileBtn:not([hidden]){background:#f7f8fc;border:1px solid #e1e6f0;color:#273449}
+.account-area #adminBtn:not([hidden]){background:linear-gradient(135deg,#172554,#4338ca);color:#fff;border:1px solid transparent;box-shadow:0 7px 18px rgba(67,56,202,.22)}
+.drawer-nav{gap:9px;padding:22px 0}
+.drawer-nav button{min-height:52px;padding:12px 15px;font-size:15px;border-radius:15px}
+.drawer-nav button span{width:32px;height:32px;border-radius:10px;font-size:17px}
+.written-cancelled{padding:18px 20px;border-radius:18px;background:#fff1f2;border:1px solid #fecdd3;color:#9f1239;line-height:1.7}
+.written-cancelled span{font-size:13px;color:#9f1239}
+@media(max-width:700px){
+ .topbar-inner{min-height:76px;padding:12px 13px;gap:10px}
+ .menu-trigger{width:43px;height:43px;flex-basis:43px;border-radius:14px}
+ .brand{gap:8px;flex:1;min-width:0}
+ .brand .seal{width:43px;height:43px;flex-basis:43px;border-radius:14px}
+ .brand-text{font-size:12.5px;line-height:1.25;max-width:165px}
+ .brand-sub{font-size:10px;max-width:165px}
+ .account-area{gap:5px}
+ .account-btn{min-height:42px;padding:9px 10px;font-size:11.5px;border-radius:12px}
+ .account-area #profileBtn:not([hidden]){max-width:86px;padding:9px 9px}
+ .account-area #adminBtn:not([hidden]){display:inline-flex!important;max-width:none;min-width:64px;width:auto;justify-content:center;overflow:visible;padding:9px 10px!important;font-size:11.5px!important;white-space:nowrap}
+ .account-area #adminBtn[hidden]{display:none!important}
+}
+@media(max-width:390px){
+ .topbar-inner{padding-left:9px;padding-right:9px;gap:7px}
+ .menu-trigger{width:39px;height:39px;flex-basis:39px}
+ .brand .seal{width:38px;height:38px;flex-basis:38px}
+ .brand-text{font-size:11.5px;max-width:130px}
+ .brand-sub{font-size:9px;max-width:130px}
+ .account-btn{padding:8px 8px;font-size:10.5px}
+ .account-area #adminBtn:not([hidden]){min-width:58px;padding:8px 7px!important;font-size:10.5px!important}
+}
 </style>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#635bff">
@@ -4384,18 +4425,24 @@ function renderProfileWrittenResults(rows){
     const title=document.createElement("h4"); title.textContent=ex.title||"Written Exam";
     const p=document.createElement("p"); p.textContent=`${ex.subject||""} → ${ex.chapter||""} • Submitted ${new Date(r.submitted_at).toLocaleDateString("en-GB")}`;
     card.append(title,p);
-    card.style.cursor="pointer"; card.title="Open CQ leaderboard";
-    card.addEventListener("click",()=>showWrittenLeaderboard(r.exam_id,{id:r.exam_id,title:ex.title,subject:ex.subject,chapter:ex.chapter,total_marks:ex.total_marks}));
+    if(r.status!=="cancelled"){
+      card.style.cursor="pointer"; card.title="Open CQ leaderboard";
+      card.addEventListener("click",()=>showWrittenLeaderboard(r.exam_id,{id:r.exam_id,title:ex.title,subject:ex.subject,chapter:ex.chapter,total_marks:ex.total_marks}));
+    }
     if(r.status==="graded"){
       const g=document.createElement("div"); g.className="written-graded";
       g.innerHTML=`<strong>Marks: ${bnNum(r.score)} / ${bnNum(ex.total_marks||0)}</strong><br>${r.feedback?`Feedback: ${escapeHtml(r.feedback)}`:"No feedback added."}`;
       card.appendChild(g);
+    }else if(r.status==="cancelled"){
+      const g=document.createElement("div"); g.className="written-cancelled";
+      g.innerHTML='<strong>✕ Status: Cancelled by admin</strong><br><span>Your answer was deleted by admin. This exam submission is no longer pending.</span>';
+      card.appendChild(g);
     }else{
       const g=document.createElement("div"); g.className="written-pending";
-      g.innerHTML='<strong>Pending admin marking.</strong><br>Your final marks will appear here after the admin grades this submission.';
+      g.innerHTML='<strong>⏳ Status: Pending admin marking</strong><br>Your final marks will appear here after the admin grades this submission.';
       card.appendChild(g);
     }
-    const hint=document.createElement("div"); hint.className="lb-hint"; hint.textContent="🏆 Tap to view CQ leaderboard"; card.appendChild(hint);
+    if(r.status!=="cancelled") { const hint=document.createElement("div"); hint.className="lb-hint"; hint.textContent="🏆 Tap to view CQ leaderboard"; card.appendChild(hint); }
     box.appendChild(card);
   });
 }
