@@ -522,6 +522,45 @@ body{font-weight:500}.lede p,.hub-text p,.subject-meta,.pill,.profile-card p,.ad
 @media(max-width:700px){.topbar-inner{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;padding:10px 12px;min-height:unset}.brand{grid-column:1;grid-row:1;min-width:0;gap:8px}.brand .seal{width:40px;height:40px;flex-basis:40px}.brand-text{font-size:14px;max-width:none;overflow:visible;text-overflow:clip}.brand-sub{font-size:10px}.menu-trigger{grid-column:2;grid-row:1;width:40px;height:40px;flex-basis:40px}.nav-search-wrap{grid-column:1/-1;grid-row:2;width:100%;max-width:none;height:42px}.account-area{grid-column:1/-1;grid-row:3;justify-content:flex-end;gap:7px}.account-btn{min-height:38px;padding:8px 12px;font-size:12px}#enableNotificationsBtn{padding:7px 9px;font-size:11px}.account-area #profileBtn:not([hidden]){max-width:none}.account-area #adminBtn:not([hidden]){min-width:0;width:auto;font-size:12px!important;padding:8px 11px!important}.subject-grid>.subject-card{flex-basis:min(78vw,310px);width:min(78vw,310px);min-height:150px}.hub-grid{grid-template-columns:1fr}.hub-card{min-height:100px}.wrap{padding-top:20px}.lede h2{font-size:clamp(25px,7vw,31px)}.lede p{font-size:15px;line-height:1.7}}
 @media(max-width:390px){.brand-text{font-size:12px}.brand .seal{width:36px;height:36px;flex-basis:36px}.brand-sub{font-size:9px}.account-btn{font-size:11px;padding:7px 9px}.subject-grid>.subject-card{flex-basis:82vw;width:82vw}}
 
+
+/* Correction: cards enter from right to left, with staggered entrance animation */
+@keyframes cardEnterRTL{0%{opacity:0;transform:translateX(42px) translateY(5px)}100%{opacity:1;transform:translateX(0) translateY(0)}}
+.subject-grid>.subject-card,.hub-grid>.hub-card,.profile-card,.admin-card,.admin-stat{animation:cardEnterRTL .52s cubic-bezier(.2,.75,.25,1) both}
+.subject-grid>.subject-card:nth-child(1),.hub-grid>.hub-card:nth-child(1){animation-delay:.04s}
+.subject-grid>.subject-card:nth-child(2),.hub-grid>.hub-card:nth-child(2){animation-delay:.10s}
+.subject-grid>.subject-card:nth-child(3),.hub-grid>.hub-card:nth-child(3){animation-delay:.16s}
+.subject-grid>.subject-card:nth-child(4),.hub-grid>.hub-card:nth-child(4){animation-delay:.22s}
+.subject-grid>.subject-card:nth-child(5),.hub-grid>.hub-card:nth-child(5){animation-delay:.28s}
+.subject-grid>.subject-card:nth-child(n+6){animation-delay:.32s}
+/* Navbar controls enlarged to approximately 1.5x while remaining responsive */
+.topbar-inner{gap:16px;padding:15px 22px;min-height:88px}
+.menu-trigger{width:54px;height:54px;flex-basis:54px}
+.brand .seal{width:58px;height:58px;flex-basis:58px;border-radius:18px}
+.brand-text{font-size:20px}.brand-sub{font-size:13px}
+.nav-search-wrap{height:58px;padding:0 15px;border-radius:17px;gap:11px}
+.nav-search-wrap>span{font-size:30px}.nav-search-wrap input{font-size:17px}.nav-search-wrap button{width:36px;height:36px;font-size:24px}
+.account-btn{min-height:54px;padding:13px 18px;font-size:16px;border-radius:13px}
+@media(max-width:900px){.topbar-inner{gap:12px;padding:12px 14px;min-height:unset}.brand .seal{width:48px;height:48px;flex-basis:48px}.brand-text{font-size:17px}.nav-search-wrap{height:50px}.account-btn{min-height:48px;padding:11px 14px;font-size:14px}}
+@media(max-width:700px){.topbar-inner{gap:9px;padding:11px 12px}.brand .seal{width:44px;height:44px;flex-basis:44px}.brand-text{font-size:16px}.brand-sub{font-size:11px}.menu-trigger{width:48px;height:48px;flex-basis:48px}.nav-search-wrap{height:50px}.account-area{gap:8px}.account-btn{min-height:45px;padding:10px 13px;font-size:13px}#enableNotificationsBtn{padding:9px 12px;font-size:12px}.account-area #adminBtn:not([hidden]){font-size:13px!important;padding:10px 13px!important}}
+@media(max-width:390px){.topbar-inner{padding:9px 8px}.brand .seal{width:40px;height:40px;flex-basis:40px}.brand-text{font-size:14px}.brand-sub{font-size:10px}.menu-trigger{width:44px;height:44px;flex-basis:44px}.account-btn{font-size:12px;padding:9px 10px}}
+@media(prefers-reduced-motion:reduce){.subject-grid>.subject-card,.hub-grid>.hub-card,.profile-card,.admin-card,.admin-stat{animation:none!important;transition:none!important}}
+
+/* User correction: restore vertical card layout everywhere; keep only a subtle RTL entrance animation */
+.subject-grid{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:15px!important;overflow:visible!important;padding:8px 0 16px!important;scroll-snap-type:none!important;overscroll-behavior:auto!important}
+.subject-grid>.subject-card{display:flex;flex:initial!important;width:100%!important;min-width:0!important;min-height:135px!important;scroll-snap-align:none!important}
+.subject-grid::-webkit-scrollbar{display:none!important}
+.hub-grid{display:flex!important;flex-direction:column!important;gap:14px!important;overflow:visible!important}
+.hub-grid>.hub-card{width:100%!important;min-height:100px!important;scroll-snap-align:none!important}
+/* Animation plays when cards are rendered; no floating or perpetual motion */
+.subject-grid>.subject-card,.hub-grid>.hub-card{animation:cardEnterRTL .58s cubic-bezier(.2,.75,.25,1) both!important;will-change:transform,opacity}
+.subject-grid>.subject-card:nth-child(1),.hub-grid>.hub-card:nth-child(1){animation-delay:.04s!important}
+.subject-grid>.subject-card:nth-child(2),.hub-grid>.hub-card:nth-child(2){animation-delay:.11s!important}
+.subject-grid>.subject-card:nth-child(3),.hub-grid>.hub-card:nth-child(3){animation-delay:.18s!important}
+.subject-grid>.subject-card:nth-child(4),.hub-grid>.hub-card:nth-child(4){animation-delay:.25s!important}
+.subject-grid>.subject-card:nth-child(5),.hub-grid>.hub-card:nth-child(5){animation-delay:.32s!important}
+.subject-grid>.subject-card:nth-child(n+6),.hub-grid>.hub-card:nth-child(n+6){animation-delay:.38s!important}
+@media(max-width:700px){.subject-grid{grid-template-columns:minmax(0,1fr)!important;gap:12px!important}.subject-grid>.subject-card{width:100%!important;min-height:125px!important}.hub-grid{grid-template-columns:minmax(0,1fr)!important}.hub-grid>.hub-card{width:100%!important}}
+@media(prefers-reduced-motion:reduce){.subject-grid>.subject-card,.hub-grid>.hub-card{animation:none!important;will-change:auto!important}}
 </style>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#635bff">
@@ -719,10 +758,6 @@ body{font-weight:500}.lede p,.hub-text p,.subject-meta,.pill,.profile-card p,.ad
       <button type="button" class="admin-stat admin-stat-click" id="adminStatBlocked"><span>🚫 Blocked</span><strong id="adminBlockedUsers">0</strong><small>View blocked users</small></button>
     </div>
     <div class="profile-card admin-card"><div class="admin-section-title"><div><h3>📝 Pending CQ Marking <span class="pending-count" id="adminPendingCount">0</span></h3><p>Newest submissions first. Once you mark a submission it disappears from this list and the student is notified instantly.</p></div><button class="btn btn-ghost" id="refreshPendingCqBtn">↻ Refresh</button></div><div id="adminPendingCqList"><div class="empty-profile">Loading pending submissions…</div></div></div>
-    <div class="profile-card admin-card"><div class="admin-section-title"><div><h3>📋 Objective Exam History</h3><p>Each exam appears once, most recently attempted first. Tap an exam to open its latest leaderboard.</p></div></div><div id="adminObjectiveHistory" class="scroll-list"><div class="empty-profile">Loading…</div></div></div>
-    <div class="profile-card admin-card"><div class="admin-section-title"><div><h3>✍️ CQ Exam History</h3><p>All written/CQ exams, submission count and marking status.</p></div><button class="btn btn-ghost" id="refreshCqHistoryBtn" type="button">↻ Refresh</button></div><div id="adminCqHistory" class="scroll-list"><div class="empty-profile">Loading CQ history…</div></div></div>
-
-    
     <div class="profile-card admin-card">
       <div class="admin-section-title"><div><h3>🏆 Leaderboard</h3><p>To view an answer key, open a subject, choose a chapter, then select an exam.</p></div></div>
       <div class="admin-actions-grid">
@@ -731,6 +766,11 @@ body{font-weight:500}.lede p,.hub-text p,.subject-meta,.pill,.profile-card p,.ad
         <button class="admin-action-card" id="adminGoLeaderboard">🏆<span>Leaderboard</span><small>Leaderboard for the most recently selected exam</small></button>
       </div>
     </div>
+
+    <div class="profile-card admin-card"><div class="admin-section-title"><div><h3>📋 Objective Exam History</h3><p>Each exam appears once, most recently attempted first. Tap an exam to open its latest leaderboard.</p></div></div><div id="adminObjectiveHistory" class="scroll-list"><div class="empty-profile">Loading…</div></div></div>
+    <div class="profile-card admin-card"><div class="admin-section-title"><div><h3>✍️ CQ Exam History</h3><p>All written/CQ exams, submission count and marking status.</p></div><button class="btn btn-ghost" id="refreshCqHistoryBtn" type="button">↻ Refresh</button></div><div id="adminCqHistory" class="scroll-list"><div class="empty-profile">Loading CQ history…</div></div></div>
+
+    
   </section>
 
 
@@ -3860,7 +3900,18 @@ async function loadWrittenAdminList(){
 }
 function editWrittenExam(ex){ editingWrittenExamId=ex.id; populateWrittenFormSubjects(); $("writtenSubjectSelect").value=ex.subject; updateWrittenChapterOptions(); $("writtenChapterSelect").value=ex.chapter; $("writtenTitleInput").value=ex.title; $("writtenTimeInput").value=ex.time_minutes; $("writtenMarksInput").value=ex.total_marks; $("writtenActiveInput").value=String(!!ex.active); $("writtenQuestionsInput").value=(ex.questions||[]).join("\n"); $("writtenAdminFormTitle").textContent="Edit Written Exam"; $("saveWrittenExamBtn").textContent="💾 Update Written Exam"; $("cancelWrittenEditBtn").hidden=false; window.scrollTo({top:0,behavior:"smooth"}); }
 function resetWrittenForm(){ editingWrittenExamId=null; $("writtenTitleInput").value=""; $("writtenTimeInput").value=60; $("writtenMarksInput").value=50; $("writtenActiveInput").value="true"; $("writtenQuestionsInput").value=""; $("writtenAdminFormTitle").textContent="Create Written Exam"; $("saveWrittenExamBtn").textContent="💾 Save Written Exam"; $("cancelWrittenEditBtn").hidden=true; }
-async function saveWrittenExam(){ if(!isAdmin()) return; const questions=$("writtenQuestionsInput").value.split(/\n+/).map(x=>x.trim()).filter(Boolean); const payload={subject:$("writtenSubjectSelect").value,chapter:$("writtenChapterSelect").value,title:$("writtenTitleInput").value.trim(),time_minutes:Number($("writtenTimeInput").value),total_marks:Number($("writtenMarksInput").value),questions,active:$("writtenActiveInput").value==="true"}; if(!payload.title||!questions.length||payload.time_minutes<1||payload.total_marks<1){toast("Enter title, at least one question, time, and total marks.","warning",3200);return;} const q=editingWrittenExamId?supabaseClient.from("written_exams").update(payload).eq("id",editingWrittenExamId):supabaseClient.from("written_exams").insert(payload); const {error}=await q; if(error){console.error(error);toast("Could not save written exam.","error",3200);return;} toast(editingWrittenExamId?"Written exam updated":"Written exam created","success");resetWrittenForm();await loadWrittenAdminList(); }
+async function saveWrittenExam(){
+ if(!isAdmin()) return;
+ const wasEditing=!!editingWrittenExamId;
+ const questions=$("writtenQuestionsInput").value.split(/\n+/).map(x=>x.trim()).filter(Boolean);
+ const payload={subject:$("writtenSubjectSelect").value,chapter:$("writtenChapterSelect").value,title:$("writtenTitleInput").value.trim(),time_minutes:Number($("writtenTimeInput").value),total_marks:Number($("writtenMarksInput").value),questions,active:$("writtenActiveInput").value==="true"};
+ if(!payload.title||!questions.length||payload.time_minutes<1||payload.total_marks<1){toast("Enter title, at least one question, time, and total marks.","warning",3200);return;}
+ const q=wasEditing?supabaseClient.from("written_exams").update(payload).eq("id",editingWrittenExamId):supabaseClient.from("written_exams").insert(payload);
+ const {error}=await q;
+ if(error){console.error(error);toast("Could not save written exam.","error",3200);return;}
+ if(!wasEditing && payload.active){void sendArbijoyPushEvent({event:"exam_created",subject:payload.subject,chapter:payload.chapter,title:payload.title});}
+ toast(wasEditing?"Written exam updated":"Written exam created","success");resetWrittenForm();await loadWrittenAdminList();
+}
 async function toggleWrittenExam(id,active){const {error}=await supabaseClient.from("written_exams").update({active:!active}).eq("id",id);if(error){console.error(error);toast("Could not update exam","error");return;}await loadWrittenAdminList();}
 async function deleteWrittenExam(id){if(!(await customConfirm("Delete this written exam and its submissions?",{icon:"🗑️",okText:"Delete"})))return;const {error}=await supabaseClient.from("written_exams").delete().eq("id",id);if(error){console.error(error);toast("Could not delete exam","error");return;}toast("Written exam deleted","success");await loadWrittenAdminList();}
 
@@ -3929,6 +3980,13 @@ async function gradeWrittenSubmission(id,max,score,feedback){
   if(score===""||score===null||!Number.isFinite(n)||n<0||n>max){ toast(`Enter a score from 0 to ${max}.`,"warning"); return false; }
   const {error}=await supabaseClient.rpc("admin_grade_written_submission",{submission_id:id,new_score:n,new_feedback:String(feedback||"")});
   if(error){ console.error(error); toast("Could not save marks. Run the latest CQ SQL in Supabase.","error",3800); return false; }
+  try{
+    const {data:sub}=await supabaseClient.from("written_submissions").select("user_id,exam_id").eq("id",id).maybeSingle();
+    if(sub?.user_id){
+      const {data:ex}=await supabaseClient.from("written_exams").select("subject,chapter,title").eq("id",sub.exam_id).maybeSingle();
+      void sendArbijoyPushEvent({event:"cq_graded",user_id:sub.user_id,exam_id:sub.exam_id,subject:ex?.subject||"subject",chapter:ex?.chapter||ex?.title||"CQ exam",title:ex?.title||"CQ exam"});
+    }
+  }catch(pushError){console.warn("Could not queue CQ grading push",pushError);}
   toast("✅ Marks saved. Removed from pending marking — the student will be notified.","success",3200);
   try{
     if(!$("screen-admin").hidden) await showAdminDashboard(true);
@@ -4481,9 +4539,61 @@ function startCqNotificationPolling(){
 function showBrowserNotice(title,body,tag){
  try{if(document.hidden&&'Notification' in window&&Notification.permission==='granted'){new Notification(title,{body,tag:tag||'ar-bijoy-exam-center',icon:'icons/icon-192.png',badge:'icons/icon-192.png'});}}catch(e){console.debug('Browser notification unavailable',e);}
 }
-function requestExamNotifications(){
- if(!('Notification' in window)){toast('This browser does not support notifications.','error');return;}
- Notification.requestPermission().then(p=>{if(p==='granted')toast('🔔 Exam notifications enabled while the site is open.','success',3000);else toast('Notifications permission was not granted.','error',3000);});
+const ARBIJOY_FIREBASE_CONFIG = {
+ apiKey: "AIzaSyDO1IpkyAsriPXMfITAF_P-JnN_gpXxEsA",
+ authDomain: "exam-center-8c4bf.firebaseapp.com",
+ projectId: "exam-center-8c4bf",
+ messagingSenderId: "816725272451",
+ appId: "1:816725272451:web:80f5ac19bdf8f3523978b6"
+};
+const ARBIJOY_FCM_VAPID_KEY = "BHF2_lPpUbXu5PJZY-BAqXQDcd7zaqfNNyQgMJu4RjgbUPR-rOQvDaABzP5GIa4X72eLuAVS1qqPGhGOyFAyezU";
+let arbijoyFirebaseSdkPromise = null;
+function loadArbijoyFirebaseSdk(){
+ if(arbijoyFirebaseSdkPromise)return arbijoyFirebaseSdkPromise;
+ arbijoyFirebaseSdkPromise = new Promise((resolve,reject)=>{
+  const urls=["https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js","https://www.gstatic.com/firebasejs/10.13.2/firebase-messaging-compat.js"];
+  const add=(i)=>{if(i>=urls.length){resolve();return;}const script=document.createElement('script');script.src=urls[i];script.async=true;script.onload=()=>add(i+1);script.onerror=()=>reject(new Error('Firebase SDK failed to load'));document.head.appendChild(script);};add(0);
+ }).then(()=>{
+  if(!firebase.apps.length)firebase.initializeApp(ARBIJOY_FIREBASE_CONFIG);
+  return true;
+ });
+ return arbijoyFirebaseSdkPromise;
+}
+async function requestExamNotifications(){
+ if(!('Notification' in window)||!('serviceWorker' in navigator)||!('PushManager' in window)){toast('This browser does not support web push. Try Chrome on Android.','error',4000);return;}
+ if(!currentProfile||!supabaseClient){toast('আগে লগইন করে তারপর Notify চালু করো।','warning',3500);return;}
+ try{
+  const permission=await Notification.requestPermission();
+  if(permission!=='granted'){toast('Notification permission দেওয়া হয়নি। Browser settings থেকে Allow করো।','error',3500);return;}
+  await loadArbijoyFirebaseSdk();
+  const swUrl=new URL('./firebase-messaging-sw.js',location.href);
+  const registration=await navigator.serviceWorker.register(swUrl.href,{scope:new URL('./',location.href).pathname});
+  await navigator.serviceWorker.ready;
+  const messaging=firebase.messaging();
+  const token=await messaging.getToken({vapidKey:ARBIJOY_FCM_VAPID_KEY,serviceWorkerRegistration:registration});
+  if(!token)throw new Error('FCM token was not created. Check Firebase Cloud Messaging settings.');
+  const {data:{user},error:userError}=await supabaseClient.auth.getUser();
+  if(userError||!user)throw new Error('Please sign in again.');
+  const {error:saveError}=await supabaseClient.from('push_subscriptions').upsert({user_id:user.id,fcm_token:token,updated_at:new Date().toISOString()},{onConflict:'user_id,fcm_token'});
+  if(saveError)throw new Error('Supabase push_subscriptions table/policy setup is incomplete: '+saveError.message);
+  if(!firebase.messaging.isSupported || await firebase.messaging.isSupported()){
+   messaging.onMessage((payload)=>{
+    const n=payload.notification||{};
+    toast('🔔 '+(n.title||payload.data?.title||'AR Bijoy Exam Center')+': '+(n.body||payload.data?.body||'New update'), 'success', 6000);
+   });
+  }
+  toast('🔔 Background notification চালু হয়েছে।','success',4000);
+  return true;
+ }catch(e){console.error('Push setup failed:',e);toast('Notification setup হয়নি: '+(e.message||'Unknown error')+' — setup guide দেখো।','error',6000);return false;}
+}
+async function sendArbijoyPushEvent(payload){
+ try{
+  if(!supabaseClient)return;
+  const {data,error}=await supabaseClient.functions.invoke('send-push',{body:payload});
+  if(error)throw error;
+  if(data?.error)throw new Error(data.error);
+  return data;
+ }catch(e){console.warn('Background push event was not sent. Complete Supabase/Firebase server setup first.',e);return null;}
 }
 let knownCqExamIds=null;try{const saved=JSON.parse(localStorage.getItem('arbijoy_known_cq_exams')||'null');if(Array.isArray(saved))knownCqExamIds=new Set(saved);}catch(e){}
 async function checkNewCqExamNotifications(){
@@ -5016,11 +5126,27 @@ $("footerYear").textContent=new Date().getFullYear();
 updateAccountUI();
 $("backFromAdmin").addEventListener("click",()=>{hideAllScreens();$("screen-subjects").hidden=false;$("topSub").textContent="Choose a subject to begin";pushScreen("subjects",{});});
 
-// Site-wide quick search: filter the visible subject/chapter/exam cards without changing navigation logic.
+// Global search: supports English aliases for Bengali subject names and navigates to matching sections.
 (function initSiteSearch(){
  const input=document.getElementById('siteSearch'),clear=document.getElementById('clearSiteSearch');if(!input)return;
- function apply(){const q=input.value.trim().toLocaleLowerCase();if(clear)clear.hidden=!q;document.querySelectorAll('.subject-grid').forEach(grid=>{const cards=[...grid.children].filter(el=>el.classList.contains('subject-card'));let visible=0;cards.forEach(card=>{const match=!q||card.innerText.toLocaleLowerCase().includes(q);card.hidden=!match;if(match)visible++;});let empty=grid.querySelector('.search-empty');if(!empty){empty=document.createElement('div');empty.className='search-empty';empty.textContent='No matching subjects, chapters or exams found.';empty.hidden=true;grid.appendChild(empty);}empty.hidden=!(q&&cards.length&&visible===0);});}
- input.addEventListener('input',apply);if(clear)clear.addEventListener('click',()=>{input.value='';apply();input.focus();});
+ const aliases=[
+  [/আইসিটি|ict|information and communication technology/i,'আইসিটি'],[/পদার্থ|physics/i,'পদার্থবিজ্ঞান'],[/রসায়ন|রসায়ন|chemistry/i,'রসায়ন'],[/জীববিজ্ঞান|biology/i,'জীববিজ্ঞান'],[/উচ্চতর গণিত|higher math|higher mathematics/i,'উচ্চতর গণিত'],[/বাংলা|bangla|bengali/i,'বাংলা'],[/ইংরেজি|english/i,'ইংরেজি'],[/গণিত|math|mathematics/i,'গণিত']
+ ];
+ function norm(t){return String(t||'').toLocaleLowerCase().replace(/[^\p{L}\p{N}]+/gu,' ').trim();}
+ function matches(el,q){const text=norm(el.innerText+' '+(el.getAttribute('aria-label')||'')+' '+(el.id||''));if(text.includes(q))return true;for(const [re,bn] of aliases){if(re.test(q)&&text.includes(norm(bn)))return true;}return false;}
+ function apply(){const raw=input.value.trim(),q=norm(raw);if(clear)clear.hidden=!raw;
+  document.querySelectorAll('.subject-grid').forEach(grid=>{const cards=[...grid.children].filter(el=>el.classList.contains('subject-card'));let visible=0;cards.forEach(card=>{const match=!q||matches(card,q);card.hidden=!match;if(match)visible++;});let empty=grid.querySelector('.search-empty');if(!empty){empty=document.createElement('div');empty.className='search-empty';empty.textContent='No matching subjects, chapters or exams found.';empty.hidden=true;grid.appendChild(empty);}empty.hidden=!(q&&cards.length&&visible===0);});
+ }
+ function go(){const raw=input.value.trim(),q=norm(raw);if(!q)return;
+  const screenNames=[['screen-subjects',/home|subject|subjects|বিষয়|বিষয়|হোম/],['screen-profile',/profile|আমার ফল|আমার প্রোফাইল/],['screen-admin',/admin|dashboard|অ্যাডমিন/],['screen-leaderboard',/leaderboard|লিডারবোর্ড/],['screen-written-exam',/cq|written|সৃজনশীল|লিখিত/]];
+  for(const [id,re] of screenNames){if(re.test(raw.toLowerCase())){if(id==='screen-profile'){showProfile();return;}if(id==='screen-admin'){showAdminDashboard();return;}if(id==='screen-leaderboard'){showLeaderboard();return;}hideAllScreens();const target=document.getElementById(id);if(target)target.hidden=false;window.scrollTo({top:0,behavior:'smooth'});return;}}
+  const cards=[...document.querySelectorAll('.subject-card')].filter(el=>!el.hidden&&matches(el,q));
+  if(cards.length){const card=cards[0];if(card.closest('[hidden]')){hideAllScreens();document.getElementById('screen-subjects').hidden=false;}card.hidden=false;card.scrollIntoView({behavior:'smooth',block:'center',inline:'center'});card.click();return;}
+  const section=[...document.querySelectorAll('section, .profile-card, .hub-card, .admin-card')].find(el=>!el.hidden&&el.querySelector('h1,h2,h3,h4')&&matches(el.querySelector('h1,h2,h3,h4'),q));
+  if(section){section.scrollIntoView({behavior:'smooth',block:'start'});section.animate([{transform:'translateY(8px)',boxShadow:'0 0 0 rgba(99,91,255,0)'},{transform:'translateY(0)',boxShadow:'0 0 0 4px rgba(99,91,255,.18)'},{boxShadow:'0 0 0 rgba(99,91,255,0)'}],{duration:900});return;}
+  toast('No matching subject or section found. Try English or Bengali keywords.','info',2800);
+ }
+ input.addEventListener('input',apply);input.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();go();}});if(clear)clear.addEventListener('click',()=>{input.value='';apply();input.focus();});
 })();
 
 // CQ Exam History in admin dashboard.
@@ -5038,7 +5164,14 @@ async function loadAdminCqHistory(){
  }catch(e){console.error('CQ history load failed',e);box.innerHTML='<div class="empty-profile">Could not load CQ history. Check written_exams and written_submissions permissions.</div>';}
 }
 const cqHistoryRefresh=document.getElementById('refreshCqHistoryBtn');if(cqHistoryRefresh)cqHistoryRefresh.addEventListener('click',loadAdminCqHistory);
-const enableNotificationsBtn=document.getElementById('enableNotificationsBtn');if(enableNotificationsBtn)enableNotificationsBtn.addEventListener('click',requestExamNotifications);
+const enableNotificationsBtn=document.getElementById('enableNotificationsBtn');
+if(enableNotificationsBtn){
+  try{if(localStorage.getItem('arbijoy_fcm_subscribed')==='1')enableNotificationsBtn.hidden=true;}catch(e){}
+  enableNotificationsBtn.addEventListener('click',async()=>{
+    const ok=await requestExamNotifications();
+    if(ok){try{localStorage.setItem('arbijoy_fcm_subscribed','1');}catch(e){}enableNotificationsBtn.hidden=true;}
+  });
+}
 
 startCqNotificationPolling();
 $("adminRefreshBtn").addEventListener("click",showAdminDashboard);
