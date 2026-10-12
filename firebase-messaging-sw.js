@@ -1,5 +1,20 @@
-/* AR Bijoy Exam Center — Firebase Cloud Messaging service worker.
-   Deploy beside index.html at /Exam-Center/firebase-messaging-sw.js */
+/* AR Bijoy Exam Center - Firebase Cloud Messaging service worker */
+/* Keep notificationclick listener BEFORE Firebase imports, as Firebase docs recommend. */
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  const target = (event.notification.data && event.notification.data.url) || 'https://arbijoy223.github.io/exam-hub/';
+  event.waitUntil((async () => {
+    const windows = await clients.matchAll({ type: 'window', includeUncontrolled: true });
+    for (const client of windows) {
+      if ('focus' in client) {
+        if ('navigate' in client && client.url !== target) await client.navigate(target);
+        return client.focus();
+      }
+    }
+    if (clients.openWindow) return clients.openWindow(target);
+  })());
+});
+
 importScripts('https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js');
 importScripts('https://www.gstatic.com/firebasejs/10.13.2/firebase-messaging-compat.js');
 
@@ -13,29 +28,16 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 messaging.onBackgroundMessage((payload) => {
-  const title = payload.notification?.title || payload.data?.title || 'AR Bijoy Exam Center';
-  const body = payload.notification?.body || payload.data?.body || 'There is a new exam update.';
-  self.registration.showNotification(title, {
+  const data = payload.data || {};
+  const title = data.title || payload.notification?.title || 'AR Bijoy Exam Center';
+  const body = data.body || payload.notification?.body || 'You have a new update.';
+  const url = data.url || 'https://arbijoy223.github.io/exam-hub/';
+  return self.registration.showNotification(title, {
     body,
-    icon: './favicon.ico',
-    badge: './favicon.ico',
-    tag: payload.data?.tag || 'arbijoy-exam-center',
-    data: { url: payload.data?.url || 'https://arbijoy223.github.io/Exam-Center/' }
+    icon: new URL('./icons/icon-192.png', self.location.href).href,
+    badge: new URL('./icons/icon-192.png', self.location.href).href,
+    vibrate: [250, 100, 250, 100, 400],
+    tag: data.tag || ('arbijoy-' + Date.now()),
+    data: { url }
   });
-});
-
-self.addEventListener('notificationclick', (event) => {
-  event.notification.close();
-  const targetUrl = event.notification.data?.url || 'https://arbijoy223.github.io/Exam-Center/';
-  event.waitUntil((async () => {
-    const openClients = await clients.matchAll({ type: 'window', includeUncontrolled: true });
-    for (const client of openClients) {
-      if ('focus' in client) {
-        await client.focus();
-        if ('navigate' in client) await client.navigate(targetUrl);
-        return;
-      }
-    }
-    if (clients.openWindow) await clients.openWindow(targetUrl);
-  })());
 });
