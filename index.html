@@ -4577,9 +4577,23 @@ async function requestExamNotifications(){
   const {error:saveError}=await supabaseClient.from('push_subscriptions').upsert({user_id:user.id,fcm_token:token,updated_at:new Date().toISOString()},{onConflict:'user_id,fcm_token'});
   if(saveError)throw new Error('Supabase push_subscriptions table/policy setup is incomplete: '+saveError.message);
   if(!firebase.messaging.isSupported || await firebase.messaging.isSupported()){
-   messaging.onMessage((payload)=>{
+   messaging.onMessage(async (payload)=>{
     const n=payload.notification||{};
-    toast('🔔 '+(n.title||payload.data?.title||'AR Bijoy Exam Center')+': '+(n.body||payload.data?.body||'New update'), 'success', 6000);
+    const title=n.title||payload.data?.title||'AR Bijoy Exam Center';
+    const body=n.body||payload.data?.body||'New update';
+    toast('🔔 '+title+': '+body, 'success', 6000);
+    // Show a native notification while the site is open too. Device/browser
+    // notification settings control whether sound/vibration are actually used.
+    try {
+     await registration.showNotification(title, {
+      body,
+      icon: new URL('./icons/icon-192.png', location.href).href,
+      badge: new URL('./icons/icon-192.png', location.href).href,
+      vibrate: [250, 100, 250, 100, 400],
+      tag: payload.data?.tag || ('arbijoy-' + Date.now()),
+      data: { url: payload.data?.url || 'https://arbijoy223.github.io/exam-hub/' }
+     });
+    } catch (noticeError) { console.debug('Native notification display unavailable', noticeError); }
    });
   }
   toast('🔔 Background notification চালু হয়েছে।','success',4000);
