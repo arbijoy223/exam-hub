@@ -690,6 +690,16 @@ html[data-theme="dark"] .empty-state,html[data-theme="dark"] .mat-empty,html[dat
 @media(max-width:720px){.subject-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important}.subject-card{padding:16px!important;min-height:165px!important;border-radius:17px!important}.subject-card .card-icon{width:42px!important;height:42px!important;font-size:22px!important}.subject-card .pill{font-size:11px!important;padding:5px 8px!important}.cq-history-card .pr-score{align-items:flex-start}.cq-history-score{align-items:flex-start}}
 @media(max-width:390px){.subject-grid{grid-template-columns:1fr!important}.subject-card,#subjectGrid .subject-card,#chapterGrid .subject-card{min-height:140px!important}.cq-history-score{display:grid;gap:4px}}
 
+
+/* Accessibility-only contrast fixes: keep the current page background and visual theme. */
+:root{color-scheme:light;}
+body,.wrap{color:var(--text);}
+.site-footer{color:#f8fafc!important;}
+.site-footer p,.site-footer small,.footer-bottom{color:#dbe3f0!important;}
+.site-footer a{color:#f1f5ff!important;}
+/* Ensure text remains legible on the existing light surfaces, even when the device uses dark mode. */
+.subject-card,.hub-card,.mat-row,.profile-card,.written-card,.admin-stat,.pstat{color:var(--text);}
+.subject-card h3,.hub-card h3,.mat-text p.mat-title,.profile-card h3,.admin-section-title h3{color:var(--text);}
 </style>
 
 </head>
@@ -3640,7 +3650,7 @@ function arAnimateNumber(el,newText){
   const target=Number(match[1].replace(/,/g,'').replace(/[০-৯]/g,d=>'০১২৩৪৫৬৭৮৯'.indexOf(d)).replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)));if(!Number.isFinite(target))return;
   const old=arCountUpState.get(el);const start=Number.isFinite(old)?old:0;if(start===target){el.textContent=raw;return;}
   arCountUpState.set(el,target);el.dataset.countAnimating='1';const suffix=match[2],beg=performance.now(),duration=650;
-  function frame(now){const t=Math.min(1,(now-beg)/duration),ease=1-Math.pow(1-t,3),v=start+(target-start)*ease;el.textContent=Math.round(v).toLocaleString('bn-BD')+suffix;if(t<1)requestAnimationFrame(frame);else{el.textContent=target.toLocaleString('bn-BD')+suffix;delete el.dataset.countAnimating;}}
+  function frame(now){const t=Math.min(1,(now-beg)/duration),ease=1-Math.pow(1-t,3),v=start+(target-start)*ease;el.textContent=Math.round(v).toLocaleString('en-US')+suffix;if(t<1)requestAnimationFrame(frame);else{el.textContent=target.toLocaleString('en-US')+suffix;delete el.dataset.countAnimating;}}
   requestAnimationFrame(frame);
 }
 function arEnableCounterAnimations(){
@@ -4655,7 +4665,7 @@ async function showProfile(){
   $("profileUsername").textContent=currentProfile.username; $("profileAvatar").textContent=currentProfile.username.charAt(0).toUpperCase(); $("profileResults").innerHTML='<div class="empty-profile">⏳ Loading results...</div>'; $("profileWrittenResults").innerHTML='<div class="empty-profile">⏳ Loading written results...</div>';
   const {data:{user}}=await supabaseClient.auth.getUser(); if(!user)return;
   const [{data,error},{data:written,error:writtenError}]=await Promise.all([
-    supabaseClient.from("results").select("subject,chapter,exam,correct,total,percent,status,attempted_at").order("attempted_at",{ascending:true}),
+    supabaseClient.from("results").select("user_id,subject,chapter,exam,correct,total,percent,status,attempted_at").eq("user_id",user.id).order("attempted_at",{ascending:true}),
     supabaseClient.from("written_submissions").select("id,exam_id,status,score,feedback,submitted_at,graded_at").eq("user_id",user.id).order("submitted_at",{ascending:false})
   ]);
   if(error){console.error(error);$("profileResults").innerHTML='<div class="empty-profile">Could not load objective results.</div>';}
@@ -4910,43 +4920,82 @@ function buildChartPoints(rows,writtenRows){
     .sort((a,b)=>new Date(a.at)-new Date(b.at));
   return items.map((it,i)=>({percent:it.percent,label:it.kind+" "+(i+1),kind:it.kind}));
 }
+const arPerformanceChartCache=new Map();
+const arPerformanceChartObservers=new WeakMap();
 function renderPerformanceChart(rows,writtenRows=[],canvasId="performanceChart"){
-  drawPerformanceChart(canvasId,buildChartPoints(rows,writtenRows));
+  const points=buildChartPoints(rows,writtenRows);
+  arPerformanceChartCache.set(canvasId,points);
+  const canvas=$(canvasId); if(!canvas) return;
+  const draw=()=>drawPerformanceChart(canvasId,arPerformanceChartCache.get(canvasId)||[]);
+  // Wait until the profile/admin screen is visible so canvas gets its real width.
+  requestAnimationFrame(()=>requestAnimationFrame(draw));
+  if(!arPerformanceChartObservers.has(canvas) && "ResizeObserver" in window){
+    const observer=new ResizeObserver(()=>{ if(canvas.getBoundingClientRect().width>0) drawPerformanceChart(canvasId,arPerformanceChartCache.get(canvasId)||[]); });
+    observer.observe(canvas); arPerformanceChartObservers.set(canvas,observer);
+  }
 }
 function drawPerformanceChart(canvasId,points,emptyText){
   const canvas=$(canvasId); if(!canvas) return;
-  const ctx=canvas.getContext("2d");
-  const rect=canvas.getBoundingClientRect(), dpr=Math.min(window.devicePixelRatio||1,2);
+  const rect=canvas.getBoundingClientRect();
+  if(rect.width<2 || rect.height<2) return;
+  const ctx=canvas.getContext("2d"); if(!ctx) return;
+  const dpr=Math.min(window.devicePixelRatio||1,2);
   const w=Math.max(260,rect.width), h=Math.max(240,rect.height), mobile=w<560;
-  canvas.width=Math.round(w*dpr); canvas.height=Math.round(h*dpr);
+  if(canvas.width!==Math.round(w*dpr)||canvas.height!==Math.round(h*dpr)){
+    canvas.width=Math.round(w*dpr); canvas.height=Math.round(h*dpr);
+  }
   canvas.style.width="100%"; canvas.style.height="100%";
-  ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,w,h);
+  ctx.setTransform(dpr,0,0,dpr,0,0);
   const pad={l:mobile?42:48,r:mobile?12:22,t:20,b:mobile?40:34};
   const cw=Math.max(10,w-pad.l-pad.r), ch=Math.max(10,h-pad.t-pad.b);
-  ctx.font=(mobile?"11px":"12px")+' Hind Siliguri, sans-serif'; ctx.textBaseline="middle"; ctx.textAlign="start";
-  ctx.lineWidth=1; ctx.strokeStyle="rgba(148,163,184,.28)"; ctx.fillStyle="#64748b";
-  for(let y=0;y<=100;y+=25){const yy=pad.t+ch-(y/100)*ch;ctx.beginPath();ctx.moveTo(pad.l,yy);ctx.lineTo(w-pad.r,yy);ctx.stroke();ctx.fillText(y+"%",4,yy);}
-  const passY=pad.t+ch-.5*ch; ctx.save(); ctx.setLineDash([6,5]); ctx.strokeStyle="rgba(22,163,74,.48)"; ctx.beginPath();ctx.moveTo(pad.l,passY);ctx.lineTo(w-pad.r,passY);ctx.stroke();ctx.restore();
-  ctx.fillStyle="#16a34a"; ctx.font=(mobile?"10px":"11px")+' Hind Siliguri, sans-serif'; ctx.fillText("Passed 50%",Math.max(pad.l+4,w-pad.r-58),passY-10);
   const chartRows=points||[];
-  if(!chartRows.length){ctx.fillStyle="#94a3b8";ctx.textAlign="center";ctx.font=(mobile?"12px":"13px")+' Hind Siliguri, sans-serif';ctx.fillText(emptyText||"Your performance will appear here after you take exams",w/2,h/2);ctx.textAlign="start";return;}
+  const paintBase=()=>{
+    ctx.clearRect(0,0,w,h);
+    ctx.font=(mobile?"11px":"12px")+' Hind Siliguri, sans-serif'; ctx.textBaseline="middle"; ctx.textAlign="start";
+    ctx.lineWidth=1; ctx.strokeStyle="rgba(148,163,184,.28)"; ctx.fillStyle="#64748b";
+    for(let y=0;y<=100;y+=25){const yy=pad.t+ch-(y/100)*ch;ctx.beginPath();ctx.moveTo(pad.l,yy);ctx.lineTo(w-pad.r,yy);ctx.stroke();ctx.fillText(y+"%",4,yy);}
+    const passY=pad.t+ch-.5*ch; ctx.save();ctx.setLineDash([6,5]);ctx.strokeStyle="rgba(22,163,74,.48)";ctx.beginPath();ctx.moveTo(pad.l,passY);ctx.lineTo(w-pad.r,passY);ctx.stroke();ctx.restore();
+    ctx.fillStyle="#16a34a";ctx.font=(mobile?"10px":"11px")+' Hind Siliguri, sans-serif';ctx.fillText("Passed 50%",Math.max(pad.l+4,w-pad.r-58),passY-10);
+  };
+  paintBase();
+  if(!chartRows.length){ctx.fillStyle="#64748b";ctx.textAlign="center";ctx.font=(mobile?"12px":"13px")+' Hind Siliguri, sans-serif';ctx.fillText(emptyText||"Your performance will appear here after you take exams",w/2,h/2);ctx.textAlign="start";return;}
   const values=chartRows.map(r=>Math.max(0,Math.min(100,Number(r.percent)||0)));
   const xFor=i=>chartRows.length===1?pad.l+cw/2:pad.l+(i/(chartRows.length-1))*cw;
   const yFor=v=>pad.t+ch-(v/100)*ch;
   const pts=values.map((v,i)=>[xFor(i),yFor(v)]);
-  ctx.strokeStyle="#635bff";ctx.lineWidth=mobile?3:3.5;ctx.lineJoin="round";ctx.lineCap="round";ctx.beginPath();
-  pts.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.stroke();
-  pts.forEach((p,i)=>{
-    ctx.beginPath();ctx.fillStyle=values[i]>=50?"#16a34a":"#ef4444";ctx.arc(p[0],p[1],mobile?4.5:5.5,0,Math.PI*2);ctx.fill();
-    ctx.lineWidth=2;ctx.strokeStyle=chartRows[i].kind==="CQ"?"#8b5cf6":"#fff";ctx.stroke();
-  });
-  ctx.fillStyle="#64748b";ctx.font=(mobile?"9px":"10px")+' Hind Siliguri, sans-serif';ctx.textAlign="center";
-  const labelStep=chartRows.length<=6?1:chartRows.length<=12?2:Math.ceil(chartRows.length/6);
-  for(let i=0;i<chartRows.length;i+=labelStep)ctx.fillText(chartRows[i].label,pts[i][0],h-17);
-  if((chartRows.length-1)%labelStep!==0)ctx.fillText(chartRows[chartRows.length-1].label,pts[chartRows.length-1][0],h-17);
-  ctx.textAlign="start";
+  const labels=()=>{
+    ctx.fillStyle="#64748b";ctx.font=(mobile?"9px":"10px")+' Hind Siliguri, sans-serif';ctx.textAlign="center";
+    const labelStep=chartRows.length<=6?1:chartRows.length<=12?2:Math.ceil(chartRows.length/6);
+    for(let i=0;i<chartRows.length;i+=labelStep)ctx.fillText(chartRows[i].label,pts[i][0],h-17);
+    if((chartRows.length-1)%labelStep!==0)ctx.fillText(chartRows[chartRows.length-1].label,pts[chartRows.length-1][0],h-17);
+    ctx.textAlign="start";
+  };
+  // Animate line growth so new results visibly move the graph to their new positions.
+  const started=performance.now(), duration=550;
+  function frame(now){
+    const t=Math.min(1,(now-started)/duration), eased=1-Math.pow(1-t,3);
+    paintBase();
+    ctx.strokeStyle="#635bff";ctx.lineWidth=mobile?3:3.5;ctx.lineJoin="round";ctx.lineCap="round";ctx.beginPath();
+    pts.forEach((p,i)=>{
+      const prev=i?pts[i-1]:[p[0],pad.t+ch];
+      const drawX=prev[0]+(p[0]-prev[0])*eased;
+      const drawY=prev[1]+(p[1]-prev[1])*eased;
+      if(i===0)ctx.moveTo(pad.l,prev[1]);
+      ctx.lineTo(drawX,drawY);
+    });
+    ctx.stroke();
+    pts.forEach((p,i)=>{
+      const startY=pad.t+ch, drawY=startY+(p[1]-startY)*eased;
+      ctx.beginPath();ctx.fillStyle=values[i]>=50?"#16a34a":"#ef4444";ctx.arc(p[0],drawY,mobile?4.5:5.5,0,Math.PI*2);ctx.fill();
+      ctx.lineWidth=2;ctx.strokeStyle=chartRows[i].kind==="CQ"?"#8b5cf6":"#fff";ctx.stroke();
+    });
+    if(t<1)requestAnimationFrame(frame);else labels();
+  }
+  requestAnimationFrame(frame);
 }
-
+window.addEventListener("resize",()=>{
+  arPerformanceChartCache.forEach((points,id)=>{const canvas=$(id);if(canvas&&canvas.getBoundingClientRect().width>0)drawPerformanceChart(id,points);});
+});
 
 function finishExam(){
   if(state.finished) return;
