@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light">
-<title>AR Bijoy Exam Center | Learn • Practice • Improve</title>
+<title>Created By: AR Bijoy</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -570,138 +570,6 @@ body{font-weight:500}.lede p,.hub-text p,.subject-meta,.pill,.profile-card p,.ad
 <meta name="apple-mobile-web-app-title" content="Exam Center">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<style id="arbijoy-pro-ui-overrides">
-/* AR Bijoy Exam Center — cohesive student-first UI layer. Existing IDs and JS remain untouched. */
-:root{
- --bg:#f5f7fc;--card:#fff;--text:#17223b;--muted:#65718a;--border:#e4e9f3;
- --primary:#4f46e5;--primary2:#7c3aed;--success:#0f9f75;--danger:#e5484d;--warning:#d97706;
- --shadow:0 12px 35px rgba(31,45,85,.08);--shadow-hover:0 20px 48px rgba(31,45,85,.14);
- --radius-lg:24px;--radius-md:17px;--radius-sm:12px;
-}
-html{scroll-behavior:smooth;scroll-padding-top:90px}
-body{color:var(--text)!important;background:radial-gradient(ellipse at 8% 0%,rgba(99,102,241,.12),transparent 34%),radial-gradient(ellipse at 95% 12%,rgba(14,165,233,.09),transparent 28%),#f5f7fc!important;font-family:"Hind Siliguri",system-ui,sans-serif;line-height:1.55}
-button,input,select,textarea{font:inherit}button{transition:transform .18s ease,box-shadow .18s ease,background .18s ease,border-color .18s ease}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,[role=button]:focus-visible{outline:3px solid rgba(99,102,241,.45);outline-offset:3px}
-.topbar{background:rgba(255,255,255,.9)!important;border-bottom:1px solid rgba(220,226,240,.9)!important;box-shadow:0 5px 24px rgba(30,41,59,.06)!important;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
-.topbar-inner{max-width:1240px!important;min-height:76px!important;padding:10px 22px!important;gap:16px!important}
-.brand{gap:12px!important;border-radius:14px;padding:5px 7px;cursor:pointer}
-.seal{border-radius:15px!important;box-shadow:0 8px 20px rgba(79,70,229,.24)!important;background:linear-gradient(145deg,#4f46e5,#7c3aed)!important;color:#fff!important}
-.brand-text{font-size:clamp(16px,2vw,20px)!important;letter-spacing:-.35px;color:#17223b!important}
-.brand-sub{font-size:12px!important;color:#7b8499!important}
-.nav-search-wrap{border:1px solid #e1e6f1!important;background:#f7f8fc!important;border-radius:15px!important;min-height:44px;transition:border-color .2s,box-shadow .2s}
-.nav-search-wrap:focus-within{border-color:#a5b4fc!important;box-shadow:0 0 0 4px rgba(99,102,241,.1)}
-.nav-search-wrap input{color:#17223b!important}
-.account-area{gap:8px!important}
-.account-btn{border-radius:12px!important;min-height:42px;padding:9px 14px!important;font-weight:700!important;box-shadow:none!important}
-.account-btn:not(.ghost){background:linear-gradient(135deg,#4f46e5,#6d5dfc)!important;color:#fff!important;border:1px solid transparent!important}
-.account-btn.ghost{background:#fff!important;border:1px solid #e3e8f2!important;color:#34405b!important}
-.account-btn:hover,.btn:hover,.hub-card:hover{transform:translateY(-2px)}
-.wrap{max-width:1240px!important;padding:34px 24px 76px!important}
-.lede{position:relative;margin:0 0 24px!important;padding:26px 28px!important;border:1px solid rgba(224,229,242,.9);border-radius:24px;background:linear-gradient(120deg,rgba(255,255,255,.98),rgba(248,249,255,.92));box-shadow:0 10px 30px rgba(31,45,85,.045);overflow:hidden}
-.lede:after{content:"";position:absolute;width:170px;height:170px;border-radius:50%;right:-60px;top:-80px;background:linear-gradient(135deg,rgba(99,102,241,.13),rgba(14,165,233,.06));pointer-events:none}
-.lede h2{font-size:clamp(25px,3.2vw,35px)!important;line-height:1.2;letter-spacing:-.7px;color:#182442!important;margin-bottom:8px!important;position:relative;z-index:1}
-.lede p{color:#69758d!important;font-size:15px!important;max-width:680px;line-height:1.7;margin:0!important;position:relative;z-index:1}
-.subject-grid{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(min(100%,245px),1fr))!important;gap:18px!important;align-items:stretch}
-.subject-grid>*{min-width:0}
-.subject-grid>button,.subject-grid>.subject-card,.subject-grid>.card,.subject-grid>div{border-radius:19px!important}
-.subject-grid button,.subject-grid .subject-item,.subject-grid .exam-card,.subject-grid .chapter-card{min-height:125px}
-.subject-grid>button,.subject-grid>div,.subject-grid>a{transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
-.subject-grid>button:hover,.subject-grid>div:hover,.subject-grid>a:hover{transform:translateY(-3px);box-shadow:var(--shadow-hover)!important}
-.hub-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:20px!important}
-.hub-card{display:flex!important;align-items:center!important;gap:18px!important;text-align:left!important;width:100%;padding:24px!important;min-height:140px;border:1px solid #e4e9f4!important;border-radius:22px!important;background:linear-gradient(145deg,#fff,#fafbff)!important;box-shadow:var(--shadow)!important;color:var(--text)!important}
-.hub-icon{width:58px!important;height:58px!important;flex:0 0 58px;border-radius:18px!important;display:grid;place-items:center}
-.hub-icon-exam{background:#e9eaff!important;color:#4f46e5!important}.hub-icon-material{background:#dcfce9!important;color:#087f5b!important}
-.hub-icon i{font-size:26px!important;font-style:normal}
-.hub-text{flex:1;min-width:0}.hub-text h3{font-size:20px!important;margin:0 0 5px!important;color:#202b48!important}.hub-text p{margin:0!important;color:#748098!important;font-size:14px!important}
-.card-arrow{font-size:25px!important;color:#7c83a0!important}
-.back-btn{display:inline-flex!important;align-items:center;gap:8px;border:1px solid #e0e6f1!important;background:rgba(255,255,255,.9)!important;color:#46516b!important;border-radius:12px!important;padding:10px 15px!important;font-weight:700!important;margin:0 0 18px!important;box-shadow:0 3px 10px rgba(31,45,85,.03)}
-.back-btn:hover{background:#eef0ff!important;border-color:#c7ccff!important;color:#4338ca!important}
-.btn{display:inline-flex!important;justify-content:center;align-items:center;gap:8px;border-radius:13px!important;padding:11px 17px!important;min-height:44px;font-weight:700!important;text-decoration:none!important;cursor:pointer}
-.btn-primary,.btn-submit{background:linear-gradient(135deg,#4f46e5,#7657ed)!important;color:#fff!important;border:1px solid transparent!important;box-shadow:0 7px 16px rgba(79,70,229,.18)!important}
-.btn-ghost{background:#fff!important;color:#44506a!important;border:1px solid #e1e6f0!important}
-.action-row{display:flex;flex-wrap:wrap;gap:10px!important;margin:22px 0 28px!important}
-.exam-sticky-header{position:sticky!important;top:76px;z-index:20;background:rgba(255,255,255,.96)!important;backdrop-filter:blur(16px);border:1px solid #e3e8f2!important;border-radius:18px!important;padding:14px 17px!important;box-shadow:0 9px 26px rgba(31,45,85,.08)!important}
-.exam-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
-.subject-name{font-size:clamp(18px,2.5vw,24px)!important;color:#202b48!important}
-.timer{border-radius:12px!important;background:#fff4e5!important;color:#9a4b08!important;border:1px solid #fed7aa!important;font-weight:800!important;font-variant-numeric:tabular-nums}
-.progress-track{background:#e9edf6!important;border-radius:99px!important;overflow:hidden}.progress-fill{background:linear-gradient(90deg,#4f46e5,#22c5a5)!important;border-radius:99px!important;transition:width .3s ease}
-.page-label{color:#737e95!important;font-weight:600}
-#questionsContainer{display:grid;gap:16px}
-#questionsContainer>*,#writtenQuestionsContainer>*{border-radius:18px!important}
-#btnExitExam{background:#fff!important;border:1px solid #fecaca!important;color:#dc2626!important}
-#btnSubmitExam{min-width:150px}
-.score-card{border-radius:28px!important;padding:clamp(24px,5vw,44px)!important;background:radial-gradient(circle at top right,rgba(167,139,250,.24),transparent 34%),linear-gradient(145deg,#fff,#f7f8ff)!important;border:1px solid #e5e8f5!important;box-shadow:var(--shadow)!important}
-.result-icon{font-size:48px!important;margin-bottom:8px}.score-big{font-size:clamp(36px,7vw,60px)!important;letter-spacing:-1.5px;color:#252d69!important;line-height:1.15}
-.score-sub,.score-remark{color:#65718a!important}
-.result-stat-grid{gap:12px!important;margin-top:25px!important}.result-stat{border:1px solid #e5e9f3!important;background:rgba(255,255,255,.85)!important;border-radius:16px!important;padding:17px!important}.result-stat strong{font-size:27px!important;color:#28345a!important}.result-stat span{color:#748098!important}
-#reviewBox{display:grid;gap:13px}#reviewTitle{font-size:22px!important;color:#26314e!important;margin-top:28px}
-.profile-head,.admin-head{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:22px 24px;border-radius:22px!important;background:#fff;border:1px solid #e4e9f3;box-shadow:var(--shadow);margin-bottom:18px}
-.profile-user{display:flex;align-items:center;gap:14px}.profile-user h2{font-size:26px!important;color:#202b48!important}.profile-user p{margin:3px 0 0!important;color:#758098!important}
-.profile-avatar,.drawer-avatar{border-radius:18px!important;background:linear-gradient(135deg,#4f46e5,#8b5cf6)!important;color:white!important;box-shadow:0 7px 18px rgba(79,70,229,.2)}
-.profile-stats,.admin-stats{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px!important;margin:18px 0 22px!important}
-.pstat,.admin-stat{border:1px solid #e3e8f2!important;border-radius:18px!important;padding:20px!important;background:linear-gradient(145deg,#fff,#fbfcff)!important;box-shadow:0 7px 20px rgba(31,45,85,.04)!important;min-width:0}
-.pstat strong,.admin-stat strong{display:block;font-size:clamp(24px,3vw,32px)!important;line-height:1.2;color:#27345b!important;font-variant-numeric:tabular-nums}.pstat span,.admin-stat span{display:block;margin-top:7px;color:#768199!important;font-size:13px!important;font-weight:600}
-.profile-card,.admin-card,.admin-section-title,.admin-table-wrap,.written-card{border:1px solid #e3e8f2!important;border-radius:20px!important;background:#fff!important;box-shadow:0 8px 24px rgba(31,45,85,.045)!important;padding:22px!important;margin:0 0 18px!important}
-.profile-card h3,.admin-card h3,.admin-section-title{color:#293451!important;font-size:19px!important}
-.chart-wrap{min-height:220px;margin-top:15px}
-.side-drawer{background:#fff!important;box-shadow:20px 0 70px rgba(19,29,58,.18)!important;border-right:1px solid #e4e8f2!important}
-.drawer-head{padding:22px!important;border-bottom:1px solid #edf0f7!important}.drawer-head strong{color:#202b48!important}.drawer-head small{color:#7a8499!important}
-.drawer-nav{padding:14px!important;gap:5px!important}.drawer-nav button{border-radius:12px!important;padding:12px 14px!important;color:#46516b!important;font-weight:650!important;text-align:left!important}
-.drawer-nav button:hover,.drawer-nav button:focus-visible{background:#eef0ff!important;color:#4338ca!important}
-.drawer-foot{color:#68748c!important;border-top:1px solid #edf0f7!important;padding:18px 22px!important}.drawer-foot span{color:#939bb0!important}
-.site-footer{border-top:1px solid #e3e8f2!important;background:rgba(255,255,255,.75)!important;margin-top:35px!important;color:#68748c!important}
-.toast{border-radius:14px!important;box-shadow:0 15px 35px rgba(20,30,60,.2)!important}
-.modal,.auth-modal,.confirm-modal,.fancy-modal-box{border-radius:22px!important;box-shadow:0 25px 80px rgba(20,30,60,.25)!important}
-input,select,textarea{border-radius:11px}
-.empty-state,.mat-empty,.lb-empty{border:1px dashed #cfd7e7!important;border-radius:18px!important;background:rgba(255,255,255,.7)!important;padding:28px!important;color:#758098!important}
-.mat-action,.mat-btns .btn{border-radius:11px!important}
-.admin-actions-grid{gap:12px!important}.admin-action-card{border-radius:16px!important;transition:transform .18s,box-shadow .18s!important}.admin-action-card:hover{transform:translateY(-2px);box-shadow:var(--shadow)!important}
-.admin-table{border-collapse:separate!important;border-spacing:0!important;overflow:hidden;border-radius:14px!important}.admin-table th{background:#f4f6fc!important;color:#58647d!important;font-weight:700!important}.admin-table td,.admin-table th{padding:12px 13px!important;border-bottom:1px solid #edf0f6!important}
-@media(min-width:1400px){.wrap{max-width:1320px!important}.topbar-inner{max-width:1320px!important}}
-@media(max-width:900px){.topbar-inner{flex-wrap:wrap!important;min-height:unset!important;padding:10px 16px!important}.nav-search-wrap{order:3;flex:1 0 100%;width:100%;max-width:none}.account-area{margin-left:auto}.wrap{padding:24px 16px 60px!important}.profile-stats,.admin-stats{grid-template-columns:repeat(2,minmax(0,1fr))!important}.exam-sticky-header{top:0}}
-@media(max-width:600px){.topbar-inner{gap:9px!important;padding:9px 12px!important}.brand{flex:1;min-width:0}.brand-sub{max-width:190px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.account-area{width:100%;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));margin:0!important}.account-btn{width:100%;padding:8px 9px!important;font-size:13px!important}.wrap{padding:18px 12px 44px!important}.lede{padding:22px 19px!important;border-radius:19px!important;margin-bottom:17px!important}.lede h2{font-size:26px!important}.lede p{font-size:14px!important}.subject-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:11px!important}.subject-grid>button,.subject-grid>div,.subject-grid>a{padding:14px!important}.hub-grid{grid-template-columns:1fr!important;gap:12px!important}.hub-card{min-height:112px;padding:18px!important;gap:13px!important;border-radius:18px!important}.hub-icon{width:49px!important;height:49px!important;flex-basis:49px;border-radius:15px!important}.hub-text h3{font-size:18px!important}.exam-sticky-header{position:relative!important;top:auto;padding:12px!important}.exam-head{align-items:flex-start}.subject-name{font-size:17px!important}.nav-row{display:flex;gap:8px!important}.nav-row .btn{flex:1;padding:9px!important;font-size:13px!important}.score-card{padding:25px 16px!important;border-radius:22px!important}.result-stat-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:7px!important}.result-stat{padding:11px 6px!important}.result-stat strong{font-size:21px!important}.result-stat span{font-size:11px!important}.action-row .btn{flex:1 1 100%}.profile-head,.admin-head{align-items:flex-start;flex-direction:column;padding:18px!important}.profile-user h2{font-size:22px!important}.profile-stats,.admin-stats{gap:9px!important}.pstat,.admin-stat{padding:14px!important;border-radius:15px!important}.pstat strong,.admin-stat strong{font-size:25px!important}.profile-card,.admin-card,.admin-section-title,.admin-table-wrap,.written-card{padding:16px!important;border-radius:17px!important}.admin-table-wrap{overflow-x:auto}.admin-table{min-width:620px}.back-btn{margin-bottom:14px!important}}
-@media(max-width:380px){.subject-grid{grid-template-columns:1fr!important}.brand-text{font-size:16px!important}.brand-sub{max-width:150px}.profile-stats,.admin-stats{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
-
-/* Correction pass: premium subject cards, real dark/light contrast, fluid layouts */
-.subject-card{position:relative!important;display:flex!important;flex-direction:column!important;align-items:flex-start!important;justify-content:flex-start!important;gap:10px!important;min-height:178px!important;padding:22px!important;overflow:hidden!important;text-align:left!important;border:1px solid var(--border,#e4e9f3)!important;border-radius:22px!important;background:linear-gradient(145deg,#fff 0%,#f8f9ff 100%)!important;color:#1c2745!important;box-shadow:0 9px 28px rgba(40,48,95,.075)!important}
-.subject-card:before{content:"";position:absolute;inset:0 auto 0 0;width:4px;background:linear-gradient(180deg,var(--card-accent,#675df3),#23b8a7);opacity:.9}
-.subject-card .card-icon{width:48px!important;height:48px!important;display:grid!important;place-items:center!important;border-radius:15px!important;background:linear-gradient(135deg,#eeefff,#e5f7ff)!important;font-size:25px!important;box-shadow:inset 0 0 0 1px rgba(99,102,241,.08)}
-.subject-card h3{order:2!important;margin:0!important;font-size:clamp(15px,1.5vw,18px)!important;line-height:1.4!important;font-weight:800!important;color:#202b49!important;max-width:100%;overflow-wrap:anywhere}
-.subject-card .subject-meta{order:3!important;display:block!important;margin:0!important}
-.subject-card .pill{display:inline-flex!important;align-items:center!important;gap:5px!important;padding:6px 10px!important;border:1px solid #e0e4ff!important;border-radius:10px!important;background:#f0f1ff!important;color:#5146c8!important;font-size:12px!important;font-weight:750!important}
-.subject-card .card-arrow{position:absolute!important;right:18px!important;top:20px!important;color:#8b91b3!important;font-size:23px!important;transition:transform .2s!important}
-.subject-card:hover .card-arrow{transform:translateX(4px)!important}
-#subjectGrid .subject-card{min-height:190px!important}#chapterGrid .subject-card{min-height:180px!important}
-.cq-history-scores{display:grid;gap:6px;margin-top:10px;width:100%}.cq-history-score{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:8px 10px;border:1px solid var(--border,#e4e9f3);border-radius:10px;background:rgba(127,127,127,.045);font-size:12px}.cq-history-score strong{font-size:12px;font-variant-numeric:tabular-nums}.cq-history-score .pass{color:#0c9467}.cq-history-score .fail{color:#dc3d4b}
-/* Footer remains readable in both themes */
-.site-footer{background:linear-gradient(135deg,#171c35,#26245b 65%,#3730a3)!important;color:#f8fafc!important;border-top:1px solid rgba(255,255,255,.12)!important}
-.site-footer *{color:inherit}.site-footer p{color:#e0e7ff!important}.site-footer .footer-edit-note,.site-footer .footer-bottom{color:#c7cce0!important}.site-footer .footer-links a{color:#f8fafc!important;border-color:rgba(255,255,255,.22)!important}
-html[data-theme="dark"],body[data-theme="dark"]{color-scheme:dark;--bg:#0b1020;--card:#151c30;--text:#edf2ff;--muted:#a7b2ca;--border:#2b3650;--primary:#9b91ff;--primary2:#b39bff;background:#0b1020!important;color:#edf2ff!important}
-html[data-theme="dark"] body,body[data-theme="dark"]{background:radial-gradient(ellipse at 8% 0%,rgba(99,102,241,.13),transparent 34%),#0b1020!important;color:#edf2ff!important}
-html[data-theme="dark"] .topbar,body[data-theme="dark"] .topbar,html[data-theme="dark"] .profile-head,html[data-theme="dark"] .admin-head,html[data-theme="dark"] .profile-card,html[data-theme="dark"] .admin-card,html[data-theme="dark"] .admin-section-title,html[data-theme="dark"] .admin-table-wrap,html[data-theme="dark"] .written-card,html[data-theme="dark"] .pstat,html[data-theme="dark"] .admin-stat,html[data-theme="dark"] .hub-card,html[data-theme="dark"] .lede,html[data-theme="dark"] .subject-card,html[data-theme="dark"] .score-card,html[data-theme="dark"] .result-stat,html[data-theme="dark"] .side-drawer,html[data-theme="dark"] .btn-ghost,html[data-theme="dark"] .back-btn{background:#151c30!important;color:#edf2ff!important;border-color:#2b3650!important}
-html[data-theme="dark"] h1,html[data-theme="dark"] h2,html[data-theme="dark"] h3,html[data-theme="dark"] h4,html[data-theme="dark"] .brand-text,html[data-theme="dark"] .subject-card h3,html[data-theme="dark"] .hub-text h3,html[data-theme="dark"] .profile-card h3,html[data-theme="dark"] .admin-card h3,html[data-theme="dark"] .lede h2,html[data-theme="dark"] .pstat strong,html[data-theme="dark"] .admin-stat strong,html[data-theme="dark"] .score-big,html[data-theme="dark"] .result-stat strong{color:#f2f5ff!important}
-html[data-theme="dark"] p,html[data-theme="dark"] .lede p,html[data-theme="dark"] .profile-user p,html[data-theme="dark"] .pstat span,html[data-theme="dark"] .admin-stat span,html[data-theme="dark"] .hub-text p,html[data-theme="dark"] .page-label,html[data-theme="dark"] .score-sub,html[data-theme="dark"] .score-remark{color:#aeb9d0!important}
-html[data-theme="dark"] input,html[data-theme="dark"] select,html[data-theme="dark"] textarea,html[data-theme="dark"] .nav-search-wrap{background:#0d1426!important;color:#f1f5ff!important;border-color:#34405b!important}
-html[data-theme="dark"] .pill{background:#28294f!important;color:#d7d4ff!important;border-color:#49457d!important}html[data-theme="dark"] .admin-table th{background:#202941!important;color:#dbe4f8!important}html[data-theme="dark"] .admin-table td{color:#e1e8f8!important;border-color:#2b3650!important}
-html[data-theme="dark"] .site-footer{background:linear-gradient(135deg,#070b16,#151735 65%,#25205c)!important;color:#f8fafc!important}
-html[data-theme="dark"] .empty-state,html[data-theme="dark"] .mat-empty,html[data-theme="dark"] .lb-empty,html[data-theme="dark"] .empty-profile{background:#111a2d!important;color:#b6c1d8!important;border-color:#34405b!important}
-@media(prefers-color-scheme:dark){html:not([data-theme="light"]):not([data-theme="dark"]) body{background:#0b1020!important;color:#edf2ff!important}html:not([data-theme="light"]):not([data-theme="dark"]) .profile-card,html:not([data-theme="light"]):not([data-theme="dark"]) .admin-card,html:not([data-theme="light"]):not([data-theme="dark"]) .pstat,html:not([data-theme="light"]):not([data-theme="dark"]) .admin-stat,html:not([data-theme="light"]):not([data-theme="dark"]) .subject-card,html:not([data-theme="light"]):not([data-theme="dark"]) .hub-card,html:not([data-theme="light"]):not([data-theme="dark"]) .lede{background:#151c30!important;color:#edf2ff!important;border-color:#2b3650!important}html:not([data-theme="light"]):not([data-theme="dark"]) .subject-card h3,html:not([data-theme="light"]):not([data-theme="dark"]) h2,html:not([data-theme="light"]):not([data-theme="dark"]) h3{color:#f2f5ff!important}}
-@media(max-width:720px){.subject-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important}.subject-card{padding:16px!important;min-height:165px!important;border-radius:17px!important}.subject-card .card-icon{width:42px!important;height:42px!important;font-size:22px!important}.subject-card .pill{font-size:11px!important;padding:5px 8px!important}.cq-history-card .pr-score{align-items:flex-start}.cq-history-score{align-items:flex-start}}
-@media(max-width:390px){.subject-grid{grid-template-columns:1fr!important}.subject-card,#subjectGrid .subject-card,#chapterGrid .subject-card{min-height:140px!important}.cq-history-score{display:grid;gap:4px}}
-
-
-/* Accessibility-only contrast fixes: keep the current page background and visual theme. */
-:root{color-scheme:light;}
-body,.wrap{color:var(--text);}
-.site-footer{color:#f8fafc!important;}
-.site-footer p,.site-footer small,.footer-bottom{color:#dbe3f0!important;}
-.site-footer a{color:#f1f5ff!important;}
-/* Ensure text remains legible on the existing light surfaces, even when the device uses dark mode. */
-.subject-card,.hub-card,.mat-row,.profile-card,.written-card,.admin-stat,.pstat{color:var(--text);}
-.subject-card h3,.hub-card h3,.mat-text p.mat-title,.profile-card h3,.admin-section-title h3{color:var(--text);}
-</style>
-
 </head>
 <body>
 
@@ -757,7 +625,7 @@ body,.wrap{color:var(--text);}
       <h2 id="chapterSubjectName"></h2>
       <p>Choose a chapter below</p>
     </div>
-    <div class="subject-grid" id="chapterGrid"></div>
+    <div class="subject-grid" id="chapterGrid">hlll</div>
   </section>
 
   <!-- স্ক্রিন 2.5: Chapter হাব — Take an Exam / Study Materials -->
@@ -3642,22 +3510,6 @@ function toast(msg, type="info", duration=2800){
   t._timer = setTimeout(()=>t.classList.remove("show"), duration);
 }
 
-/* Animated numeric counters: applies to dashboard/profile stat values whenever data refreshes. */
-const arCountUpState=new WeakMap();
-function arAnimateNumber(el,newText){
-  if(!el||el.dataset.countAnimating==='1')return;
-  const raw=String(newText??'').trim();const match=raw.match(/^([+-]?[\d,٠-٩০-৯]+(?:\.\d+)?)(%?)$/);if(!match)return;
-  const target=Number(match[1].replace(/,/g,'').replace(/[০-৯]/g,d=>'০১২৩৪৫৬৭৮৯'.indexOf(d)).replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)));if(!Number.isFinite(target))return;
-  const old=arCountUpState.get(el);const start=Number.isFinite(old)?old:0;if(start===target){el.textContent=raw;return;}
-  arCountUpState.set(el,target);el.dataset.countAnimating='1';const suffix=match[2],beg=performance.now(),duration=650;
-  function frame(now){const t=Math.min(1,(now-beg)/duration),ease=1-Math.pow(1-t,3),v=start+(target-start)*ease;el.textContent=Math.round(v).toLocaleString('en-US')+suffix;if(t<1)requestAnimationFrame(frame);else{el.textContent=target.toLocaleString('en-US')+suffix;delete el.dataset.countAnimating;}}
-  requestAnimationFrame(frame);
-}
-function arEnableCounterAnimations(){
- const roots=[document.getElementById('screen-profile'),document.getElementById('screen-admin'),document.getElementById('screen-admin-user'),document.getElementById('screen-admin-performance')].filter(Boolean);
- roots.forEach(root=>{if(root.dataset.countObserver)return;root.dataset.countObserver='1';const obs=new MutationObserver(muts=>muts.forEach(m=>{if(m.type==='characterData'){const el=m.target.parentElement;if(el&&el.matches('.pstat strong,.admin-stat strong,.result-stat strong,.score-big'))arAnimateNumber(el,el.textContent);}else if(m.type==='childList'){const target=m.target.nodeType===1?m.target:null;if(target&&target.matches('.pstat strong,.admin-stat strong,.result-stat strong,.score-big'))arAnimateNumber(target,target.textContent);if(target&&target.closest){const parent=target.closest('.pstat,.admin-stat,.result-stat');const stat=parent&&parent.querySelector('strong');if(stat)arAnimateNumber(stat,stat.textContent);}m.addedNodes.forEach(n=>{if(n.nodeType===1){if(n.matches?.('.pstat strong,.admin-stat strong,.result-stat strong,.score-big'))arAnimateNumber(n,n.textContent);n.querySelectorAll?.('.pstat strong,.admin-stat strong,.result-stat strong,.score-big').forEach(el=>arAnimateNumber(el,el.textContent));}});}}));obs.observe(root,{subtree:true,childList:true,characterData:true});});
-}
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',arEnableCounterAnimations);else arEnableCounterAnimations();
 function bnNum(n){
   // Keep all interface numbers in Western/English digits.
   return String(n).replace(/[\u09E6-\u09EF]/g, d => String(d.charCodeAt(0) - 0x09E6));
@@ -4115,7 +3967,7 @@ function renderAdminUserResults(rows,writtenRows=[]){
   const box=$("adminUserResults"); if(!rows.length){box.innerHTML='<div class="empty-profile">No objective exam results yet.</div>';return;}
   const groups=new Map(); rows.forEach(r=>{const key=`${r.subject}|||${r.chapter}|||${r.exam}`;if(!groups.has(key))groups.set(key,{subject:r.subject,chapter:r.chapter,exam:r.exam,rows:[]});groups.get(key).rows.push(r);});
   const list=[...groups.values()].map(g=>{const avg=Math.round(g.rows.reduce((a,r)=>a+Number(r.percent||0),0)/g.rows.length),latest=g.rows.slice().sort((a,b)=>new Date(b.attempted_at)-new Date(a.attempted_at))[0],pass=g.rows.filter(r=>Number(r.percent)>=50).length;return {...g,avg,latest,pass,fail:g.rows.length-pass,attempts:g.rows.length};}).sort((a,b)=>new Date(b.latest.attempted_at)-new Date(a.latest.attempted_at));
-  box.innerHTML=list.map(g=>`<button type="button" class="profile-result admin-exam-result" data-subject="${escapeHtml(g.subject)}" data-chapter="${escapeHtml(g.chapter)}" data-exam="${escapeHtml(g.exam)}" style="width:100%;text-align:left;border:0;cursor:pointer"><div class="pr-main"><strong>${escapeHtml(g.subject)} → ${escapeHtml(g.exam)}</strong><span>${escapeHtml(g.chapter)} • Latest: ${escapeHtml($("adminUserUsername").textContent)} — ${bnNum(g.latest.correct)}/${bnNum(g.latest.total)} marks (${bnNum(g.latest.percent)}%) • ${bnNum(g.attempts)} attempt${g.attempts===1?"":"s"} • Avg ${bnNum(g.avg)}%</span></div><div class="pr-score"><strong class="${g.avg>=50?"pass":"fail"}">${bnNum(g.avg)}% • ${g.avg>=50?"PASS":"FAIL"}</strong><span>${bnNum(g.pass)} pass • ${bnNum(g.fail)} fail</span></div></button>`).join("");
+  box.innerHTML=list.map(g=>`<button type="button" class="profile-result admin-exam-result" data-subject="${escapeHtml(g.subject)}" data-chapter="${escapeHtml(g.chapter)}" data-exam="${escapeHtml(g.exam)}" style="width:100%;text-align:left;border:0;cursor:pointer"><div class="pr-main"><strong>${escapeHtml(g.subject)} → ${escapeHtml(g.exam)}</strong><span>${escapeHtml(g.chapter)} • Latest: ${escapeHtml($("adminUserUsername").textContent)} — ${bnNum(g.latest.percent)}% • ${bnNum(g.attempts)} attempt${g.attempts===1?"":"s"} • Avg ${bnNum(g.avg)}%</span></div><div class="pr-score"><strong class="${g.avg>=50?"pass":"fail"}">${bnNum(g.avg)}% • ${g.avg>=50?"PASS":"FAIL"}</strong><span>${bnNum(g.pass)} pass • ${bnNum(g.fail)} fail</span></div></button>`).join("");
   box.querySelectorAll(".admin-exam-result").forEach(btn=>btn.addEventListener("click",()=>{state.selectedSubject=btn.dataset.subject;state.selectedChapter=btn.dataset.chapter;state.selectedExam=btn.dataset.exam;showLeaderboard();}));
 }
 function renderAdminWrittenSubmissions(rows){
@@ -4594,7 +4446,7 @@ async function showAdminDashboard(silent){
     else{
       hist.innerHTML=[...groups.values()].sort((a,b)=>new Date(b.latest.attempted_at)-new Date(a.latest.attempted_at)).map(g=>{
         const r=g.latest,pct=Number(r.percent||0),uname=nameOf.get(r.user_id)||"Unknown";
-        return `<button type="button" class="profile-result admin-exam-result" data-subject="${escapeHtml(r.subject)}" data-chapter="${escapeHtml(r.chapter)}" data-exam="${escapeHtml(r.exam)}" style="width:100%;text-align:left;border:0;cursor:pointer"><div class="pr-main"><strong>${escapeHtml(r.subject)} → ${escapeHtml(r.exam)} (${escapeHtml(uname)} — ${bnNum(r.correct)}/${bnNum(r.total)} marks, ${bnNum(pct)}%)</strong><span>${escapeHtml(r.chapter)} • ${timeAgo(r.attempted_at)} • ${bnNum(g.attempts)} attempt${g.attempts===1?"":"s"} by ${bnNum(g.users.size)} student${g.users.size===1?"":"s"}</span></div><div class="pr-score"><strong class="${pct>=50?"pass":"fail"}">${bnNum(pct)}%</strong><span>🏆 Leaderboard</span></div></button>`;
+        return `<button type="button" class="profile-result admin-exam-result" data-subject="${escapeHtml(r.subject)}" data-chapter="${escapeHtml(r.chapter)}" data-exam="${escapeHtml(r.exam)}" style="width:100%;text-align:left;border:0;cursor:pointer"><div class="pr-main"><strong>${escapeHtml(r.subject)} → ${escapeHtml(r.exam)} (${escapeHtml(uname)} — ${bnNum(pct)}%)</strong><span>${escapeHtml(r.chapter)} • ${timeAgo(r.attempted_at)} • ${bnNum(g.attempts)} attempt${g.attempts===1?"":"s"} by ${bnNum(g.users.size)} student${g.users.size===1?"":"s"}</span></div><div class="pr-score"><strong class="${pct>=50?"pass":"fail"}">${bnNum(pct)}%</strong><span>🏆 Leaderboard</span></div></button>`;
       }).join("");
       hist.querySelectorAll(".admin-exam-result").forEach(btn=>btn.addEventListener("click",()=>{state.selectedSubject=btn.dataset.subject;state.selectedChapter=btn.dataset.chapter;state.selectedExam=btn.dataset.exam;showLeaderboard();}));
     }
@@ -4665,7 +4517,7 @@ async function showProfile(){
   $("profileUsername").textContent=currentProfile.username; $("profileAvatar").textContent=currentProfile.username.charAt(0).toUpperCase(); $("profileResults").innerHTML='<div class="empty-profile">⏳ Loading results...</div>'; $("profileWrittenResults").innerHTML='<div class="empty-profile">⏳ Loading written results...</div>';
   const {data:{user}}=await supabaseClient.auth.getUser(); if(!user)return;
   const [{data,error},{data:written,error:writtenError}]=await Promise.all([
-    supabaseClient.from("results").select("user_id,subject,chapter,exam,correct,total,percent,status,attempted_at").eq("user_id",user.id).order("attempted_at",{ascending:true}),
+    supabaseClient.from("results").select("subject,chapter,exam,correct,total,percent,status,attempted_at").order("attempted_at",{ascending:true}),
     supabaseClient.from("written_submissions").select("id,exam_id,status,score,feedback,submitted_at,graded_at").eq("user_id",user.id).order("submitted_at",{ascending:false})
   ]);
   if(error){console.error(error);$("profileResults").innerHTML='<div class="empty-profile">Could not load objective results.</div>';}
@@ -4907,7 +4759,7 @@ function renderProfileResults(rows,writtenRows=[]){
   const box=$("profileResults"); if(!rows.length){box.innerHTML='<div class="empty-profile">No objective exam results yet.</div>';return;}
   const groups=new Map();rows.forEach(r=>{const k=`${r.subject}|||${r.chapter}|||${r.exam}`;if(!groups.has(k))groups.set(k,[]);groups.get(k).push(r);});
   const list=[...groups.values()].map(a=>{a.sort((x,y)=>new Date(y.attempted_at)-new Date(x.attempted_at));const latest=a[0],avg=Math.round(a.reduce((n,r)=>n+Number(r.percent||0),0)/a.length);return {latest,avg,count:a.length};}).sort((a,b)=>new Date(b.latest.attempted_at)-new Date(a.latest.attempted_at));
-  box.innerHTML=list.map(g=>{const r=g.latest,pass=Number(r.percent)>=50;return `<button type="button" class="profile-result profile-objective-click" data-subject="${escapeHtml(r.subject)}" data-chapter="${escapeHtml(r.chapter)}" data-exam="${escapeHtml(r.exam)}" style="width:100%;text-align:left;border:0;cursor:pointer"><div class="pr-main"><strong>${escapeHtml(r.subject)} → ${escapeHtml(r.exam)}</strong><span>${escapeHtml(r.chapter)} • Score: ${bnNum(r.correct)} / ${bnNum(r.total)} marks (${bnNum(r.percent)}%) • ${g.count} attempt${g.count===1?'':'s'}</span></div><div class="pr-score"><strong class="${pass?'pass':'fail'}">${escapeHtml(currentProfile.username)} • ${bnNum(r.percent)}%</strong><span>Avg ${bnNum(g.avg)}%</span></div></button>`;}).join('');
+  box.innerHTML=list.map(g=>{const r=g.latest,pass=Number(r.percent)>=50;return `<button type="button" class="profile-result profile-objective-click" data-subject="${escapeHtml(r.subject)}" data-chapter="${escapeHtml(r.chapter)}" data-exam="${escapeHtml(r.exam)}" style="width:100%;text-align:left;border:0;cursor:pointer"><div class="pr-main"><strong>${escapeHtml(r.subject)} → ${escapeHtml(r.exam)}</strong><span>${escapeHtml(r.chapter)} • Latest: ${bnNum(r.correct)}/${bnNum(r.total)} marks (${bnNum(r.percent)}%) • ${g.count} attempt${g.count===1?'':'s'}</span></div><div class="pr-score"><strong class="${pass?'pass':'fail'}">${escapeHtml(currentProfile.username)} • ${bnNum(r.percent)}%</strong><span>Avg ${bnNum(g.avg)}%</span></div></button>`;}).join('');
   box.querySelectorAll('.profile-objective-click').forEach(b=>b.addEventListener('click',()=>{state.selectedSubject=b.dataset.subject;state.selectedChapter=b.dataset.chapter;state.selectedExam=b.dataset.exam;showLeaderboard();}));
 }
 
@@ -4920,82 +4772,43 @@ function buildChartPoints(rows,writtenRows){
     .sort((a,b)=>new Date(a.at)-new Date(b.at));
   return items.map((it,i)=>({percent:it.percent,label:it.kind+" "+(i+1),kind:it.kind}));
 }
-const arPerformanceChartCache=new Map();
-const arPerformanceChartObservers=new WeakMap();
 function renderPerformanceChart(rows,writtenRows=[],canvasId="performanceChart"){
-  const points=buildChartPoints(rows,writtenRows);
-  arPerformanceChartCache.set(canvasId,points);
-  const canvas=$(canvasId); if(!canvas) return;
-  const draw=()=>drawPerformanceChart(canvasId,arPerformanceChartCache.get(canvasId)||[]);
-  // Wait until the profile/admin screen is visible so canvas gets its real width.
-  requestAnimationFrame(()=>requestAnimationFrame(draw));
-  if(!arPerformanceChartObservers.has(canvas) && "ResizeObserver" in window){
-    const observer=new ResizeObserver(()=>{ if(canvas.getBoundingClientRect().width>0) drawPerformanceChart(canvasId,arPerformanceChartCache.get(canvasId)||[]); });
-    observer.observe(canvas); arPerformanceChartObservers.set(canvas,observer);
-  }
+  drawPerformanceChart(canvasId,buildChartPoints(rows,writtenRows));
 }
 function drawPerformanceChart(canvasId,points,emptyText){
   const canvas=$(canvasId); if(!canvas) return;
-  const rect=canvas.getBoundingClientRect();
-  if(rect.width<2 || rect.height<2) return;
-  const ctx=canvas.getContext("2d"); if(!ctx) return;
-  const dpr=Math.min(window.devicePixelRatio||1,2);
+  const ctx=canvas.getContext("2d");
+  const rect=canvas.getBoundingClientRect(), dpr=Math.min(window.devicePixelRatio||1,2);
   const w=Math.max(260,rect.width), h=Math.max(240,rect.height), mobile=w<560;
-  if(canvas.width!==Math.round(w*dpr)||canvas.height!==Math.round(h*dpr)){
-    canvas.width=Math.round(w*dpr); canvas.height=Math.round(h*dpr);
-  }
+  canvas.width=Math.round(w*dpr); canvas.height=Math.round(h*dpr);
   canvas.style.width="100%"; canvas.style.height="100%";
-  ctx.setTransform(dpr,0,0,dpr,0,0);
+  ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,w,h);
   const pad={l:mobile?42:48,r:mobile?12:22,t:20,b:mobile?40:34};
   const cw=Math.max(10,w-pad.l-pad.r), ch=Math.max(10,h-pad.t-pad.b);
+  ctx.font=(mobile?"11px":"12px")+' Hind Siliguri, sans-serif'; ctx.textBaseline="middle"; ctx.textAlign="start";
+  ctx.lineWidth=1; ctx.strokeStyle="rgba(148,163,184,.28)"; ctx.fillStyle="#64748b";
+  for(let y=0;y<=100;y+=25){const yy=pad.t+ch-(y/100)*ch;ctx.beginPath();ctx.moveTo(pad.l,yy);ctx.lineTo(w-pad.r,yy);ctx.stroke();ctx.fillText(y+"%",4,yy);}
+  const passY=pad.t+ch-.5*ch; ctx.save(); ctx.setLineDash([6,5]); ctx.strokeStyle="rgba(22,163,74,.48)"; ctx.beginPath();ctx.moveTo(pad.l,passY);ctx.lineTo(w-pad.r,passY);ctx.stroke();ctx.restore();
+  ctx.fillStyle="#16a34a"; ctx.font=(mobile?"10px":"11px")+' Hind Siliguri, sans-serif'; ctx.fillText("Passed 50%",Math.max(pad.l+4,w-pad.r-58),passY-10);
   const chartRows=points||[];
-  const paintBase=()=>{
-    ctx.clearRect(0,0,w,h);
-    ctx.font=(mobile?"11px":"12px")+' Hind Siliguri, sans-serif'; ctx.textBaseline="middle"; ctx.textAlign="start";
-    ctx.lineWidth=1; ctx.strokeStyle="rgba(148,163,184,.28)"; ctx.fillStyle="#64748b";
-    for(let y=0;y<=100;y+=25){const yy=pad.t+ch-(y/100)*ch;ctx.beginPath();ctx.moveTo(pad.l,yy);ctx.lineTo(w-pad.r,yy);ctx.stroke();ctx.fillText(y+"%",4,yy);}
-    const passY=pad.t+ch-.5*ch; ctx.save();ctx.setLineDash([6,5]);ctx.strokeStyle="rgba(22,163,74,.48)";ctx.beginPath();ctx.moveTo(pad.l,passY);ctx.lineTo(w-pad.r,passY);ctx.stroke();ctx.restore();
-    ctx.fillStyle="#16a34a";ctx.font=(mobile?"10px":"11px")+' Hind Siliguri, sans-serif';ctx.fillText("Passed 50%",Math.max(pad.l+4,w-pad.r-58),passY-10);
-  };
-  paintBase();
-  if(!chartRows.length){ctx.fillStyle="#64748b";ctx.textAlign="center";ctx.font=(mobile?"12px":"13px")+' Hind Siliguri, sans-serif';ctx.fillText(emptyText||"Your performance will appear here after you take exams",w/2,h/2);ctx.textAlign="start";return;}
+  if(!chartRows.length){ctx.fillStyle="#94a3b8";ctx.textAlign="center";ctx.font=(mobile?"12px":"13px")+' Hind Siliguri, sans-serif';ctx.fillText(emptyText||"Your performance will appear here after you take exams",w/2,h/2);ctx.textAlign="start";return;}
   const values=chartRows.map(r=>Math.max(0,Math.min(100,Number(r.percent)||0)));
   const xFor=i=>chartRows.length===1?pad.l+cw/2:pad.l+(i/(chartRows.length-1))*cw;
   const yFor=v=>pad.t+ch-(v/100)*ch;
   const pts=values.map((v,i)=>[xFor(i),yFor(v)]);
-  const labels=()=>{
-    ctx.fillStyle="#64748b";ctx.font=(mobile?"9px":"10px")+' Hind Siliguri, sans-serif';ctx.textAlign="center";
-    const labelStep=chartRows.length<=6?1:chartRows.length<=12?2:Math.ceil(chartRows.length/6);
-    for(let i=0;i<chartRows.length;i+=labelStep)ctx.fillText(chartRows[i].label,pts[i][0],h-17);
-    if((chartRows.length-1)%labelStep!==0)ctx.fillText(chartRows[chartRows.length-1].label,pts[chartRows.length-1][0],h-17);
-    ctx.textAlign="start";
-  };
-  // Animate line growth so new results visibly move the graph to their new positions.
-  const started=performance.now(), duration=550;
-  function frame(now){
-    const t=Math.min(1,(now-started)/duration), eased=1-Math.pow(1-t,3);
-    paintBase();
-    ctx.strokeStyle="#635bff";ctx.lineWidth=mobile?3:3.5;ctx.lineJoin="round";ctx.lineCap="round";ctx.beginPath();
-    pts.forEach((p,i)=>{
-      const prev=i?pts[i-1]:[p[0],pad.t+ch];
-      const drawX=prev[0]+(p[0]-prev[0])*eased;
-      const drawY=prev[1]+(p[1]-prev[1])*eased;
-      if(i===0)ctx.moveTo(pad.l,prev[1]);
-      ctx.lineTo(drawX,drawY);
-    });
-    ctx.stroke();
-    pts.forEach((p,i)=>{
-      const startY=pad.t+ch, drawY=startY+(p[1]-startY)*eased;
-      ctx.beginPath();ctx.fillStyle=values[i]>=50?"#16a34a":"#ef4444";ctx.arc(p[0],drawY,mobile?4.5:5.5,0,Math.PI*2);ctx.fill();
-      ctx.lineWidth=2;ctx.strokeStyle=chartRows[i].kind==="CQ"?"#8b5cf6":"#fff";ctx.stroke();
-    });
-    if(t<1)requestAnimationFrame(frame);else labels();
-  }
-  requestAnimationFrame(frame);
+  ctx.strokeStyle="#635bff";ctx.lineWidth=mobile?3:3.5;ctx.lineJoin="round";ctx.lineCap="round";ctx.beginPath();
+  pts.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.stroke();
+  pts.forEach((p,i)=>{
+    ctx.beginPath();ctx.fillStyle=values[i]>=50?"#16a34a":"#ef4444";ctx.arc(p[0],p[1],mobile?4.5:5.5,0,Math.PI*2);ctx.fill();
+    ctx.lineWidth=2;ctx.strokeStyle=chartRows[i].kind==="CQ"?"#8b5cf6":"#fff";ctx.stroke();
+  });
+  ctx.fillStyle="#64748b";ctx.font=(mobile?"9px":"10px")+' Hind Siliguri, sans-serif';ctx.textAlign="center";
+  const labelStep=chartRows.length<=6?1:chartRows.length<=12?2:Math.ceil(chartRows.length/6);
+  for(let i=0;i<chartRows.length;i+=labelStep)ctx.fillText(chartRows[i].label,pts[i][0],h-17);
+  if((chartRows.length-1)%labelStep!==0)ctx.fillText(chartRows[chartRows.length-1].label,pts[chartRows.length-1][0],h-17);
+  ctx.textAlign="start";
 }
-window.addEventListener("resize",()=>{
-  arPerformanceChartCache.forEach((points,id)=>{const canvas=$(id);if(canvas&&canvas.getBoundingClientRect().width>0)drawPerformanceChart(id,points);});
-});
+
 
 function finishExam(){
   if(state.finished) return;
@@ -5357,12 +5170,11 @@ async function loadAdminCqHistory(){
  try{
   const [{data:exams,error:examErr},{data:subs,error:subErr}]=await Promise.all([
    supabaseClient.from('written_exams').select('id,title,subject,chapter,total_marks,active,created_at,updated_at').order('created_at',{ascending:false}),
-   supabaseClient.from('written_submissions').select('id,user_id,exam_id,status,score,submitted_at,graded_at').order('submitted_at',{ascending:false})
+   supabaseClient.from('written_submissions').select('id,exam_id,status,score,submitted_at,graded_at').order('submitted_at',{ascending:false})
   ]);
   if(examErr)throw examErr;if(subErr)throw subErr;
   const submissions=subs||[];if(!(exams||[]).length){box.innerHTML='<div class="empty-profile">No CQ exams have been created yet.</div>';return;}
-  const userIds=[...new Set(submissions.map(r=>r.user_id).filter(Boolean))];let users=[];if(userIds.length){const uq=await supabaseClient.from('profiles').select('user_id,username').in('user_id',userIds);if(!uq.error)users=uq.data||[];}const userMap=new Map(users.map(u=>[u.user_id,u.username]));
-  box.innerHTML=(exams||[]).map(ex=>{const rows=submissions.filter(r=>r.exam_id===ex.id),graded=rows.filter(r=>r.status==='graded').length,pending=rows.filter(r=>r.status==='submitted').length;const latest=rows[0];const status=pending?`${pending} pending marking`:graded?`${graded} graded`:rows.length?`${rows.length} submission(s)`: 'No submissions yet';const scoreRows=rows.map(r=>{const uname=userMap.get(r.user_id)||'Student';const score=r.status==='graded'&&r.score!==null?`<b class="${Number(r.score)>=Number(ex.total_marks||0)*.5?'pass':'fail'}">${bnNum(r.score)} / ${bnNum(ex.total_marks||0)} marks (${Number(ex.total_marks)?bnNum(Math.round(Number(r.score)/Number(ex.total_marks)*100)):0}%)</b>`:r.status==='cancelled'?'Cancelled':'Pending marks';return `<div class="cq-history-score"><span>${escapeHtml(uname)} · ${timeAgo(r.submitted_at)}</span><strong>${score}</strong></div>`;}).join('');return `<div class="profile-result cq-history-card" style="width:100%;margin-bottom:10px"><div class="pr-main"><strong>${escapeHtml(ex.title||'CQ / Written Exam')}</strong><span>${escapeHtml(ex.subject||'')}${ex.chapter?' → '+escapeHtml(ex.chapter):''} • Total ${bnNum(ex.total_marks||0)} marks</span><span>${status}${latest?' • Latest: '+timeAgo(latest.submitted_at):''}</span>${scoreRows?`<div class="cq-history-scores">${scoreRows}</div>`:''}</div><div class="pr-score"><strong>${ex.active===false?'Inactive':'Active'}</strong><span>${bnNum(rows.length)} submissions</span></div></div>`;}).join('');
+  box.innerHTML=(exams||[]).map(ex=>{const rows=submissions.filter(r=>r.exam_id===ex.id),graded=rows.filter(r=>r.status==='graded').length,pending=rows.filter(r=>r.status==='submitted').length;const latest=rows[0];const status=pending?`${pending} pending marking`:graded?`${graded} graded`:rows.length?`${rows.length} submission(s)`: 'No submissions yet';return `<div class="profile-result" style="width:100%;margin-bottom:10px"><div class="pr-main"><strong>${escapeHtml(ex.title||'CQ / Written Exam')}</strong><span>${escapeHtml(ex.subject||'')}${ex.chapter?' → '+escapeHtml(ex.chapter):''} • ${bnNum(ex.total_marks||0)} marks</span><span>${status}${latest?' • Latest: '+timeAgo(latest.submitted_at):''}</span></div><div class="pr-score"><strong>${ex.active===false?'Inactive':'Active'}</strong><span>${bnNum(rows.length)} submissions</span></div></div>`;}).join('');
  }catch(e){console.error('CQ history load failed',e);box.innerHTML='<div class="empty-profile">Could not load CQ history. Check written_exams and written_submissions permissions.</div>';}
 }
 const cqHistoryRefresh=document.getElementById('refreshCqHistoryBtn');if(cqHistoryRefresh)cqHistoryRefresh.addEventListener('click',loadAdminCqHistory);
