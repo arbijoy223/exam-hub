@@ -335,7 +335,7 @@ display:flex;align-items:center;justify-content:center;font-weight:800;font-size
 
 
 /* Professional navigation, drawer, footer and auth polish */
-.menu-trigger{width:44px;height:44px;flex:0 0 44px;border:1px solid #e4e8f2;border-radius:15px;background:rgba(255,255,255,.92);display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px;cursor:pointer;box-shadow:0 6px 18px rgba(15,23,42,.07);transition:.2s}
+.menu-trigger{width:44px;height:44px;flex:0 0 44px;border:1px solid #e4e8f2;border-radius:15px;background:rgba(255,255,255,.92);display:flex;width:10px;height:5px;flex-direction:column;justify-content:center; font:bold;align-items:center;gap:6px;cursor:pointer;box-shadow:0 6px 28px rgba(15,23,42,.07);transition:.8s}
 .menu-trigger:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(99,91,255,.16);border-color:#c7c5ff}.menu-trigger span{display:block;width:18px;height:2px;border-radius:5px;background:#4338ca;transition:.2s}
 .brand{cursor:pointer;min-width:0}.brand .seal{position:relative;width:48px;height:48px;border-radius:17px;background:linear-gradient(145deg,#4338ca 0%,#7c3aed 58%,#a78bfa 100%);border:1px solid rgba(255,255,255,.65);box-shadow:0 8px 0 rgba(79,70,229,.10),0 12px 25px rgba(99,91,255,.28);font-size:0;flex:0 0 48px;overflow:hidden}.brand .seal:before{content:"";position:absolute;inset:4px;border:1px solid rgba(255,255,255,.45);border-radius:13px}.brand .seal span{font-family:Georgia,serif;font-size:23px;font-weight:900;line-height:1;color:#fff;text-shadow:0 2px 5px rgba(0,0,0,.2);z-index:1}.brand .seal small{position:absolute;bottom:5px;font:700 6px system-ui;letter-spacing:1.3px;color:#ede9fe}
 .account-area{gap:10px}.account-btn{min-height:48px;padding:13px 20px;font-size:14px;border-radius:15px;font-weight:800}.account-btn.ghost{background:linear-gradient(135deg,#4f46e5,#7c3aed);border:1px solid rgba(255,255,255,.6);box-shadow:0 9px 24px rgba(79,70,229,.3)}
@@ -867,7 +867,7 @@ img,canvas,video,svg{max-width:100%}
           <h3 id="hubExamTitle">Take an Exam</h3>
           <p id="hubExamCount"></p>
         </div>
-        <div class="card-arrow"></div>
+        <div ></div>
       </button>
       <button class="hub-card" id="hubGoMaterials">
         <div class="hub-icon hub-icon-material"><i>📚</i></div>
@@ -875,7 +875,7 @@ img,canvas,video,svg{max-width:100%}
           <h3>Study Materials</h3>
           <p id="hubMaterialCount"></p>
         </div>
-        <div class="card-arrow"></div>
+        <div ></div>
       </button>
     </div>
   </section>
@@ -3820,7 +3820,7 @@ function showChapters(subject){
       <div class="card-icon">📚</div>
       <h3>${chapterName}</h3>
       <div class="subject-meta"><span class="pill">${bnNum(examCount)} exams</span></div>
-      <div class="card-arrow"></div>`;
+      <div ></div>`;
     card.addEventListener("click", ()=>showChapterHub(subject, chapterName));
     grid.appendChild(card);
   });
@@ -3881,7 +3881,7 @@ async function showExams(subject, chapter){
   });
   written.forEach((exam,i)=>{
     const card=document.createElement("button"); card.className="subject-card"; card.style.setProperty("--card-accent",accentPalette[(exams.length+i)%accentPalette.length]);
-    card.innerHTML=`<div class="card-icon">✍️</div><h3>${exam.title}</h3><div class="subject-meta"><span class="pill">CQ / Written</span><span class="pill">${bnNum(Array.isArray(exam.questions)?exam.questions.length:0)} questions</span><span class="pill">⏱ ${bnNum(exam.time_minutes)} min</span><span class="pill">${bnNum(exam.total_marks)} marks</span></div><div></div>`;
+    card.innerHTML=`<div class="card-icon">✍️</div><h3>${exam.title}</h3><div class="subject-meta"><span class="pill">CQ / Written</span><span class="pill">${bnNum(Array.isArray(exam.questions)?exam.questions.length:0)} questions</span><span class="pill">⏱ ${bnNum(exam.time_minutes)} min</span><span class="pill">${bnNum(exam.total_marks)} marks</span></div><div>→</div>`;
     card.addEventListener("click",()=>isAdmin()?showWrittenLeaderboard(exam.id,{id:exam.id,title:exam.title,subject:exam.subject,chapter:exam.chapter,total_marks:exam.total_marks}):startWrittenExam(exam)); grid.appendChild(card);
   });
   if(!grid.children.length) grid.innerHTML='<div class="mat-empty">No exams are available for this chapter yet.</div>';
@@ -5618,7 +5618,7 @@ setTimeout(()=>{
     const target=Number(m[2]);if(!Number.isFinite(target)||target===0)return;
     el.dataset.countAnimating='1';el.dataset.countLast=raw;
     if(reduced){el.dataset.countAnimating='0';return}
-    const prefix=m[1],suffix=m[3],start=performance.now(),duration=650;
+    const prefix=m[1],suffix=m[3],start=performance.now(),duration=950;
     function tick(now){
       const t=Math.min(1,(now-start)/duration),ease=1-Math.pow(1-t,3);
       const value=target*ease;
