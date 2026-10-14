@@ -867,7 +867,7 @@ img,canvas,video,svg{max-width:100%}
           <h3 id="hubExamTitle">Take an Exam</h3>
           <p id="hubExamCount"></p>
         </div>
-        <div class="card-arrow">→</div>
+        <div class="card-arrow"></div>
       </button>
       <button class="hub-card" id="hubGoMaterials">
         <div class="hub-icon hub-icon-material"><i>📚</i></div>
@@ -875,7 +875,7 @@ img,canvas,video,svg{max-width:100%}
           <h3>Study Materials</h3>
           <p id="hubMaterialCount"></p>
         </div>
-        <div class="card-arrow">→</div>
+        <div class="card-arrow"></div>
       </button>
     </div>
   </section>
@@ -3820,7 +3820,7 @@ function showChapters(subject){
       <div class="card-icon">📚</div>
       <h3>${chapterName}</h3>
       <div class="subject-meta"><span class="pill">${bnNum(examCount)} exams</span></div>
-      <div class="card-arrow">→</div>`;
+      <div class="card-arrow"></div>`;
     card.addEventListener("click", ()=>showChapterHub(subject, chapterName));
     grid.appendChild(card);
   });
@@ -3876,12 +3876,12 @@ async function showExams(subject, chapter){
     const qCount = examObj.questions.length;
     const timeInMinutes = examObj.examTime || qCount;
     const card = document.createElement("button"); card.className="subject-card"; card.style.setProperty("--card-accent",accentPalette[i%accentPalette.length]);
-    card.innerHTML=`<div class="card-icon">${isAdmin()?"📋":"📝"}</div><h3>${examName}</h3><div class="subject-meta"><span class="pill">${bnNum(qCount)} questions</span><span class="pill">⏱ ${bnNum(timeInMinutes)} min</span></div><div class="card-arrow">→</div>`;
+    card.innerHTML=`<div class="card-icon">${isAdmin()?"📋":"📝"}</div><h3>${examName}</h3><div class="subject-meta"><span class="pill">${bnNum(qCount)} questions</span><span class="pill">⏱ ${bnNum(timeInMinutes)} min</span></div><div></div>`;
     card.addEventListener("click",()=>askForName(subject,chapter,examName)); grid.appendChild(card);
   });
   written.forEach((exam,i)=>{
     const card=document.createElement("button"); card.className="subject-card"; card.style.setProperty("--card-accent",accentPalette[(exams.length+i)%accentPalette.length]);
-    card.innerHTML=`<div class="card-icon">✍️</div><h3>${exam.title}</h3><div class="subject-meta"><span class="pill">CQ / Written</span><span class="pill">${bnNum(Array.isArray(exam.questions)?exam.questions.length:0)} questions</span><span class="pill">⏱ ${bnNum(exam.time_minutes)} min</span><span class="pill">${bnNum(exam.total_marks)} marks</span></div><div class="card-arrow">→</div>`;
+    card.innerHTML=`<div class="card-icon">✍️</div><h3>${exam.title}</h3><div class="subject-meta"><span class="pill">CQ / Written</span><span class="pill">${bnNum(Array.isArray(exam.questions)?exam.questions.length:0)} questions</span><span class="pill">⏱ ${bnNum(exam.time_minutes)} min</span><span class="pill">${bnNum(exam.total_marks)} marks</span></div><div></div>`;
     card.addEventListener("click",()=>isAdmin()?showWrittenLeaderboard(exam.id,{id:exam.id,title:exam.title,subject:exam.subject,chapter:exam.chapter,total_marks:exam.total_marks}):startWrittenExam(exam)); grid.appendChild(card);
   });
   if(!grid.children.length) grid.innerHTML='<div class="mat-empty">No exams are available for this chapter yet.</div>';
