@@ -666,6 +666,44 @@ input,textarea,select{border-radius:12px}
 @media(prefers-reduced-motion:reduce){.subject-card,.hub-card,.mat-row{animation:none!important;transition:none!important}.subject-card:hover,.hub-card:hover,.mat-row:hover{transform:none!important}}
 /* ===== end premium visual refresh; application logic intentionally unchanged ===== */
 
+
+/* Manual light/dark theme toggle */
+.theme-toggle{display:inline-flex;align-items:center;justify-content:center;gap:1px;white-space:nowrap;border:1px solid var(--border)!important;background:var(--card)!important;color:var(--text)!important;border-radius:12px!important;min-height:40px;padding:9px 12px!important;cursor:pointer;font-weight:800;box-shadow:0 3px 10px rgba(15,23,42,.06)}
+.theme-toggle:hover{transform:translateY(-1px);border-color:var(--primary)!important}
+@media(max-width:700px){.theme-toggle{grid-column:2;grid-row:1;justify-self:end;margin-right:48px;min-height:40px;padding:8px 10px!important}.topbar-inner{position:relative}.menu-trigger{position:absolute;right:12px;top:10px}}
+html[data-theme="light"]{color-scheme:light;--bg:#f4f7fb;--card:rgba(255,255,255,.96);--text:#172033;--muted:#697386;--border:#e5e9f2;--primary:#635bff;--primary2:#8b5cf6;--shadow:0 15px 45px rgba(30,41,59,.10)}
+html[data-theme="light"] body{background:radial-gradient(circle at 8% 8%,rgba(99,91,255,.12),transparent 28%),radial-gradient(circle at 92% 18%,rgba(139,92,246,.10),transparent 25%),linear-gradient(135deg,#f8faff,#eef2f8)!important;color:#172033!important}
+html[data-theme="light"] .topbar{background:rgba(255,255,255,.92)!important;border-color:#e5e9f2!important}
+html[data-theme="light"] .brand-text,html[data-theme="light"] .brand-sub,html[data-theme="light"] .lede,html[data-theme="light"] .hub-card,html[data-theme="light"] .material-card,html[data-theme="light"] .question-card,html[data-theme="light"] .option,html[data-theme="light"] .result-card,html[data-theme="light"] .profile-user,html[data-theme="light"] .stat-card{color:#172033!important}
+html[data-theme="light"] .nav-search-wrap{background:#f8f9ff!important;color:#777f92!important;border-color:#e0e4f0!important}
+html[data-theme="light"] .nav-search-wrap input{background:transparent!important;color:#172033!important}
+html[data-theme="light"] .subject-card,html[data-theme="light"] .profile-card,html[data-theme="light"] .written-card,html[data-theme="light"] .admin-stat-click,html[data-theme="light"] .written-submit-card{background:linear-gradient(145deg,#fff,#f8f8ff)!important;color:#172033!important;border-color:#e5e9f2!important}
+html[data-theme="light"] .side-drawer{background:rgba(255,255,255,.98)!important;color:#172033!important}
+html[data-theme="light"] .drawer-head strong,html[data-theme="light"] .drawer-nav button,html[data-theme="light"] .drawer-foot{color:#172033!important}
+html[data-theme="light"] .auth-modal{background:#fff!important;color:#172033!important;border-color:#e5e9f2!important}
+html[data-theme="light"] .auth-form label{color:#344054!important}
+html[data-theme="light"] .auth-form input,html[data-theme="light"] .written-admin-grid input,html[data-theme="light"] .written-admin-grid textarea,html[data-theme="light"] .written-admin-grid select{background:#fff!important;color:#172033!important;border-color:#d8deea!important}
+html[data-theme="light"] .written-question{background:#fff!important;color:#172033!important}
+html[data-theme="light"] .chart-wrap{background:linear-gradient(180deg,#fff,#f8faff)!important;border-color:#e5e9f2!important}
+html[data-theme="light"] .profile-result{border-color:#e5e9f2!important;color:#172033!important}
+html[data-theme="dark"]{color-scheme:dark;--bg:#0c1220;--card:#151e30;--text:#edf2ff;--muted:#a8b3c8;--border:#2a3850;--primary:#a5a7ff;--primary2:#c4a5ff;--shadow:0 14px 36px rgba(0,0,0,.3)}
+html[data-theme="dark"] body{background:radial-gradient(ellipse at 4% 0%,rgba(99,102,241,.16),transparent 29%),radial-gradient(ellipse at 96% 7%,rgba(139,92,246,.12),transparent 27%),linear-gradient(150deg,#0c1220,#101827 55%,#0b1120)!important;color:#edf2ff!important}
+html[data-theme="dark"] .topbar{background:rgba(14,20,34,.96)!important;border-color:#28334a!important}
+html[data-theme="dark"] .brand-text,html[data-theme="dark"] .brand-sub,html[data-theme="dark"] .lede,html[data-theme="dark"] .hub-card,html[data-theme="dark"] .material-card,html[data-theme="dark"] .question-card,html[data-theme="dark"] .option,html[data-theme="dark"] .result-card,html[data-theme="dark"] .profile-user,html[data-theme="dark"] .stat-card{color:#edf2ff!important}
+html[data-theme="dark"] .nav-search-wrap{background:#10192b!important;color:#a8b3c8!important;border-color:#35425c!important}
+html[data-theme="dark"] .nav-search-wrap input{background:transparent!important;color:#edf2ff!important}
+html[data-theme="dark"] .subject-card,html[data-theme="dark"] .profile-card,html[data-theme="dark"] .written-card,html[data-theme="dark"] .admin-stat-click,html[data-theme="dark"] .written-submit-card{background:linear-gradient(145deg,#151e30,#192238)!important;color:#edf2ff!important;border-color:#2d3a54!important}
+html[data-theme="dark"] .side-drawer{background:rgba(17,25,42,.99)!important;color:#edf2ff!important}
+html[data-theme="dark"] .drawer-head strong,html[data-theme="dark"] .drawer-nav button,html[data-theme="dark"] .drawer-foot{color:#edf2ff!important}
+html[data-theme="dark"] .auth-modal{background:linear-gradient(160deg,#172137,#111a2b)!important;color:#edf2ff!important;border-color:#34415a!important}
+html[data-theme="dark"] .auth-form label{color:#dbe4f6!important}
+html[data-theme="dark"] .auth-form input,html[data-theme="dark"] .written-admin-grid input,html[data-theme="dark"] .written-admin-grid textarea,html[data-theme="dark"] .written-admin-grid select{background:#0f1728!important;color:#edf2ff!important;border-color:#35435d!important}
+html[data-theme="dark"] .written-question{background:#131e31!important;color:#edf2ff!important}
+html[data-theme="dark"] .chart-wrap{background:linear-gradient(180deg,#151e30,#111a2b)!important;border-color:#2a3850!important}
+html[data-theme="dark"] .profile-result{border-color:#2a3850!important;color:#edf2ff!important}
+html[data-theme="dark"] .cq-history-score{background:#202a43!important;color:#edf2ff!important}
+html[data-theme="dark"] .site-footer{background:linear-gradient(130deg,#080d17 0%,#17182f 65%,#282353 100%)!important}
+
 </style>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#635bff">
@@ -771,6 +809,7 @@ img,canvas,video,svg{max-width:100%}
     </div>
     <div class="nav-search-wrap"><span aria-hidden="true">⌕</span><input id="siteSearch" type="search" placeholder="Search subjects, chapters, exams…" aria-label="Search subjects, chapters and exams"><button id="clearSiteSearch" type="button" aria-label="Clear search" hidden>×</button></div>
     <div class="account-area">
+      <button class="account-btn ghost theme-toggle" id="themeToggleBtn" type="button" aria-label="Switch to dark mode" aria-pressed="false" title="Switch theme"><span id="themeToggleIcon" aria-hidden="true">🌙</span> <span id="themeToggleLabel">Dark</span></button>
       <button class="account-btn ghost" id="enableNotificationsBtn" type="button" title="Enable exam notifications">🔔 Notify</button>
       <button class="account-btn ghost" id="authActionBtn">↪ Log in</button>
       <button class="account-btn" id="profileBtn" hidden>👤 Profile</button>
@@ -5609,6 +5648,32 @@ setTimeout(()=>{
       const wrap=c.closest('.chart-wrap');if(wrap){wrap.style.transform='translateZ(0)';requestAnimationFrame(()=>wrap.style.transform='')}
     });
   },120)});
+})();
+</script>
+
+
+<script id="manual-theme-toggle">
+(function(){
+  const root=document.documentElement;
+  const btn=document.getElementById('themeToggleBtn');
+  const icon=document.getElementById('themeToggleIcon');
+  const label=document.getElementById('themeToggleLabel');
+  if(!btn)return;
+  let saved=null;
+  try{saved=localStorage.getItem('bijoy-theme')}catch(e){}
+  const systemDark=!!(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches);
+  function applyTheme(theme){
+    root.setAttribute('data-theme',theme);
+    const isDark=theme==='dark';
+    if(icon)icon.textContent=isDark?'☀️':'🌙';
+    if(label)label.textContent=isDark?'Light':'Dark';
+    btn.setAttribute('aria-pressed',String(isDark));
+    btn.setAttribute('aria-label',isDark?'Switch to light mode':'Switch to dark mode');
+    btn.title=isDark?'Switch to light mode':'Switch to dark mode';
+    try{localStorage.setItem('bijoy-theme',theme)}catch(e){}
+  }
+  applyTheme(saved==='light'||saved==='dark'?saved:(systemDark?'dark':'light'));
+  btn.addEventListener('click',function(){applyTheme(root.getAttribute('data-theme')==='dark'?'light':'dark')});
 })();
 </script>
 
