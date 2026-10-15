@@ -44,7 +44,7 @@ box-shadow:var(--shadow);font-family:inherit;color:var(--text);transition:transf
 .hub-text{flex:1;min-width:0}
 .hub-text h3{font-size:17px;margin-bottom:3px}
 .hub-text p{font-size:13px;color:var(--muted);margin:0}
-.hub-card .card-arrow{flex-shrink:0;font-size:18px;color:var(--muted)}
+.hub-card .card-arrw{flex-shrink:0;font-size:18px;color:var(--muted)}
 
 .mat-row{display:flex;align-items:center;gap:14px;padding:16px 18px;background:var(--card);
 border:1px solid var(--border);border-radius:16px;margin-bottom:12px;box-shadow:var(--shadow)}
@@ -67,7 +67,7 @@ background:var(--card);border:1px solid rgba(255,255,255,.9);border-radius:22px;
 .card-icon{width:56px;height:56px;border-radius:17px;display:flex;align-items:center;justify-content:center;font-size:27px;margin-bottom:15px;background:linear-gradient(135deg,rgba(99,91,255,.11),rgba(139,92,246,.13))}
 .subject-card h3{font-size:20px;margin-bottom:7px}.subject-meta{display:flex;gap:8px;flex-wrap:wrap}
 .pill{background:rgba(99,91,255,.07);border:1px solid rgba(99,91,255,.12);border-radius:30px;padding:4px 10px;color:var(--muted);font-size:12.5px}
-.card-arrow{position:absolute;right:20px;bottom:20px;width:36px;height:36px;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;background:linear-gradient(135deg,var(--primary),var(--primary2))}
+.card-arro{position:absolute;right:20px;bottom:20px;width:36px;height:36px;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;background:linear-gradient(135deg,var(--primary),var(--primary2))}
 .back-btn{display:inline-flex;align-items:center;gap:7px;padding:10px 15px;margin-bottom:5px;background:var(--card);border:1px solid var(--border);border-radius:13px;cursor:pointer;color:var(--text);box-shadow:0 6px 18px rgba(15,23,42,.05);transition:.2s}
 .back-btn:hover{transform:translateX(-4px);color:var(--primary)}
 .modal-overlay{position:fixed;inset:0;z-index:1000;background:rgba(15,23,42,.60);backdrop-filter:blur(9px);display:flex;align-items:center;justify-content:center;padding:20px}
@@ -455,7 +455,7 @@ body{background:radial-gradient(ellipse at 10% 0%,rgba(199,209,223,.58),transpar
 .subject-card{border-color:rgba(255,255,255,.94);border-radius:25px;background:rgba(255,255,255,.86);backdrop-filter:blur(16px)}
 .subject-card:hover{box-shadow:0 18px 38px rgba(47,57,84,.11)}
 .card-icon{background:linear-gradient(135deg,rgba(199,209,223,.45),rgba(172,181,205,.24));color:#52638f}
-.card-arrow{background:linear-gradient(135deg,#52638f,#8586aa);box-shadow:0 6px 14px rgba(82,99,143,.2)}
+.card-arro{background:linear-gradient(135deg,#52638f,#8586aa);box-shadow:0 6px 14px rgba(82,99,143,.2)}
 .hub-card{border-radius:22px;border-color:#e5e7ee;background:rgba(255,255,255,.9)}
 .hub-icon-exam{background:rgba(172,181,205,.28);color:#52638f}.hub-icon-material{background:rgba(33,133,108,.1)}
 .pill{background:rgba(199,209,223,.28);border-color:rgba(172,181,205,.45);color:#59647c}
@@ -817,6 +817,29 @@ img,canvas,video,svg{max-width:100%}
 @media(max-width:520px){.signup-avatar-field{padding:10px}.cq-answer-upload{padding:8px}.cq-answer-preview img{max-height:220px}}
 </style>
 
+
+<style id="correction-navbar-darkmode">
+/* Larger navigation controls; wrap naturally onto a second row when needed. */
+.topbar-inner{flex-wrap:wrap!important;row-gap:10px!important}
+.account-area{display:flex!important;flex-wrap:wrap!important;align-items:center!important;justify-content:flex-end!important;gap:10px!important;min-width:0!important}
+.account-btn{min-height:52px!important;padding:13px 19px!important;font-size:15px!important;border-radius:15px!important}
+.profile-nav-btn{min-height:58px!important;padding:8px 18px 8px 10px!important;gap:12px!important}
+.nav-profile-avatar{width:43px!important;height:43px!important;min-width:43px!important;font-size:17px!important}
+#profileBtn #navProfileName{font-size:15px!important;max-width:180px!important}
+.home-nav-btn{background:linear-gradient(135deg,#0f766e,#0d9488)!important;color:#fff!important;border:1px solid rgba(255,255,255,.4)!important}
+@media(max-width:700px){.topbar-inner{display:flex!important;flex-wrap:wrap!important;align-items:center!important}.brand{flex:1 1 calc(100% - 60px)!important}.nav-search-wrap{flex:1 1 100%!important;order:3!important;min-width:0!important}.account-area{flex:1 1 100%!important;order:4!important;justify-content:flex-start!important;gap:8px!important}.account-btn{min-height:48px!important;padding:11px 13px!important;font-size:13px!important}.profile-nav-btn{min-height:54px!important;padding:7px 12px 7px 8px!important;gap:8px!important}.nav-profile-avatar{width:38px!important;height:38px!important;min-width:38px!important}#profileBtn #navProfileName{max-width:140px!important;font-size:13px!important}.theme-toggle{margin:0!important;grid-column:auto!important;grid-row:auto!important}.menu-trigger{position:static!important;order:0!important}}
+@media(max-width:390px){.account-btn{padding:10px 11px!important;font-size:12px!important}.profile-nav-btn{max-width:none!important}#profileBtn #navProfileName{max-width:110px!important}}
+/* High-contrast text and form controls in dark theme. */
+html[data-theme="dark"] body,html[data-theme="dark"] body *{border-color:var(--border)}
+html[data-theme="dark"] p,html[data-theme="dark"] li,html[data-theme="dark"] label,html[data-theme="dark"] small,html[data-theme="dark"] .card-hint,html[data-theme="dark"] .empty-profile,html[data-theme="dark"] .pr-main span,html[data-theme="dark"] .pstat span,html[data-theme="dark"] .admin-section-title p{color:#cbd5e1!important}
+html[data-theme="dark"] h1,html[data-theme="dark"] h2,html[data-theme="dark"] h3,html[data-theme="dark"] h4,html[data-theme="dark"] strong,html[data-theme="dark"] .pr-main strong,html[data-theme="dark"] .admin-section-title h3{color:#f8fafc!important}
+html[data-theme="dark"] input:not([type="range"]),html[data-theme="dark"] textarea,html[data-theme="dark"] select{background:#0f172a!important;color:#f1f5f9!important;border-color:#475569!important}
+html[data-theme="dark"] input::placeholder,html[data-theme="dark"] textarea::placeholder{color:#94a3b8!important;opacity:1}
+html[data-theme="dark"] .profile-result,html[data-theme="dark"] .written-card,html[data-theme="dark"] .admin-card,html[data-theme="dark"] .cq-history-score,html[data-theme="dark"] .cq-student-comment,html[data-theme="dark"] .written-submit-card,html[data-theme="dark"] .written-question,html[data-theme="dark"] .modal,html[data-theme="dark"] .fancy-modal-box{background:#151e30!important;color:#f1f5f9!important;border-color:#334155!important}
+html[data-theme="dark"] .admin-table th{background:#202b40!important;color:#f1f5f9!important}html[data-theme="dark"] .admin-table td{background:#131c2d!important;color:#e2e8f0!important}
+html[data-theme="dark"] .btn-ghost,html[data-theme="dark"] .back-btn{color:#f1f5f9!important}
+html[data-theme="dark"] .theme-toggle{background:#202b40!important;color:#f8fafc!important;border-color:#475569!important}
+</style>
 </head>
 
 <body>
@@ -833,6 +856,7 @@ img,canvas,video,svg{max-width:100%}
     </div>
     <div class="nav-search-wrap"><span aria-hidden="true">⌕</span><input id="siteSearch" type="search" placeholder="Search subjects, chapters, exams…" aria-label="Search subjects, chapters and exams"><button id="clearSiteSearch" type="button" aria-label="Clear search" hidden>×</button></div>
     <div class="account-area">
+      <button class="account-btn home-nav-btn" id="navHomeBtn" type="button" title="Go to Home">⌂ Home</button>
       <button class="account-btn ghost theme-toggle" id="themeToggleBtn" type="button" aria-label="Switch to dark mode" aria-pressed="false" title="Switch theme"><span id="themeToggleIcon" aria-hidden="true">🌙</span> <span id="themeToggleLabel">Dark</span></button>
       <button class="account-btn ghost" id="enableNotificationsBtn" type="button" title="Enable exam notifications">🔔 Notify</button>
       <button class="account-btn ghost" id="authActionBtn">↪ Log in</button>
@@ -891,7 +915,7 @@ img,canvas,video,svg{max-width:100%}
           <h3 id="hubExamTitle">Take an Exam</h3>
           <p id="hubExamCount"></p>
         </div>
-        <div ></div>
+        <div class="card-arrow">→</div>
       </button>
       <button class="hub-card" id="hubGoMaterials">
         <div class="hub-icon hub-icon-material"><i>📚</i></div>
@@ -899,7 +923,7 @@ img,canvas,video,svg{max-width:100%}
           <h3>Study Materials</h3>
           <p id="hubMaterialCount"></p>
         </div>
-        <div ></div>
+        <div class="card-arrow">→</div>
       </button>
     </div>
   </section>
@@ -3879,7 +3903,7 @@ function showChapters(subject){
       <div class="card-icon">📚</div>
       <h3>${chapterName}</h3>
       <div class="subject-meta"><span class="pill">${bnNum(examCount)} exams</span></div>
-      <div ></div>`;
+      <div class="card-arrow">→</div>`;
     card.addEventListener("click", ()=>showChapterHub(subject, chapterName));
     grid.appendChild(card);
   });
@@ -3935,12 +3959,12 @@ async function showExams(subject, chapter){
     const qCount = examObj.questions.length;
     const timeInMinutes = examObj.examTime || qCount;
     const card = document.createElement("button"); card.className="subject-card"; card.style.setProperty("--card-accent",accentPalette[i%accentPalette.length]);
-    card.innerHTML=`<div class="card-icon">${isAdmin()?"📋":"📝"}</div><h3>${examName}</h3><div class="subject-meta"><span class="pill">${bnNum(qCount)} questions</span><span class="pill">⏱ ${bnNum(timeInMinutes)} min</span></div><div></div>`;
+    card.innerHTML=`<div class="card-icon">${isAdmin()?"📋":"📝"}</div><h3>${examName}</h3><div class="subject-meta"><span class="pill">${bnNum(qCount)} questions</span><span class="pill">⏱ ${bnNum(timeInMinutes)} min</span></div><div class="card-arrow">→</div>`;
     card.addEventListener("click",()=>askForName(subject,chapter,examName)); grid.appendChild(card);
   });
   written.forEach((exam,i)=>{
     const card=document.createElement("button"); card.className="subject-card"; card.style.setProperty("--card-accent",accentPalette[(exams.length+i)%accentPalette.length]);
-    card.innerHTML=`<div class="card-icon">✍️</div><h3>${exam.title}</h3><div class="subject-meta"><span class="pill">CQ / Written</span><span class="pill">${bnNum(Array.isArray(exam.questions)?exam.questions.length:0)} questions</span><span class="pill">⏱ ${bnNum(exam.time_minutes)} min</span><span class="pill">${bnNum(exam.total_marks)} marks</span></div><div></div>`;
+    card.innerHTML=`<div class="card-icon">✍️</div><h3>${exam.title}</h3><div class="subject-meta"><span class="pill">CQ / Written</span><span class="pill">${bnNum(Array.isArray(exam.questions)?exam.questions.length:0)} questions</span><span class="pill">⏱ ${bnNum(exam.time_minutes)} min</span><span class="pill">${bnNum(exam.total_marks)} marks</span></div><div class="card-arrow">→</div>`;
     card.addEventListener("click",()=>isAdmin()?showWrittenLeaderboard(exam.id,{id:exam.id,title:exam.title,subject:exam.subject,chapter:exam.chapter,total_marks:exam.total_marks}):startWrittenExam(exam)); grid.appendChild(card);
   });
   if(!grid.children.length) grid.innerHTML='<div class="mat-empty">No exams are available for this chapter yet.</div>';
@@ -4834,7 +4858,7 @@ function openImageCropper(file){return new Promise((resolve,reject)=>{
   const endDrag=()=>{drag=null;img.style.cursor='grab'};stage.addEventListener('pointerup',endDrag);stage.addEventListener('pointercancel',endDrag);
   overlay.querySelector('[data-crop-cancel]').onclick=()=>cleanup(null);
   overlay.addEventListener('click',e=>{if(e.target===overlay)cleanup(null)});
-  overlay.querySelector('[data-crop-save]').onclick=()=>{try{const size=420,canvas=document.createElement('canvas');canvas.width=size;canvas.height=size;const ctx=canvas.getContext('2d');const ratio=size/stage.clientWidth;ctx.drawImage(img,-x*ratio,-y*ratio,img.naturalWidth*scale*ratio,img.naturalHeight*scale*ratio);cleanup(canvas.toDataURL('image/jpeg',.84));}catch(e){cleanup(null);reject(e)}};
+  overlay.querySelector('[data-crop-save]').onclick=()=>{try{const size=420,canvas=document.createElement('canvas');canvas.width=size;canvas.height=size;const ctx=canvas.getContext('2d');const ratio=size/stage.clientWidth;ctx.drawImage(img,x*ratio,y*ratio,img.naturalWidth*scale*ratio,img.naturalHeight*scale*ratio);cleanup(canvas.toDataURL('image/jpeg',.84));}catch(e){cleanup(null);reject(e)}};
 });}
 
 // Existing users can update their profile picture from My Profile.
@@ -5506,7 +5530,9 @@ async function loadAdminCqHistory(){
   ]);
   if(examErr)throw examErr;if(subErr)throw subErr;
   const submissions=subs||[];if(!(exams||[]).length){box.innerHTML='<div class="empty-profile">No CQ exams have been created yet.</div>';return;}
-  box.innerHTML=(exams||[]).map(ex=>{const rows=submissions.filter(r=>r.exam_id===ex.id),graded=rows.filter(r=>r.status==='graded').length,pending=rows.filter(r=>r.status==='submitted').length;const latest=rows[0];const status=pending?`${pending} pending marking`:graded?`${graded} graded`:rows.length?`${rows.length} submission(s)`: 'No submissions yet';return `<div class="profile-result cq-history-item" style="width:100%;margin-bottom:10px"><div class="pr-main"><strong>${escapeHtml(ex.title||'CQ / Written Exam')}</strong><span>${escapeHtml(ex.subject||'')}${ex.chapter?' → '+escapeHtml(ex.chapter):''} • Total: ${bnNum(ex.total_marks||0)} marks</span><span>${status}${latest?' • Latest: '+timeAgo(latest.submitted_at):''}</span>${rows.map(r=>`<span class="cq-history-score">Student ID: ${escapeHtml(String(r.user_id||'—'))} • ${r.status==='graded'?'Marks: '+bnNum(r.score??0)+'/'+bnNum(ex.total_marks||0):r.status==='submitted'?'Pending marking':'Status: '+escapeHtml(r.status||'unknown')} • ${timeAgo(r.graded_at||r.submitted_at)}</span>`).join('')}</div><div class="pr-score"><strong>${ex.active===false?'Inactive':'Active'}</strong><span>${bnNum(rows.length)} submissions</span></div></div>`;}).join('');
+  const userIds=[...new Set(submissions.map(r=>r.user_id).filter(Boolean))];let userNames=new Map();
+  if(userIds.length){const {data:profiles,error:profileErr}=await supabaseClient.from('profiles').select('user_id,username').in('user_id',userIds);if(profileErr)console.warn('CQ history usernames could not load:',profileErr);else userNames=new Map((profiles||[]).map(p=>[p.user_id,p.username]));}
+  box.innerHTML=(exams||[]).map(ex=>{const rows=submissions.filter(r=>r.exam_id===ex.id),graded=rows.filter(r=>r.status==='graded').length,pending=rows.filter(r=>r.status==='submitted').length;const latest=rows[0];const status=pending?`${pending} pending marking`:graded?`${graded} graded`:rows.length?`${rows.length} submission(s)`: 'No submissions yet';return `<div class="profile-result cq-history-item" style="width:100%;margin-bottom:10px"><div class="pr-main"><strong>${escapeHtml(ex.title||'CQ / Written Exam')}</strong><span>${escapeHtml(ex.subject||'')}${ex.chapter?' → '+escapeHtml(ex.chapter):''} • Total: ${bnNum(ex.total_marks||0)} marks</span><span>${status}${latest?' • Latest: '+timeAgo(latest.submitted_at):''}</span>${rows.map(r=>`<span class="cq-history-score">Student: ${escapeHtml(userNames.get(r.user_id)||'Unknown student')} • ${r.status==='graded'?'Marks: '+bnNum(r.score??0)+'/'+bnNum(ex.total_marks||0):r.status==='submitted'?'Pending marking':'Status: '+escapeHtml(r.status||'unknown')} • ${timeAgo(r.graded_at||r.submitted_at)}</span>`).join('')}</div><div class="pr-score"><strong>${ex.active===false?'Inactive':'Active'}</strong><span>${bnNum(rows.length)} submissions</span></div></div>`;}).join('');
  }catch(e){console.error('CQ history load failed',e);box.innerHTML='<div class="empty-profile">Could not load CQ history. Check written_exams and written_submissions permissions.</div>';}
 }
 const cqHistoryRefresh=document.getElementById('refreshCqHistoryBtn');if(cqHistoryRefresh)cqHistoryRefresh.addEventListener('click',loadAdminCqHistory);
@@ -5784,5 +5810,9 @@ setTimeout(()=>{
 })();
 </script>
 
+
+<script id="navbar-home-button">
+(function(){const b=document.getElementById('navHomeBtn');if(!b)return;b.addEventListener('click',()=>{const home=document.getElementById('drawerHome');if(home){home.click();return;}const brand=document.getElementById('brandHomeBtn');if(brand)brand.click();});})();
+</script>
 </body>
 </html>
