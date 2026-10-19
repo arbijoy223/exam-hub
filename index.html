@@ -44,7 +44,7 @@ box-shadow:var(--shadow);font-family:inherit;color:var(--text);transition:transf
 .hub-text{flex:1;min-width:0}
 .hub-text h3{font-size:17px;margin-bottom:3px}
 .hub-text p{font-size:13px;color:var(--muted);margin:0}
-.hub-card .card-arrw{flex-shrink:0;font-size:18px;color:var(--muted)}
+.hub-card .card-arrow{flex-shrink:0;font-size:18px;color:var(--muted)}
 
 .mat-row{display:flex;align-items:center;gap:14px;padding:16px 18px;background:var(--card);
 border:1px solid var(--border);border-radius:16px;margin-bottom:12px;box-shadow:var(--shadow)}
@@ -55,7 +55,7 @@ border:1px solid var(--border);border-radius:16px;margin-bottom:12px;box-shadow:
 .mat-text p.mat-title{font-size:15px;margin:0 0 2px;color:var(--text)}
 .mat-text p.mat-sub{font-size:12.5px;color:var(--muted);margin:0}
 .mat-action{flex-shrink:0;padding:9px 14px;border-radius:10px;border:1px solid var(--border);
-background:var(--bg);color:var(--text);font-size:13.5px;font-weight:700;cursor:pointer;text-decoration:none;white-space:nowrap}
+background:var(--bg);color:var(--text);font-size:13.5px;font-weight:600;cursor:pointer;text-decoration:none;white-space:nowrap}
 .mat-action:hover{background:var(--card)}
 .mat-video-frame{margin-top:-4px;margin-bottom:12px;border-radius:16px;overflow:hidden;box-shadow:var(--shadow)}
 .mat-video-frame iframe{width:100%;aspect-ratio:16/9;display:block;border:0}
@@ -67,7 +67,7 @@ background:var(--card);border:1px solid rgba(255,255,255,.9);border-radius:22px;
 .card-icon{width:56px;height:56px;border-radius:17px;display:flex;align-items:center;justify-content:center;font-size:27px;margin-bottom:15px;background:linear-gradient(135deg,rgba(99,91,255,.11),rgba(139,92,246,.13))}
 .subject-card h3{font-size:20px;margin-bottom:7px}.subject-meta{display:flex;gap:8px;flex-wrap:wrap}
 .pill{background:rgba(99,91,255,.07);border:1px solid rgba(99,91,255,.12);border-radius:30px;padding:4px 10px;color:var(--muted);font-size:12.5px}
-.card-arro{position:absolute;right:20px;bottom:20px;width:36px;height:36px;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;background:linear-gradient(135deg,var(--primary),var(--primary2))}
+.card-arrow{position:absolute;right:20px;bottom:20px;width:36px;height:36px;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;background:linear-gradient(135deg,var(--primary),var(--primary2))}
 .back-btn{display:inline-flex;align-items:center;gap:7px;padding:10px 15px;margin-bottom:5px;background:var(--card);border:1px solid var(--border);border-radius:13px;cursor:pointer;color:var(--text);box-shadow:0 6px 18px rgba(15,23,42,.05);transition:.2s}
 .back-btn:hover{transform:translateX(-4px);color:var(--primary)}
 .modal-overlay{position:fixed;inset:0;z-index:1000;background:rgba(15,23,42,.60);backdrop-filter:blur(9px);display:flex;align-items:center;justify-content:center;padding:20px}
@@ -316,7 +316,7 @@ display:flex;align-items:center;justify-content:center;font-weight:800;font-size
 .auth-modal{width:min(430px,100%);padding:26px!important}
 .auth-tabs{display:grid;grid-template-columns:1fr 1fr;gap:7px;padding:5px;background:#f1f5f9;border-radius:14px;margin:18px 0}
 .auth-tab{border:0;background:transparent;padding:10px;border-radius:10px;font:700 14px var(--sans);cursor:pointer;color:#64748b}.auth-tab.active{background:#fff;color:var(--primary);box-shadow:0 3px 12px rgba(15,23,42,.08)}
-.auth-form{display:grid;gap:11px}.auth-form label{font-size:13px;font-weight:800;color:#475569}.auth-form input{width:100%;border:1px solid var(--border);border-radius:13px;padding:12px 13px;outline:none;font-size:14px;background:#fff}.auth-form input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(99,91,255,.10)}
+.auth-form{display:grid;gap:11px}.auth-form label{font-size:13px;font-weight:700;color:#475569}.auth-form input{width:100%;border:1px solid var(--border);border-radius:13px;padding:12px 13px;outline:none;font-size:14px;background:#fff}.auth-form input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(99,91,255,.10)}
 .auth-note{font-size:12px;line-height:1.65;color:#64748b;margin:3px 0 8px}.auth-error{min-height:20px;color:#dc2626;font-size:12px;font-weight:700}
 .profile-head{display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap;margin:20px 0}.profile-user{display:flex;align-items:center;gap:13px}.profile-avatar{width:58px;height:58px;border-radius:19px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:22px;background:linear-gradient(135deg,var(--primary),var(--primary2));box-shadow:0 10px 25px rgba(99,91,255,.22)}
 .profile-user h2{font-size:25px}.profile-user p{margin:3px 0 0;color:var(--muted);font-size:13px}.profile-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0}.pstat{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:17px;text-align:center;box-shadow:var(--shadow)}.pstat strong{display:block;font-size:25px;color:var(--primary)}.pstat span{font-size:12px;color:var(--muted)}
@@ -443,7 +443,7 @@ body{background:radial-gradient(ellipse at 10% 0%,rgba(199,209,223,.58),transpar
 .menu-trigger:hover{transform:translateY(-1px);box-shadow:0 8px 18px rgba(47,57,84,.11)}
 .menu-trigger span{background:#52638f;height:2px;border-radius:2px}
 .account-area{gap:10px}
-.account-btn{min-height:49px;padding:12px 18px;border-radius:15px;font-size:14px;font-weight:800;border:1px solid #dfe3eb;background:#fff;color:#39445d;box-shadow:0 4px 12px rgba(47,57,84,.045);transition:transform .18s,box-shadow .18s,background .18s}
+.account-btn{min-height:49px;padding:12px 18px;border-radius:15px;font-size:14px;font-weight:700;border:1px solid #dfe3eb;background:#fff;color:#39445d;box-shadow:0 4px 12px rgba(47,57,84,.045);transition:transform .18s,box-shadow .18s,background .18s}
 .account-btn:hover{transform:translateY(-1px);box-shadow:0 8px 18px rgba(47,57,84,.1)}
 .account-area #authActionBtn{background:#fff;color:#52638f}
 .account-area #profileBtn:not([hidden]){background:#fff;border-color:#dfe3eb;color:#39445d}
@@ -455,7 +455,7 @@ body{background:radial-gradient(ellipse at 10% 0%,rgba(199,209,223,.58),transpar
 .subject-card{border-color:rgba(255,255,255,.94);border-radius:25px;background:rgba(255,255,255,.86);backdrop-filter:blur(16px)}
 .subject-card:hover{box-shadow:0 18px 38px rgba(47,57,84,.11)}
 .card-icon{background:linear-gradient(135deg,rgba(199,209,223,.45),rgba(172,181,205,.24));color:#52638f}
-.card-arro{background:linear-gradient(135deg,#52638f,#8586aa);box-shadow:0 6px 14px rgba(82,99,143,.2)}
+.card-arrow{background:linear-gradient(135deg,#52638f,#8586aa);box-shadow:0 6px 14px rgba(82,99,143,.2)}
 .hub-card{border-radius:22px;border-color:#e5e7ee;background:rgba(255,255,255,.9)}
 .hub-icon-exam{background:rgba(172,181,205,.28);color:#52638f}.hub-icon-material{background:rgba(33,133,108,.1)}
 .pill{background:rgba(199,209,223,.28);border-color:rgba(172,181,205,.45);color:#59647c}
@@ -1287,25 +1287,35 @@ function setAuthMode(mode){
 
 async function loadCurrentProfile(){
   if(!supabaseClient) return null;
-  const {data:{user}}=await supabaseClient.auth.getUser();
-  if(!user){ currentProfile=null; updateAccountUI(); return null; }
-  const {data,error}=await supabaseClient.from("profiles").select("username,is_admin,blocked,avatar_url").eq("user_id",user.id).single();
+  let authResult;
+  try { authResult = await supabaseClient.auth.getUser(); }
+  catch(err) { console.error("Auth user lookup failed:",err); toast("Could not verify your login session. Refresh and try again.","error",4500); return null; }
+  const user=authResult?.data?.user;
+  if(authResult?.error || !user){ currentProfile=null; updateAccountUI(); return null; }
+
+  // First request includes avatar_url; fall back for projects where avatar SQL was not applied.
+  let result=await supabaseClient.from("profiles").select("username,is_admin,blocked,avatar_url").eq("user_id",user.id).maybeSingle();
+  if(result.error && /avatar_url|column/i.test(result.error.message||"")){
+    result=await supabaseClient.from("profiles").select("username,is_admin,blocked").eq("user_id",user.id).maybeSingle();
+  }
+  const data=result.data, error=result.error;
   if(error || !data){
-    console.error(error || "Profile not found");
-    currentProfile=null;
-    await supabaseClient.auth.signOut();
-    updateAccountUI();
-    toast("Could not load your profile. Please log in again.", "error", 3500);
+    const detail=error ? `${error.message}${error.code?` (code ${error.code})`:""}` : `No profiles row matched the signed-in Auth user ID ${user.id}.`;
+    console.error("Could not load profile:", {detail,userId:user.id,email:user.email});
+    currentProfile=null; updateAccountUI();
+    const msg=error
+      ? `Profile load failed: ${detail}. Check profiles SELECT/RLS policy and that this row's user_id matches the Auth user's ID.`
+      : `No profile row matches this login (Auth user ID: ${user.id}). In Supabase, make profiles.user_id equal this user's ID from Authentication → Users.`;
+    const errEl=$("authError");
+    if(errEl && !$ ("authModal").hidden) errEl.textContent=msg;
+    toast(msg,"error",7000);
     return null;
   }
-  currentProfile={user_id:user.id,username:data.username,is_admin:!!data.is_admin,blocked:!!data.blocked,avatar_url:normalizeAvatarUrl(data.avatar_url)||normalizeAvatarUrl(user.user_metadata?.avatar_data_url)||null};
+  currentProfile={user_id:user.id,username:data.username||user.user_metadata?.username||user.email?.split("@")[0]||"User",is_admin:data.is_admin===true,blocked:!!data.blocked,avatar_url:normalizeAvatarUrl(data.avatar_url)||normalizeAvatarUrl(user.user_metadata?.avatar_data_url)||null};
   state.studentName=currentProfile.username;
   if(currentProfile.blocked){
-    currentProfile=null;
-    await supabaseClient.auth.signOut();
-    updateAccountUI();
-    toast("🚫 Your account has been blocked.", "error", 4000);
-    return null;
+    currentProfile=null; await supabaseClient.auth.signOut(); updateAccountUI();
+    toast("🚫 Your account has been blocked.", "error", 4000); return null;
   }
   updateAccountUI(); return currentProfile;
 }
@@ -1366,7 +1376,12 @@ async function handleAuthSubmit(e){
       $("authError").textContent="Account created successfully। Supabase-এ Email Confirmations বন্ধ করলে username/password দিয়ে সরাসরি Log in হবে।";
       return;
     }
-    await loadCurrentProfile(); closeAuthModal(); setTimeout(()=>{checkCqNotifications();checkAdminPending();},1200); toast(authMode==="login"?"👋 Logged in successfully":"🎉 Account created successfully", "success", 2500);
+    const loadedProfile=await loadCurrentProfile();
+    if(!loadedProfile){
+      $("authError").textContent=$("authError").textContent||"Signed in, but the profile could not be loaded. Check the Supabase error shown above.";
+      return;
+    }
+    closeAuthModal(); setTimeout(()=>{checkCqNotifications();checkAdminPending();},1200); toast(authMode==="login"?"👋 Logged in successfully":"🎉 Account created successfully", "success", 2500);
     if(pendingExamAfterLogin){ const p=pendingExamAfterLogin; pendingExamAfterLogin=null; state.selectedExam=p.exam; startExam(); }
   }catch(err){ console.error(err); $("authError").textContent=err.message||"Unable to log in."; }
   finally{ $("authSubmitBtn").disabled=false; }
@@ -1726,7 +1741,7 @@ const examData = {
         },
 
 
-      "Exam 2": {
+        "Exam 2": {
           examTime: 15,
          questions: [
 
