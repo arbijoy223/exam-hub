@@ -731,6 +731,20 @@ html[data-theme="dark"] .site-footer{background:linear-gradient(130deg,#080d17 0
 .admin-user-search-results button{display:block;width:100%;padding:11px 14px;text-align:left;border:0;border-bottom:1px solid var(--border);background:white;cursor:pointer;color:var(--text);font:inherit}
 @media(max-width:700px){.hero-carousel{padding:0 12px;margin:10px auto 18px}.hero-track,.hero-slide{min-height:160px}.hero-slide{padding:22px 18px}.hero-dots{right:22px;bottom:12px}}
 
+
+/* Smooth, aesthetic hero + leaderboard inspiration */
+#homeHeroCarousel{position:relative;overflow:hidden;border-radius:26px;margin:18px auto 24px;box-shadow:0 22px 60px rgba(15,23,42,.22);isolation:isolate;background:linear-gradient(120deg,#101a38,#263c69,#7451a5);}
+#homeHeroCarousel:before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(circle at 15% 20%,rgba(96,165,250,.35),transparent 38%),radial-gradient(circle at 85% 85%,rgba(192,132,252,.3),transparent 42%),linear-gradient(100deg,rgba(6,12,30,.76),rgba(10,20,45,.22));}
+#homeHeroCarousel .hero-slide{transition:opacity 1.2s ease,transform 6s ease;transform:scale(1.025);}
+#homeHeroCarousel .hero-slide.active{transform:scale(1);}
+#homeHeroCarousel .hero-slide-content{position:relative;z-index:2;}
+.hero-top-three{position:relative;z-index:3;display:flex;flex-wrap:wrap;gap:10px;margin-top:15px;}
+.hero-top-user{display:flex;align-items:center;gap:9px;padding:9px 13px;border:1px solid rgba(255,255,255,.26);border-radius:16px;background:rgba(10,18,40,.48);backdrop-filter:blur(12px);color:white;box-shadow:0 8px 22px #0002;}
+.hero-top-user strong{font-size:13px}.hero-top-user small{display:block;font-size:10px;opacity:.8}.hero-top-user .medal{font-size:21px}
+.exam-feedback-panel{margin:18px 0;padding:20px;border:1px solid var(--border);border-radius:20px;background:linear-gradient(135deg,var(--card-bg,#fff),rgba(99,102,241,.07));box-shadow:0 12px 32px rgba(15,23,42,.08)}
+.exam-feedback-panel h3{margin:0 0 6px}.exam-feedback-panel p{color:var(--muted);font-size:13px}.exam-feedback-panel input,.exam-feedback-panel select,.exam-feedback-panel textarea{width:100%;box-sizing:border-box;margin:7px 0;padding:12px;border:1px solid var(--border);border-radius:11px;background:var(--card-bg,#fff);color:var(--text,#111827);font:inherit}.exam-feedback-panel textarea{min-height:105px;resize:vertical}
+.admin-message-item{padding:15px;margin:10px 0;border:1px solid var(--border);border-radius:15px;background:var(--card-bg,#fff)}.admin-message-item p{white-space:pre-wrap;overflow-wrap:anywhere}.admin-message-item small{color:var(--muted)}
+@media(prefers-reduced-motion:reduce){#homeHeroCarousel .hero-slide{transition:none;transform:none}}
 </style>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#635bff">
@@ -919,7 +933,7 @@ html[data-theme="dark"] .theme-toggle{background:#202b40!important;color:#f8fafc
     <article class="hero-slide active" style="background-image:url('https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=1600&q=80')"><div class="hero-slide-content"><h2>Practice Today, Improve Tomorrow</h2><p>Choose your subject and prepare with regular MCQ and CQ exams.</p></div></article>
     <article class="hero-slide" style="background-image:url('https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&w=1600&q=80')"><div class="hero-slide-content"><h2>Your Learning Journey</h2><p>Track your performance and learn from every attempt.</p></div></article>
     <article class="hero-slide" style="background-image:url('https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=1600&q=80')"><div class="hero-slide-content"><h2>Stay Focused. Keep Learning.</h2><p>Explore study materials and prepare for your next exam.</p></div></article>
-  </div><div class="hero-dots" aria-label="Choose slide"><button class="hero-dot active" aria-label="Slide 1"></button><button class="hero-dot" aria-label="Slide 2"></button><button class="hero-dot" aria-label="Slide 3"></button></div>
+  </div><div class="hero-top-three" id="heroTopThree" aria-label="Top three students"><div class="hero-top-user"><span class="medal">🏆</span><div><strong>Top performers</strong><small>Keep learning, keep growing</small></div></div></div><div class="hero-dots" aria-label="Choose slide"><button class="hero-dot active" aria-label="Slide 1"></button><button class="hero-dot" aria-label="Slide 2"></button><button class="hero-dot" aria-label="Slide 3"></button></div>
 </div>
 
 <div class="wrap">
@@ -1076,6 +1090,7 @@ html[data-theme="dark"] .theme-toggle{background:#202b40!important;color:#f8fafc
       <button type="button" class="admin-stat admin-stat-click" id="adminStatAverage"><span>📈 Overall Average</span><strong id="adminOverallAvg">0%</strong><small>Open overall graph</small></button>
       <button type="button" class="admin-stat admin-stat-click" id="adminStatBlocked"><span>🚫 Blocked</span><strong id="adminBlockedUsers">0</strong><small>View blocked users</small></button>
     </div>
+    <div class="profile-card admin-card"><div class="admin-section-title"><div><h3>📨 Student Messages & Complaints</h3><p>Messages submitted after MCQ/CQ exams. You can mark each one resolved.</p></div><button class="btn btn-ghost" id="refreshExamMessagesBtn" type="button">↻ Refresh</button></div><div id="adminExamMessages"><div class="empty-profile">Loading messages…</div></div></div>
     <div class="profile-card admin-card"><div class="admin-section-title"><div><h3>📝 Pending CQ Marking <span class="pending-count" id="adminPendingCount">0</span></h3><p>Newest submissions first. Once you mark a submission it disappears from this list and the student is notified instantly.</p></div><button class="btn btn-ghost" id="refreshPendingCqBtn">↻ Refresh</button></div><div id="adminPendingCqList"><div class="empty-profile">Loading pending submissions…</div></div></div>
     <div class="profile-card admin-card">
       <div class="admin-section-title"><div><h3>🏆 Leaderboard</h3><p>To view an answer key, open a subject, choose a chapter, then select an exam.</p></div></div>
@@ -5902,6 +5917,31 @@ setTimeout(()=>{
    },300);
  });
  document.addEventListener('click',e=>{if(!wrap.contains(e.target))results.hidden=true;});
+})();
+</script>
+
+<script id="exam-feedback-inbox-top3">
+(function(){
+ const $=id=>document.getElementById(id);
+ function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+ function getClient(){return window.supabaseClient||null;}
+ function profile(){return window.currentProfile||null;}
+ function addFeedbackPanel(targetId,kind){
+   const target=$(targetId);if(!target||target.querySelector('.exam-feedback-panel'))return;
+   const panel=document.createElement('form');panel.className='exam-feedback-panel';panel.innerHTML=`<h3>💬 Question / Complaint to Admin</h3><p>Exam শেষ হলে কোনো প্রশ্ন, ভুল প্রশ্ন, মার্কস বা অন্য সমস্যা জানাতে এখানে লিখো।</p><label>বিষয় / Subject (optional)<input name="subject" maxlength="120" placeholder="যেমন: English — Chapter 1"></label><label>Message<textarea name="message" maxlength="3000" required placeholder="তোমার প্রশ্ন বা অভিযোগ বিস্তারিত লিখো..."></textarea></label><button class="btn btn-primary" type="submit">📨 Send to Admin</button><span class="feedback-status" role="status" style="display:block;margin-top:8px;font-size:13px"></span>`;
+   panel.addEventListener('submit',async e=>{e.preventDefault();const status=panel.querySelector('.feedback-status'),btn=panel.querySelector('button[type=submit]'),client=getClient();try{if(!client)throw Error('Server connection is not ready.');const {data:{user},error:authError}=await client.auth.getUser();if(authError||!user)throw Error('মেসেজ পাঠাতে আগে login করো।');const message=panel.elements.message.value.trim();if(!message)throw Error('Message লিখতে হবে।');btn.disabled=true;status.textContent='Sending…';const p=profile()||{};const examTitle=kind==='written'?(document.getElementById('writtenResultSub')?.textContent||'CQ / Written exam'):(document.getElementById('scoreSub')?.textContent||'MCQ exam');const payload={user_id:user.id,username:p.username||user.email||'Student',exam_title:examTitle,subject:panel.elements.subject.value.trim()||null,message,created_at:new Date().toISOString(),status:'open'};const {error}=await client.from('exam_messages').insert(payload);if(error)throw error;panel.reset();status.textContent='✅ Message sent. Admin will review it.';status.style.color='#16a34a';}catch(err){status.textContent='Could not send: '+(err.message||'Unknown error')+' — confirm exam_messages table/RLS SQL is installed.';status.style.color='#dc2626';}finally{btn.disabled=false;}});
+   target.appendChild(panel);
+ }
+ function attachPanels(){addFeedbackPanel('screen-result','mcq');addFeedbackPanel('screen-written-result','written');}
+ // Result screens may be revealed after initial page load.
+ const observer=new MutationObserver(()=>{if($('screen-result')&&!$('screen-result').hidden)addFeedbackPanel('screen-result','mcq');if($('screen-written-result')&&!$('screen-written-result').hidden)addFeedbackPanel('screen-written-result','written');});
+ ['screen-result','screen-written-result'].forEach(id=>{if($(id))observer.observe($(id),{attributes:true,attributeFilter:['hidden']});});attachPanels();
+ async function loadAdminMessages(){const box=$('adminExamMessages'),client=getClient();if(!box||!client)return;box.innerHTML='<div class="empty-profile">Loading messages…</div>';try{const {data,error}=await client.from('exam_messages').select('id,user_id,username,exam_title,subject,message,created_at,status').order('created_at',{ascending:false}).limit(100);if(error)throw error;if(!data?.length){box.innerHTML='<div class="empty-profile">No messages yet.</div>';return;}box.innerHTML='';data.forEach(m=>{const el=document.createElement('article');el.className='admin-message-item';el.innerHTML=`<div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><strong>👤 ${esc(m.username||'Student')}</strong><span class="pill">${esc(m.status||'open')}</span></div><small>${esc(m.exam_title||'Exam')} · ${esc(m.subject||'General')} · ${m.created_at?new Date(m.created_at).toLocaleString():''}</small><p>${esc(m.message)}</p><small>User ID: ${esc(m.user_id)}</small><div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-ghost" data-resolve="${esc(m.id)}">✓ Mark resolved</button><button class="btn btn-ghost" data-reply="${esc(m.user_id)}" data-name="${esc(m.username||'Student')}">Copy user ID</button></div>`;el.querySelector('[data-resolve]').addEventListener('click',async ev=>{try{const {error}=await client.from('exam_messages').update({status:'resolved'}).eq('id',m.id);if(error)throw error;await loadAdminMessages();}catch(e){alert('Could not update status: '+e.message);}});el.querySelector('[data-reply]').addEventListener('click',ev=>{const val=ev.currentTarget.dataset.reply; if(navigator.clipboard?.writeText)navigator.clipboard.writeText(val).then(()=>alert('User ID copied'));else alert(val);});box.appendChild(el);});}catch(e){box.innerHTML='<p style="color:#dc2626">Could not load messages: '+esc(e.message)+'<br>Run the SQL setup file and confirm admin policies.</p>';}}
+ $('refreshExamMessagesBtn')?.addEventListener('click',loadAdminMessages);
+ // Load inbox when admin dashboard opens, and keep the action explicit.
+ const admin=$('screen-admin');if(admin)new MutationObserver(()=>{if(!admin.hidden&&profile()?.is_admin)loadAdminMessages();}).observe(admin,{attributes:true,attributeFilter:['hidden']});
+ async function loadTopThree(){const box=$('heroTopThree'),client=getClient();if(!box||!client)return;try{const {data:results,error}=await client.from('results').select('user_id,percent,correct,total,attempted_at').order('percent',{ascending:false}).order('attempted_at',{ascending:false}).limit(100);if(error)throw error;const best=new Map();(results||[]).forEach(r=>{if(!r.user_id)return;const old=best.get(r.user_id);if(!old||Number(r.percent)>Number(old.percent))best.set(r.user_id,r);});const top=[...best.entries()].sort((a,b)=>Number(b[1].percent)-Number(a[1].percent)).slice(0,3);if(!top.length)return;const ids=top.map(x=>x[0]);const {data:users}=await client.from('profiles').select('user_id,username').in('user_id',ids);const names=new Map((users||[]).map(u=>[u.user_id,u.username||'Student']));const medals=['🥇','🥈','🥉'];box.innerHTML=top.map(([id,r],i)=>`<div class="hero-top-user"><span class="medal">${medals[i]}</span><div><strong>${esc(names.get(id)||'Student')}</strong><small>${Number(r.percent)||0}% · ${Number(r.correct)||0}/${Number(r.total)||0} correct</small></div></div>`).join('');}catch(e){console.debug('Top-three widget unavailable',e.message);}}
+ document.addEventListener('DOMContentLoaded',()=>{attachPanels();loadTopThree();});setTimeout(()=>{attachPanels();loadTopThree();},1800);
 })();
 </script>
 
