@@ -335,7 +335,7 @@ display:flex;align-items:center;justify-content:center;font-weight:800;font-size
 
 
 /* Professional navigation, drawer, footer and auth polish */
-.menu-trigger{width:44px;height:44px;flex:0 0 44px;border:1px solid #e4e8f2;border-radius:15px;background:rgba(255,255,255,.92);display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px;cursor:pointer;box-shadow:0 6px 18px rgba(15,23,42,.07);transition:.2s}
+.menu-trigger{width:44px;height:44px;flex:0 0 44px;border:1px solid #e4e8f2;border-radius:15px;background:rgba(255,255,255,.92);display:flex;width:10px;height:5px;flex-direction:column;justify-content:center; font:bold;align-items:center;gap:6px;cursor:pointer;box-shadow:0 6px 28px rgba(15,23,42,.07);transition:.8s}
 .menu-trigger:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(99,91,255,.16);border-color:#c7c5ff}.menu-trigger span{display:block;width:18px;height:2px;border-radius:5px;background:#4338ca;transition:.2s}
 .brand{cursor:pointer;min-width:0}.brand .seal{position:relative;width:48px;height:48px;border-radius:17px;background:linear-gradient(145deg,#4338ca 0%,#7c3aed 58%,#a78bfa 100%);border:1px solid rgba(255,255,255,.65);box-shadow:0 8px 0 rgba(79,70,229,.10),0 12px 25px rgba(99,91,255,.28);font-size:0;flex:0 0 48px;overflow:hidden}.brand .seal:before{content:"";position:absolute;inset:4px;border:1px solid rgba(255,255,255,.45);border-radius:13px}.brand .seal span{font-family:Georgia,serif;font-size:23px;font-weight:900;line-height:1;color:#fff;text-shadow:0 2px 5px rgba(0,0,0,.2);z-index:1}.brand .seal small{position:absolute;bottom:5px;font:700 6px system-ui;letter-spacing:1.3px;color:#ede9fe}
 .account-area{gap:10px}.account-btn{min-height:48px;padding:13px 20px;font-size:14px;border-radius:15px;font-weight:800}.account-btn.ghost{background:linear-gradient(135deg,#4f46e5,#7c3aed);border:1px solid rgba(255,255,255,.6);box-shadow:0 9px 24px rgba(79,70,229,.3)}
@@ -667,20 +667,8 @@ input,textarea,select{border-radius:12px}
 /* ===== end premium visual refresh; application logic intentionally unchanged ===== */
 
 
-.cq-answer-preview{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}.cq-image-thumb{display:flex;flex-direction:column;gap:5px;align-items:center;border:1px solid var(--border);padding:6px;border-radius:10px}.cq-image-thumb img{width:110px;height:110px;object-fit:contain;border-radius:7px;background:#fff}.cq-image-thumb button{font-size:12px;padding:5px 8px}.cq-student-comment{padding:10px 12px;border-left:3px solid var(--primary);background:var(--bg);border-radius:8px;white-space:pre-wrap}
-.profile-nav-btn[hidden]{display:none!important}
-/* Profile avatar in navbar + crop dialog */
-.profile-nav-btn{display:inline-flex!important;align-items:center;gap:9px;padding:7px 14px 7px 8px!important;min-height:48px!important}
-.nav-profile-avatar{display:inline-flex;width:36px;height:36px;min-width:36px;border-radius:50%;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--primary),var(--primary2));background-position:center;background-size:cover;color:#fff;font-size:15px;font-weight:900;border:2px solid rgba(255,255,255,.75);box-shadow:0 2px 8px rgba(0,0,0,.12)}
-#profileBtn #navProfileName{max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.crop-overlay{position:fixed;inset:0;z-index:10050;background:rgba(7,12,25,.78);display:flex;align-items:center;justify-content:center;padding:16px}
-.crop-panel{width:min(460px,100%);background:var(--card,#fff);color:var(--text,#172033);border:1px solid var(--border,#ddd);border-radius:20px;padding:20px;box-shadow:0 25px 80px rgba(0,0,0,.35)}
-.crop-stage{width:min(300px,75vw);height:min(300px,75vw);margin:14px auto;overflow:hidden;border-radius:50%;background:#e5e7eb;position:relative;touch-action:none}
-.crop-stage img{position:absolute;max-width:none;user-select:none;-webkit-user-drag:none;cursor:grab;transform-origin:center center}
-.crop-controls{display:flex;gap:10px;align-items:center;margin:12px 0}.crop-controls input{flex:1;min-width:0}.crop-actions{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap}
-@media(max-width:700px){.profile-nav-btn{gap:6px!important;padding:5px 9px 5px 6px!important;min-height:42px!important}.nav-profile-avatar{width:31px;height:31px;min-width:31px}#profileBtn #navProfileName{max-width:88px;font-size:12px}}
 /* Manual light/dark theme toggle */
-.theme-toggle{display:inline-flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap;border:1px solid var(--border)!important;background:var(--card)!important;color:var(--text)!important;border-radius:12px!important;min-height:40px;padding:9px 12px!important;cursor:pointer;font-weight:800;box-shadow:0 3px 10px rgba(15,23,42,.06)}
+.theme-toggle{display:inline-flex;align-items:center;justify-content:center;gap:1px;white-space:nowrap;border:1px solid var(--border)!important;background:var(--card)!important;color:var(--text)!important;border-radius:12px!important;min-height:40px;padding:9px 12px!important;cursor:pointer;font-weight:800;box-shadow:0 3px 10px rgba(15,23,42,.06)}
 .theme-toggle:hover{transform:translateY(-1px);border-color:var(--primary)!important}
 @media(max-width:700px){.theme-toggle{grid-column:2;grid-row:1;justify-self:end;margin-right:48px;min-height:40px;padding:8px 10px!important}.topbar-inner{position:relative}.menu-trigger{position:absolute;right:12px;top:10px}}
 html[data-theme="light"]{color-scheme:light;--bg:#f4f7fb;--card:rgba(255,255,255,.96);--text:#172033;--muted:#697386;--border:#e5e9f2;--primary:#635bff;--primary2:#8b5cf6;--shadow:0 15px 45px rgba(30,41,59,.10)}
@@ -803,43 +791,8 @@ img,canvas,video,svg{max-width:100%}
  .site-footer{background:linear-gradient(130deg,#080d17 0%,#17182f 65%,#282353 100%)!important}
 }
 @media(prefers-reduced-motion:reduce){.subject-grid>.subject-card{transition:none!important;animation:none!important}}
-
-/* Optional signup avatar and CQ answer image upload */
-.signup-avatar-field[hidden]{display:none!important}.signup-avatar-field{display:grid;gap:7px;padding:12px;border:1px dashed var(--border);border-radius:14px;background:var(--card)}
-.signup-avatar-field input[type=file],.cq-image-input{width:100%;max-width:100%;font-size:13px;padding:8px;border:1px solid var(--border);border-radius:10px;background:var(--card);color:var(--text)}
-.signup-avatar-preview-row{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted)}
-.signup-avatar-preview-row img{width:56px;height:56px;object-fit:cover;border-radius:50%;border:2px solid var(--primary)}
-.cq-answer-upload{display:grid;gap:7px;margin-top:10px;padding:10px;border:1px dashed var(--border);border-radius:12px;background:var(--card)}
-.cq-answer-upload label{font-size:12px;font-weight:800;color:var(--muted)}
-.cq-answer-preview{display:flex;gap:8px;align-items:flex-start;flex-wrap:wrap}.cq-answer-preview img{max-width:min(100%,360px);max-height:280px;object-fit:contain;border-radius:10px;border:1px solid var(--border);background:#fff}
-.cq-answer-preview button{padding:7px 10px;border:1px solid var(--border);border-radius:9px;background:var(--card);color:var(--text);cursor:pointer}
-.cq-stored-image{display:block;max-width:min(100%,520px);max-height:420px;object-fit:contain;border:1px solid var(--border);border-radius:12px;margin-top:9px;background:#fff}
-@media(max-width:520px){.signup-avatar-field{padding:10px}.cq-answer-upload{padding:8px}.cq-answer-preview img{max-height:220px}}
 </style>
 
-
-<style id="correction-navbar-darkmode">
-/* Larger navigation controls; wrap naturally onto a second row when needed. */
-.topbar-inner{flex-wrap:wrap!important;row-gap:10px!important}
-.account-area{display:flex!important;flex-wrap:wrap!important;align-items:center!important;justify-content:flex-end!important;gap:10px!important;min-width:0!important}
-.account-btn{min-height:52px!important;padding:13px 19px!important;font-size:15px!important;border-radius:15px!important}
-.profile-nav-btn{min-height:58px!important;padding:8px 18px 8px 10px!important;gap:12px!important}
-.nav-profile-avatar{width:43px!important;height:43px!important;min-width:43px!important;font-size:17px!important}
-#profileBtn #navProfileName{font-size:15px!important;max-width:180px!important}
-.home-nav-btn{background:linear-gradient(135deg,#0f766e,#0d9488)!important;color:#fff!important;border:1px solid rgba(255,255,255,.4)!important}
-@media(max-width:700px){.topbar-inner{display:flex!important;flex-wrap:wrap!important;align-items:center!important}.brand{flex:1 1 calc(100% - 60px)!important}.nav-search-wrap{flex:1 1 100%!important;order:3!important;min-width:0!important}.account-area{flex:1 1 100%!important;order:4!important;justify-content:flex-start!important;gap:8px!important}.account-btn{min-height:48px!important;padding:11px 13px!important;font-size:13px!important}.profile-nav-btn{min-height:54px!important;padding:7px 12px 7px 8px!important;gap:8px!important}.nav-profile-avatar{width:38px!important;height:38px!important;min-width:38px!important}#profileBtn #navProfileName{max-width:140px!important;font-size:13px!important}.theme-toggle{margin:0!important;grid-column:auto!important;grid-row:auto!important}.menu-trigger{position:static!important;order:0!important}}
-@media(max-width:390px){.account-btn{padding:10px 11px!important;font-size:12px!important}.profile-nav-btn{max-width:none!important}#profileBtn #navProfileName{max-width:110px!important}}
-/* High-contrast text and form controls in dark theme. */
-html[data-theme="dark"] body,html[data-theme="dark"] body *{border-color:var(--border)}
-html[data-theme="dark"] p,html[data-theme="dark"] li,html[data-theme="dark"] label,html[data-theme="dark"] small,html[data-theme="dark"] .card-hint,html[data-theme="dark"] .empty-profile,html[data-theme="dark"] .pr-main span,html[data-theme="dark"] .pstat span,html[data-theme="dark"] .admin-section-title p{color:#cbd5e1!important}
-html[data-theme="dark"] h1,html[data-theme="dark"] h2,html[data-theme="dark"] h3,html[data-theme="dark"] h4,html[data-theme="dark"] strong,html[data-theme="dark"] .pr-main strong,html[data-theme="dark"] .admin-section-title h3{color:#f8fafc!important}
-html[data-theme="dark"] input:not([type="range"]),html[data-theme="dark"] textarea,html[data-theme="dark"] select{background:#0f172a!important;color:#f1f5f9!important;border-color:#475569!important}
-html[data-theme="dark"] input::placeholder,html[data-theme="dark"] textarea::placeholder{color:#94a3b8!important;opacity:1}
-html[data-theme="dark"] .profile-result,html[data-theme="dark"] .written-card,html[data-theme="dark"] .admin-card,html[data-theme="dark"] .cq-history-score,html[data-theme="dark"] .cq-student-comment,html[data-theme="dark"] .written-submit-card,html[data-theme="dark"] .written-question,html[data-theme="dark"] .modal,html[data-theme="dark"] .fancy-modal-box{background:#151e30!important;color:#f1f5f9!important;border-color:#334155!important}
-html[data-theme="dark"] .admin-table th{background:#202b40!important;color:#f1f5f9!important}html[data-theme="dark"] .admin-table td{background:#131c2d!important;color:#e2e8f0!important}
-html[data-theme="dark"] .btn-ghost,html[data-theme="dark"] .back-btn{color:#f1f5f9!important}
-html[data-theme="dark"] .theme-toggle{background:#202b40!important;color:#f8fafc!important;border-color:#475569!important}
-</style>
 </head>
 
 <body>
@@ -856,11 +809,10 @@ html[data-theme="dark"] .theme-toggle{background:#202b40!important;color:#f8fafc
     </div>
     <div class="nav-search-wrap"><span aria-hidden="true">⌕</span><input id="siteSearch" type="search" placeholder="Search subjects, chapters, exams…" aria-label="Search subjects, chapters and exams"><button id="clearSiteSearch" type="button" aria-label="Clear search" hidden>×</button></div>
     <div class="account-area">
-      <button class="account-btn home-nav-btn" id="navHomeBtn" type="button" title="Go to Home">⌂ Home</button>
       <button class="account-btn ghost theme-toggle" id="themeToggleBtn" type="button" aria-label="Switch to dark mode" aria-pressed="false" title="Switch theme"><span id="themeToggleIcon" aria-hidden="true">🌙</span> <span id="themeToggleLabel">Dark</span></button>
       <button class="account-btn ghost" id="enableNotificationsBtn" type="button" title="Enable exam notifications">🔔 Notify</button>
       <button class="account-btn ghost" id="authActionBtn">↪ Log in</button>
-      <button class="account-btn profile-nav-btn" id="profileBtn" hidden><span class="nav-profile-avatar" id="navProfileAvatar">U</span><span id="navProfileName">Profile</span></button>
+      <button class="account-btn" id="profileBtn" hidden>👤 Profile</button>
       <button class="account-btn admin-account-btn" id="adminBtn" hidden>🛡️ Admin</button>
     </div>
   </div>
@@ -915,7 +867,7 @@ html[data-theme="dark"] .theme-toggle{background:#202b40!important;color:#f8fafc
           <h3 id="hubExamTitle">Take an Exam</h3>
           <p id="hubExamCount"></p>
         </div>
-        <div class="card-arrow">→</div>
+        <div ></div>
       </button>
       <button class="hub-card" id="hubGoMaterials">
         <div class="hub-icon hub-icon-material"><i>📚</i></div>
@@ -923,7 +875,7 @@ html[data-theme="dark"] .theme-toggle{background:#202b40!important;color:#f8fafc
           <h3>Study Materials</h3>
           <p id="hubMaterialCount"></p>
         </div>
-        <div class="card-arrow">→</div>
+        <div ></div>
       </button>
     </div>
   </section>
@@ -998,11 +950,7 @@ html[data-theme="dark"] .theme-toggle{background:#202b40!important;color:#f8fafc
     <button class="back-btn" id="backFromProfile">← Back to Home</button>
     <div class="profile-head">
       <div class="profile-user"><div class="profile-avatar" id="profileAvatar">U</div><div><h2 id="profileUsername">User</h2><p>Your exams and performance</p></div></div>
-      <div class="profile-edit-actions" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-        <input id="profileAvatarInput" type="file" accept="image/*" hidden>
-        <button class="btn btn-ghost" id="changeProfileAvatarBtn" type="button">📷 Change photo</button>
-        <button class="btn btn-ghost" id="btnLogout">🚪 Log out</button>
-      </div>
+      <button class="btn btn-ghost" id="btnLogout">🚪 Log out</button>
     </div>
     <div class="profile-stats">
       <div class="pstat"><strong id="profileTotal">0</strong><span>Total Exams</span></div>
@@ -1176,20 +1124,12 @@ html[data-theme="dark"] .theme-toggle{background:#202b40!important;color:#f8fafc
       <input id="authUsername" type="text" autocomplete="username" placeholder="e.g. bijoy_123" minlength="3" maxlength="20" required>
       <label for="authPassword">Password</label>
       <input id="authPassword" type="password" autocomplete="current-password" placeholder="At least 6 characters" minlength="6" required>
-      <div id="signupAvatarField" class="signup-avatar-field" hidden>
-        <label for="signupAvatarInput">Profile picture <span style="font-weight:500;color:var(--muted)">(optional)</span></label>
-        <input id="signupAvatarInput" type="file" accept="image/*">
-        <div class="signup-avatar-preview-row"><img id="signupAvatarPreview" alt="Profile picture preview" hidden><span>Choose a photo (optional, max 5 MB)</span></div>
-      </div>
       <div class="auth-note">Sign in with your username. Your password should be secrete from others.</div>
       <div class="auth-error" id="authError"></div>
       <div class="modal-buttons"><button type="button" class="btn btn-ghost" id="authCancelBtn">Cancel</button><button type="submit" class="btn btn-primary" id="authSubmitBtn">Log in</button></div>
     </form>
   </div>
 </div>
-<script>
-(function(){const input=document.getElementById('signupAvatarInput'),preview=document.getElementById('signupAvatarPreview');if(!input||!preview)return;input.addEventListener('change',()=>{const f=input.files&&input.files[0];if(!f){preview.hidden=true;preview.removeAttribute('src');return;}if(!f.type.startsWith('image/')){input.value='';preview.hidden=true;return;}if(f.size>5*1024*1024){input.value='';preview.hidden=true;alert('Image must be 5 MB or smaller.');return;}const reader=new FileReader();reader.onload=()=>{preview.src=reader.result;preview.hidden=false;};reader.readAsDataURL(f);});})();
-</script>
 
 <!-- Name input modal -->
 <div class="modal-overlay" id="confirmModal" hidden>
@@ -1269,19 +1209,6 @@ function authReady(){
   return false;
 }
 
-/*
- * Temporary resilience workaround:
- * Supabase's /auth/v1/user endpoint is returning HTTP 500 in the reported incident.
- * Read the current user from the locally stored session instead of calling getUser(),
- * which makes a network request to that endpoint. Database requests still require
- * the access token to be accepted by Supabase; this cannot repair a server-side outage.
- */
-async function getSessionUserResult(){
-  if(!supabaseClient) return {data:{user:null,session:null},error:new Error("Supabase client is unavailable")};
-  const {data,error}=await supabaseClient.auth.getSession();
-  return {data:{user:data?.session?.user||null,session:data?.session||null},error};
-}
-
 function openAuthModal(mode="login", pending=null){
   if(!authReady()) return;
   authMode=mode; pendingExamAfterLogin=pending;
@@ -1295,44 +1222,29 @@ function setAuthMode(mode){
   $("authSubmitBtn").textContent=mode==="login"?"Log in":"Sign up";
   $("authTabLogin").classList.toggle("active",mode==="login"); $("authTabSignup").classList.toggle("active",mode==="signup");
   $("authPassword").autocomplete=mode==="login"?"current-password":"new-password";
-  if($("signupAvatarField")) $("signupAvatarField").hidden=mode!=="signup";
 }
 
 async function loadCurrentProfile(){
   if(!supabaseClient) return null;
-  let authResult;
-  try { authResult = await getSessionUserResult(); }
-  catch(err) { console.error("Auth user lookup failed:",err); toast("Could not verify your login session. Refresh and try again.","error",4500); return null; }
-  const user=authResult?.data?.user;
-  if(authResult?.error || !user){ currentProfile=null; updateAccountUI(); return null; }
-
-  // Try the full profile first. If any part of this request is rejected by
-  // PostgREST (including an opaque HTTP 400), retry with only core columns.
-  let result=await supabaseClient.from("profiles").select("username,is_admin,blocked,avatar_url").eq("user_id",user.id).maybeSingle();
-  if(result.error){
-    console.warn("Full profile query failed; retrying core profile columns:", result.error);
-    const fallback=await supabaseClient.from("profiles").select("username,is_admin,blocked").eq("user_id",user.id).maybeSingle();
-    if(!fallback.error) result={...fallback,data:{...fallback.data,avatar_url:null}};
-    else result=fallback;
-  }
-  const data=result.data, error=result.error;
+  const {data:{user}}=await supabaseClient.auth.getUser();
+  if(!user){ currentProfile=null; updateAccountUI(); return null; }
+  const {data,error}=await supabaseClient.from("profiles").select("username,is_admin,blocked").eq("user_id",user.id).single();
   if(error || !data){
-    const detail=error ? `${error.message}${error.code?` (code ${error.code})`:""}` : `No profiles row matched the signed-in Auth user ID ${user.id}.`;
-    console.error("Could not load profile:", {detail,userId:user.id,email:user.email});
-    currentProfile=null; updateAccountUI();
-    const msg=error
-      ? `Profile load failed: ${detail}. Check profiles SELECT/RLS policy and that this row's user_id matches the Auth user's ID.`
-      : `No profile row matches this login (Auth user ID: ${user.id}). In Supabase, make profiles.user_id equal this user's ID from Authentication → Users.`;
-    const errEl=$("authError");
-    if(errEl && !$("authModal").hidden) errEl.textContent=msg;
-    toast(msg,"error",7000);
+    console.error(error || "Profile not found");
+    currentProfile=null;
+    await supabaseClient.auth.signOut();
+    updateAccountUI();
+    toast("Could not load your profile. Please log in again.", "error", 3500);
     return null;
   }
-  currentProfile={user_id:user.id,username:data.username||user.user_metadata?.username||user.email?.split("@")[0]||"User",is_admin:data.is_admin===true,blocked:!!data.blocked,avatar_url:normalizeAvatarUrl(data.avatar_url)||normalizeAvatarUrl(user.user_metadata?.avatar_data_url)||null};
+  currentProfile={user_id:user.id,username:data.username,is_admin:!!data.is_admin,blocked:!!data.blocked};
   state.studentName=currentProfile.username;
   if(currentProfile.blocked){
-    currentProfile=null; await supabaseClient.auth.signOut(); updateAccountUI();
-    toast("🚫 Your account has been blocked.", "error", 4000); return null;
+    currentProfile=null;
+    await supabaseClient.auth.signOut();
+    updateAccountUI();
+    toast("🚫 Your account has been blocked.", "error", 4000);
+    return null;
   }
   updateAccountUI(); return currentProfile;
 }
@@ -1340,15 +1252,12 @@ function updateAccountUI(){
   const logged=!!currentProfile;
   const admin=!!(logged && currentProfile.is_admin);
   $("profileBtn").hidden=!logged;
-  const navName=$("navProfileName"),navAvatar=$("navProfileAvatar");
-  if(navName) navName.textContent=logged?currentProfile.username:"Profile";
-  if(navAvatar) renderAvatar(navAvatar,logged?currentProfile.avatar_url:null,logged?currentProfile.username.charAt(0).toUpperCase():"U");
+  $("profileBtn").textContent=logged?"👤 "+currentProfile.username:"👤 Profile";
   $("profileBtn").title=logged?"Open profile":"Profile";
   $("adminBtn").hidden=!admin;
   $("authActionBtn").textContent=logged?"↪ Log out":"🔐 Log in";
   $("drawerName").textContent=logged?currentProfile.username:"Welcome";
-  const drawerAvatar=$("drawerAvatar");
-  if(logged&&currentProfile.avatar_url){drawerAvatar.textContent="";drawerAvatar.style.backgroundImage=`url("${currentProfile.avatar_url}")`;drawerAvatar.style.backgroundSize="cover";drawerAvatar.style.backgroundPosition="center";}else{drawerAvatar.style.backgroundImage="";drawerAvatar.textContent=logged?currentProfile.username.charAt(0).toUpperCase():"B";}
+  $("drawerAvatar").textContent=logged?currentProfile.username.charAt(0).toUpperCase():"B";
   $("drawerRole").textContent=admin?"Administrator":"AR Bijoy Exam Center";
   $("drawerLogin").hidden=logged;
   $("drawerLogout").hidden=!logged;
@@ -1358,23 +1267,6 @@ function updateAccountUI(){
   $("drawerLeaderboard").hidden=!admin;
 }
 
-async function compressImageFile(file,maxDimension=1200,quality=0.78){
-  if(!file) return null;
-  if(!file.type||!file.type.startsWith("image/")) throw new Error("Please choose an image file.");
-  if(file.size>5*1024*1024) throw new Error("Image must be 5 MB or smaller.");
-  const source=await new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=()=>reject(new Error("Could not read image."));r.readAsDataURL(file);});
-  const img=await new Promise((resolve,reject)=>{const im=new Image();im.onload=()=>resolve(im);im.onerror=()=>reject(new Error("Could not open this image."));im.src=source;});
-  const scale=Math.min(1,maxDimension/Math.max(img.naturalWidth,img.naturalHeight));
-  const canvas=document.createElement("canvas");canvas.width=Math.max(1,Math.round(img.naturalWidth*scale));canvas.height=Math.max(1,Math.round(img.naturalHeight*scale));
-  const ctx=canvas.getContext("2d");ctx.drawImage(img,0,0,canvas.width,canvas.height);
-  return canvas.toDataURL("image/jpeg",quality);
-}
-function normalizeAvatarUrl(value){
-  if(typeof value==="string") return /^(data:image\/|https?:\/\/)/i.test(value)?value:null;
-  if(value&&typeof value==="object") return normalizeAvatarUrl(value.dataUrl||value.data_url||value.url||value.src||value.avatar_data_url||value.avatar_url);
-  return null;
-}
-function renderAvatar(el,url,letter){if(!el)return;const safeUrl=normalizeAvatarUrl(url);if(safeUrl){el.textContent="";el.style.backgroundImage=`url("${safeUrl}")`;el.style.backgroundSize="cover";el.style.backgroundPosition="center";el.setAttribute("aria-label","Profile picture");}else{el.style.backgroundImage="";el.textContent=letter||"U";el.removeAttribute("aria-label");}}
 async function handleAuthSubmit(e){
   e.preventDefault(); if(!authReady()) return;
   const username=cleanUsername($("authUsername").value); const password=$("authPassword").value;
@@ -1384,21 +1276,14 @@ async function handleAuthSubmit(e){
   $("authSubmitBtn").disabled=true;
   try{
     let result;
-    let avatarData=null;
-    if(authMode==="signup" && $("signupAvatarInput").files?.[0]) avatarData=await openImageCropper($("signupAvatarInput").files[0]);
-    if(authMode==="signup") result=await supabaseClient.auth.signUp({email:usernameEmail(username),password,options:{data:{username,...(avatarData?{avatar_data_url:avatarData}:{})}}});
+    if(authMode==="signup") result=await supabaseClient.auth.signUp({email:usernameEmail(username),password,options:{data:{username}}});
     else result=await supabaseClient.auth.signInWithPassword({email:usernameEmail(username),password});
     if(result.error) throw result.error;
     if(authMode==="signup" && !result.data.session){
       $("authError").textContent="Account created successfully। Supabase-এ Email Confirmations বন্ধ করলে username/password দিয়ে সরাসরি Log in হবে।";
       return;
     }
-    const loadedProfile=await loadCurrentProfile();
-    if(!loadedProfile){
-      $("authError").textContent=$("authError").textContent||"Signed in, but the profile could not be loaded. Check the Supabase error shown above.";
-      return;
-    }
-    closeAuthModal(); setTimeout(()=>{checkCqNotifications();checkAdminPending();},1200); toast(authMode==="login"?"👋 Logged in successfully":"🎉 Account created successfully", "success", 2500);
+    await loadCurrentProfile(); closeAuthModal(); setTimeout(()=>{checkCqNotifications();checkAdminPending();},1200); toast(authMode==="login"?"👋 Logged in successfully":"🎉 Account created successfully", "success", 2500);
     if(pendingExamAfterLogin){ const p=pendingExamAfterLogin; pendingExamAfterLogin=null; state.selectedExam=p.exam; startExam(); }
   }catch(err){ console.error(err); $("authError").textContent=err.message||"Unable to log in."; }
   finally{ $("authSubmitBtn").disabled=false; }
@@ -3935,7 +3820,7 @@ function showChapters(subject){
       <div class="card-icon">📚</div>
       <h3>${chapterName}</h3>
       <div class="subject-meta"><span class="pill">${bnNum(examCount)} exams</span></div>
-      <div class="card-arrow">→</div>`;
+      <div ></div>`;
     card.addEventListener("click", ()=>showChapterHub(subject, chapterName));
     grid.appendChild(card);
   });
@@ -3991,12 +3876,12 @@ async function showExams(subject, chapter){
     const qCount = examObj.questions.length;
     const timeInMinutes = examObj.examTime || qCount;
     const card = document.createElement("button"); card.className="subject-card"; card.style.setProperty("--card-accent",accentPalette[i%accentPalette.length]);
-    card.innerHTML=`<div class="card-icon">${isAdmin()?"📋":"📝"}</div><h3>${examName}</h3><div class="subject-meta"><span class="pill">${bnNum(qCount)} questions</span><span class="pill">⏱ ${bnNum(timeInMinutes)} min</span></div><div class="card-arrow">→</div>`;
+    card.innerHTML=`<div class="card-icon">${isAdmin()?"📋":"📝"}</div><h3>${examName}</h3><div class="subject-meta"><span class="pill">${bnNum(qCount)} questions</span><span class="pill">⏱ ${bnNum(timeInMinutes)} min</span></div><div></div>`;
     card.addEventListener("click",()=>askForName(subject,chapter,examName)); grid.appendChild(card);
   });
   written.forEach((exam,i)=>{
     const card=document.createElement("button"); card.className="subject-card"; card.style.setProperty("--card-accent",accentPalette[(exams.length+i)%accentPalette.length]);
-    card.innerHTML=`<div class="card-icon">✍️</div><h3>${exam.title}</h3><div class="subject-meta"><span class="pill">CQ / Written</span><span class="pill">${bnNum(Array.isArray(exam.questions)?exam.questions.length:0)} questions</span><span class="pill">⏱ ${bnNum(exam.time_minutes)} min</span><span class="pill">${bnNum(exam.total_marks)} marks</span></div><div class="card-arrow">→</div>`;
+    card.innerHTML=`<div class="card-icon">✍️</div><h3>${exam.title}</h3><div class="subject-meta"><span class="pill">CQ / Written</span><span class="pill">${bnNum(Array.isArray(exam.questions)?exam.questions.length:0)} questions</span><span class="pill">⏱ ${bnNum(exam.time_minutes)} min</span><span class="pill">${bnNum(exam.total_marks)} marks</span></div><div>→</div>`;
     card.addEventListener("click",()=>isAdmin()?showWrittenLeaderboard(exam.id,{id:exam.id,title:exam.title,subject:exam.subject,chapter:exam.chapter,total_marks:exam.total_marks}):startWrittenExam(exam)); grid.appendChild(card);
   });
   if(!grid.children.length) grid.innerHTML='<div class="mat-empty">No exams are available for this chapter yet.</div>';
@@ -4137,7 +4022,7 @@ $("backToHubFromMaterials").addEventListener("click", ()=>{
 // ===== CQ / Written Exam =====
 function updateWrittenProgress(){
   const ans=state.writtenAnswers||[];
-  const done=ans.filter(v=>Array.isArray(v.images)&&v.images.length>0).length;
+  const done=ans.filter(v=>String(v||"").trim()!=="").length;
   const el=$("writtenProgressPill");
   if(el) el.textContent=`Answered ${bnNum(done)} / ${bnNum(ans.length)}`;
 }
@@ -4159,28 +4044,20 @@ function startWrittenExam(exam){
   if(isAdmin()){ toast("Admin accounts cannot take exams.","info"); return; }
   clearInterval(state.writtenTimerId);
   state.writtenExamId=exam.id; state.writtenExamObj=exam;
-  state.writtenAnswers=new Array((exam.questions||[]).length).fill(null).map(()=>({text:"",imageDataUrl:null,images:[]}));
-  state.writtenComment="";
+  state.writtenAnswers=new Array((exam.questions||[]).length).fill("");
   state.finished=false; state.writtenInProgress=true;
   hideAllScreens(); $("screen-written-exam").hidden=false;
   $("topSub").textContent=currentProfile.username; $("writtenExamTitle").textContent=exam.title;
   $("writtenExamMeta").innerHTML=`<span class="pill">${bnNum(exam.questions.length)} questions</span><span class="pill">⏱ ${bnNum(exam.time_minutes)} min</span><span class="pill">${bnNum(exam.total_marks)} marks</span><span class="pill" id="writtenProgressPill"></span>`;
   $("writtenExamNotice").textContent="Write your answers clearly. When the time ends, your submission will be sent automatically. Your marks will be added to your profile after the admin checks it.";
   const box=$("writtenQuestionsContainer"); box.innerHTML="";
-  const commentWrap=document.createElement("div");commentWrap.className="written-question cq-shared-comment";
-  const commentTitle=document.createElement("label");commentTitle.textContent="📝 Additional comment (optional)";commentTitle.style.cssText="display:block;font-weight:800;margin-bottom:8px";
-  const commentBox=document.createElement("textarea");commentBox.id="writtenSharedComment";commentBox.placeholder="Any note for the teacher/admin (optional)…";commentBox.rows=3;commentBox.style.width="100%";commentBox.addEventListener("input",()=>{state.writtenComment=commentBox.value});commentWrap.append(commentTitle,commentBox);box.appendChild(commentWrap);
   exam.questions.forEach((q,i)=>{
-    const card=document.createElement("div");card.className="written-question";
-    const label=document.createElement("div");label.className="qnum";label.textContent=`Question ${bnNum(i+1)} / ${bnNum(exam.questions.length)}`;
-    const text=document.createElement("div");text.className="qtext";text.textContent=q;
-    const upload=document.createElement("div");upload.className="cq-answer-upload";
-    const uploadLabel=document.createElement("label");uploadLabel.textContent="📷 Upload answer images (select multiple images at once)";uploadLabel.style.display="block";
-    const file=document.createElement("input");file.type="file";file.accept="image/*";file.multiple=true;file.className="cq-image-input";file.setAttribute("aria-label",`Upload multiple answer images for question ${i+1}`);
-    const preview=document.createElement("div");preview.className="cq-answer-preview";
-    file.addEventListener("change",async()=>{try{const files=Array.from(file.files||[]);if(!files.length)return;const current=state.writtenAnswers[i].images||[];if(current.length+files.length>10){toast("Maximum 10 images per question. Remove some images first.","error",3500);file.value="";return;}for(const f of files){if(!f.type.startsWith("image/"))throw new Error("Please choose image files only.");if(f.size>8*1024*1024)throw new Error("Each image must be 8 MB or smaller.");}const data=await Promise.all(files.map(f=>compressImageFile(f,1400,.72)));state.writtenAnswers[i].images=current.concat(data);state.writtenAnswers[i].imageDataUrl=state.writtenAnswers[i].images[0]||null;preview.innerHTML="";state.writtenAnswers[i].images.forEach((src,j)=>{const wrap=document.createElement("div");wrap.className="cq-image-thumb";const img=document.createElement("img");img.src=src;img.alt=`Question ${i+1} answer image ${j+1}`;img.loading="lazy";const remove=document.createElement("button");remove.type="button";remove.textContent="Remove";remove.addEventListener("click",()=>{state.writtenAnswers[i].images.splice(j,1);state.writtenAnswers[i].imageDataUrl=state.writtenAnswers[i].images[0]||null;renderPreviews();updateWrittenProgress()});wrap.append(img,remove);preview.appendChild(wrap)});updateWrittenProgress();}catch(err){file.value="";toast(err.message||"Could not process images","error",3500);}});
-    function renderPreviews(){preview.innerHTML="";state.writtenAnswers[i].images.forEach((src,j)=>{const wrap=document.createElement("div");wrap.className="cq-image-thumb";const img=document.createElement("img");img.src=src;img.alt=`Question ${i+1} answer image ${j+1}`;const remove=document.createElement("button");remove.type="button";remove.textContent="Remove";remove.onclick=()=>{state.writtenAnswers[i].images.splice(j,1);state.writtenAnswers[i].imageDataUrl=state.writtenAnswers[i].images[0]||null;renderPreviews();updateWrittenProgress()};wrap.append(img,remove);preview.appendChild(wrap)});}
-    upload.append(uploadLabel,file,preview);card.append(label,text,upload);box.appendChild(card);
+    const card=document.createElement("div"); card.className="written-question";
+    const label=document.createElement("div"); label.className="qnum"; label.textContent=`Question ${bnNum(i+1)} / ${bnNum(exam.questions.length)}`;
+    const text=document.createElement("div"); text.className="qtext"; text.textContent=q;
+    const ta=document.createElement("textarea"); ta.className="written-answer-box"; ta.placeholder="Write your answer here...";
+    ta.addEventListener("input",()=>{state.writtenAnswers[i]=ta.value; updateWrittenProgress();});
+    card.append(label,text,ta); box.appendChild(card);
   });
   updateWrittenProgress();
   state.timeLeft=Math.max(1,Number(exam.time_minutes||60))*60;
@@ -4196,7 +4073,7 @@ function updateWrittenTimer(){
 async function submitWrittenExam(auto=false){
   if(state.finished || !state.writtenExamId || !currentProfile) return;
   if(!auto){
-    const empty=state.writtenAnswers.filter(v=>!Array.isArray(v.images)||v.images.length===0).length;
+    const empty=state.writtenAnswers.filter(v=>String(v||"").trim()==="").length;
     const msg=empty>0?`${empty} question(s) are still unanswered. Submit anyway?`:"Submit your written exam now?";
     if(!(await customConfirm(msg,{icon:empty>0?"⚠️":"✍️",okText:"Submit"}))) return;
     if(state.finished) return;
@@ -4209,9 +4086,9 @@ async function submitWrittenExam(auto=false){
     toast(msg,"error",3500);
     if(state.timeLeft>0) runWrittenTimer();
   };
-  const {data:{user}}=await getSessionUserResult();
+  const {data:{user}}=await supabaseClient.auth.getUser();
   if(!user){ failBack("You are logged out. Please log in again."); return; }
-  const payload={exam_id:state.writtenExamId,user_id:user.id,answers:state.writtenAnswers.map((v,i)=>({text:"",imageDataUrl:(v.images||[])[0]||null,images:v.images||[],comment:i===0?String(state.writtenComment||""):""})),status:"submitted",score:null,feedback:null,submitted_at:new Date().toISOString()};
+  const payload={exam_id:state.writtenExamId,user_id:user.id,answers:state.writtenAnswers.map(v=>String(v||"")),status:"submitted",score:null,feedback:null,submitted_at:new Date().toISOString()};
   const {error}=await supabaseClient.from("written_submissions").insert(payload).select("id,submitted_at,status,score,feedback").single();
   if(error){ console.error(error); failBack("Could not submit written exam. Please try again."); return; }
   state.writtenInProgress=false;
@@ -4300,12 +4177,12 @@ async function showAdminUserProfile(userId,silent){
   if(silent!==true){$("adminUserResults").innerHTML='<div class="empty-profile">⏳ Loading...</div>'; $("adminUserWritten").innerHTML='<div class="empty-profile">⏳ Loading...</div>';}
   try{
     const [{data:user,error:ue},{data:results,error:re},writtenRows]=await Promise.all([
-      supabaseClient.from("profiles").select("user_id,username,is_admin,blocked,created_at,avatar_url").eq("user_id",userId).single(),
+      supabaseClient.from("profiles").select("user_id,username,is_admin,blocked,created_at").eq("user_id",userId).single(),
       supabaseClient.from("results").select("subject,chapter,exam,correct,total,percent,status,attempted_at").eq("user_id",userId).order("attempted_at",{ascending:false}),
       loadWrittenSubmissionsForUser(userId)
     ]);
     if(ue) throw ue; if(re) throw re;
-    $("adminUserUsername").textContent=user.username; renderAvatar($("adminUserAvatar"),normalizeAvatarUrl(user.avatar_url),user.username.charAt(0).toUpperCase()); $("adminUserStatusText").textContent=user.is_admin?"Administrator":(user.blocked?"Blocked account":"Student account");
+    $("adminUserUsername").textContent=user.username; $("adminUserAvatar").textContent=user.username.charAt(0).toUpperCase(); $("adminUserStatusText").textContent=user.is_admin?"Administrator":(user.blocked?"Blocked account":"Student account");
     const blockBtn=$("adminUserBlockBtn"); blockBtn.textContent=user.blocked?"🔓 Unblock":"🚫 Block"; blockBtn.onclick=()=>toggleUserBlock(user.user_id,!!user.blocked,blockBtn);
     renderAdminUserResults(results||[],writtenRows||[]); renderAdminWrittenSubmissions(writtenRows||[]); renderPerformanceChart(results||[],writtenRows||[],"adminUserChart");
   }catch(err){console.error("Admin user profile load:",err);$("adminUserResults").innerHTML='<div class="empty-profile">Could not load this user profile.</div>';$("adminUserWritten").innerHTML='<div class="empty-profile">Could not load CQ / Written submissions.</div>';toast("Could not load user profile. Check Supabase/RLS.","error",3800);}
@@ -4320,7 +4197,7 @@ function renderAdminUserResults(rows,writtenRows=[]){
 }
 function renderAdminWrittenSubmissions(rows){
   const box=$("adminUserWritten"); if(!rows.length){box.innerHTML='<div class="empty-profile">No written submissions yet.</div>';return;} box.innerHTML="";
-  rows.forEach(r=>{const ex=r.written_exams||r,card=document.createElement("div");card.className="written-submit-card";const title=document.createElement("h4");title.textContent=ex.title||"Written Exam";const p=document.createElement("p");p.textContent=`${ex.subject||""} → ${ex.chapter||""} • Submitted ${new Date(r.submitted_at).toLocaleString("en-GB")} • Max ${ex.total_marks||0} marks`;card.append(title,p);{const lb=document.createElement("button");lb.className="btn btn-ghost";lb.style.margin="8px 0";lb.textContent="🏆 CQ Leaderboard";lb.addEventListener("click",()=>showWrittenLeaderboard(r.exam_id,{id:r.exam_id,title:ex.title,subject:ex.subject,chapter:ex.chapter,total_marks:ex.total_marks}));card.appendChild(lb);}const qs=Array.isArray(ex.questions)?ex.questions:[],ans=Array.isArray(r.answers)?r.answers:[];if(qs.length){const answersBox=document.createElement("div");qs.forEach((q,i)=>{const qa=document.createElement("div");qa.className="written-question";const qh=document.createElement("strong");qh.textContent=`Question ${i+1}: ${q}`;const a=document.createElement("div");a.style.cssText="margin-top:8px;white-space:pre-wrap;line-height:1.65";const item=ans[i];if(item&&typeof item==="object"){a.textContent=item.text||((item.images&&item.images.length)||item.imageDataUrl?"":"(No answer) ");if(i===0&&item.comment){const cm=document.createElement("p");cm.className="cq-student-comment";cm.textContent="Student comment: "+item.comment;a.appendChild(cm);}const imgs=Array.isArray(item.images)&&item.images.length?item.images:(item.imageDataUrl?[item.imageDataUrl]:[]);imgs.forEach((src,j)=>{const im=document.createElement("img");im.className="cq-stored-image";im.src=src;im.alt=`Uploaded answer image ${j+1} for question ${i+1}`;im.loading="lazy";a.appendChild(im);});}else a.textContent=item||"(No answer)";qa.append(qh,a);answersBox.appendChild(qa);});card.appendChild(answersBox);}if(r.status==="graded"){const g=document.createElement("div");g.className="written-graded";g.innerHTML=`<strong>Score: ${bnNum(r.score)} / ${bnNum(ex.total_marks||0)}</strong><br>${r.feedback?`Feedback: ${escapeHtml(r.feedback)}`:"No feedback added."}`;card.appendChild(g);}else{const row=document.createElement("div");row.className="grade-row";row.innerHTML=`<label>Marks (max ${ex.total_marks||0})<input type="number" min="0" max="${Number(ex.total_marks)||0}" step="0.5" value=""></label><button class="btn btn-primary">Grade Submission</button>`;const fb=document.createElement("textarea");fb.className="grade-feedback";fb.placeholder="Optional feedback for the student";row.appendChild(fb);card.appendChild(row);row.querySelector("button").addEventListener("click",()=>gradeWrittenSubmission(r.id,Number(ex.total_marks)||0,row.querySelector("input").value,fb.value));}box.appendChild(card);});
+  rows.forEach(r=>{const ex=r.written_exams||r,card=document.createElement("div");card.className="written-submit-card";const title=document.createElement("h4");title.textContent=ex.title||"Written Exam";const p=document.createElement("p");p.textContent=`${ex.subject||""} → ${ex.chapter||""} • Submitted ${new Date(r.submitted_at).toLocaleString("en-GB")} • Max ${ex.total_marks||0} marks`;card.append(title,p);{const lb=document.createElement("button");lb.className="btn btn-ghost";lb.style.margin="8px 0";lb.textContent="🏆 CQ Leaderboard";lb.addEventListener("click",()=>showWrittenLeaderboard(r.exam_id,{id:r.exam_id,title:ex.title,subject:ex.subject,chapter:ex.chapter,total_marks:ex.total_marks}));card.appendChild(lb);}const qs=Array.isArray(ex.questions)?ex.questions:[],ans=Array.isArray(r.answers)?r.answers:[];if(qs.length){const answersBox=document.createElement("div");qs.forEach((q,i)=>{const qa=document.createElement("div");qa.className="written-question";const qh=document.createElement("strong");qh.textContent=`Question ${i+1}: ${q}`;const a=document.createElement("div");a.style.cssText="margin-top:8px;white-space:pre-wrap;line-height:1.65";a.textContent=ans[i]||"(No answer)";qa.append(qh,a);answersBox.appendChild(qa);});card.appendChild(answersBox);}if(r.status==="graded"){const g=document.createElement("div");g.className="written-graded";g.innerHTML=`<strong>Score: ${bnNum(r.score)} / ${bnNum(ex.total_marks||0)}</strong><br>${r.feedback?`Feedback: ${escapeHtml(r.feedback)}`:"No feedback added."}`;card.appendChild(g);}else{const row=document.createElement("div");row.className="grade-row";row.innerHTML=`<label>Marks (max ${ex.total_marks||0})<input type="number" min="0" max="${Number(ex.total_marks)||0}" step="0.5" value=""></label><button class="btn btn-primary">Grade Submission</button>`;const fb=document.createElement("textarea");fb.className="grade-feedback";fb.placeholder="Optional feedback for the student";row.appendChild(fb);card.appendChild(row);row.querySelector("button").addEventListener("click",()=>gradeWrittenSubmission(r.id,Number(ex.total_marks)||0,row.querySelector("input").value,fb.value));}box.appendChild(card);});
 }
 async function gradeWrittenSubmission(id,max,score,feedback){
   if(!isAdmin()) return false;
@@ -4716,7 +4593,7 @@ document.addEventListener("keydown", (e)=>{
 
 async function saveUserResult(entry){
   if(!supabaseClient || !currentProfile) return;
-  const {data:{user}}=await getSessionUserResult();
+  const {data:{user}}=await supabaseClient.auth.getUser();
   if(!user) return;
   const row={user_id:user.id,exam_key:entry.examKey,subject:entry.subject,chapter:entry.chapter,exam:entry.exam,correct:entry.correct,total:entry.total,percent:entry.percent,status:entry.percent>=50?"pass":"fail",attempted_at:new Date(entry.time).toISOString()};
   const {error}=await supabaseClient.from("results").insert(row);
@@ -4829,7 +4706,7 @@ async function loadAdminPendingCqQueue(seedRows=null, seedUsers=null){
       card.append(h,meta,open,cancel);
       const qs=Array.isArray(ex.questions)?ex.questions:[];
       const det=document.createElement('details');const sum=document.createElement('summary');sum.textContent=`View answers (${qs.length})`;det.appendChild(sum);
-      qs.forEach((q,i)=>{const qa=document.createElement('div');qa.className='written-question';const qh=document.createElement('strong');qh.textContent=`Question ${i+1}: ${q}`;const a=document.createElement('div');a.style.cssText='white-space:pre-wrap;margin-top:6px';const item=(r.answers||[])[i];if(item&&typeof item==='object'){a.textContent=item.text||((item.images&&item.images.length)||item.imageDataUrl?'':'(No answer)');if(i===0&&item.comment){const cm=document.createElement('p');cm.className='cq-student-comment';cm.textContent='Student comment: '+item.comment;a.appendChild(cm);}const imgs=Array.isArray(item.images)&&item.images.length?item.images:(item.imageDataUrl?[item.imageDataUrl]:[]);imgs.forEach((src,j)=>{const im=document.createElement('img');im.className='cq-stored-image';im.src=src;im.alt=`Uploaded answer image ${j+1} for question ${i+1}`;im.loading='lazy';a.appendChild(im);});}else a.textContent=item||'(No answer)';qa.append(qh,a);det.appendChild(qa);});
+      qs.forEach((q,i)=>{const qa=document.createElement('div');qa.className='written-question';const qh=document.createElement('strong');qh.textContent=`Question ${i+1}: ${q}`;const a=document.createElement('div');a.style.cssText='white-space:pre-wrap;margin-top:6px';a.textContent=(r.answers||[])[i]||'(No answer)';qa.append(qh,a);det.appendChild(qa);});
       card.appendChild(det);
       const row=document.createElement('div');row.className='grade-row';row.innerHTML=`<label>Marks (max ${Number(ex.total_marks)||0})<input type="number" min="0" max="${Number(ex.total_marks)||0}" step="0.5"></label><button class="btn btn-primary">Grade & notify user</button>`;
       const fb=document.createElement('textarea');fb.className='grade-feedback';fb.placeholder='Optional feedback';row.appendChild(fb);
@@ -4862,8 +4739,8 @@ async function toggleUserBlock(userId, currentlyBlocked, btn){
 async function showProfile(){
   if(!authReady()) return; await loadCurrentProfile(); if(!currentProfile){openAuthModal("login");return;}
   hideAllScreens(); $("screen-profile").hidden=false; $("topSub").textContent="My Profile"; pushScreen("profile",{});
-  $("profileUsername").textContent=currentProfile.username; renderAvatar($("profileAvatar"),currentProfile.avatar_url,currentProfile.username.charAt(0).toUpperCase()); $("profileResults").innerHTML='<div class="empty-profile">⏳ Loading results...</div>'; $("profileWrittenResults").innerHTML='<div class="empty-profile">⏳ Loading written results...</div>';
-  const {data:{user}}=await getSessionUserResult(); if(!user)return;
+  $("profileUsername").textContent=currentProfile.username; $("profileAvatar").textContent=currentProfile.username.charAt(0).toUpperCase(); $("profileResults").innerHTML='<div class="empty-profile">⏳ Loading results...</div>'; $("profileWrittenResults").innerHTML='<div class="empty-profile">⏳ Loading written results...</div>';
+  const {data:{user}}=await supabaseClient.auth.getUser(); if(!user)return;
   const [{data,error},{data:written,error:writtenError}]=await Promise.all([
     supabaseClient.from("results").select("subject,chapter,exam,correct,total,percent,status,attempted_at").order("attempted_at",{ascending:true}),
     supabaseClient.from("written_submissions").select("id,exam_id,status,score,feedback,submitted_at,graded_at").eq("user_id",user.id).order("submitted_at",{ascending:false})
@@ -4875,46 +4752,6 @@ async function showProfile(){
   renderProfileWrittenResults(rows);
   if(!error){renderProfileResults(data||[],rows);renderPerformanceChart(data||[],rows);}
 }
-// Interactive square/circle cropper. User can zoom and drag before saving.
-function openImageCropper(file){return new Promise((resolve,reject)=>{
-  if(!file||!file.type||!file.type.startsWith("image/")){reject(new Error("Please choose an image file."));return;}
-  const url=URL.createObjectURL(file),overlay=document.createElement("div");overlay.className="crop-overlay";
-  overlay.innerHTML='<div class="crop-panel" role="dialog" aria-modal="true" aria-label="Crop profile picture"><h3 style="margin:0">Crop profile picture</h3><p style="color:var(--muted);margin:6px 0">Drag the image to position it, then adjust zoom.</p><div class="crop-stage"><img alt="Image crop preview"></div><div class="crop-controls"><label for="cropZoom">Zoom</label><input id="cropZoom" type="range" min="1" max="3" step="0.01" value="1"></div><div class="crop-actions"><button type="button" class="btn btn-ghost" data-crop-cancel>Cancel</button><button type="button" class="btn" data-crop-save>Use photo</button></div></div>';
-  document.body.appendChild(overlay);const stage=overlay.querySelector('.crop-stage'),img=overlay.querySelector('img'),zoom=overlay.querySelector('#cropZoom');let scale=1,base=1,x=0,y=0,drag=null,done=false;
-  const cleanup=(v)=>{if(done)return;done=true;URL.revokeObjectURL(url);overlay.remove();resolve(v||null)};
-  img.onload=()=>{const sw=stage.clientWidth,sh=stage.clientHeight;base=Math.max(sw/img.naturalWidth,sh/img.naturalHeight);scale=base;img.style.width=img.naturalWidth+'px';img.style.height=img.naturalHeight+'px';position();};img.src=url;
-  function position(){const z=Number(zoom.value);scale=base*z;const sw=stage.clientWidth,sh=stage.clientHeight;const w=img.naturalWidth*scale,h=img.naturalHeight*scale;x=Math.min(0,Math.max(sw-w,x));y=Math.min(0,Math.max(sh-h,y));img.style.width=w+'px';img.style.height=h+'px';img.style.left=x+'px';img.style.top=y+'px';}
-  zoom.addEventListener('input',()=>{const old=scale,centerX=stage.clientWidth/2,centerY=stage.clientHeight/2,ratio=(base*Number(zoom.value))/old;x=centerX-(centerX-x)*ratio;y=centerY-(centerY-y)*ratio;position()});
-  stage.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY,ox:x,oy:y};stage.setPointerCapture?.(e.pointerId);img.style.cursor='grabbing'});
-  stage.addEventListener('pointermove',e=>{if(!drag)return;x=drag.ox+(e.clientX-drag.x);y=drag.oy+(e.clientY-drag.y);position()});
-  const endDrag=()=>{drag=null;img.style.cursor='grab'};stage.addEventListener('pointerup',endDrag);stage.addEventListener('pointercancel',endDrag);
-  overlay.querySelector('[data-crop-cancel]').onclick=()=>cleanup(null);
-  overlay.addEventListener('click',e=>{if(e.target===overlay)cleanup(null)});
-  overlay.querySelector('[data-crop-save]').onclick=()=>{try{const size=420,canvas=document.createElement('canvas');canvas.width=size;canvas.height=size;const ctx=canvas.getContext('2d');const ratio=size/stage.clientWidth;ctx.drawImage(img,x*ratio,y*ratio,img.naturalWidth*scale*ratio,img.naturalHeight*scale*ratio);cleanup(canvas.toDataURL('image/jpeg',.84));}catch(e){cleanup(null);reject(e)}};
-});}
-
-// Existing users can update their profile picture from My Profile.
-(function setupProfileAvatarUpload(){
-  const btn=$("changeProfileAvatarBtn"),input=$("profileAvatarInput");
-  if(!btn||!input)return;
-  btn.addEventListener("click",()=>{if(!currentProfile){openAuthModal("login");return;}input.click();});
-  input.addEventListener("change",async()=>{
-    const file=input.files&&input.files[0]; if(!file)return;
-    const oldText=btn.textContent; btn.disabled=true; btn.textContent="Uploading…";
-    try{
-      const avatarData=await openImageCropper(file); if(!avatarData)return;
-      const {data:{user},error:userError}=await getSessionUserResult(); if(userError)throw userError; if(!user)throw new Error("Please log in again.");
-      const {error:metaError}=await supabaseClient.auth.updateUser({data:{avatar_data_url:avatarData}}); if(metaError)throw metaError;
-      const {error:profileError}=await supabaseClient.from("profiles").update({avatar_url:avatarData}).eq("user_id",user.id);
-      if(profileError)throw new Error("Photo was updated in auth, but the profile table needs the avatar_url SQL update. Run the provided SQL add-on, then try again.");
-      currentProfile.avatar_url=avatarData; renderAvatar($("profileAvatar"),avatarData,currentProfile.username.charAt(0).toUpperCase()); renderAvatar($("navProfileAvatar"),avatarData,currentProfile.username.charAt(0).toUpperCase());
-      const da=$("drawerAvatar");if(da){da.textContent="";da.style.backgroundImage=`url("${avatarData}")`;da.style.backgroundSize="cover";da.style.backgroundPosition="center";}
-      toast("Profile picture updated successfully!","success",2600);
-    }catch(err){console.error("Profile photo update:",err);toast(err.message||"Could not update profile picture.","error",4500);}
-    finally{btn.disabled=false;btn.textContent=oldText;input.value="";}
-  });
-})();
-
 let cqNotificationPollStarted=false;
 let cqNotifyBusy=false;
 function startCqNotificationPolling(){
@@ -4960,7 +4797,7 @@ async function requestExamNotifications(){
   const messaging=firebase.messaging();
   const token=await messaging.getToken({vapidKey:ARBIJOY_FCM_VAPID_KEY,serviceWorkerRegistration:registration});
   if(!token)throw new Error('FCM token was not created. Check Firebase Cloud Messaging settings.');
-  const {data:{user},error:userError}=await getSessionUserResult();
+  const {data:{user},error:userError}=await supabaseClient.auth.getUser();
   if(userError||!user)throw new Error('Please sign in again.');
   const {error:saveError}=await supabaseClient.from('push_subscriptions').upsert({user_id:user.id,fcm_token:token,updated_at:new Date().toISOString()},{onConflict:'user_id,fcm_token'});
   if(saveError)throw new Error('Supabase push_subscriptions table/policy setup is incomplete: '+saveError.message);
@@ -5562,9 +5399,7 @@ async function loadAdminCqHistory(){
   ]);
   if(examErr)throw examErr;if(subErr)throw subErr;
   const submissions=subs||[];if(!(exams||[]).length){box.innerHTML='<div class="empty-profile">No CQ exams have been created yet.</div>';return;}
-  const userIds=[...new Set(submissions.map(r=>r.user_id).filter(Boolean))];let userNames=new Map();
-  if(userIds.length){const {data:profiles,error:profileErr}=await supabaseClient.from('profiles').select('user_id,username').in('user_id',userIds);if(profileErr)console.warn('CQ history usernames could not load:',profileErr);else userNames=new Map((profiles||[]).map(p=>[p.user_id,p.username]));}
-  box.innerHTML=(exams||[]).map(ex=>{const rows=submissions.filter(r=>r.exam_id===ex.id),graded=rows.filter(r=>r.status==='graded').length,pending=rows.filter(r=>r.status==='submitted').length;const latest=rows[0];const status=pending?`${pending} pending marking`:graded?`${graded} graded`:rows.length?`${rows.length} submission(s)`: 'No submissions yet';return `<div class="profile-result cq-history-item" style="width:100%;margin-bottom:10px"><div class="pr-main"><strong>${escapeHtml(ex.title||'CQ / Written Exam')}</strong><span>${escapeHtml(ex.subject||'')}${ex.chapter?' → '+escapeHtml(ex.chapter):''} • Total: ${bnNum(ex.total_marks||0)} marks</span><span>${status}${latest?' • Latest: '+timeAgo(latest.submitted_at):''}</span>${rows.map(r=>`<span class="cq-history-score">Student: ${escapeHtml(userNames.get(r.user_id)||'Unknown student')} • ${r.status==='graded'?'Marks: '+bnNum(r.score??0)+'/'+bnNum(ex.total_marks||0):r.status==='submitted'?'Pending marking':'Status: '+escapeHtml(r.status||'unknown')} • ${timeAgo(r.graded_at||r.submitted_at)}</span>`).join('')}</div><div class="pr-score"><strong>${ex.active===false?'Inactive':'Active'}</strong><span>${bnNum(rows.length)} submissions</span></div></div>`;}).join('');
+  box.innerHTML=(exams||[]).map(ex=>{const rows=submissions.filter(r=>r.exam_id===ex.id),graded=rows.filter(r=>r.status==='graded').length,pending=rows.filter(r=>r.status==='submitted').length;const latest=rows[0];const status=pending?`${pending} pending marking`:graded?`${graded} graded`:rows.length?`${rows.length} submission(s)`: 'No submissions yet';return `<div class="profile-result cq-history-item" style="width:100%;margin-bottom:10px"><div class="pr-main"><strong>${escapeHtml(ex.title||'CQ / Written Exam')}</strong><span>${escapeHtml(ex.subject||'')}${ex.chapter?' → '+escapeHtml(ex.chapter):''} • Total: ${bnNum(ex.total_marks||0)} marks</span><span>${status}${latest?' • Latest: '+timeAgo(latest.submitted_at):''}</span>${rows.map(r=>`<span class="cq-history-score">Student ID: ${escapeHtml(String(r.user_id||'—'))} • ${r.status==='graded'?'Marks: '+bnNum(r.score??0)+'/'+bnNum(ex.total_marks||0):r.status==='submitted'?'Pending marking':'Status: '+escapeHtml(r.status||'unknown')} • ${timeAgo(r.graded_at||r.submitted_at)}</span>`).join('')}</div><div class="pr-score"><strong>${ex.active===false?'Inactive':'Active'}</strong><span>${bnNum(rows.length)} submissions</span></div></div>`;}).join('');
  }catch(e){console.error('CQ history load failed',e);box.innerHTML='<div class="empty-profile">Could not load CQ history. Check written_exams and written_submissions permissions.</div>';}
 }
 const cqHistoryRefresh=document.getElementById('refreshCqHistoryBtn');if(cqHistoryRefresh)cqHistoryRefresh.addEventListener('click',loadAdminCqHistory);
@@ -5783,7 +5618,7 @@ setTimeout(()=>{
     const target=Number(m[2]);if(!Number.isFinite(target)||target===0)return;
     el.dataset.countAnimating='1';el.dataset.countLast=raw;
     if(reduced){el.dataset.countAnimating='0';return}
-    const prefix=m[1],suffix=m[3],start=performance.now(),duration=650;
+    const prefix=m[1],suffix=m[3],start=performance.now(),duration=950;
     function tick(now){
       const t=Math.min(1,(now-start)/duration),ease=1-Math.pow(1-t,3);
       const value=target*ease;
@@ -5842,11 +5677,5 @@ setTimeout(()=>{
 })();
 </script>
 
-
-<script id="navbar-home-button">
-(function(){const b=document.getElementById('navHomeBtn');if(!b)return;b.addEventListener('click',()=>{const home=document.getElementById('drawerHome');if(home){home.click();return;}const brand=document.getElementById('brandHomeBtn');if(brand)brand.click();});})();
-</script>
 </body>
 </html>
-
-
