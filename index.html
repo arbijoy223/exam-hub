@@ -717,6 +717,20 @@ html[data-theme="dark"] .profile-result{border-color:#2a3850!important;color:#ed
 html[data-theme="dark"] .cq-history-score{background:#202a43!important;color:#edf2ff!important}
 html[data-theme="dark"] .site-footer{background:linear-gradient(130deg,#080d17 0%,#17182f 65%,#282353 100%)!important}
 
+
+/* Home hero carousel and exam feedback */
+.hero-carousel{position:relative;max-width:1200px;margin:18px auto 24px;padding:0 20px}
+.hero-track{position:relative;overflow:hidden;border-radius:22px;min-height:190px;background:#273449;box-shadow:0 12px 30px rgba(35,45,70,.14)}
+.hero-slide{display:none;position:relative;min-height:190px;color:white;background-size:cover;background-position:center;padding:30px 28px;align-items:flex-end}
+.hero-slide.active{display:flex}.hero-slide:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(15,23,42,.82),rgba(15,23,42,.08))}
+.hero-slide-content{position:relative;z-index:1;max-width:620px}.hero-slide h2{font-size:clamp(22px,4vw,34px);margin:0 0 8px}.hero-slide p{margin:0;line-height:1.6;font-size:14px}
+.hero-dots{position:absolute;right:32px;bottom:18px;display:flex;gap:7px;z-index:2}.hero-dot{width:9px;height:9px;border:0;border-radius:20px;background:#ffffff88;padding:0;cursor:pointer}.hero-dot.active{width:24px;background:#fff}
+.feedback-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px;margin:16px 0;box-shadow:var(--shadow)}
+.feedback-card textarea{width:100%;min-height:100px;border:1px solid var(--border);border-radius:12px;padding:12px;font:inherit;resize:vertical}
+.admin-user-search-results{position:absolute;z-index:120;background:white;border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow);max-height:280px;overflow:auto;width:min(420px,90vw)}
+.admin-user-search-results button{display:block;width:100%;padding:11px 14px;text-align:left;border:0;border-bottom:1px solid var(--border);background:white;cursor:pointer;color:var(--text);font:inherit}
+@media(max-width:700px){.hero-carousel{padding:0 12px;margin:10px auto 18px}.hero-track,.hero-slide{min-height:160px}.hero-slide{padding:22px 18px}.hero-dots{right:22px;bottom:12px}}
+
 </style>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#635bff">
@@ -898,6 +912,15 @@ html[data-theme="dark"] .theme-toggle{background:#202b40!important;color:#f8fafc
   </nav>
   <div class="drawer-foot">AR Bijoy Exam Center <span>Learn • Practice • Improve</span></div>
 </aside>
+
+
+<div class="hero-carousel" id="homeHeroCarousel" aria-label="Featured announcements">
+  <div class="hero-track">
+    <article class="hero-slide active" style="background-image:url('https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=1600&q=80')"><div class="hero-slide-content"><h2>Practice Today, Improve Tomorrow</h2><p>Choose your subject and prepare with regular MCQ and CQ exams.</p></div></article>
+    <article class="hero-slide" style="background-image:url('https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&w=1600&q=80')"><div class="hero-slide-content"><h2>Your Learning Journey</h2><p>Track your performance and learn from every attempt.</p></div></article>
+    <article class="hero-slide" style="background-image:url('https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=1600&q=80')"><div class="hero-slide-content"><h2>Stay Focused. Keep Learning.</h2><p>Explore study materials and prepare for your next exam.</p></div></article>
+  </div><div class="hero-dots" aria-label="Choose slide"><button class="hero-dot active" aria-label="Slide 1"></button><button class="hero-dot" aria-label="Slide 2"></button><button class="hero-dot" aria-label="Slide 3"></button></div>
+</div>
 
 <div class="wrap">
 
@@ -1276,6 +1299,8 @@ const supabaseClient = (SUPABASE_URL.startsWith("http") && SUPABASE_ANON_KEY.len
   ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 
 let currentProfile = null;
+window.supabaseClient = supabaseClient;
+Object.defineProperty(window,"currentProfile",{configurable:true,get:()=>currentProfile});
 let authMode = "login";
 let pendingExamAfterLogin = null;
 
@@ -3902,6 +3927,11 @@ function renderSubjects(){
   });
 }
 
+// Ensure English subject section exists; admin can add its chapter/exam content later.
+if(!examData["ইংরেজি"]){
+  examData["ইংরেজি"]={chapters:{"English Practice":{exams:{}}}};
+}
+
 // 2. Chapter লিস্ট দেখানো
 function showChapters(subject){
   state.selectedSubject = subject;
@@ -4309,6 +4339,8 @@ function renderAdminWrittenSubmissions(rows){
   const box=$("adminUserWritten"); if(!rows.length){box.innerHTML='<div class="empty-profile">No written submissions yet.</div>';return;} box.innerHTML="";
   rows.forEach(r=>{const ex=r.written_exams||r,card=document.createElement("div");card.className="written-submit-card";const title=document.createElement("h4");title.textContent=ex.title||"Written Exam";const p=document.createElement("p");p.textContent=`${ex.subject||""} → ${ex.chapter||""} • Submitted ${new Date(r.submitted_at).toLocaleString("en-GB")} • Max ${ex.total_marks||0} marks`;card.append(title,p);{const lb=document.createElement("button");lb.className="btn btn-ghost";lb.style.margin="8px 0";lb.textContent="🏆 CQ Leaderboard";lb.addEventListener("click",()=>showWrittenLeaderboard(r.exam_id,{id:r.exam_id,title:ex.title,subject:ex.subject,chapter:ex.chapter,total_marks:ex.total_marks}));card.appendChild(lb);}const qs=Array.isArray(ex.questions)?ex.questions:[],ans=Array.isArray(r.answers)?r.answers:[];if(qs.length){const answersBox=document.createElement("div");qs.forEach((q,i)=>{const qa=document.createElement("div");qa.className="written-question";const qh=document.createElement("strong");qh.textContent=`Question ${i+1}: ${q}`;const a=document.createElement("div");a.style.cssText="margin-top:8px;white-space:pre-wrap;line-height:1.65";const item=ans[i];if(item&&typeof item==="object"){a.textContent=item.text||((item.images&&item.images.length)||item.imageDataUrl?"":"(No answer) ");if(i===0&&item.comment){const cm=document.createElement("p");cm.className="cq-student-comment";cm.textContent="Student comment: "+item.comment;a.appendChild(cm);}const imgs=Array.isArray(item.images)&&item.images.length?item.images:(item.imageDataUrl?[item.imageDataUrl]:[]);imgs.forEach((src,j)=>{const im=document.createElement("img");im.className="cq-stored-image";im.src=src;im.alt=`Uploaded answer image ${j+1} for question ${i+1}`;im.loading="lazy";a.appendChild(im);});}else a.textContent=item||"(No answer)";qa.append(qh,a);answersBox.appendChild(qa);});card.appendChild(answersBox);}if(r.status==="graded"){const g=document.createElement("div");g.className="written-graded";g.innerHTML=`<strong>Score: ${bnNum(r.score)} / ${bnNum(ex.total_marks||0)}</strong><br>${r.feedback?`Feedback: ${escapeHtml(r.feedback)}`:"No feedback added."}`;card.appendChild(g);}else{const row=document.createElement("div");row.className="grade-row";row.innerHTML=`<label>Marks (max ${ex.total_marks||0})<input type="number" min="0" max="${Number(ex.total_marks)||0}" step="0.5" value=""></label><button class="btn btn-primary">Grade Submission</button>`;const fb=document.createElement("textarea");fb.className="grade-feedback";fb.placeholder="Optional feedback for the student";row.appendChild(fb);card.appendChild(row);row.querySelector("button").addEventListener("click",()=>gradeWrittenSubmission(r.id,Number(ex.total_marks)||0,row.querySelector("input").value,fb.value));}box.appendChild(card);});
 }
+window.showAdminUserProfile = showAdminUserProfile;
+
 async function gradeWrittenSubmission(id,max,score,feedback){
   if(!isAdmin()) return false;
   const n=Number(score);
@@ -4631,13 +4663,17 @@ function renderAllQuestions(){
 
 // Exit button click handler (হোমপেজে নিয়ে যাবে)
 $("btnExitExam").addEventListener("click", async ()=>{
-  if(await customConfirm("Cancel this exam and return home?", {icon:"🚪"})){
+  if(await customConfirm("Cancel this exam? Your current answers and marks will be saved.", {icon:"🚪"})){
     clearInterval(state.timerId);
-    state.examInProgress = false;
-    hideAllScreens();
-    $("screen-subjects").hidden = false;
-    $("topSub").textContent = "Choose a subject to begin";
-    pushScreen("subjects", {});
+    try{
+      const qs=examData[state.selectedSubject].chapters[state.selectedChapter].exams[state.selectedExam].questions;
+      const correct=qs.reduce((n,q,i)=>n+(state.answers[i]===q.answer?1:0),0);
+      const total=qs.length, percent=total?Math.round(correct/total*100):0, now=Date.now();
+      await saveUserResult({examKey:getExamKey(),time:now,subject:state.selectedSubject,chapter:state.selectedChapter,exam:state.selectedExam,correct,total,percent,status:"cancelled"});
+      saveLeaderboardEntry({examKey:getExamKey(),time:now,subject:state.selectedSubject,chapter:state.selectedChapter,exam:state.selectedExam,name:state.studentName,correct,total,percent});
+      toast("Cancelled exam score saved (where database permissions allow).","info",3500);
+    }catch(err){console.error("Cancelled exam save failed:",err);toast("Exam cancel hoyeche, kintu score save hoyni: "+(err.message||""),"error",4500);}
+    state.finished=true;state.examInProgress=false;hideAllScreens();$("screen-subjects").hidden=false;$("topSub").textContent="Choose a subject to begin";pushScreen("subjects",{});
   }
 });
 
@@ -4705,7 +4741,7 @@ async function saveUserResult(entry){
   if(!supabaseClient || !currentProfile) return;
   const {data:{user}}=await supabaseClient.auth.getUser();
   if(!user) return;
-  const row={user_id:user.id,exam_key:entry.examKey,subject:entry.subject,chapter:entry.chapter,exam:entry.exam,correct:entry.correct,total:entry.total,percent:entry.percent,status:entry.percent>=50?"pass":"fail",attempted_at:new Date(entry.time).toISOString()};
+  const row={user_id:user.id,exam_key:entry.examKey,subject:entry.subject,chapter:entry.chapter,exam:entry.exam,correct:entry.correct,total:entry.total,percent:entry.percent,status:entry.status || (entry.percent>=50?"pass":"fail"),attempted_at:new Date(entry.time).toISOString()};
   const {error}=await supabaseClient.from("results").insert(row);
   if(error) console.error("Result save failed:",error);
 }
@@ -5833,5 +5869,41 @@ setTimeout(()=>{
 <script id="navbar-home-button">
 (function(){const b=document.getElementById('navHomeBtn');if(!b)return;b.addEventListener('click',()=>{const home=document.getElementById('drawerHome');if(home){home.click();return;}const brand=document.getElementById('brandHomeBtn');if(brand)brand.click();});})();
 </script>
+
+<script>
+/* Hero carousel rotation */
+(function(){
+ const root=document.getElementById('homeHeroCarousel'); if(!root)return;
+ const slides=[...root.querySelectorAll('.hero-slide')],dots=[...root.querySelectorAll('.hero-dot')];let idx=0;
+ function show(n){idx=(n+slides.length)%slides.length;slides.forEach((x,i)=>x.classList.toggle('active',i===idx));dots.forEach((x,i)=>x.classList.toggle('active',i===idx));}
+ dots.forEach((b,i)=>b.addEventListener('click',()=>show(i)));
+ setInterval(()=>show(idx+1),5000);
+})();
+
+/* Admin-only username search dropdown. It uses existing profiles and admin profile screen. */
+(function(){
+ const input=document.getElementById('siteSearch'); if(!input)return;
+ const wrap=input.closest('.nav-search-wrap'); if(!wrap)return;
+ wrap.style.position='relative';
+ const results=document.createElement('div');results.className='admin-user-search-results';results.hidden=true;wrap.appendChild(results);
+ let timer=null;
+ input.addEventListener('input',()=>{
+   clearTimeout(timer);results.hidden=true;results.innerHTML='';
+   const q=input.value.trim().toLowerCase();
+   if(!q||!window.currentProfile||!window.currentProfile.is_admin||!window.supabaseClient)return;
+   timer=setTimeout(async()=>{
+     try{
+       const {data,error}=await window.supabaseClient.from('profiles').select('user_id,username').ilike('username','%'+q.replace(/[%_]/g,'')+'%').limit(8);
+       if(error)throw error;
+       results.innerHTML='';
+       (data||[]).forEach(u=>{const b=document.createElement('button');b.type='button';b.textContent=u.username||'Unnamed user';b.addEventListener('click',()=>{results.hidden=true;input.value=u.username||'';if(typeof window.showAdminUserProfile==='function')window.showAdminUserProfile(u.user_id);else alert('Admin profile screen is unavailable.');});results.appendChild(b);});
+       if(results.childElementCount)results.hidden=false;
+     }catch(e){console.warn('Admin user search failed',e);}
+   },300);
+ });
+ document.addEventListener('click',e=>{if(!wrap.contains(e.target))results.hidden=true;});
+})();
+</script>
+
 </body>
 </html>
