@@ -919,6 +919,56 @@ html[data-theme="dark"] .theme-toggle{background:#202b40!important;color:#f8fafc
 @media(prefers-reduced-motion:reduce){.account-area .account-btn,.message-unread-badge{animation:none!important;transition:none!important}}
 </style>
 
+
+<style id="site-polish-responsive-theme-v6">
+/* Consistent spacing, motion and readable themes */
+:root{--motion-fast:180ms;--motion-smooth:320ms;--motion-ease:cubic-bezier(.2,.75,.25,1)}
+html{scroll-behavior:smooth}
+body{overflow-x:hidden;line-height:1.6}
+button,a,.btn,.account-btn,.drawer-nav button,.mat-action,.subject-card,.hub-card,.profile-card,.admin-card,.stat-card,.question-card,.option,.modal,.toast,.chat-bubble{transition:color var(--motion-smooth) ease,background-color var(--motion-smooth) ease,border-color var(--motion-smooth) ease,box-shadow var(--motion-smooth) ease,transform var(--motion-smooth) var(--motion-ease),opacity var(--motion-smooth) ease}
+button:hover,.btn:hover,.account-btn:hover,.mat-action:hover{transform:translateY(-2px)}
+button:active,.btn:active,.account-btn:active{transform:scale(.98)}
+:focus-visible{outline:3px solid rgba(99,91,255,.72)!important;outline-offset:3px}
+/* Navbar: no horizontal scrolling; account/navigation controls wrap onto rows */
+.topbar{width:100%;max-width:100%;box-sizing:border-box}
+.topbar-inner{width:100%;max-width:1360px;box-sizing:border-box;flex-wrap:wrap;row-gap:10px}
+.account-area{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:8px;min-width:0;max-width:100%}
+.account-area>*{max-width:100%;white-space:normal}
+@media(max-width:700px){
+ .topbar-inner{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;grid-template-rows:auto auto auto!important;gap:8px!important;padding:10px 12px!important;overflow:visible}
+ .brand{grid-column:1;grid-row:1;min-width:0!important;max-width:100%;overflow:hidden}
+ .brand-text{white-space:normal!important;overflow-wrap:anywhere;line-height:1.2}
+ .menu-trigger{grid-column:2;grid-row:1;position:static!important;justify-self:end}
+ .theme-toggle{grid-column:2;grid-row:1;justify-self:end;margin-right:46px!important;max-width:calc(100% - 48px)}
+ .nav-search-wrap{grid-column:1/-1;grid-row:2;width:100%;max-width:none;min-width:0;box-sizing:border-box}
+ .account-area{grid-column:1/-1;grid-row:3;display:flex!important;flex-wrap:wrap!important;justify-content:flex-start!important;align-content:flex-start;gap:7px!important;width:100%;min-width:0}
+ .account-area>*{flex:0 1 auto!important;min-width:0!important;max-width:100%;font-size:12px!important;padding:8px 10px!important;white-space:normal;overflow-wrap:anywhere}
+ .account-area #profileBtn:not([hidden]),.account-area #adminBtn:not([hidden]){width:auto!important;max-width:100%}
+ .wrap{max-width:100%;box-sizing:border-box}
+}
+@media(max-width:390px){.account-area>*{font-size:11px!important;padding:7px 8px!important}.brand-text{font-size:12px!important}.brand-sub{white-space:normal!important}}
+/* Compact subject cards with a subtle floating feel */
+.subject-grid{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr))!important;gap:13px!important;overflow:visible!important;padding:8px 2px 16px!important;scroll-snap-type:none!important}
+.subject-grid>.subject-card{display:flex!important;width:100%!important;min-width:0!important;min-height:118px!important;flex:initial!important;padding:17px!important;border-radius:19px!important;animation:subjectFloatIn .5s var(--motion-ease) both,subjectFloat 5.5s ease-in-out infinite!important;box-sizing:border-box}
+.subject-grid>.subject-card:nth-child(2n){animation-delay:.08s,-1.8s!important}
+.subject-grid>.subject-card:nth-child(3n){animation-delay:.14s,-3s!important}
+.subject-card h3{font-size:clamp(16px,2vw,19px)!important;line-height:1.35}
+.subject-card:hover{transform:translateY(-5px) scale(1.01)!important;box-shadow:0 15px 32px rgba(99,91,255,.14)!important;animation-play-state:paused!important}
+@keyframes subjectFloatIn{from{opacity:0;translate:0 10px}to{opacity:1;translate:0 0}}
+@keyframes subjectFloat{0%,100%{translate:0 0}50%{translate:0 -4px}}
+@media(max-width:600px){.subject-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}.subject-grid>.subject-card{min-height:112px!important;padding:13px!important}.subject-card h3{font-size:15px!important}.subject-meta{gap:5px!important;font-size:11px}}
+@media(max-width:350px){.subject-grid{grid-template-columns:minmax(0,1fr)!important}}
+/* Dark theme: ensure text remains legible on every common surface */
+html[data-theme="dark"] body{color:#edf2ff!important}
+html[data-theme="dark"] .subject-card,html[data-theme="dark"] .hub-card,html[data-theme="dark"] .profile-card,html[data-theme="dark"] .admin-card,html[data-theme="dark"] .stat-card,html[data-theme="dark"] .question-card,html[data-theme="dark"] .option,html[data-theme="dark"] .result-card,html[data-theme="dark"] .written-card,html[data-theme="dark"] .material-card,html[data-theme="dark"] .admin-stat-click,html[data-theme="dark"] .written-submit-card,html[data-theme="dark"] .chat-bubble,html[data-theme="dark"] .modal,html[data-theme="dark"] .auth-modal{background:#151e30!important;color:#edf2ff!important;border-color:#35425c!important}
+html[data-theme="dark"] p,html[data-theme="dark"] span,html[data-theme="dark"] label,html[data-theme="dark"] li,html[data-theme="dark"] small,html[data-theme="dark"] .muted,html[data-theme="dark"] .lede p,html[data-theme="dark"] .hub-text p,html[data-theme="dark"] .subject-meta,html[data-theme="dark"] .profile-card p,html[data-theme="dark"] .admin-section-title p,html[data-theme="dark"] .empty-profile{color:#c5cee0}
+html[data-theme="dark"] h1,html[data-theme="dark"] h2,html[data-theme="dark"] h3,html[data-theme="dark"] h4,html[data-theme="dark"] strong,html[data-theme="dark"] .subject-card h3,html[data-theme="dark"] .hub-text h3,html[data-theme="dark"] .qtext,html[data-theme="dark"] .option,html[data-theme="dark"] .profile-result{color:#f3f6ff!important}
+html[data-theme="dark"] input,html[data-theme="dark"] textarea,html[data-theme="dark"] select,html[data-theme="dark"] .chat-compose textarea{background:#0f1728!important;color:#f3f6ff!important;border-color:#3b4964!important}
+html[data-theme="dark"] input::placeholder,html[data-theme="dark"] textarea::placeholder{color:#aab6cc!important}
+html[data-theme="dark"] .pill{background:#202b42!important;color:#dce5ff!important;border-color:#3a4865!important}
+html[data-theme="dark"] a{color:#b9baff}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+</style>
 </head>
 
 <body>
