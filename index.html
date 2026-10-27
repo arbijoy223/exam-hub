@@ -6272,50 +6272,6 @@ html:root:root body *{scroll-behavior:auto}
   html:root:root body .subject-card .card-icon{flex-basis:36px!important;width:36px!important;height:36px!important;}
   html:root:root body .subject-card h3,html:root:root body .subject-card .subject-card-copy h3{font-size:16px!important;}
 }
-
-/* ===== Restore original pink navigation + original hero palette; lift Top performers ===== */
-html:root:root body .topbar{background:rgba(255,255,255,.88)!important;border-bottom:1px solid rgba(234,76,137,.18)!important;box-shadow:0 5px 25px rgba(234,76,137,.08)!important}
-html:root:root body .account-btn{background:linear-gradient(135deg,#ea4c89,#f472b6)!important;color:#fff!important;border:1px solid rgba(234,76,137,.22)!important;box-shadow:0 7px 20px rgba(234,76,137,.22)!important}
-html:root:root body .account-btn.ghost{background:linear-gradient(135deg,#ea4c89,#f472b6)!important;color:#fff!important;border-color:rgba(255,255,255,.35)!important}
-html:root:root body .account-area .home-nav-btn,html:root:root body .account-area .account-btn{color:#fff!important}
-html:root:root body #homeHeroCarousel{background:linear-gradient(120deg,#101a38,#263c69,#7451a5)!important}
-html:root:root body #homeHeroCarousel:before{background:radial-gradient(circle at 15% 20%,rgba(96,165,250,.25),transparent 38%),radial-gradient(circle at 85% 85%,rgba(192,132,252,.24),transparent 42%),linear-gradient(100deg,rgba(6,12,30,.58),rgba(10,20,45,.12))!important}
-html:root:root body #homeHeroCarousel .hero-track{background:linear-gradient(120deg,#101a38,#263c69,#7451a5)!important}
-html:root:root body #homeHeroCarousel .hero-slide:before{background:linear-gradient(90deg,rgba(15,23,42,.70),rgba(15,23,42,.08))!important}
-html:root:root body #homeHeroCarousel .hero-top-three{margin-top:-18px!important;padding-top:0!important;position:relative!important;z-index:4!important}
-html:root:root body #homeHeroCarousel .hero-top-user{background:rgba(234,76,137,.20)!important;border-color:rgba(255,255,255,.32)!important}
-@media(max-width:700px){html:root:root body #homeHeroCarousel .hero-top-three{margin-top:-12px!important;gap:7px!important}}
-
-
-/* ===== Final readability + navbar profile-avatar fixes ===== */
-/* Keep the avatar image visible above button/background styling. */
-#profileBtn .nav-profile-avatar{
-  position:relative!important;flex:0 0 36px!important;overflow:hidden!important;
-  background-color:#e9e8ff!important;background-repeat:no-repeat!important;
-  background-position:center!important;background-size:cover!important;
-  color:#3730a3!important;border:2px solid rgba(255,255,255,.95)!important;
-}
-#profileBtn .nav-profile-avatar[aria-label="Profile picture"]{color:transparent!important;}
-#profileBtn .nav-profile-avatar:not([aria-label="Profile picture"]){
-  background-image:none!important;background:linear-gradient(135deg,#fce7f3,#fbcfe8)!important;
-  color:#9d174d!important;
-}
-/* Stronger text contrast/weight in both light and dark modes without changing icon glyphs. */
-body{font-weight:600!important}
-p,li,label,small,summary,td,th,dd,dt,.lede,.subject-meta,.hub-text p,.subject-card p,
-.card-description,.brand-sub,.nav-search-wrap input,.profile-card p,.drawer-foot,
-.modal p,.modal label,.form-help,.muted,.subtitle,.description{
-  font-weight:600!important;
-}
-h1,h2,h3,h4,h5,h6,.brand-text,.brand-sub,.account-btn,.theme-toggle,
-button:not(.icon-btn),.drawer-nav button,.subject-card h3,.hub-text h3,
-.pill,.badge,.nav-search-wrap button,.profile-result strong,.qtext,.option,
-.section-title,.section-heading,.hero-title,.hero-subtitle,.top-performer-title{
-  font-weight:800!important;
-}
-input,select,textarea{font-weight:600!important}
-input::placeholder,textarea::placeholder{font-weight:600!important;opacity:.8}
-@media(max-width:700px){#profileBtn .nav-profile-avatar{flex-basis:31px!important}}
 </style>
 
 </html>
