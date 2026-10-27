@@ -6240,115 +6240,51 @@ html:root:root body *{scroll-behavior:auto}
 @media(max-width:380px){html:root:root body .subject-grid{grid-template-columns:minmax(0,1fr)!important}}
 @media(prefers-reduced-motion:reduce){html:root:root body *{animation:none!important;transition:none!important}}
 /* ===== end V8 ===== */
+
+/* ===== Phone width 380–500px: keep card names readable ===== */
+@media (min-width: 380px) and (max-width: 500px){
+  html:root:root body .subject-grid{grid-template-columns:minmax(0,1fr)!important;gap:12px!important;width:100%!important;}
+  html:root:root body .subject-grid>.subject-card{
+    width:100%!important;min-width:0!important;min-height:unset!important;height:auto!important;
+    padding:16px 18px!important;gap:12px!important;border-radius:17px!important;
+    display:flex!important;align-items:center!important;box-sizing:border-box!important;
+    overflow:visible!important;white-space:normal!important;
+  }
+  html:root:root body .subject-card h3,
+  html:root:root body .subject-card .subject-card-copy,
+  html:root:root body .subject-card .subject-card-copy h3,
+  html:root:root body .subject-card p,
+  html:root:root body .subject-card small{
+    min-width:0!important;max-width:100%!important;white-space:normal!important;
+    overflow-wrap:break-word!important;word-break:normal!important;hyphens:none!important;
+    line-height:1.4!important;text-overflow:clip!important;
+  }
+  html:root:root body .subject-card h3,
+  html:root:root body .subject-card .subject-card-copy h3{font-size:clamp(17px,4.4vw,20px)!important;letter-spacing:normal!important;}
+  html:root:root body .subject-card .card-arrow,
+  html:root:root body .subject-card .card-arro{display:none!important;}
+  html:root:root body .subject-card .card-icon{flex:0 0 42px!important;width:42px!important;height:42px!important;}
+  html:root:root body .subject-card :is(.subject-card-copy,.card-content,.card-body){flex:1 1 auto!important;min-width:0!important;}
+}
+@media (min-width: 431px) and (max-width: 500px){
+  html:root:root body .subject-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important;}
+  html:root:root body .subject-grid>.subject-card{padding:14px!important;align-items:flex-start!important;}
+  html:root:root body .subject-card .card-icon{flex-basis:36px!important;width:36px!important;height:36px!important;}
+  html:root:root body .subject-card h3,html:root:root body .subject-card .subject-card-copy h3{font-size:16px!important;}
+}
+
+/* ===== Restore original pink navigation + original hero palette; lift Top performers ===== */
+html:root:root body .topbar{background:rgba(255,255,255,.88)!important;border-bottom:1px solid rgba(234,76,137,.18)!important;box-shadow:0 5px 25px rgba(234,76,137,.08)!important}
+html:root:root body .account-btn{background:linear-gradient(135deg,#ea4c89,#f472b6)!important;color:#fff!important;border:1px solid rgba(234,76,137,.22)!important;box-shadow:0 7px 20px rgba(234,76,137,.22)!important}
+html:root:root body .account-btn.ghost{background:linear-gradient(135deg,#ea4c89,#f472b6)!important;color:#fff!important;border-color:rgba(255,255,255,.35)!important}
+html:root:root body .account-area .home-nav-btn,html:root:root body .account-area .account-btn{color:#fff!important}
+html:root:root body #homeHeroCarousel{background:linear-gradient(120deg,#101a38,#263c69,#7451a5)!important}
+html:root:root body #homeHeroCarousel:before{background:radial-gradient(circle at 15% 20%,rgba(96,165,250,.25),transparent 38%),radial-gradient(circle at 85% 85%,rgba(192,132,252,.24),transparent 42%),linear-gradient(100deg,rgba(6,12,30,.58),rgba(10,20,45,.12))!important}
+html:root:root body #homeHeroCarousel .hero-track{background:linear-gradient(120deg,#101a38,#263c69,#7451a5)!important}
+html:root:root body #homeHeroCarousel .hero-slide:before{background:linear-gradient(90deg,rgba(15,23,42,.70),rgba(15,23,42,.08))!important}
+html:root:root body #homeHeroCarousel .hero-top-three{margin-top:-18px!important;padding-top:0!important;position:relative!important;z-index:4!important}
+html:root:root body #homeHeroCarousel .hero-top-user{background:rgba(234,76,137,.20)!important;border-color:rgba(255,255,255,.32)!important}
+@media(max-width:700px){html:root:root body #homeHeroCarousel .hero-top-three{margin-top:-12px!important;gap:7px!important}}
 </style>
 
 </html>
-
-<style id="user-requested-readability-responsive-fix">
-/* Responsive readability and contrast patch for uploaded index-dribbble-v8.html */
-html:root:root body { color:var(--dr-ink,#172033)!important; }
-html:root:root body :is(p,li,label,small,span,div,td,th,dd,dt,figcaption,.muted,.hint,.description,.card-hint,.subject-meta,.lede,.mat-sub,.hub-text,.form-hint,.help-text) {
-  text-shadow:none;
-}
-html:root:root body :is(.subject-card,.hub-card,.material-card,.question-card,.profile-card,.admin-card,.written-card,.pstat,.stat-card,.admin-stat,.admin-action-card,.feedback-card,.lb-row,.result-stat,.written-question,.written-submit-card,.cq-result-item,.exam-card) {
-  color:var(--dr-ink)!important;
-}
-html:root:root body :is(.subject-card,.hub-card,.material-card,.question-card,.profile-card,.admin-card,.written-card,.pstat,.stat-card,.admin-stat,.admin-action-card,.feedback-card,.lb-row,.result-stat,.written-question,.written-submit-card,.cq-result-item,.exam-card) :is(h1,h2,h3,h4,p,span,small,label,strong,em,li,div) {
-  color:inherit;
-}
-html:root:root body :is(.subject-card h3,.subject-card .subject-title,.hub-card h3,.material-card h3,.question-card .qtext,.question-card .qnum,.written-question,.exam-card h3) {
-  color:var(--dr-ink)!important;
-}
-html:root:root body :is(.subject-meta,.subject-meta span,.card-hint,.hub-text p,.mat-sub,.pstat span,.admin-stat span,.lede, .form-hint, .help-text) {
-  color:var(--dr-muted)!important;
-  opacity:1!important;
-}
-html[data-theme="dark"] body :is(.subject-card,.hub-card,.material-card,.question-card,.profile-card,.admin-card,.written-card,.pstat,.stat-card,.admin-stat,.admin-action-card,.feedback-card,.lb-row,.result-stat,.written-question,.written-submit-card,.cq-result-item,.exam-card) {
-  background:var(--dr-card,#17162b)!important;
-  color:#f3f3f7!important;
-  border-color:var(--dr-line,#393852)!important;
-}
-html[data-theme="dark"] body :is(.subject-card,.hub-card,.material-card,.question-card,.profile-card,.admin-card,.written-card,.pstat,.stat-card,.admin-stat,.admin-action-card,.feedback-card,.lb-row,.result-stat,.written-question,.written-submit-card,.cq-result-item,.exam-card) :is(h1,h2,h3,h4,p,span,small,label,strong,em,li,div,td,th) {
-  color:inherit;
-  opacity:1;
-}
-html[data-theme="dark"] body :is(.subject-card h3,.hub-card h3,.material-card h3,.qtext,.qnum,.option,.option span,.admin-table td,.admin-table th) {
-  color:#f3f3f7!important;
-}
-html[data-theme="dark"] body :is(input,textarea,select)::placeholder { color:#b9b8ca!important; opacity:1!important; }
-html[data-theme="dark"] body :is(.subject-meta,.subject-meta span,.card-hint,.hub-text p,.mat-sub,.pstat span,.admin-stat span,.lede,.form-hint,.help-text) { color:#c1c0d1!important; opacity:1!important; }
-
-/* Exam and subject cards adapt to narrow screens without clipping text */
-html:root:root body .subject-grid { grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr))!important; align-items:stretch; }
-html:root:root body .subject-card { min-width:0!important; min-height:140px; padding:20px!important; overflow-wrap:anywhere; }
-html:root:root body .subject-card h3 { font-size:clamp(16px,2.2vw,20px)!important; line-height:1.35!important; overflow-wrap:anywhere; }
-html:root:root body .subject-card :is(p,span,small,.subject-meta) { font-size:clamp(12px,1.6vw,14px); line-height:1.5!important; overflow-wrap:anywhere; }
-html:root:root body :is(.question-card,.exam-card,.written-question,.written-submit-card,.cq-result-item,.hub-card,.material-card,.admin-card,.profile-card) { min-width:0!important; overflow-wrap:anywhere; }
-html:root:root body :is(.question-card p,.qtext,.option,.written-question p,.written-question label,.hub-card p,.material-card p,.admin-card p) { font-size:clamp(14px,2.1vw,16px)!important; line-height:1.65!important; overflow-wrap:anywhere; word-break:normal; }
-html:root:root body :is(.admin-table,.table-wrap) { max-width:100%; }
-@media(max-width:700px) {
- html:root:root body .wrap { width:100%!important; padding:18px 12px 42px!important; }
- html:root:root body .subject-grid { grid-template-columns:repeat(2,minmax(0,1fr))!important; gap:12px!important; }
- html:root:root body .subject-card { min-height:132px!important; padding:14px!important; border-radius:16px!important; }
- html:root:root body .subject-card h3 { font-size:16px!important; line-height:1.35!important; }
- html:root:root body .subject-card .card-icon { width:42px!important; height:42px!important; margin-bottom:10px!important; }
- html:root:root body .subject-meta { gap:5px!important; }
- html:root:root body .subject-meta .pill, html:root:root body .subject-card small { font-size:11px!important; line-height:1.4!important; white-space:normal!important; }
- html:root:root body :is(.question-card,.written-question,.written-submit-card,.cq-result-item,.material-card,.hub-card,.admin-card,.profile-card) { padding:14px!important; border-radius:16px!important; }
- html:root:root body :is(.qtext,.option,.written-question p,.written-question label) { font-size:14px!important; line-height:1.65!important; }
- html:root:root body .hero-carousel { padding:0 12px!important; margin:12px auto 18px!important; }
- html:root:root body #homeHeroCarousel .hero-track { height:auto!important; min-height:230px!important; }
- html:root:root body #homeHeroCarousel .hero-slide { min-height:230px!important; padding:22px 18px 42px!important; background-position:center!important; background-size:cover!important; }
- html:root:root body #homeHeroCarousel .hero-slide:before { background:linear-gradient(90deg,rgba(8,12,28,.78) 0%,rgba(8,12,28,.48) 62%,rgba(8,12,28,.26) 100%)!important; }
- html:root:root body #homeHeroCarousel .hero-slide h2 { color:#fff!important; font-size:clamp(20px,5.2vw,28px)!important; line-height:1.25!important; text-shadow:0 2px 12px rgba(0,0,0,.45); }
- html:root:root body #homeHeroCarousel .hero-slide p { color:#fff!important; font-size:13px!important; line-height:1.55!important; text-shadow:0 1px 8px rgba(0,0,0,.5); }
-}
-@media(max-width:380px) {
- html:root:root body .subject-grid { grid-template-columns:minmax(0,1fr)!important; }
- html:root:root body .subject-card { min-height:115px!important; }
-}
-
-/* Image-forward carousel: retain photos, use a dark legible overlay instead of opaque gradients */
-html:root:root body #homeHeroCarousel .hero-track { background:#17162b!important; }
-html:root:root body #homeHeroCarousel .hero-slide { background-color:#17162b!important; background-size:cover!important; background-position:center!important; }
-html:root:root body #homeHeroCarousel .hero-slide:before {
- background:linear-gradient(90deg,rgba(8,12,28,.78) 0%,rgba(8,12,28,.48) 58%,rgba(8,12,28,.18) 100%)!important;
-}
-html:root:root body #homeHeroCarousel .hero-slide-content { z-index:2!important; }
-html:root:root body #homeHeroCarousel .hero-slide h2,
-html:root:root body #homeHeroCarousel .hero-slide p { color:#fff!important; }
-
-/* Only the currently selected navigation control receives the active fill */
-html:root:root body .account-area .account-btn { background:transparent!important; color:var(--dr-ink)!important; border-color:var(--dr-line)!important; box-shadow:none!important; }
-html:root:root body .account-area .account-btn:is(.active,.is-active,[aria-current="page"],[aria-pressed="true"],[data-active="true"]) {
- background:var(--dr-pink)!important; color:#fff!important; border-color:var(--dr-pink)!important;
-}
-html:root:root body .account-area .account-btn:not(:is(.active,.is-active,[aria-current="page"],[aria-pressed="true"],[data-active="true"])):hover {
- background:var(--dr-soft)!important; color:var(--dr-ink)!important;
-}
-html:root:root body .account-area .home-nav-btn { background:transparent!important; color:var(--dr-ink)!important; border-color:var(--dr-line)!important; }
-html:root:root body .account-area .home-nav-btn:is(.active,.is-active,[aria-current="page"],[aria-pressed="true"],[data-active="true"]) { background:var(--dr-pink)!important;color:#fff!important;border-color:var(--dr-pink)!important; }
-</style>
-
-<script id="navbar-active-state-fix">
-(function(){
-  function bindNavActive(){
-    var area=document.querySelector('.account-area');
-    if(!area || area.dataset.activeFixBound==='1') return;
-    area.dataset.activeFixBound='1';
-    area.addEventListener('click',function(e){
-      var btn=e.target.closest('.account-btn');
-      if(!btn || !area.contains(btn)) return;
-      area.querySelectorAll('.account-btn').forEach(function(item){
-        item.classList.remove('active','is-active');
-        item.removeAttribute('aria-current');
-        item.setAttribute('aria-pressed','false');
-      });
-      btn.classList.add('active');
-      btn.setAttribute('aria-pressed','true');
-    });
-  }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',bindNavActive);
-  else bindNavActive();
-})();
-</script>
