@@ -997,9 +997,9 @@ html[data-theme="dark"] a{color:#b9baff}
   <div class="topbar-inner">
     <button class="menu-trigger" id="menuTrigger" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
     <div class="brand" id="brandHomeBtn" role="button" tabindex="0" title="Go to homepage">
-      <div class="seal"><small>Bijoy exam</small></div>
-      <div>
-        <div class="brand-text"><span font="bold">Bijoy</span> Exam Center</div>
+      <div class="seal"><svg viewBox="0 0 48 48" aria-hidden="true"><defs><linearGradient id="brandG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff6b9a"/><stop offset="1" stop-color="#6c4cff"/></linearGradient></defs><rect width="48" height="48" rx="14" fill="url(#brandG)"/><path d="M24 10 L42 19 L24 28 L6 19Z" fill="#fff"/><path d="M14 24.5v7.5c0 3.4 20 3.4 20 0v-7.5L24 30z" fill="#fff" opacity=".92"/><path d="M39 21.5v10" stroke="#ffd166" stroke-width="2.6" stroke-linecap="round"/><circle cx="39" cy="34" r="2.8" fill="#ffd166"/></svg><small>Bijoy exam</small></div>
+      <div class="brand-copy">
+        <div class="brand-text"><span class="b1">Bijoy</span> <span class="b2">Exam Center</span></div>
         <div class="brand-sub" id="topSub">Choose a subject to begin</div>
       </div>
     </div>
@@ -5623,10 +5623,34 @@ setTimeout(()=>{
  };
  async function loadDirectConversation(){const box=$('directChatThread');if(!box||!activeDirectUser)return;try{const uid=await userId(),{data,error}=await client().from('exam_messages').select('id,user_id,username,message,created_at,sender_id,sender_role').eq('user_id',activeDirectUser).not('sender_role','is',null).order('created_at',{ascending:true}).limit(300);if(error)throw error;box.innerHTML='';(data||[]).forEach(m=>{const b=document.createElement('div');b.className='chat-bubble '+(m.sender_id===uid?'mine':'theirs');b.innerHTML='<div>'+esc(m.message)+'</div><small>'+esc(m.sender_role==='admin'?'Admin':(m.username||'Student'))+' · '+(m.created_at?new Date(m.created_at).toLocaleString(): '')+'</small>';box.appendChild(b);});if(!data?.length)box.innerHTML='<div class="empty-profile">এখনো কোনো মেসেজ নেই। কথোপকথন শুরু করো।</div>';box.scrollTop=box.scrollHeight;}catch(e){box.innerHTML='<p>Conversation load হয়নি: '+esc(e.message)+'</p>';}}
  async function updateNav(){const b=$('navMessagesBtn');if(!b)return;const pr=profile();b.hidden=!pr;const label=pr?.is_admin?'📨 Message':'💬 Message';if(!b.querySelector('.message-unread-badge'))b.innerHTML=label+'<span class="message-unread-badge" hidden>0</span>';else b.childNodes[0].textContent=label+' ';if(!pr||!client())return;try{const c=client(),uid=await userId(),key='examhub_msg_seen_'+uid+'_'+(pr.is_admin?'admin':'user');let seen=0;try{seen=Date.parse(localStorage.getItem(key)||'')||0;}catch(e){}let q=c.from('exam_messages').select('id,status,admin_reply,user_reply,user_id,created_at,replied_at,user_replied_at,sender_role,sender_id');if(pr.is_admin)q=q.or('created_at.gt.'+new Date(seen).toISOString()+',user_replied_at.gt.'+new Date(seen).toISOString());else q=q.eq('user_id',uid);const {data,error}=await q;if(error)throw error;const count=(data||[]).filter(m=>pr.is_admin?(Math.max(Date.parse(m.created_at||0)||0,Date.parse(m.user_replied_at||0)||0)>seen):((m.sender_role==='admin' || !!m.admin_reply) && Math.max(Date.parse(m.created_at||0)||0,Date.parse(m.replied_at||0)||0)>seen)).length;const badge=b.querySelector('.message-unread-badge');if(badge){badge.hidden=count<1;badge.textContent=count>99?'99+':String(count);}}catch(e){const badge=b.querySelector('.message-unread-badge');if(badge)badge.hidden=true;}}setInterval(updateNav,12000);updateNav();
- async function loadTopThree(){const box=$('heroTopThree'),c=client();if(!box||!c)return;try{
+ async function loadTopThreeLegacy(){const box=$('heroTopThree'),c=client();if(!box||!c)return;try{
  const [{data:users,error:ue},{data:rs,error:re},{data:ws,error:we}]=await Promise.all([c.from('profiles').select('user_id,username,is_admin,blocked,created_at').eq('is_admin',false).eq('blocked',false),c.from('results').select('user_id,percent,correct,total,attempted_at'),c.from('written_submissions').select('user_id,exam_id,status,score,graded_at,submitted_at').eq('status','graded').not('score','is',null)]);if(ue)throw ue;if(re)throw re;if(we)throw we;
  const exids=[...new Set((ws||[]).map(x=>x.exam_id).filter(Boolean))];let exs=[];if(exids.length){const ex=await c.from('written_exams').select('id,total_marks').in('id',exids);if(ex.error)throw ex.error;exs=ex.data||[];}const maxMap=new Map(exs.map(x=>[x.id,Number(x.total_marks)||0]));const stats=new Map((users||[]).map(u=>[u.user_id,{username:u.username||'Student',sum:0,n:0}]));(rs||[]).forEach(r=>{const x=stats.get(r.user_id);if(x){x.sum+=Number(r.percent)||0;x.n++;}});(ws||[]).forEach(r=>{const x=stats.get(r.user_id),max=maxMap.get(r.exam_id)||0;if(x&&max>0){x.sum+=(Number(r.score)||0)/max*100;x.n++;}});const top=[...stats.entries()].filter(([id,x])=>x.n>0).map(([id,x])=>({id,username:x.username,avg:Math.round(x.sum/x.n)})).sort((a,b)=>b.avg-a.avg||a.username.localeCompare(b.username)).slice(0,3);if(!top.length){box.innerHTML='<div class="hero-top-user"><span class="medal">🏆</span><div><strong>Top 3 coming soon</strong><small>Admin User Performance report অনুযায়ী ranking</small></div></div>';return;}const medals=['🥇','🥈','🥉'];box.innerHTML=top.map((u,i)=>'<div class="hero-top-user"><span class="medal">'+medals[i]+'</span><div><strong>'+esc(u.username)+'</strong><small>'+u.avg+'% average · Admin report ranking</small></div></div>').join('');
  }catch(e){console.debug('Top-three report ranking unavailable',e.message);}}
+ function topChip(medal,name,pct,more,cls){return '<div class="hero-top-user'+(cls?' '+cls:'')+'"><span class="medal">'+medal+'</span><div><strong>'+esc(name)+'</strong><small><b>'+pct+'%</b><span class="more"> '+more+'</span></small></div></div>';}
+ function isLogged(){const b=document.getElementById('profileBtn');return !!(b&&!b.hidden);}
+ function isAdminUser(){const b=document.getElementById('adminBtn');return !!(b&&!b.hidden);}
+ async function loadTopThree(){
+  const box=$('heroTopThree'),c=client();if(!box||!c)return;
+  try{
+   const {data,error}=await c.rpc('get_top_performers',{top_n:3});
+   if(error)throw error;
+   const rows=data||[],medals=['🥇','🥈','🥉'];
+   const top=rows.filter(r=>Number(r.pos)<=3),mine=rows.find(r=>r.is_me);
+   let html=top.map(r=>topChip(medals[Number(r.pos)-1]||'🏅',r.username||'Student'+(r.is_me?' (You)':''),r.avg_percent,'avg · '+r.attempts+' exam'+(Number(r.attempts)===1?'':'s'),r.is_me?'me':'')).join('');
+   if(!top.length)html='<div class="hero-top-user"><span class="medal">🏆</span><div><strong>Top 3 coming soon</strong><small><span>Rankings start after the first exams</span></small></div></div>';
+   if(isLogged()){
+    if(mine&&Number(mine.pos)>3)html+=topChip('🎯','You · #'+mine.pos,mine.avg_percent,'avg · keep going!','me');
+    else if(!mine)html+='<div class="hero-top-user me"><span class="medal">🎯</span><div><strong>Your rank</strong><small><span>Take an exam to get ranked</span></small></div></div>';
+   }
+   box.innerHTML=html;
+  }catch(e){
+   console.debug('get_top_performers unavailable',e&&e.message);
+   if(isAdminUser())return loadTopThreeLegacy();
+  }
+ }
+ window.loadTopThree=loadTopThree;
+
 
  document.addEventListener('DOMContentLoaded',()=>{attachPanels();loadTopThree();});setTimeout(()=>{attachPanels();loadTopThree();},1200);setInterval(loadTopThree,60000);
 })();
@@ -5877,11 +5901,6 @@ html:root:root body .account-area :is(.account-btn,#authActionBtn,.home-nav-btn)
 html:root:root body .account-area .nav-active :is(span:not(.nav-profile-avatar),strong,small,b,i){color:inherit!important}
 html:root:root body .account-area .account-btn:active{transform:scale(.97)!important}
 
-@media(max-width:700px){
- html:root:root body .account-area{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto!important;overflow-y:hidden;scrollbar-width:none;gap:8px!important;padding:2px 2px 6px!important;-webkit-overflow-scrolling:touch;width:100%}
- html:root:root body .account-area::-webkit-scrollbar{display:none}
- html:root:root body .account-area .account-btn{flex:none!important;min-height:42px!important;padding:8px 14px!important}
-}
 
 /* ---------- Hero: homepage only, sliding right-to-left ---------- */
 html:root:root body #homeHeroCarousel{flex:0 0 auto!important;display:block!important;position:relative!important;overflow:visible!important;background:none!important;box-shadow:none!important;min-height:0!important;height:clamp(230px,36vw,400px)!important;padding:0!important;border-radius:0!important;margin:16px auto 22px!important;width:calc(100% - 24px);max-width:1200px}
@@ -6124,6 +6143,84 @@ html:root:root body :is(#standaloneMessageForm,.exam-feedback-panel form) button
   mo.observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['class','hidden','data-theme']});
   new MutationObserver(function(){schedule(450);}).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
   window.addEventListener('resize',function(){schedule(500);});
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+
+<style id="dribbble-theme-v11">
+/* ===== V11: brand, navbar (no scroll, 2 lines), menu top-right, sticky exam timer, top performers ===== */
+/* --- brand / logo --- */
+html:root:root body .brand{display:flex!important;align-items:center;gap:12px;padding:6px 18px 6px 6px;background:var(--dr-card)!important;border:1px solid var(--dr-line);border-radius:22px;box-shadow:0 6px 18px rgba(70,50,10,.10);cursor:pointer;position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s;min-width:0}
+html:root:root body .brand:hover{transform:translateY(-1px);box-shadow:0 10px 26px rgba(214,58,120,.20)}
+html:root:root body .brand:before{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 40%,rgba(255,255,255,.55) 50%,transparent 60%);transform:translateX(-120%);animation:drShine 5s ease-in-out infinite;pointer-events:none}
+@keyframes drShine{0%,70%{transform:translateX(-120%)}100%{transform:translateX(120%)}}
+html:root:root body .brand .seal{width:50px!important;height:50px!important;flex:0 0 50px!important;padding:0!important;background:none!important;border:0!important;border-radius:16px!important;box-shadow:0 8px 18px rgba(124,92,255,.40)!important;display:block!important;overflow:visible}
+html:root:root body .brand .seal svg{width:100%;height:100%;display:block;border-radius:16px}
+html:root:root body .brand .seal small{display:none!important}
+html:root:root body .brand-copy{display:flex;flex-direction:column;gap:3px;min-width:0}
+html:root:root body .brand-text{font-size:21px!important;font-weight:800!important;letter-spacing:-.03em;line-height:1.1;display:flex!important;gap:6px;align-items:baseline;flex-wrap:wrap;max-width:none!important;overflow:visible!important;text-overflow:clip!important}
+html:root:root body .brand-text .b1{background:linear-gradient(90deg,#d63a78,#7c5cff);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent!important;color:transparent!important}
+html:root:root body .brand-text .b2{color:var(--dr-ink)!important}
+html:root:root body .brand-sub{font-size:12px!important;font-weight:600;color:var(--dr-muted)!important;display:flex!important;align-items:center;gap:6px;max-width:none!important}
+html:root:root body .brand-sub:before{content:"";flex:none;width:7px;height:7px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 3px rgba(34,197,94,.22)}
+
+/* --- topbar layout: menu at top-right --- */
+@media(min-width:701px){
+ html:root:root body .topbar-inner{display:flex!important;flex-wrap:wrap!important;align-items:center!important;gap:12px 14px!important}
+ html:root:root body .brand{order:1}
+ html:root:root body .nav-search-wrap{order:2;flex:1 1 220px!important;max-width:360px!important}
+ html:root:root body .account-area{order:3;margin-left:auto!important;flex:0 1 auto!important;flex-wrap:wrap!important;justify-content:flex-end;overflow:visible!important}
+ html:root:root body .menu-trigger{order:4;position:static!important;margin-left:4px}
+ html:root:root body .brand-sub{display:flex!important}
+}
+@media(max-width:700px){
+ html:root:root body .topbar-inner{display:grid!important;grid-template-columns:minmax(0,1fr) auto;gap:10px!important;align-items:center;padding:10px 12px!important}
+ html:root:root body .brand{grid-column:1;grid-row:1;padding:5px 12px 5px 5px;border-radius:20px;flex:none!important}
+ html:root:root body .brand .seal{width:44px!important;height:44px!important;flex-basis:44px!important}
+ html:root:root body .brand-text{font-size:17px!important}
+ html:root:root body .brand-sub{font-size:11px!important}
+ html:root:root body .menu-trigger{grid-column:2!important;grid-row:1!important;position:static!important;justify-self:end;align-self:start;margin:0!important}
+ html:root:root body .nav-search-wrap{grid-column:1/-1;grid-row:2;order:0!important;max-width:none!important;width:100%}
+ html:root:root body .account-area{grid-column:1/-1;grid-row:3;order:0!important;display:flex!important;flex-wrap:wrap!important;overflow:visible!important;gap:8px!important;width:100%;justify-content:center;padding:0!important}
+ html:root:root body .account-area .account-btn{flex:1 1 calc(33.333% - 8px)!important;min-width:0!important;justify-content:center;padding:8px 6px!important;font-size:13px!important;min-height:42px!important;margin:0!important}
+ html:root:root body .account-area #navProfileName{max-width:72px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+}
+/* --- drawer now opens from the right (menu button is on the right) --- */
+html:root:root body .side-drawer{left:auto!important;right:0!important;transform:translateX(105%)!important;border-right:0!important;border-left:1px solid var(--dr-line)!important;box-shadow:-18px 0 60px rgba(47,57,84,.18)!important;border-radius:26px 0 0 26px!important}
+html:root:root body .side-drawer.open{transform:translateX(0)!important}
+
+/* --- exam: timer always visible --- */
+html:root:root body.dr-in-exam .topbar{position:static!important}
+html:root:root body #screen-exam .exam-sticky-header,html:root:root body #screen-written-exam>.exam-head{position:sticky!important;top:0!important;z-index:140!important;background:var(--dr-bg)!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;border-bottom:1px solid var(--dr-line)!important;box-shadow:0 8px 20px rgba(70,50,10,.12)!important;margin:0 -12px 12px!important;padding:10px 14px!important;border-radius:0 0 18px 18px!important}
+html:root:root body #screen-exam .exam-sticky-header .exam-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+html:root:root body :is(#timerBox,#writtenTimerBox){font-size:17px!important;min-width:104px!important;box-shadow:0 6px 16px rgba(26,24,48,.28)}
+
+/* --- top performers (top 3 + my position) --- */
+html:root:root body #homeHeroCarousel .hero-top-three{flex-wrap:wrap!important;overflow:visible!important}
+html:root:root body #homeHeroCarousel .hero-top-user .medal{font-size:19px}
+html:root:root body #homeHeroCarousel .hero-top-user>div{display:flex;flex-direction:column;line-height:1.2;min-width:0}
+html:root:root body #homeHeroCarousel .hero-top-user strong{font-size:13px!important;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+html:root:root body #homeHeroCarousel .hero-top-user small{display:block!important;font-size:11px!important}
+html:root:root body #homeHeroCarousel .hero-top-user small b{color:#b4235f!important;-webkit-text-fill-color:#b4235f!important;font-weight:800}
+html:root:root body #homeHeroCarousel .hero-top-user.me{background:linear-gradient(135deg,#ffe3ee,#fffbf2)!important;box-shadow:0 0 0 2px #d63a78,0 6px 18px rgba(0,0,0,.25)!important}
+@media(max-width:700px){
+ html:root:root body #homeHeroCarousel .hero-top-three{gap:6px!important;top:10px;left:10px;right:10px}
+ html:root:root body #homeHeroCarousel .hero-top-user{padding:4px 10px 4px 6px!important;gap:6px!important}
+ html:root:root body #homeHeroCarousel .hero-top-user .more{display:none}
+ html:root:root body #homeHeroCarousel .hero-top-user strong{font-size:12px!important;max-width:84px}
+}
+</style>
+
+<script id="dribbble-v11-scripts">
+(function(){
+ function init(){
+  var wrap=document.querySelector('.wrap')||document.body;
+  function sync(){var a=document.getElementById('screen-exam'),b=document.getElementById('screen-written-exam');document.body.classList.toggle('dr-in-exam',!!((a&&!a.hidden)||(b&&!b.hidden)));}
+  new MutationObserver(sync).observe(wrap,{attributes:true,attributeFilter:['hidden'],subtree:true});sync();
+  var last=0;function refresh(){var n=Date.now();if(n-last<4000)return;last=n;if(window.loadTopThree)window.loadTopThree();}
+  var pb=document.getElementById('profileBtn');if(pb)new MutationObserver(function(){setTimeout(refresh,700);}).observe(pb,{attributes:true,attributeFilter:['hidden']});
+  var home=document.getElementById('screen-subjects');if(home)new MutationObserver(function(){if(!home.hidden)refresh();}).observe(home,{attributes:true,attributeFilter:['hidden']});
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
