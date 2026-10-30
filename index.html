@@ -1188,29 +1188,78 @@ html[data-theme="dark"] a{color:#b9baff}
   <!-- Live Class -->
   <section id="screen-live-class" hidden>
     <button class="back-btn" id="backFromLiveClass" type="button">← Back to Home</button>
-    <div class="lede"><h2>📡 Live Class</h2><p>Join the teacher's live lesson or manage a class as Admin.</p></div>
+    <div class="lede"><h2 id="liveHeading">📡 Live Class</h2><p id="liveSubheading">Join the teacher's live lesson.</p></div>
+
+    <!-- ADMIN ONLY: start a class -->
     <div class="profile-card" id="liveAdminPanel" hidden>
       <h3>🎥 Start a Live Class</h3>
       <form id="liveCreateForm" class="written-admin-grid">
         <label>Class title<input id="liveTitle" required maxlength="120" placeholder="e.g. ICT Chapter 2"></label>
         <label>Subject<input id="liveSubject" maxlength="80" placeholder="Subject"></label>
         <label class="full">Description<textarea id="liveDescription" maxlength="500" placeholder="What will be covered?"></textarea></label>
-        <button class="btn btn-primary full" type="submit">Create & Start Live</button>
+        <button class="btn btn-primary full" type="submit">Create &amp; Start Live</button>
       </form>
-      <p class="card-hint">Maximum 50 student viewers. Only Admin can start/end a class.</p>
+      <p class="card-hint">Maximum 50 student viewers. Students only watch and listen: their camera and microphone stay off.</p>
     </div>
-    <div class="profile-card">
-      <div class="admin-section-title"><div><h3>Available Classes</h3><p>Upcoming and currently live classes</p></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-ghost" id="enableLiveNotifications" type="button">🔔 Enable notifications</button><button class="btn btn-ghost" id="refreshLiveClasses" type="button">↻ Refresh</button></div></div>
+
+    <!-- class list (admin + students) -->
+    <div class="profile-card" id="liveListCard">
+      <div class="admin-section-title"><div><h3 id="liveListTitle">Available Classes</h3><p id="liveListHint">Upcoming and currently live classes</p></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-ghost" id="enableLiveNotifications" type="button">🔔 Enable notifications</button><button class="btn btn-ghost" id="refreshLiveClasses" type="button">↻ Refresh</button></div></div>
       <div id="liveClassList" class="empty-profile">Loading classes…</div>
     </div>
-    <div class="profile-card" id="liveRoomPanel" hidden>
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><h3 id="liveRoomTitle">Live room</h3><button class="btn btn-ghost" id="leaveLiveRoom" type="button">Leave room</button></div>
-      <div id="liveTeacherControls" hidden style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:10px 0"><label style="font-weight:700">Camera <select id="liveCameraSelect" aria-label="Select camera" style="max-width:230px;padding:9px;border:1px solid var(--border);border-radius:10px"><option value="">Default camera</option></select></label><button type="button" class="btn btn-ghost" id="liveSwitchCamera">↻ Switch camera</button></div>
-      <div id="liveVideoGrid" class="live-video-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px"></div>
-      <div id="liveRoomStatus" role="status" style="margin-top:10px;color:var(--muted)">Connecting…</div>
-      <div id="liveChatLog" style="max-height:220px;overflow:auto;margin:12px 0;padding:10px;background:#f8fafc;border-radius:12px"></div>
-      <form id="liveChatForm" style="display:flex;gap:8px"><input id="liveChatInput" maxlength="500" placeholder="Ask the teacher…" style="flex:1;min-width:0;border:1px solid var(--border);border-radius:12px;padding:12px"><button class="btn btn-primary">Send</button></form>
+
+    <!-- STUDENT VIEW: only the teacher's video + audio, and chat -->
+    <div class="profile-card live-room live-student" id="liveStudentRoom" hidden>
+      <div class="live-room-head">
+        <div><h3 id="liveStudentTitle">Live class</h3><div class="live-meta"><span class="live-now-badge">🔴 LIVE</span><span id="liveStudentViewers">👥 1 watching</span></div></div>
+        <button class="btn btn-ghost" id="liveStudentLeave" type="button">Leave class</button>
+      </div>
+      <div class="live-layout">
+        <div class="live-stage" id="liveStudentStage">
+          <div class="live-stage-msg" id="liveStudentMsg">Waiting for the teacher's video…</div>
+          <button type="button" class="live-sound-btn" id="liveSoundBtn" hidden>🔊 Tap to turn on sound</button>
+        </div>
+        <div class="live-chat">
+          <div class="live-chat-title"><span>💬 Live chat</span></div>
+          <div id="liveStudentChatLog" class="live-chat-log"></div>
+          <form id="liveStudentChatForm" class="live-chat-form"><input id="liveStudentChatInput" maxlength="300" placeholder="Ask the teacher…" autocomplete="off"><button class="btn btn-primary">Send</button></form>
+        </div>
+      </div>
+      <div id="liveStudentStatus" class="live-status" role="status"></div>
     </div>
+
+    <!-- ADMIN VIEW: studio (own preview, controls, student comments) -->
+    <div class="profile-card live-room live-admin" id="liveAdminRoom" hidden>
+      <div class="live-room-head">
+        <div><h3 id="liveAdminTitle">Live studio</h3><div class="live-meta"><span class="live-now-badge">🔴 ON AIR</span><span id="liveAdminTimer">⏱ 00:00</span><span id="liveAdminViewers">👥 0 students</span></div></div>
+        <div class="live-head-actions"><button class="btn btn-ghost" id="liveAdminLeave" type="button">Leave studio</button><button class="btn live-end-btn" id="liveAdminEnd" type="button">⏹ End class</button></div>
+      </div>
+      <div class="live-layout">
+        <div>
+          <div class="live-stage" id="liveAdminStage"><div class="live-stage-msg" id="liveAdminMsg">Starting your camera…</div></div>
+          <div class="live-controls">
+            <button type="button" class="live-ctl on" id="liveMicBtn">🎤 Mic on</button>
+            <div class="live-meter" title="Microphone level"><i id="liveMicMeter"></i></div>
+            <button type="button" class="live-ctl on" id="liveCamBtn">📷 Camera on</button>
+            <button type="button" class="live-ctl" id="liveSwitchCamera" hidden>↻ Flip camera</button>
+          </div>
+          <div class="live-devices">
+            <label>Camera <select id="liveCameraSelect" aria-label="Select camera"><option value="">Default camera</option></select></label>
+            <label>Microphone <select id="liveMicSelect" aria-label="Select microphone"><option value="">Default microphone</option></select></label>
+          </div>
+          <div id="liveAdminStatus" class="live-status" role="status"></div>
+        </div>
+        <div class="live-side">
+          <div class="live-chat">
+            <div class="live-chat-title"><span>💬 Student comments</span><span id="liveCommentCount" class="live-count">0</span></div>
+            <div id="liveAdminChatLog" class="live-chat-log"><div class="live-empty">Student comments will appear here.</div></div>
+            <form id="liveAdminChatForm" class="live-chat-form"><input id="liveAdminChatInput" maxlength="300" placeholder="Reply to students…" autocomplete="off"><button class="btn btn-primary">Send</button></form>
+          </div>
+          <div class="live-viewers"><div class="live-chat-title"><span>👥 Students watching</span></div><div id="liveViewerList" class="live-viewer-list"><span class="live-empty">No one has joined yet.</span></div></div>
+        </div>
+      </div>
+    </div>
+    <div id="liveAudioSink" aria-hidden="true" style="display:none"></div>
   </section>
 
   <!-- Dedicated Admin pages -->
@@ -5780,12 +5829,15 @@ setTimeout(()=>{
 <script>
 (function(){
  const $=id=>document.getElementById(id);
- let room=null, activeClass=null, localPreviewTrack=null, pollTimer=null, knownLiveIds=new Set(), notificationReady=false;
+ let room=null,role=null,activeClass=null,pollTimer=null,knownLiveIds=new Set(),notificationReady=false,leaving=false,lastChat=0,meterTimer=null,clockTimer=null,startedAt=0,commentCount=0,micWarned=false,micPeak=0,micOnSince=0;
  const edgeUrl=()=> (window.EXAMHUB_LIVECLASS_FUNCTION_URL||'').replace(/\/$/,'');
+ const LK=()=>window.LivekitClient||{};
+ const EV=n=>((LK().RoomEvent)||{})[n];
+ const confirmBox=(m,o)=>typeof window.customConfirm==='function'?window.customConfirm(m,o):Promise.resolve(confirm(m));
  async function api(action,payload={}){
    const client=window.supabaseClient,url=edgeUrl();
-   if(!client)throw new Error('Supabase client পাওয়া যায়নি।');
-   if(!url)throw new Error('Live Class Function URL কনফিগার করা হয়নি।');
+   if(!client)throw new Error('Supabase client পাওয়া যায়নি।');
+   if(!url)throw new Error('Live Class Function URL কনফিগার করা হয়নি।');
    const {data:{session}}=await client.auth.getSession();
    if(!session?.access_token)throw new Error('আগে লগইন করো।');
    const res=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token},body:JSON.stringify({action,...payload})});
@@ -5795,102 +5847,265 @@ setTimeout(()=>{
  }
  function admin(){return !!(window.currentProfile&&window.currentProfile.is_admin===true);}
  function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
- function show(){if(!window.currentProfile){alert('Live Class দেখতে আগে লগইন করো।');return;}
+ function isTeacherP(p){if(!p)return false;if(p.permissions)return !!p.permissions.canPublish;return !!(p.trackPublications&&p.trackPublications.size>0);}
+ function pname(p){return (p&&(p.name||p.identity))||'Student';}
+
+ /* ---------- page / list ---------- */
+ function setHeadings(){
+   const a=admin();
+   $('liveHeading').textContent=a?'🎥 Live Studio':'📡 Live Class';
+   $('liveSubheading').textContent=a?'Start a class, teach on camera and read your students\' comments.':'Join the teacher\'s live lesson. You can watch, listen and ask questions in chat.';
+   $('liveListTitle').textContent=a?'Your Live Classes':'Available Classes';
+   $('liveListHint').textContent=a?'Reopen your studio or end a running class':'Join when a class is live';
+ }
+ function show(){
+   if(!window.currentProfile){alert('Live Class দেখতে আগে লগইন করো।');return;}
    document.querySelectorAll('.wrap > section').forEach(x=>x.hidden=true);
-   $('screen-live-class').hidden=false;$('liveAdminPanel').hidden=!admin();
+   $('screen-live-class').hidden=false;
+   if(!room)showList(); 
    $('topSub').textContent='Live Class';loadClasses();startWatcher();
+   window.scrollTo({top:0});
+ }
+ function showList(){
+   setHeadings();
+   $('liveStudentRoom').hidden=true;$('liveAdminRoom').hidden=true;
+   $('liveListCard').hidden=false;$('liveAdminPanel').hidden=!admin();
  }
  async function loadClasses(){
-   const box=$('liveClassList');if(!box)return;box.textContent='Loading…';
+   const box=$('liveClassList');if(!box)return;
    try{
-     const {data,error}=await window.supabaseClient.from('live_classes').select('id,title,subject,description,status,scheduled_at,created_at').in('status',['scheduled','live']).order('created_at',{ascending:false});
+     const {data,error}=await window.supabaseClient.from('live_classes').select('id,title,subject,description,status,scheduled_at,created_at,created_by').in('status',['scheduled','live']).order('created_at',{ascending:false});
      if(error)throw error;
-     if(!data?.length){box.innerHTML='<div class="empty-profile">এখন কোনো Live Class নেই।</div>';return;}
-     box.innerHTML=data.map(c=>`<div class="mat-row live-class-row" style="flex-wrap:wrap"><div class="mat-text"><p class="mat-title"><b>${esc(c.title)}</b> ${c.status==='live'?'<span class="live-now-badge">LIVE</span>':''}</p><p class="mat-sub">${esc(c.subject||'')} · ${c.status==='live'?'🔴 Live now':'Upcoming'}</p><p class="mat-sub">${esc(c.description||'')}</p></div>${c.status==='live'?`<button class="btn btn-primary" data-join="${esc(c.id)}">Join Live</button>`:'<button class="btn btn-ghost" disabled>Waiting for teacher</button>'}${admin()?`<button class="btn btn-ghost" data-end="${esc(c.id)}">End</button>`:''}</div>`).join('');
+     if(!data?.length){box.className='empty-profile';box.innerHTML='<div class="empty-profile">এখন কোনো Live Class নেই।</div>';return;}
+     box.className='';
+     const a=admin(),me=window.currentProfile&&window.currentProfile.user_id;
+     box.innerHTML=data.map(c=>{
+       const live=c.status==='live',mine=a&&c.created_by===me;
+       let actions='';
+       if(a){actions=live&&mine?`<button class="btn btn-primary" data-studio="${esc(c.id)}">🎥 Open studio</button><button class="btn btn-ghost" data-end="${esc(c.id)}">End</button>`:(live?`<button class="btn btn-ghost" data-end="${esc(c.id)}">End</button>`:'');}
+       else{actions=live?`<button class="btn btn-primary" data-join="${esc(c.id)}">Join Live</button>`:'<button class="btn btn-ghost" disabled>Waiting for teacher</button>';}
+       return `<div class="mat-row live-class-row" style="flex-wrap:wrap"><div class="mat-text"><p class="mat-title"><b>${esc(c.title)}</b> ${live?'<span class="live-now-badge">LIVE</span>':''}</p><p class="mat-sub">${esc(c.subject||'')} · ${live?'🔴 Live now':'Upcoming'}</p><p class="mat-sub">${esc(c.description||'')}</p></div><div class="live-row-actions">${actions}</div></div>`;
+     }).join('');
      box.querySelectorAll('[data-join]').forEach(b=>b.addEventListener('click',()=>joinClass(b.dataset.join,false)));
+     box.querySelectorAll('[data-studio]').forEach(b=>b.addEventListener('click',()=>joinClass(b.dataset.studio,true)));
      box.querySelectorAll('[data-end]').forEach(b=>b.addEventListener('click',()=>endClass(b.dataset.end)));
-   }catch(e){box.textContent='ক্লাস লোড হয়নি: '+e.message;}
+   }catch(e){box.textContent='ক্লাস লোড হয়নি: '+e.message;}
  }
- function participantName(p){return p?.name||p?.metadata?.displayName||'Student';}
- function getTile(id){let tile=document.querySelector(`[data-live-tile="${CSS.escape(id)}"]`);if(tile)return tile;tile=document.createElement('div');tile.dataset.liveTile=id;tile.className='live-video-tile';const label=document.createElement('div');label.className='live-video-name';label.textContent='Connecting…';tile.appendChild(label);$('liveVideoGrid').appendChild(tile);return tile;}
- function attachTrack(track,participant,isLocal=false){
-   if(!track||track.kind!=='video')return;
-   const key=isLocal?'local':(participant?.identity||participant?.sid||'remote');
-   const tile=getTile(key);if(tile.querySelector('video'))return;
-   const el=track.attach();el.style.cssText='width:100%;height:100%;max-height:480px;object-fit:cover;background:#111827;border-radius:14px';el.autoplay=true;el.playsInline=true;el.muted=!!isLocal;
-   tile.insertBefore(el,tile.firstChild);
-   const label=tile.querySelector('.live-video-name');if(label)label.textContent=isLocal?'You (Admin)':participantName(participant);
+
+ /* ---------- chat ---------- */
+ function addMsg(logId,name,text,kind){
+   const log=$(logId);if(!log)return;
+   log.querySelectorAll('.live-empty').forEach(x=>x.remove());
+   const d=document.createElement('div');d.className='live-msg'+(kind?' '+kind:'');
+   const s=document.createElement('strong');s.textContent=(kind==='teacher'?'👨‍🏫 ':'')+name;
+   const t=document.createElement('span');t.textContent=text;
+   d.append(s,t);log.appendChild(d);
+   if(log.scrollHeight-log.scrollTop-log.clientHeight<160||kind==='me')log.scrollTop=log.scrollHeight;
+   while(log.children.length>300)log.removeChild(log.firstChild);
  }
- function removeParticipantTile(p){const id=p?.identity;if(!id)return;document.querySelector(`[data-live-tile="${CSS.escape(id)}"]`)?.remove();}
- async function setupCameraControls(){
-   if(!admin())return;$('liveTeacherControls').hidden=false;
+ function onData(payload,participant){
+   let text='';try{const raw=new TextDecoder().decode(payload);try{const j=JSON.parse(raw);text=(j&&typeof j.m==='string')?j.m:raw;}catch(_){text=raw;}}catch(e){return;}
+   text=String(text).slice(0,300);if(!text.trim())return;
+   const teacher=isTeacherP(participant);
+   if(role==='teacher'){addMsg('liveAdminChatLog',pname(participant),text,teacher?'teacher':'');if(!teacher){commentCount++;$('liveCommentCount').textContent=commentCount;}}
+   else addMsg('liveStudentChatLog',pname(participant),text,teacher?'teacher':'');
+ }
+ async function sendChat(inputId,logId){
+   if(!room)return;const input=$(inputId),msg=input.value.trim();if(!msg)return;
+   const now=Date.now();if(now-lastChat<1000)return;lastChat=now;
    try{
-     const devices=await navigator.mediaDevices.enumerateDevices(),cams=devices.filter(d=>d.kind==='videoinput'),sel=$('liveCameraSelect');
-     sel.innerHTML='';cams.forEach((d,i)=>{const o=document.createElement('option');o.value=d.deviceId;o.textContent=d.label||`Camera ${i+1}`;sel.appendChild(o);});
-     if(cams.length>1)$('liveSwitchCamera').hidden=false;else $('liveSwitchCamera').hidden=true;
-   }catch(e){console.warn('Camera list unavailable',e);}
+     await room.localParticipant.publishData(new TextEncoder().encode(JSON.stringify({t:'chat',m:msg})),{reliable:true,topic:'chat'});
+     addMsg(logId,'You',msg,'me');input.value='';
+   }catch(err){status(err.message);}
  }
- async function switchCamera(cycle=false){
-   if(!room)return;try{
-     const sel=$('liveCameraSelect'),devices=(await navigator.mediaDevices.enumerateDevices()).filter(d=>d.kind==='videoinput');let id=sel?.value;
-     if(cycle&&devices.length>1){const current=devices.findIndex(d=>d.deviceId===id);id=devices[(current+1+devices.length)%devices.length].deviceId;}
-     if(id&&room.switchActiveDevice)await room.switchActiveDevice('videoinput',id);
-     await setupCameraControls();if(id&&sel)sel.value=id;
-   }catch(e){$('liveRoomStatus').textContent='Camera switch হয়নি: '+e.message;}
+ function status(t){const id=role==='teacher'?'liveAdminStatus':'liveStudentStatus';const el=$(id);if(el)el.textContent=t||'';}
+
+ /* ---------- participants / viewers ---------- */
+ function viewerNames(){const out=[];if(!room)return out;room.remoteParticipants.forEach(p=>{if(!isTeacherP(p))out.push(pname(p));});return out;}
+ function updateViewers(){
+   if(!room)return;const names=viewerNames();
+   if(role==='teacher'){
+     $('liveAdminViewers').textContent='👥 '+names.length+(names.length===1?' student':' students');
+     const box=$('liveViewerList');box.innerHTML='';
+     if(!names.length){box.innerHTML='<span class="live-empty">No one has joined yet.</span>';}
+     else names.sort((a,b)=>a.localeCompare(b)).forEach(n=>{const c=document.createElement('span');c.className='live-chip';c.textContent=n;box.appendChild(c);});
+   }else{
+     const n=names.length+1;$('liveStudentViewers').textContent='👥 '+n+' watching';
+     let teacherHere=false;room.remoteParticipants.forEach(p=>{if(isTeacherP(p))teacherHere=true;});
+     if(!teacherHere&&!$('liveStudentStage').querySelector('video'))$('liveStudentMsg').textContent="Waiting for the teacher's video…";
+   }
  }
+
+ /* ---------- tracks ---------- */
+ function attachRemote(track,pub,participant){
+   if(!track||role!=='student')return;           // the admin never renders students' media
+   if(track.kind==='audio'){
+     $('liveAudioSink').querySelectorAll('[data-sid="'+(track.sid||'')+'"]').forEach(x=>x.remove());
+     const el=track.attach();el.dataset.sid=track.sid||'';el.autoplay=true;el.volume=1;el.muted=false;$('liveAudioSink').appendChild(el);
+     const p=el.play&&el.play();if(p&&p.catch)p.catch(()=>{});
+     $('liveSoundBtn').hidden=room?room.canPlaybackAudio!==false:true;
+     return;
+   }
+   if(track.kind==='video'){
+     const stage=$('liveStudentStage');stage.querySelectorAll('video').forEach(v=>v.remove());
+     const el=track.attach();el.autoplay=true;el.playsInline=true;el.muted=true;el.setAttribute('playsinline','');
+     stage.insertBefore(el,stage.firstChild);$('liveStudentMsg').hidden=true;
+   }
+ }
+ function detachRemote(track){
+   try{track.detach().forEach(el=>el.remove());}catch(e){}
+   if(track.kind==='video'&&role==='student'&&!$('liveStudentStage').querySelector('video')){$('liveStudentMsg').hidden=false;$('liveStudentMsg').textContent="Teacher's camera is off. You can still hear the class.";}
+ }
+ function refreshPreview(){
+   if(role!=='teacher'||!room)return;
+   const stage=$('liveAdminStage');let pubTrack=null;
+   room.localParticipant.videoTrackPublications.forEach(pub=>{if(pub.track&&!pub.isMuted)pubTrack=pub.track;});
+   stage.querySelectorAll('video').forEach(v=>v.remove());
+   if(pubTrack){const el=pubTrack.attach();el.autoplay=true;el.muted=true;el.playsInline=true;el.setAttribute('playsinline','');stage.insertBefore(el,stage.firstChild);$('liveAdminMsg').hidden=true;}
+   else{$('liveAdminMsg').hidden=false;$('liveAdminMsg').textContent='Your camera is off. Students can still hear you.';}
+   syncButtons();
+ }
+ function syncButtons(){
+   if(!room)return;const lp=room.localParticipant;
+   const m=$('liveMicBtn'),c=$('liveCamBtn');
+   const mo=!!lp.isMicrophoneEnabled,co=!!lp.isCameraEnabled;
+   m.textContent=mo?'🎤 Mic on':'🔇 Mic off';m.classList.toggle('on',mo);m.classList.toggle('off',!mo);
+   c.textContent=co?'📷 Camera on':'🚫 Camera off';c.classList.toggle('on',co);c.classList.toggle('off',!co);
+ }
+ async function fillDevices(){
+   try{
+     const devs=await navigator.mediaDevices.enumerateDevices();
+     const fill=(sel,kind,label)=>{const el=$(sel);const cur=el.value;el.innerHTML='';const list=devs.filter(d=>d.kind===kind);list.forEach((d,i)=>{const o=document.createElement('option');o.value=d.deviceId;o.textContent=d.label||(label+' '+(i+1));el.appendChild(o);});if(cur&&[...el.options].some(o=>o.value===cur))el.value=cur;return list.length;};
+     const cams=fill('liveCameraSelect','videoinput','Camera');fill('liveMicSelect','audioinput','Microphone');
+     $('liveSwitchCamera').hidden=cams<2;
+   }catch(e){console.warn('Device list unavailable',e);}
+ }
+ async function switchDevice(kind,id){
+   if(!room||!id)return;
+   try{await room.switchActiveDevice(kind,id);status('');}catch(e){status('Device change failed: '+e.message);}
+   refreshPreview();
+ }
+ function startMeter(){
+   stopMeter();micPeak=0;micWarned=false;micOnSince=Date.now();
+   meterTimer=setInterval(()=>{
+     if(!room||role!=='teacher')return;const lp=room.localParticipant,lvl=lp.isMicrophoneEnabled?(lp.audioLevel||0):0;
+     $('liveMicMeter').style.width=Math.min(100,Math.round(lvl*320))+'%';
+     if(lp.isMicrophoneEnabled){micPeak=Math.max(micPeak,lvl);if(!micWarned&&Date.now()-micOnSince>7000&&micPeak<0.01){micWarned=true;status('Mic is on, but no sound is detected. Pick the right microphone below, or raise the input volume on your device.');}}
+     else micOnSince=Date.now();
+   },150);
+ }
+ function stopMeter(){if(meterTimer){clearInterval(meterTimer);meterTimer=null;}}
+ function startClock(){stopClock();startedAt=Date.now();clockTimer=setInterval(()=>{const s=Math.floor((Date.now()-startedAt)/1000),h=Math.floor(s/3600),m=Math.floor(s%3600/60),x=s%60,p=n=>String(n).padStart(2,'0');$('liveAdminTimer').textContent='⏱ '+(h?p(h)+':':'')+p(m)+':'+p(x);},1000);}
+ function stopClock(){if(clockTimer){clearInterval(clockTimer);clockTimer=null;}}
+
+ /* ---------- connect ---------- */
  async function ensureLiveKitSdk(){
    if(window.LivekitClient)return;
-   await new Promise((resolve,reject)=>{const script=document.createElement('script');script.src='https://unpkg.com/livekit-client@2.15.6/dist/livekit-client.umd.min.js';script.onload=resolve;script.onerror=()=>reject(new Error('LiveKit SDK CDN থেকে লোড হয়নি। ইন্টারনেট সংযোগ পরীক্ষা করে আবার চেষ্টা করো।'));document.head.appendChild(script);});
-   if(!window.LivekitClient)throw new Error('LiveKit SDK লোড হয়নি। Browser refresh করে আবার চেষ্টা করো।');
+   await new Promise((resolve,reject)=>{const s=document.createElement('script');s.src='https://unpkg.com/livekit-client@2.15.6/dist/livekit-client.umd.min.js';s.onload=resolve;s.onerror=()=>reject(new Error('LiveKit SDK CDN থেকে লোড হয়নি। ইন্টারনেট সংযোগ পরীক্ষা করে আবার চেষ্টা করো।'));document.head.appendChild(s);});
+   if(!window.LivekitClient)throw new Error('LiveKit SDK লোড হয়নি। Browser refresh করে আবার চেষ্টা করো।');
+ }
+ function resetRoomUI(){
+   $('liveAudioSink').innerHTML='';
+   ['liveStudentStage','liveAdminStage'].forEach(id=>$(id).querySelectorAll('video').forEach(v=>v.remove()));
+   $('liveStudentChatLog').innerHTML='';$('liveAdminChatLog').innerHTML='<div class="live-empty">Student comments will appear here.</div>';
+   $('liveViewerList').innerHTML='<span class="live-empty">No one has joined yet.</span>';
+   commentCount=0;$('liveCommentCount').textContent='0';$('liveStudentStatus').textContent='';$('liveAdminStatus').textContent='';
+   $('liveStudentMsg').hidden=false;$('liveStudentMsg').textContent="Waiting for the teacher's video…";
+   $('liveAdminMsg').hidden=false;$('liveAdminMsg').textContent='Starting your camera…';
+   $('liveSoundBtn').hidden=true;$('liveMicMeter').style.width='0';
  }
  async function connectRoom(data,teacher){
    await ensureLiveKitSdk();
-   $('liveRoomTitle').textContent=data.title||'Live Class';$('liveRoomPanel').hidden=false;$('liveClassList').parentElement.hidden=true;$('liveAdminPanel').hidden=true;$('liveRoomStatus').textContent='Connecting to live room…';$('liveVideoGrid').innerHTML='';$('liveChatLog').innerHTML='';
-   room=new LivekitClient.Room({adaptiveStream:true,dynacast:true,stopLocalTrackOnUnpublish:true});
-   room.on('participantConnected',p=>{getTile(p.identity).querySelector('.live-video-name').textContent=participantName(p);});
-   room.on('participantDisconnected',p=>removeParticipantTile(p));
-   room.on('trackSubscribed',(track,pub,participant)=>attachTrack(track,participant,false));
-   room.on('trackUnsubscribed',(track)=>{try{track.detach().forEach(el=>el.remove());}catch(e){}});
-   room.on('dataReceived',(payload,participant)=>{let msg='';try{msg=new TextDecoder().decode(payload);}catch(e){};appendChat(participantName(participant),msg);});
-   room.on('disconnected',()=>{$('liveRoomStatus').textContent='Disconnected';});
+   role=teacher?'teacher':'student';leaving=false;resetRoomUI();
+   $('liveListCard').hidden=true;$('liveAdminPanel').hidden=true;
+   $('liveStudentRoom').hidden=teacher;$('liveAdminRoom').hidden=!teacher;
+   (teacher?$('liveAdminTitle'):$('liveStudentTitle')).textContent=data.title||'Live Class';
+   status('Connecting to the live room…');
+   const L=LK();
+   room=new L.Room({adaptiveStream:true,dynacast:true,stopLocalTrackOnUnpublish:true,videoCaptureDefaults:L.VideoPresets?{resolution:L.VideoPresets.h720.resolution}:undefined});
+   room.on(EV('ParticipantConnected')||'participantConnected',()=>updateViewers());
+   room.on(EV('ParticipantDisconnected')||'participantDisconnected',p=>{updateViewers();if(role==='student'&&isTeacherP(p)){$('liveStudentMsg').hidden=false;$('liveStudentMsg').textContent='The teacher left for a moment. Please wait…';$('liveStudentStage').querySelectorAll('video').forEach(v=>v.remove());}});
+   room.on(EV('TrackSubscribed')||'trackSubscribed',(track,pub,p)=>attachRemote(track,pub,p));
+   room.on(EV('TrackUnsubscribed')||'trackUnsubscribed',t=>detachRemote(t));
+   room.on(EV('DataReceived')||'dataReceived',(payload,p)=>onData(payload,p));
+   room.on(EV('AudioPlaybackStatusChanged')||'audioPlaybackChanged',()=>{if(role==='student')$('liveSoundBtn').hidden=room.canPlaybackAudio!==false;});
+   room.on(EV('LocalTrackPublished')||'localTrackPublished',refreshPreview);
+   room.on(EV('LocalTrackUnpublished')||'localTrackUnpublished',refreshPreview);
+   room.on(EV('TrackMuted')||'trackMuted',refreshPreview);
+   room.on(EV('TrackUnmuted')||'trackUnmuted',refreshPreview);
+   room.on(EV('Reconnecting')||'reconnecting',()=>status('Connection is unstable, reconnecting…'));
+   room.on(EV('Reconnected')||'reconnected',()=>status(role==='teacher'?'You are live.':'You are watching the live class.'));
+   room.on(EV('Disconnected')||'disconnected',()=>{
+     if(leaving)return;
+     if(role==='student'){status('The class has ended or the connection was lost.');setTimeout(()=>{if(!leaving)leaveRoom();},2500);}
+     else status('Disconnected from the live room. Open your studio again to reconnect.');
+   });
    await room.connect(data.livekit_url,data.token,{autoSubscribe:true});
    if(teacher){
-     await room.localParticipant.setCameraEnabled(true);await room.localParticipant.setMicrophoneEnabled(true);
-     const pubs=[...room.localParticipant.videoTrackPublications.values()];for(const pub of pubs)if(pub.track)attachTrack(pub.track,room.localParticipant,true);
-     await setupCameraControls();
-   }else{$('liveTeacherControls').hidden=true;}
-   room.remoteParticipants.forEach(p=>{getTile(p.identity).querySelector('.live-video-name').textContent=participantName(p);p.trackPublications.forEach(pub=>{if(pub.track)attachTrack(pub.track,p,false);});});
-   $('liveRoomStatus').textContent=teacher?'You are live. Students can now join.':'You are watching the live class.';
-   window.scrollTo({top:$('liveRoomPanel').offsetTop,behavior:'smooth'});
+     const lp=room.localParticipant;let problems=[];
+     try{await lp.setMicrophoneEnabled(true);}catch(e){problems.push('Microphone: '+(e.message||e));}
+     try{await lp.setCameraEnabled(true);}catch(e){problems.push('Camera: '+(e.message||e));}
+     refreshPreview();await fillDevices();startMeter();startClock();updateViewers();
+     status(problems.length?problems.join(' · ')+' — allow access in the browser address bar and try again.':'You are live. Only you are on camera; students listen and comment.');
+   }else{
+     try{await room.startAudio();}catch(e){}
+     $('liveSoundBtn').hidden=room.canPlaybackAudio!==false;
+     room.remoteParticipants.forEach(p=>p.trackPublications.forEach(pub=>{if(pub.track)attachRemote(pub.track,pub,p);}));
+     updateViewers();status('You are watching the live class. Your camera and microphone are off.');
+   }
+   window.scrollTo({top:(teacher?$('liveAdminRoom'):$('liveStudentRoom')).offsetTop,behavior:'smooth'});
  }
  async function joinClass(id,teacher){
    try{
-     $('liveRoomStatus').textContent='Preparing connection…';
      const data=await api(teacher?'start':'join',{class_id:id});
      activeClass=id;await connectRoom(data,teacher);
-   }catch(e){try{if(room){await room.disconnect();room=null;}}catch(_){}$('liveRoomStatus').textContent='Connection failed: '+e.message;alert('Live Class: '+e.message);$('liveRoomPanel').hidden=true;$('liveClassList').parentElement.hidden=false;$('liveAdminPanel').hidden=!admin();}
+   }catch(e){
+     try{if(room){leaving=true;await room.disconnect();}}catch(_){}room=null;
+     alert('Live Class: '+e.message);showList();
+   }
  }
- function appendChat(name,msg){const d=document.createElement('div');d.className='live-chat-message';const strong=document.createElement('strong');strong.textContent=name+': ';d.append(strong,document.createTextNode(msg));$('liveChatLog').appendChild(d);$('liveChatLog').scrollTop=$('liveChatLog').scrollHeight;}
- async function endClass(id){if(!admin()||!confirm('লাইভ ক্লাস বন্ধ করবে?'))return;try{await api('end',{class_id:id});if(room){await room.disconnect();room=null;}$('liveRoomPanel').hidden=true;$('liveClassList').parentElement.hidden=false;$('liveAdminPanel').hidden=!admin();await loadClasses();}catch(e){alert(e.message);}}
- $('liveCreateForm')?.addEventListener('submit',async e=>{e.preventDefault();if(!admin())return;const btn=$('liveCreateForm').querySelector('button[type="submit"]');btn.disabled=true;btn.textContent='Starting…';try{const r=await api('create',{title:$('liveTitle').value.trim(),subject:$('liveSubject').value.trim(),description:$('liveDescription').value.trim()});$('liveCreateForm').reset();await loadClasses();activeClass=r.class_id;await connectRoom(r,true);}catch(err){alert('ক্লাস তৈরি হয়নি: '+err.message);}finally{btn.disabled=false;btn.textContent='Create & Start Live';}});
+ async function leaveRoom(){
+   leaving=true;stopMeter();stopClock();
+   try{if(room){await room.disconnect();}}catch(e){}
+   room=null;role=null;activeClass=null;resetRoomUI();showList();loadClasses();
+ }
+ async function endClass(id){
+   if(!admin())return;
+   const ok=await confirmBox('Do you want to end this live class? All students will be disconnected.',{okText:'Yes, end class',cancelText:'Keep live',icon:'⏹️'});
+   if(!ok)return;
+   try{await api('end',{class_id:id});if(room&&activeClass===id)await leaveRoom();else await loadClasses();}catch(e){alert(e.message);}
+ }
+
+ /* ---------- wiring ---------- */
+ $('liveCreateForm')?.addEventListener('submit',async e=>{e.preventDefault();if(!admin())return;const btn=$('liveCreateForm').querySelector('button[type="submit"]');btn.disabled=true;btn.textContent='Starting…';try{const r=await api('create',{title:$('liveTitle').value.trim(),subject:$('liveSubject').value.trim(),description:$('liveDescription').value.trim()});$('liveCreateForm').reset();activeClass=r.class_id;await connectRoom(r,true);}catch(err){alert('ক্লাস তৈরি হয়নি: '+err.message);showList();}finally{btn.disabled=false;btn.textContent='Create & Start Live';}});
  $('refreshLiveClasses')?.addEventListener('click',loadClasses);
- $('liveSwitchCamera')?.addEventListener('click',()=>switchCamera(true));
- $('liveCameraSelect')?.addEventListener('change',()=>switchCamera(false));
- $('backFromLiveClass')?.addEventListener('click',async()=>{if(room){await room.disconnect();room=null;}$('liveRoomPanel').hidden=true;$('liveClassList').parentElement.hidden=false;$('liveAdminPanel').hidden=!admin();document.querySelectorAll('.wrap > section').forEach(x=>x.hidden=true);$('screen-subjects').hidden=false;$('topSub').textContent='Choose a subject to begin';});
- $('leaveLiveRoom')?.addEventListener('click',async()=>{if(room){await room.disconnect();room=null;}$('liveRoomPanel').hidden=true;$('liveClassList').parentElement.hidden=false;$('liveAdminPanel').hidden=!admin();});
- $('liveChatForm')?.addEventListener('submit',async e=>{e.preventDefault();if(!room)return;const input=$('liveChatInput'),msg=input.value.trim();if(!msg)return;try{await room.localParticipant.publishData(new TextEncoder().encode(msg),{reliable:true});appendChat('You',msg);input.value='';}catch(err){alert(err.message);}});
+ $('liveSoundBtn')?.addEventListener('click',async()=>{try{await room.startAudio();}catch(e){}$('liveSoundBtn').hidden=room?room.canPlaybackAudio!==false:true;$('liveAudioSink').querySelectorAll('audio').forEach(a=>{const p=a.play();if(p&&p.catch)p.catch(()=>{});});});
+ $('liveMicBtn')?.addEventListener('click',async()=>{if(!room)return;try{await room.localParticipant.setMicrophoneEnabled(!room.localParticipant.isMicrophoneEnabled);micOnSince=Date.now();micPeak=0;micWarned=false;}catch(e){status('Microphone: '+e.message);}syncButtons();});
+ $('liveCamBtn')?.addEventListener('click',async()=>{if(!room)return;try{await room.localParticipant.setCameraEnabled(!room.localParticipant.isCameraEnabled);}catch(e){status('Camera: '+e.message);}refreshPreview();});
+ $('liveSwitchCamera')?.addEventListener('click',async()=>{const devs=(await navigator.mediaDevices.enumerateDevices()).filter(d=>d.kind==='videoinput');if(devs.length<2)return;const cur=$('liveCameraSelect').value,i=devs.findIndex(d=>d.deviceId===cur),next=devs[(i+1+devs.length)%devs.length];$('liveCameraSelect').value=next.deviceId;switchDevice('videoinput',next.deviceId);});
+ $('liveCameraSelect')?.addEventListener('change',e=>switchDevice('videoinput',e.target.value));
+ $('liveMicSelect')?.addEventListener('change',e=>{micOnSince=Date.now();micPeak=0;micWarned=false;switchDevice('audioinput',e.target.value);});
+ $('liveAdminLeave')?.addEventListener('click',leaveRoom);
+ $('liveAdminEnd')?.addEventListener('click',()=>{if(activeClass)endClass(activeClass);});
+ $('liveStudentLeave')?.addEventListener('click',leaveRoom);
+ $('backFromLiveClass')?.addEventListener('click',async()=>{if(room)await leaveRoom();showList();document.querySelectorAll('.wrap > section').forEach(x=>x.hidden=true);$('screen-subjects').hidden=false;$('topSub').textContent='Choose a subject to begin';});
+ $('liveStudentChatForm')?.addEventListener('submit',e=>{e.preventDefault();sendChat('liveStudentChatInput','liveStudentChatLog');});
+ $('liveAdminChatForm')?.addEventListener('submit',e=>{e.preventDefault();sendChat('liveAdminChatInput','liveAdminChatLog');});
+
  async function checkLiveNotifications(){
    if(!window.supabaseClient||!window.currentProfile)return;
    try{const {data,error}=await window.supabaseClient.from('live_classes').select('id,title,subject,status,created_by').eq('status','live');if(error)throw error;
      const own=window.currentProfile.user_id||window.currentProfile.id;
-     (data||[]).forEach(c=>{if(!knownLiveIds.has(c.id)){knownLiveIds.add(c.id);if(c.created_by===own)return;const title='Live Class শুরু হয়েছে';const body=(c.title||'New class')+(c.subject?' · '+c.subject:'');try{if('Notification'in window&&Notification.permission==='granted')new Notification(title,{body,tag:'live-'+c.id});}catch(e){}if(typeof window.toast==='function')window.toast('🔴 '+body+' — Join করতে Live Class খোলো','info',6000);}});
+     (data||[]).forEach(c=>{if(!knownLiveIds.has(c.id)){knownLiveIds.add(c.id);if(c.created_by===own)return;const title='Live Class শুরু হয়েছে';const body=(c.title||'New class')+(c.subject?' · '+c.subject:'');try{if('Notification'in window&&Notification.permission==='granted')new Notification(title,{body,tag:'live-'+c.id});}catch(e){}if(typeof window.toast==='function')window.toast('🔴 '+body+' — Join করতে Live Class খোলো','info',6000);}});
+     if(!room&&$('screen-live-class')&&!$('screen-live-class').hidden)loadClasses();
    }catch(e){console.debug('Live notification check:',e.message);}
  }
  function startWatcher(){if(pollTimer)return;checkLiveNotifications();pollTimer=setInterval(checkLiveNotifications,15000);}
- $('enableLiveNotifications')?.addEventListener('click',async()=>{if(!('Notification'in window)){alert('এই Browser-এ Notification সমর্থিত নয়।');return;}try{const permission=await Notification.requestPermission();notificationReady=permission==='granted';$('enableLiveNotifications').textContent=notificationReady?'🔔 Notifications enabled':'🔔 Enable notifications';if(notificationReady)alert('Live Class notification চালু হয়েছে। ওয়েবসাইট খোলা থাকলে Live শুরু হলে জানাবে।');}catch(e){alert('Notification চালু করা যায়নি।');}});
+ $('enableLiveNotifications')?.addEventListener('click',async()=>{if(!('Notification'in window)){alert('এই Browser-এ Notification সমর্থিত নয়।');return;}try{const permission=await Notification.requestPermission();notificationReady=permission==='granted';$('enableLiveNotifications').textContent=notificationReady?'🔔 Notifications enabled':'🔔 Enable notifications';if(notificationReady)alert('Live Class notification চালু হয়েছে। ওয়েবসাইট খোলা থাকলে Live শুরু হলে জানাবে।');}catch(e){alert('Notification চালু করা যায়নি।');}});
  $('drawerLiveClass')?.addEventListener('click',()=>{document.querySelector('.side-drawer')?.classList.remove('open');document.querySelector('.drawer-backdrop')?.classList.remove('open');show();});
+ $('adminGoLive')?.addEventListener('click',show);
  window.openExamHubLiveClass=show;
- // Start the lightweight live-status watcher as soon as the signed-in profile is ready.
+ window.addEventListener('beforeunload',()=>{try{if(room)room.disconnect();}catch(e){}});
  let bootWait=setInterval(()=>{if(window.currentProfile){clearInterval(bootWait);startWatcher();}},1000);
 })();
 </script>
@@ -5917,14 +6132,45 @@ setTimeout(()=>{
 })();
 </script>
 <style id="live-class-polish">
-.live-video-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr))!important;align-items:start}
-.live-video-tile{position:relative;overflow:hidden;min-height:180px;aspect-ratio:16/9;background:#101827;border-radius:16px;box-shadow:0 8px 22px #0f172a18}
-.live-video-tile video{position:absolute;inset:0}
-.live-video-name{position:absolute;z-index:2;left:10px;bottom:10px;padding:5px 10px;border-radius:999px;background:#0f172acc;color:#fff!important;font-size:12px;font-weight:700}
-.live-now-badge{display:inline-flex;align-items:center;padding:3px 8px;border-radius:999px;background:#fee2e2;color:#b91c1c;font-size:10px;font-weight:900;letter-spacing:.06em}
-.live-chat-message{padding:7px 9px;margin:4px 0;border-radius:10px;background:var(--dr-soft,#f3f4f6);overflow-wrap:anywhere}
-#liveChatLog{background:var(--dr-card)!important;border:1px solid var(--dr-line)!important;color:var(--dr-ink)!important}
-@media(max-width:600px){#liveRoomPanel{padding:12px!important}.live-video-tile{min-height:150px}.live-class-row .mat-text{flex-basis:100%}#liveCameraSelect{max-width:190px}}
+.live-now-badge{display:inline-flex;align-items:center;padding:3px 9px;border-radius:999px;background:#fee2e2;color:#b91c1c;font-size:10px;font-weight:900;letter-spacing:.06em}
+.live-row-actions{display:flex;gap:8px;flex-wrap:wrap}
+.live-room{padding:16px}
+.live-room-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.live-room-head h3{margin:0 0 8px}
+.live-meta{display:flex;gap:12px;align-items:center;flex-wrap:wrap;font-size:13px;font-weight:700;color:var(--dr-muted,#64748b)}
+.live-head-actions{display:flex;gap:8px;flex-wrap:wrap}
+.live-end-btn{background:#dc2626!important;color:#fff!important;border:0!important}
+.live-layout{display:grid;grid-template-columns:minmax(0,1.75fr) minmax(270px,1fr);gap:16px;align-items:start}
+.live-stage{position:relative;aspect-ratio:16/9;width:100%;background:#0b0f1d;border-radius:18px;overflow:hidden;display:grid;place-items:center;box-shadow:0 12px 30px rgba(15,23,42,.25)}
+.live-stage video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000}
+.live-stage-msg{position:relative;z-index:1;color:#e5e7eb!important;padding:14px 20px;text-align:center;font-weight:700;line-height:1.5}
+.live-sound-btn{position:absolute;z-index:4;bottom:14px;left:50%;transform:translateX(-50%);background:#e11d2e;color:#fff;border:0;border-radius:999px;padding:12px 22px;font-weight:800;font-size:15px;cursor:pointer;box-shadow:0 10px 26px rgba(0,0,0,.45);animation:drNewPulse 1.6s ease-in-out infinite}
+.live-controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:12px}
+.live-ctl{border:1px solid var(--dr-line,#e5e7eb);background:var(--dr-card,#fff);color:var(--dr-ink,#111);border-radius:999px;padding:10px 16px;font-weight:800;cursor:pointer}
+.live-ctl.on{background:#dcfce7;color:#14532d;border-color:#86efac}
+.live-ctl.off{background:#fee2e2;color:#7f1d1d;border-color:#fecaca}
+.live-meter{width:96px;height:9px;border-radius:99px;background:var(--dr-soft,#eee);overflow:hidden}
+.live-meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,#22c55e,#facc15,#ef4444);transition:width .12s}
+.live-devices{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.live-devices label{display:grid;gap:5px;font-size:12px;font-weight:800;color:var(--dr-muted,#64748b)}
+.live-devices select{min-width:0;padding:9px 10px;border:1px solid var(--dr-line,#e5e7eb);border-radius:12px;background:var(--dr-card,#fff);color:var(--dr-ink,#111)}
+.live-status{margin-top:12px;color:var(--dr-muted,#64748b);font-size:13px;line-height:1.5}
+.live-side{display:grid;gap:14px}
+.live-chat{display:flex;flex-direction:column;min-height:300px;max-height:470px;border:1px solid var(--dr-line,#e5e7eb);border-radius:18px;background:var(--dr-card,#fff);overflow:hidden}
+.live-chat-title{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;font-weight:800;border-bottom:1px solid var(--dr-line,#e5e7eb)}
+.live-count{background:#e11d2e;color:#fff;border-radius:99px;padding:1px 9px;font-size:12px}
+.live-chat-log{flex:1;overflow:auto;padding:10px 12px;display:flex;flex-direction:column;gap:6px}
+.live-msg{padding:8px 11px;border-radius:12px;background:var(--dr-soft,#f3f4f6);overflow-wrap:anywhere;font-size:14px;line-height:1.45}
+.live-msg strong{display:block;font-size:12px;margin-bottom:2px;color:var(--dr-muted,#64748b)}
+.live-msg.teacher{background:#fde7ef}.live-msg.me{background:#e0e7ff}
+.live-empty{color:var(--dr-muted,#64748b);font-size:13px;text-align:center;padding:12px}
+.live-chat-form{display:flex;gap:8px;padding:10px;border-top:1px solid var(--dr-line,#e5e7eb)}
+.live-chat-form input{flex:1;min-width:0;border:1px solid var(--dr-line,#e5e7eb);border-radius:999px;padding:11px 14px;background:var(--dr-card,#fff);color:var(--dr-ink,#111)}
+.live-viewers{border:1px solid var(--dr-line,#e5e7eb);border-radius:18px;background:var(--dr-card,#fff);overflow:hidden}
+.live-viewer-list{display:flex;gap:6px;flex-wrap:wrap;padding:10px 12px;max-height:130px;overflow:auto}
+.live-chip{background:var(--dr-soft,#f3f4f6);border-radius:99px;padding:4px 11px;font-size:12.5px;font-weight:700}
+@media(max-width:820px){.live-layout{grid-template-columns:minmax(0,1fr)}.live-chat{max-height:340px;min-height:240px}}
+@media(max-width:600px){.live-room{padding:12px}.live-devices{grid-template-columns:1fr}.live-class-row .mat-text{flex-basis:100%}}
 </style>
 </body>
 <style id="dribbble-theme-v8">
