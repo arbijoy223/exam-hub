@@ -1024,6 +1024,7 @@ html[data-theme="dark"] a{color:#b9baff}
     <button id="drawerProfile"><span>♙</span> My Profile</button>
     <button id="drawerAdmin" hidden><span>🛡</span> Admin Dashboard</button>
     <button id="drawerLeaderboard" hidden><span>🏆</span> Leaderboard</button>
+    <button id="drawerLiveClass"><span>📡</span> Live Class</button>
     <button id="drawerLogin"><span>↪</span> Sign in / Sign up</button>
     <button id="drawerLogout" hidden><span>⇥</span> Log out</button>
   </nav>
@@ -1182,6 +1183,33 @@ html[data-theme="dark"] a{color:#b9baff}
     <button class="back-btn" id="backFromMessages" type="button">← Back</button>
     <div class="lede"><h2 id="messagesHeading">💬 Messages</h2><p id="messagesSubheading">Questions, complaints and replies from Admin.</p></div>
     <div class="profile-card" id="newMessageCard"><h3>✉️ Start a conversation</h3><p>পরীক্ষা না দিয়েও এখানে Admin-কে মেসেজ পাঠাতে পারো।</p><form id="standaloneMessageForm"><label>Subject (optional)<input name="subject" maxlength="120" placeholder="বিষয় লিখো"></label><label>Message<textarea name="message" maxlength="3000" required placeholder="Admin-কে কী জানাতে চাও লিখো..."></textarea></label><button class="btn btn-primary" type="submit">📨 Send message</button><p id="standaloneMessageStatus" role="status"></p></form></div><div class="profile-card"><div class="admin-section-title"><div><h3 id="messagesListTitle">Your messages</h3></div><button class="btn btn-ghost" id="refreshMessagesBtn" type="button">↻ Refresh</button></div><div id="messageInboxList"><div class="empty-profile">Loading messages…</div></div></div>
+  </section>
+
+  <!-- Live Class -->
+  <section id="screen-live-class" hidden>
+    <button class="back-btn" id="backFromLiveClass" type="button">← Back to Home</button>
+    <div class="lede"><h2>📡 Live Class</h2><p>Join the teacher's live lesson or manage a class as Admin.</p></div>
+    <div class="profile-card" id="liveAdminPanel" hidden>
+      <h3>🎥 Start a Live Class</h3>
+      <form id="liveCreateForm" class="written-admin-grid">
+        <label>Class title<input id="liveTitle" required maxlength="120" placeholder="e.g. ICT Chapter 2"></label>
+        <label>Subject<input id="liveSubject" maxlength="80" placeholder="Subject"></label>
+        <label class="full">Description<textarea id="liveDescription" maxlength="500" placeholder="What will be covered?"></textarea></label>
+        <button class="btn btn-primary full" type="submit">Create & Start Live</button>
+      </form>
+      <p class="card-hint">Maximum 50 student viewers. Only Admin can start/end a class.</p>
+    </div>
+    <div class="profile-card">
+      <div class="admin-section-title"><div><h3>Available Classes</h3><p>Upcoming and currently live classes</p></div><button class="btn btn-ghost" id="refreshLiveClasses" type="button">↻ Refresh</button></div>
+      <div id="liveClassList" class="empty-profile">Loading classes…</div>
+    </div>
+    <div class="profile-card" id="liveRoomPanel" hidden>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><h3 id="liveRoomTitle">Live room</h3><button class="btn btn-ghost" id="leaveLiveRoom" type="button">Leave room</button></div>
+      <div id="liveVideoGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px"></div>
+      <div id="liveRoomStatus" role="status" style="margin-top:10px;color:var(--muted)">Connecting…</div>
+      <div id="liveChatLog" style="max-height:220px;overflow:auto;margin:12px 0;padding:10px;background:#f8fafc;border-radius:12px"></div>
+      <form id="liveChatForm" style="display:flex;gap:8px"><input id="liveChatInput" maxlength="500" placeholder="Ask the teacher…" style="flex:1;min-width:0;border:1px solid var(--border);border-radius:12px;padding:12px"><button class="btn btn-primary">Send</button></form>
+    </div>
   </section>
 
   <!-- Admin Dashboard -->
@@ -5724,6 +5752,83 @@ setTimeout(()=>{
 .chat-compose{display:flex;gap:8px;margin-top:12px;align-items:flex-end}.chat-compose textarea{flex:1;min-width:0;min-height:48px;max-height:120px;border-radius:14px;padding:12px}
 @media(max-width:600px){.chat-thread{padding:10px;max-height:55vh}.chat-bubble{max-width:90%;font-size:14px}.chat-compose{gap:6px}.chat-compose button{padding:10px}}
 </style>
+
+<script>window.EXAMHUB_LIVECLASS_FUNCTION_URL='https://YOUR-PROJECT.supabase.co/functions/v1/live-class';</script>
+<script src="https://cdn.jsdelivr.net/npm/livekit-client@2.15.6/dist/livekit-client.umd.min.js"></script>
+<script>
+(function(){
+ const $=id=>document.getElementById(id);
+ let room=null, activeClass=null;
+ const edgeUrl=()=> (window.EXAMHUB_LIVECLASS_FUNCTION_URL||'').replace(/\/$/,'');
+ async function api(action,payload={}){
+   const client=window.supabaseClient, url=edgeUrl();
+   if(!client) throw new Error('Supabase client পাওয়া যায়নি।');
+   if(!url) throw new Error('Live Class Function URL কনফিগার করা হয়নি।');
+   const {data:{session}}=await client.auth.getSession();
+   if(!session?.access_token) throw new Error('আগে লগইন করো।');
+   const res=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token},body:JSON.stringify({action,...payload})});
+   const body=await res.json().catch(()=>({}));
+   if(!res.ok) throw new Error(body.error||'Live Class request failed');
+   return body;
+ }
+ function admin(){return !!(window.currentProfile&&window.currentProfile.is_admin===true);}
+ function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+ function show(){if(!window.currentProfile){alert('Live Class দেখতে আগে লগইন করো।');return;}
+   document.querySelectorAll('.wrap > section').forEach(x=>x.hidden=true);
+   $('screen-live-class').hidden=false;$('liveAdminPanel').hidden=!admin();
+   $('topSub').textContent='Live Class';loadClasses();
+ }
+ async function loadClasses(){
+   const box=$('liveClassList');box.textContent='Loading…';
+   try{
+     const {data,error}=await window.supabaseClient.from('live_classes').select('id,title,subject,description,status,scheduled_at,created_at').in('status',['scheduled','live']).order('created_at',{ascending:false});
+     if(error)throw error;
+     if(!data?.length){box.innerHTML='<div class="empty-profile">এখন কোনো Live Class নেই।</div>';return;}
+     box.innerHTML=data.map(c=>`<div class="mat-row" style="flex-wrap:wrap"><div class="mat-text"><p class="mat-title"><b>${esc(c.title)}</b></p><p class="mat-sub">${esc(c.subject||'')} · ${c.status==='live'?'🔴 LIVE':'Upcoming'}</p><p class="mat-sub">${esc(c.description||'')}</p></div><button class="btn btn-primary" data-join="${esc(c.id)}" ${c.status!=='live'?'disabled':''}>Join Live</button>${admin()?`<button class="btn btn-ghost" data-end="${esc(c.id)}">End</button>`:''}</div>`).join('');
+     box.querySelectorAll('[data-join]').forEach(b=>b.addEventListener('click',()=>joinClass(b.dataset.join,false)));
+     box.querySelectorAll('[data-end]').forEach(b=>b.addEventListener('click',()=>endClass(b.dataset.end)));
+   }catch(e){box.textContent='ক্লাস লোড হয়নি: '+e.message;}
+ }
+ async function attachParticipant(participant){
+   const grid=$('liveVideoGrid');
+   participant.trackPublications.forEach(pub=>{if(pub.track)attachTrack(pub.track,participant);});
+   participant.on('trackSubscribed',(track)=>attachTrack(track,participant));
+ }
+ function attachTrack(track,participant){
+   const el=track.attach();el.style.width='100%';el.style.maxHeight='480px';el.style.background='#111827';el.style.borderRadius='14px';
+   el.autoplay=true;el.playsInline=true;
+   const wrap=document.createElement('div');wrap.appendChild(el);
+   const label=document.createElement('small');label.textContent=participant.identity;wrap.appendChild(label);
+   $('liveVideoGrid').appendChild(wrap);
+ }
+ async function joinClass(id,teacher){
+   try{
+     if(!window.LivekitClient)throw new Error('LiveKit SDK লোড হয়নি।');
+     const data=await api(teacher?'start':'join',{class_id:id});
+     activeClass=id;$('liveRoomTitle').textContent=data.title||'Live Class';$('liveRoomPanel').hidden=false;$('liveRoomStatus').textContent='Connecting…';
+     room=new LivekitClient.Room({adaptiveStream:true,dynacast:true});
+     room.on('participantConnected',p=>attachParticipant(p));
+     room.on('trackSubscribed',(track,pub,participant)=>attachTrack(track,participant));
+     room.on('dataReceived',(payload,participant)=>{const msg=new TextDecoder().decode(payload);appendChat(participant?.identity||'Student',msg);});
+     room.on('disconnected',()=>{$('liveRoomStatus').textContent='Disconnected';});
+     await room.connect(data.livekit_url,data.token);
+     if(teacher){await room.localParticipant.setCameraEnabled(true);await room.localParticipant.setMicrophoneEnabled(true);}
+     room.remoteParticipants.forEach(attachParticipant);
+     $('liveRoomStatus').textContent=teacher?'You are live.':'You are watching the live class.';
+     window.scrollTo({top:$('liveRoomPanel').offsetTop,behavior:'smooth'});
+   }catch(e){alert('Live Class: '+e.message);}
+ }
+ function appendChat(name,msg){const d=document.createElement('div');d.textContent=name+': '+msg;$('liveChatLog').appendChild(d);$('liveChatLog').scrollTop=$('liveChatLog').scrollHeight;}
+ async function endClass(id){if(!admin()||!confirm('লাইভ ক্লাস বন্ধ করবে?'))return;try{await api('end',{class_id:id});if(room){await room.disconnect();room=null;}$('liveRoomPanel').hidden=true;await loadClasses();}catch(e){alert(e.message);}}
+ $('liveCreateForm')?.addEventListener('submit',async e=>{e.preventDefault();if(!admin())return;try{const r=await api('create',{title:$('liveTitle').value.trim(),subject:$('liveSubject').value.trim(),description:$('liveDescription').value.trim()});$('liveCreateForm').reset();await loadClasses();await joinClass(r.class_id,true);}catch(err){alert('ক্লাস তৈরি হয়নি: '+err.message);}});
+ $('refreshLiveClasses')?.addEventListener('click',loadClasses);
+ $('backFromLiveClass')?.addEventListener('click',()=>{if(room){room.disconnect();room=null;}$('liveRoomPanel').hidden=true;document.querySelectorAll('.wrap > section').forEach(x=>x.hidden=true);$('screen-subjects').hidden=false;$('topSub').textContent='Choose a subject to begin';});
+ $('leaveLiveRoom')?.addEventListener('click',async()=>{if(room){await room.disconnect();room=null;}$('liveRoomPanel').hidden=true;});
+ $('liveChatForm')?.addEventListener('submit',async e=>{e.preventDefault();if(!room)return;const input=$('liveChatInput'),msg=input.value.trim();if(!msg)return;try{await room.localParticipant.publishData(new TextEncoder().encode(msg),{reliable:true});appendChat('You',msg);input.value='';}catch(err){alert(err.message);}});
+ $('drawerLiveClass')?.addEventListener('click',()=>{document.querySelector('.side-drawer')?.classList.remove('open');document.querySelector('.drawer-backdrop')?.classList.remove('open');show();});
+ window.openExamHubLiveClass=show;
+})();
+</script>
 </body>
 <style id="dribbble-theme-v8">
 /* ===== V8: Dribbble-inspired UI (visual layer only - no logic changed) ===== */
