@@ -766,6 +766,17 @@ html[data-theme="dark"] .site-footer{background:linear-gradient(130deg,#080d17 0
 #homeHeroCarousel .hero-dots{z-index:4}
 @media(max-width:700px){#homeHeroCarousel{min-height:250px;margin:10px auto 20px}#homeHeroCarousel .hero-track{height:205px!important;min-height:205px!important}#homeHeroCarousel .hero-slide{min-height:205px!important}#homeHeroCarousel .hero-top-user{padding:8px 10px}}
 
+
+
+/* LiveKit recording controls and recorded video library */
+.live-record-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:12px 0;padding:12px;border:1px solid var(--border);border-radius:14px;background:#fff}
+.live-record-status{font-size:12px;font-weight:800;color:#64748b;margin-right:auto}
+.live-record-status.recording{color:#dc2626}.live-record-status.paused{color:#b45309}
+.live-rec-btn{background:#fee2e2!important;color:#b91c1c!important;border-color:#fecaca!important}
+.recorded-video-item{padding:14px;border:1px solid var(--border);border-radius:15px;margin:10px 0;background:#fff}
+.recorded-video-item video{width:100%;max-height:480px;background:#0f172a;border-radius:12px;display:block}.recorded-video-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.recorded-delete-btn{color:#b91c1c!important;border-color:#fecaca!important}
+.recorded-video-item strong{display:block;margin:8px 0 3px}
+@media(max-width:600px){.live-record-controls>*{flex:1 1 42%}.live-record-status{flex-basis:100%}}
 </style>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#635bff">
@@ -1207,6 +1218,10 @@ html[data-theme="dark"] a{color:#b9baff}
       <div class="admin-section-title"><div><h3 id="liveListTitle">Available Classes</h3><p id="liveListHint">Upcoming and currently live classes</p></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-ghost" id="enableLiveNotifications" type="button">🔔 Enable notifications</button><button class="btn btn-ghost" id="refreshLiveClasses" type="button">↻ Refresh</button></div></div>
       <div id="liveClassList" class="empty-profile">Loading classes…</div>
     </div>
+    <div class="profile-card" id="recordedVideoSection">
+      <div class="admin-section-title"><div><h3>🎬 Recorded Video</h3><p>এই Live Class-গুলোর সংরক্ষিত রেকর্ডিং</p></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="btn btn-primary" id="loadRecordedVideos">Load recordings</button><button type="button" class="btn btn-ghost" id="refreshRecordedVideos">↻ Refresh</button></div></div>
+      <div id="recordedVideoList" class="empty-profile">ওয়েবসাইট দ্রুত রাখার জন্য রেকর্ডিংয়ের তালিকা খুললে লোড হবে।</div>
+    </div>
 
     <!-- STUDENT VIEW: only the teacher's video + audio, and chat -->
     <div class="profile-card live-room live-student" id="liveStudentRoom" hidden>
@@ -1247,6 +1262,13 @@ html[data-theme="dark"] a{color:#b9baff}
           <div class="live-devices">
             <label>Camera <select id="liveCameraSelect" aria-label="Select camera"><option value="">Default camera</option></select></label>
             <label>Microphone <select id="liveMicSelect" aria-label="Select microphone"><option value="">Default microphone</option></select></label>
+          </div>
+          <div class="live-record-controls" id="liveRecordControls">
+            <span id="liveRecordStatus" class="live-record-status">● Not recording</span>
+            <button type="button" class="live-ctl live-rec-btn" id="liveRecordStart">⏺ Record</button>
+            <button type="button" class="live-ctl" id="liveRecordPause" disabled>⏸ Pause</button>
+            <button type="button" class="live-ctl" id="liveRecordResume" disabled>▶ Resume</button>
+            <button type="button" class="live-ctl off" id="liveRecordStop" disabled>⏹ Stop &amp; Save</button>
           </div>
           <div id="liveAdminStatus" class="live-status" role="status"></div>
         </div>
@@ -6108,6 +6130,7 @@ setTimeout(()=>{
    }
  }
  async function leaveRoom(){
+   if(liveRecorder&&liveRecorder.state!=='inactive'){stopLiveRecording();await new Promise(resolve=>{const r=liveRecorder;if(!r||r.state==='inactive')return resolve();r.addEventListener('stop',resolve,{once:true});setTimeout(resolve,15000);});}
    leaving=true;stopMeter();stopClock();
    try{if(room){await room.disconnect();}}catch(e){}
    room=null;role=null;activeClass=null;resetRoomUI();showList();loadClasses();
@@ -6119,6 +6142,119 @@ setTimeout(()=>{
    try{await api('end',{class_id:id});if(room&&activeClass===id)await leaveRoom();else await loadClasses();}catch(e){alert(e.message);}
  }
 
+
+ /* ---------- LiveKit recording + Supabase Storage archive ---------- */
+ let liveRecorder=null,liveRecordChunks=[],liveRecordStartedAt=0,liveRecordPausedMs=0,liveRecordPauseAt=0;
+ const RECORD_BUCKET='live-recordings';
+ function recordingStatus(text,state=''){const el=$('liveRecordStatus');if(el){el.textContent=text;el.className='live-record-status '+state;}}
+ function syncRecordingButtons(state){
+   $('liveRecordStart').disabled=state==='recording'||state==='paused'||!room||role!=='teacher';
+   $('liveRecordPause').disabled=state!=='recording';
+   $('liveRecordResume').disabled=state!=='paused';
+   $('liveRecordStop').disabled=!(state==='recording'||state==='paused');
+ }
+ function getTeacherRecordingStream(){
+   if(!room||role!=='teacher')throw new Error('শুধু Admin/Teacher রেকর্ড করতে পারবেন।');
+   const tracks=[];
+   room.localParticipant.trackPublications.forEach(pub=>{
+     if(pub.track&&!pub.isMuted&&pub.track.mediaStreamTrack&&pub.track.mediaStreamTrack.readyState==='live'){
+       tracks.push(pub.track.mediaStreamTrack);
+     }
+   });
+   if(!tracks.some(t=>t.kind==='video'))throw new Error('রেকর্ড করার জন্য Camera চালু করুন।');
+   if(!tracks.some(t=>t.kind==='audio'))console.warn('Recording without microphone audio.');
+   return new MediaStream(tracks);
+ }
+ async function startLiveRecording(){
+   if(!window.MediaRecorder)throw new Error('এই Browser-এ MediaRecorder সমর্থিত নয়।');
+   if(liveRecorder&&liveRecorder.state!=='inactive')return;
+   const stream=getTeacherRecordingStream();
+   const mime=['video/webm;codecs=vp9,opus','video/webm;codecs=vp8,opus','video/webm'].find(t=>MediaRecorder.isTypeSupported(t));
+   liveRecordChunks=[];liveRecordPausedMs=0;liveRecordStartedAt=Date.now();
+   liveRecorder=new MediaRecorder(stream,mime?{mimeType:mime}:undefined);
+   liveRecorder.ondataavailable=e=>{if(e.data&&e.data.size)liveRecordChunks.push(e.data);};
+   liveRecorder.onerror=e=>{recordingStatus('Recording error','paused');status('Recording error: '+(e.error?.message||'Unknown error'));};
+   liveRecorder.onstop=async()=>{
+     const blob=new Blob(liveRecordChunks,{type:liveRecorder?.mimeType||'video/webm'});
+     liveRecordChunks=[];
+     if(!blob.size){recordingStatus('Empty recording');syncRecordingButtons('idle');return;}
+     recordingStatus('Uploading recording…','paused');
+     try{
+       const title=($('liveAdminTitle')?.textContent||'Live Class').replace(/[^\w\- ]+/g,'').trim().slice(0,70)||'Live-Class';
+       const path=activeClass+'/'+Date.now()+'-'+title.replace(/\s+/g,'-')+'.webm';
+       const {error}=await window.supabaseClient.storage.from(RECORD_BUCKET).upload(path,blob,{contentType:'video/webm',upsert:false});
+       if(error)throw error;
+       recordingStatus('✓ Saved to Recorded Video','');
+       await loadRecordedVideos();
+       if(typeof window.toast==='function')window.toast('Recording সংরক্ষণ হয়েছে।','success',5000);
+     }catch(err){
+       recordingStatus('Save failed — download available','paused');
+       const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='live-'+(activeClass||'class')+'.webm';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),60000);
+       alert('Supabase Storage-এ recording save হয়নি: '+err.message+'\\nভিডিওটি ডাউনলোড করা হয়েছে।');
+     }finally{syncRecordingButtons('idle');}
+   };
+   liveRecorder.start(1000);recordingStatus('● Recording…','recording');syncRecordingButtons('recording');
+ }
+ function pauseLiveRecording(){if(liveRecorder?.state==='recording'){liveRecorder.pause();liveRecordPauseAt=Date.now();recordingStatus('Ⅱ Recording paused','paused');syncRecordingButtons('paused');}}
+ function resumeLiveRecording(){if(liveRecorder?.state==='paused'){liveRecordPausedMs+=Date.now()-liveRecordPauseAt;liveRecorder.resume();recordingStatus('● Recording…','recording');syncRecordingButtons('recording');}}
+ function stopLiveRecording(){
+   if(liveRecorder&&liveRecorder.state!=='inactive'){liveRecorder.stop();recordingStatus('Preparing video…','paused');syncRecordingButtons('idle');}
+ }
+ async function loadRecordedVideos(){
+   const box=$('recordedVideoList');if(!box||!window.supabaseClient)return;
+   box.className='empty-profile';box.textContent='রেকর্ডিংয়ের তালিকা লোড হচ্ছে…';
+   try{
+     const {data:folders,error}=await window.supabaseClient.storage.from(RECORD_BUCKET).list('',{limit:100,sortBy:{column:'name',order:'desc'}});
+     if(error)throw error;
+     const dirs=(folders||[]).filter(x=>!x.id);
+     const folderResults=await Promise.all(dirs.map(async dir=>{
+       const {data:files,error:fe}=await window.supabaseClient.storage.from(RECORD_BUCKET).list(dir.name,{limit:50,sortBy:{column:'name',order:'desc'}});
+       if(fe)return [];
+       return (files||[]).filter(f=>/\.webm$/i.test(f.name)).map(f=>({path:dir.name+'/'+f.name,name:f.name,created:f.created_at||f.updated_at||''}));
+     }));
+     const videos=folderResults.flat().sort((a,b)=>(b.created||'').localeCompare(a.created||''));
+     if(!videos.length){box.className='empty-profile';box.textContent='এখনো কোনো Recorded Video নেই।';return;}
+     box.className='';box.innerHTML='';
+     videos.forEach(v=>{
+       const item=document.createElement('article');item.className='recorded-video-item';item.dataset.recordPath=v.path;
+       const video=document.createElement('video');video.controls=true;video.playsInline=true;video.preload='none';video.dataset.lazyPath=v.path;video.setAttribute('aria-label','Recorded class video');
+       const title=document.createElement('strong');title.textContent=v.name.replace(/\.webm$/i,'').replace(/^\d+-/,'').replace(/-/g,' ');
+       const meta=document.createElement('small');meta.textContent=v.created?new Date(v.created).toLocaleString():'';
+       const actions=document.createElement('div');actions.className='recorded-video-actions';
+       const play=document.createElement('button');play.type='button';play.className='btn btn-primary';play.textContent='▶ Load / Play';play.dataset.playRecorded=v.path;
+       actions.appendChild(play);
+       if(admin()){const del=document.createElement('button');del.type='button';del.className='btn btn-ghost recorded-delete-btn';del.textContent='🗑 Delete';del.dataset.deleteRecorded=v.path;actions.appendChild(del);}
+       item.append(video,title,meta,actions);box.appendChild(item);
+     });
+   }catch(e){box.className='empty-profile';box.textContent='Recorded Video লোড হয়নি: '+e.message+' (Storage bucket ও access policy পরীক্ষা করুন।)';}
+ }
+ async function playRecordedVideo(path,button){
+   const item=button.closest('.recorded-video-item'),video=item?.querySelector('video');if(!video)return;
+   try{
+     button.disabled=true;button.textContent='Loading…';
+     if(!video.src){
+       const {data,error}=await window.supabaseClient.storage.from(RECORD_BUCKET).createSignedUrl(path,60*60*24);
+       if(error)throw error;
+       video.src=data.signedUrl;
+     }
+     const result=video.play();if(result?.catch)await result.catch(()=>{});
+     button.textContent='▶ Play';
+   }catch(e){button.textContent='Retry';alert('ভিডিও চালু হয়নি: '+e.message);}finally{button.disabled=false;}
+ }
+ async function deleteRecordedVideo(path,button){
+   if(!admin()){alert('শুধু Admin ভিডিও Delete করতে পারবেন।');return;}
+   const ok=await confirmBox('এই Recorded Video স্থায়ীভাবে Delete করতে চান?',{okText:'Delete video',cancelText:'Cancel',icon:'🗑️'});
+   if(!ok)return;
+   try{
+     button.disabled=true;button.textContent='Deleting…';
+     const {error}=await window.supabaseClient.storage.from(RECORD_BUCKET).remove([path]);
+     if(error)throw error;
+     button.closest('.recorded-video-item')?.remove();
+     const box=$('recordedVideoList');if(box&&!box.querySelector('.recorded-video-item')){box.className='empty-profile';box.textContent='এখনো কোনো Recorded Video নেই।';}
+     if(typeof window.toast==='function')window.toast('ভিডিও Delete হয়েছে।','success',4000);
+   }catch(e){button.disabled=false;button.textContent='🗑 Delete';alert('ভিডিও Delete হয়নি: '+e.message+'\nStorage-এর Admin-only DELETE policy পরীক্ষা করুন।');}
+ }
+
  /* ---------- wiring ---------- */
  $('liveCreateForm')?.addEventListener('submit',async e=>{e.preventDefault();if(!admin())return;const btn=$('liveCreateForm').querySelector('button[type="submit"]');btn.disabled=true;btn.textContent='Starting…';try{const r=await api('create',{title:$('liveTitle').value.trim(),subject:$('liveSubject').value.trim(),description:$('liveDescription').value.trim()});$('liveCreateForm').reset();activeClass=r.class_id;await connectRoom(r,true);}catch(err){alert('ক্লাস তৈরি হয়নি: '+err.message);showList();}finally{btn.disabled=false;btn.textContent='Create & Start Live';}});
  $('refreshLiveClasses')?.addEventListener('click',loadClasses);
@@ -6128,7 +6264,14 @@ setTimeout(()=>{
  $('liveSwitchCamera')?.addEventListener('click',async()=>{const devs=(await navigator.mediaDevices.enumerateDevices()).filter(d=>d.kind==='videoinput');if(devs.length<2)return;const cur=$('liveCameraSelect').value,i=devs.findIndex(d=>d.deviceId===cur),next=devs[(i+1+devs.length)%devs.length];$('liveCameraSelect').value=next.deviceId;switchDevice('videoinput',next.deviceId);});
  $('liveCameraSelect')?.addEventListener('change',e=>switchDevice('videoinput',e.target.value));
  $('liveMicSelect')?.addEventListener('change',e=>{micOnSince=Date.now();micPeak=0;micWarned=false;switchDevice('audioinput',e.target.value);});
- $('liveAdminLeave')?.addEventListener('click',leaveRoom);
+ $('liveRecordStart')?.addEventListener('click',async()=>{try{await startLiveRecording();}catch(e){alert('Recording শুরু হয়নি: '+e.message);}});
+ $('liveRecordPause')?.addEventListener('click',pauseLiveRecording);
+ $('liveRecordResume')?.addEventListener('click',resumeLiveRecording);
+ $('liveRecordStop')?.addEventListener('click',stopLiveRecording);
+ $('loadRecordedVideos')?.addEventListener('click',loadRecordedVideos);
+ $('refreshRecordedVideos')?.addEventListener('click',loadRecordedVideos);
+ $('recordedVideoList')?.addEventListener('click',e=>{const play=e.target.closest('[data-play-recorded]');if(play){playRecordedVideo(play.dataset.playRecorded,play);return;}const del=e.target.closest('[data-delete-recorded]');if(del)deleteRecordedVideo(del.dataset.deleteRecorded,del);});
+ $('liveAdminLeave')?.addEventListener('click',async()=>{if(liveRecorder&&liveRecorder.state!=='inactive')stopLiveRecording();await leaveRoom();});
  $('liveAdminEnd')?.addEventListener('click',()=>{if(activeClass)endClass(activeClass);});
  $('liveStudentLeave')?.addEventListener('click',leaveRoom);
  $('liveStudentFullscreen')?.addEventListener('click',()=>toggleLiveFullscreen('liveStudentStage'));
