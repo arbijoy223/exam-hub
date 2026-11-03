@@ -1190,40 +1190,118 @@ html[data-theme="dark"] a{color:#b9baff}
     <div class="profile-card"><h3>✍️ CQ / Written Exam Results</h3><p class="card-hint">Tap a CQ exam to view its CQ leaderboard</p><div id="profileWrittenResults"></div></div>
   </section>
 
-  <!-- Student Study Space -->
-  <section id="screen-study" hidden>
+  <!-- Student Study Space (step-by-step pages) -->
+  <section id="screen-study" data-study-page="home" hidden>
     <button class="back-btn" id="backFromStudy" type="button">← Back to Home</button>
-    <div class="lede"><h2>📚 My Study Space</h2><p>নিজের রুটিন, লক্ষ্য, পড়ার সময় ও বিষয়ভিত্তিক অগ্রগতি এক জায়গায় রাখো।</p></div>
-    <div class="study-summary-grid">
-      <div class="study-stat"><span>আজকের Focus</span><strong id="studyTodayMinutes">0 min</strong><small>আজকের পড়ার সময়</small></div>
-      <div class="study-stat"><span>Completed Goals</span><strong id="studyGoalCount">0/0</strong><small>লক্ষ্য পূরণের হিসাব</small></div>
-      <div class="study-stat"><span>Subjects Tracked</span><strong id="studySubjectCount">0</strong><small>অগ্রগতি সংরক্ষিত</small></div>
+    <div class="st-hero"><h2>📚 Study Space</h2><p>Plan, study and track your progress in 5 easy steps. Everything is saved to your profile by date.</p></div>
+    <div id="stTimerBanner" class="st-banner" hidden></div>
+    <div class="st-today">
+      <div class="st-today-date" id="stTodayDate">Today</div>
+      <div class="st-today-grid">
+        <div class="st-stat"><strong id="stTodayMin">0</strong><span>minutes studied today</span></div>
+        <div class="st-stat"><strong id="stTodayGoals">0</strong><span>goals completed today</span></div>
+        <div class="st-stat"><strong id="stStreak">0</strong><span>day streak 🔥</span></div>
+      </div>
     </div>
-    <div class="profile-card study-card">
-      <div class="study-card-head"><div><h3>⏱️ Focus Timer</h3><p>Pomodoro বা নিজের মতো সময় নির্ধারণ করো।</p></div><span class="study-live-dot" id="studyTimerStatus">Ready</span></div>
-      <div class="study-timer-face" id="studyTimerDisplay">25:00</div>
-      <div class="study-timer-settings"><label>সময় (মিনিট)<input id="studyTimerMinutes" type="number" min="1" max="180" value="25"></label><label>বিষয়<select id="studyTimerSubject"><option value="General">সাধারণ পড়াশোনা</option></select></label></div>
-      <div class="study-actions"><button class="btn btn-primary" id="studyTimerStart">▶ Start</button><button class="btn btn-ghost" id="studyTimerPause" disabled>Ⅱ Pause</button><button class="btn btn-ghost" id="studyTimerFinish" disabled>✓ Finish &amp; Save</button><button class="btn btn-ghost" id="studyTimerReset">↺ Reset</button></div>
-      <p class="card-hint" id="studyTimerHint">Timer শেষ বা Finish করলে পড়ার সময় তোমার প্রোফাইলে সেভ হবে।</p>
+    <h3 class="st-section-title">Start here</h3>
+    <div class="st-steps">
+      <button class="st-step-card" data-go="timer" type="button"><span class="st-num">1</span><span class="st-ic">⏱️</span><span class="st-tx"><b>Focus Timer</b><small>Start a study session and save your time</small></span><span class="st-arrow">›</span></button>
+      <button class="st-step-card" data-go="routine" type="button"><span class="st-num">2</span><span class="st-ic">🗓️</span><span class="st-tx"><b>Weekly Routine</b><small>Plan what to study on each day</small></span><span class="st-arrow">›</span></button>
+      <button class="st-step-card" data-go="goals" type="button"><span class="st-num">3</span><span class="st-ic">🎯</span><span class="st-tx"><b>Goals</b><small>Set small targets and tick them off</small></span><span class="st-arrow">›</span></button>
+      <button class="st-step-card" data-go="progress" type="button"><span class="st-num">4</span><span class="st-ic">📈</span><span class="st-tx"><b>Subject Progress</b><small>Tell us how ready you feel in each topic</small></span><span class="st-arrow">›</span></button>
+      <button class="st-step-card" data-go="record" type="button"><span class="st-num">5</span><span class="st-ic">📅</span><span class="st-tx"><b>Study Record</b><small>See everything you did on any date</small></span><span class="st-arrow">›</span></button>
     </div>
-    <div class="profile-card study-card">
-      <div class="study-card-head"><div><h3>🗓️ My Study Routine</h3><p>সপ্তাহের প্রতিদিনের পড়ার পরিকল্পনা তৈরি করো।</p></div></div>
-      <form id="studyRoutineForm" class="study-form-grid"><label>দিন<select name="day"><option>Saturday</option><option>Sunday</option><option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option></select></label><label>সময়<input name="time" type="time" required></label><label>বিষয়<input name="subject" required maxlength="60" placeholder="যেমন: গণিত"></label><label>কী পড়বে?<input name="task" required maxlength="140" placeholder="যেমন: বীজগণিত অধ্যায় ৩"></label><button class="btn btn-primary study-full" type="submit">＋ Add to Routine</button></form>
-      <div id="studyRoutineList" class="study-list"></div>
-    </div>
-    <div class="profile-card study-card">
-      <div class="study-card-head"><div><h3>🎯 Study Goals</h3><p>ছোট ছোট লক্ষ্য তৈরি করো, শেষ হলে Complete করো।</p></div></div>
-      <form id="studyGoalForm" class="study-form-grid"><label class="study-full">Goal<input name="title" required maxlength="140" placeholder="যেমন: আজ ৩০টি গণিত MCQ সমাধান করব"></label><label>বিষয়<input name="subject" maxlength="60" placeholder="ঐচ্ছিক"></label><label>শেষ তারিখ<input name="due" type="date"></label><button class="btn btn-primary study-full" type="submit">＋ Add Goal</button></form>
-      <div id="studyGoalList" class="study-list"></div>
-    </div>
-    <div class="profile-card study-card">
-      <div class="study-card-head"><div><h3>📈 Subject-wise Progress</h3><p>প্রতিটি বিষয়/টপিক কতটুকু আয়ত্ত হয়েছে তা আপডেট করো। Improvement আগের মানের সঙ্গে তুলনা করে দেখাবে।</p></div></div>
-      <form id="studyProgressForm" class="study-form-grid"><label>বিষয়<input name="subject" required maxlength="60" placeholder="যেমন: পদার্থবিজ্ঞান"></label><label>Topic / Chapter<input name="topic" required maxlength="100" placeholder="যেমন: গতি"></label><label>বর্তমান প্রস্তুতি (%)<input name="current" type="number" min="0" max="100" required placeholder="যেমন: ৬৫"></label><label>আগের প্রস্তুতি (%)<input name="baseline" type="number" min="0" max="100" value="0" required></label><button class="btn btn-primary study-full" type="submit">＋ Save Progress</button></form>
-      <div id="studyProgressList" class="study-progress-list"></div>
-    </div>
-    <div class="profile-card study-card"><div class="study-card-head"><div><h3>🕘 Recent Study Sessions</h3><p>Timer দিয়ে সম্পন্ন করা পড়ার সেশন।</p></div></div><div id="studySessionList" class="study-list"></div></div>
-    <p class="study-privacy-note">🔒 তোমার Study Space-এর তথ্য তোমার অ্যাকাউন্টে সেভ থাকবে। Admin তোমার পড়ার অগ্রগতি মনিটর করতে পারবেন।</p>
+    <p class="st-privacy">🔒 Your Study Space is saved to your account. Your teacher (admin) can view it from your profile to help you improve.</p>
   </section>
+
+  <section id="screen-study-timer" data-study-page="timer" hidden>
+    <button class="back-btn" data-go="home" type="button">← Study Space</button>
+    <div class="st-head"><span class="st-badge">Step 1 of 5</span><h2>⏱️ Focus Timer</h2><p>Study without distractions, then save your time.</p></div>
+    <ol class="st-how"><li>Choose a subject</li><li>Pick how long</li><li>Press Start and focus</li></ol>
+
+    <div class="st-card" id="stTimerSetup">
+      <label class="st-label">1. What will you study?
+        <select id="stTimerSubject"></select>
+      </label>
+      <input id="stTimerOther" class="st-input" maxlength="60" placeholder="Type the subject name" hidden>
+      <div class="st-label">2. For how long?</div>
+      <div class="st-chips" id="stTimerChips"><button type="button" data-min="15">15 min</button><button type="button" data-min="25" class="on">25 min</button><button type="button" data-min="45">45 min</button><button type="button" data-min="60">1 hour</button></div>
+      <label class="st-label">Or type your own minutes<input id="stTimerMinutes" class="st-input" type="number" min="1" max="180" value="25" inputmode="numeric"></label>
+      <button class="btn btn-primary st-big" id="stTimerStart" type="button">▶ Start studying</button>
+    </div>
+
+    <div class="st-card st-run" id="stTimerRun" hidden>
+      <div class="st-run-sub" id="stRunSubject">General study</div>
+      <div class="st-clock" id="stClock">25:00</div>
+      <div class="st-run-state" id="stRunState">Focus time</div>
+      <div class="st-bar"><span id="stRunBar"></span></div>
+      <div class="st-row-btns"><button class="btn btn-ghost" id="stTimerPause" type="button">Ⅱ Pause</button><button class="btn btn-primary" id="stTimerFinish" type="button">✓ Finish &amp; save</button></div>
+      <button class="st-link" id="stTimerCancel" type="button">Cancel without saving</button>
+    </div>
+
+    <div class="st-card st-done" id="stTimerDone" hidden>
+      <div class="st-done-ic">🎉</div><h3 id="stDoneTitle">Session saved!</h3><p id="stDoneText"></p>
+      <div class="st-row-btns"><button class="btn btn-ghost" id="stStudyAgain" type="button">Study again</button><button class="btn btn-primary" data-go="record" type="button">See today's record</button></div>
+    </div>
+
+    <div class="st-card"><h3>Today's sessions</h3><div id="stTodaySessions" class="st-list"></div></div>
+    <div class="st-foot"><button class="btn btn-ghost" data-go="home" type="button">← Study Space</button><button class="btn btn-primary" data-go="routine" type="button">Next: Weekly Routine →</button></div>
+  </section>
+
+  <section id="screen-study-routine" data-study-page="routine" hidden>
+    <button class="back-btn" data-go="home" type="button">← Study Space</button>
+    <div class="st-head"><span class="st-badge">Step 2 of 5</span><h2>🗓️ Weekly Routine</h2><p>Plan your week. Your routine repeats every week.</p></div>
+    <ol class="st-how"><li>Pick a day</li><li>Choose a time and subject</li><li>Add what you will study</li></ol>
+    <form id="stRoutineForm" class="st-card">
+      <div class="st-label">1. Which day?</div>
+      <div class="st-chips" id="stDayChips"></div>
+      <div class="st-two"><label class="st-label">2. Time<input name="time" type="time" class="st-input" required></label>
+      <label class="st-label">Subject<input name="subject" class="st-input" list="stSubjects" required maxlength="60" placeholder="e.g. Math"></label></div>
+      <label class="st-label">3. What will you study?<input name="task" class="st-input" required maxlength="140" placeholder="e.g. Algebra chapter 3, 10 problems"></label>
+      <button class="btn btn-primary st-big" type="submit">＋ Add to my routine</button>
+    </form>
+    <div class="st-card"><h3>Today's plan <span class="st-pill" id="stTodayName"></span></h3><div id="stRoutineToday" class="st-list"></div></div>
+    <div class="st-card"><h3>My full week</h3><div id="stRoutineWeek"></div></div>
+    <div class="st-foot"><button class="btn btn-ghost" data-go="timer" type="button">← Back: Timer</button><button class="btn btn-primary" data-go="goals" type="button">Next: Goals →</button></div>
+  </section>
+
+  <section id="screen-study-goals" data-study-page="goals" hidden>
+    <button class="back-btn" data-go="home" type="button">← Study Space</button>
+    <div class="st-head"><span class="st-badge">Step 3 of 5</span><h2>🎯 Goals</h2><p>Small goals are easy to finish. Tick them when you are done.</p></div>
+    <ol class="st-how"><li>Write one small goal</li><li>Add a deadline (optional)</li><li>Tick it when finished</li></ol>
+    <form id="stGoalForm" class="st-card">
+      <label class="st-label">1. What do you want to finish?<input name="title" class="st-input" required maxlength="140" placeholder="e.g. Solve 30 math MCQs today"></label>
+      <div class="st-two"><label class="st-label">Subject (optional)<input name="subject" class="st-input" list="stSubjects" maxlength="60"></label>
+      <label class="st-label">Deadline (optional)<input name="due" type="date" class="st-input"></label></div>
+      <button class="btn btn-primary st-big" type="submit">＋ Add goal</button>
+    </form>
+    <div class="st-card"><h3>To do <span class="st-pill" id="stGoalTodoCount">0</span></h3><div id="stGoalTodo" class="st-list"></div></div>
+    <div class="st-card"><h3>Completed <span class="st-pill ok" id="stGoalDoneCount">0</span></h3><div id="stGoalDone" class="st-list"></div></div>
+    <div class="st-foot"><button class="btn btn-ghost" data-go="routine" type="button">← Back: Routine</button><button class="btn btn-primary" data-go="progress" type="button">Next: Progress →</button></div>
+  </section>
+
+  <section id="screen-study-progress" data-study-page="progress" hidden>
+    <button class="back-btn" data-go="home" type="button">← Study Space</button>
+    <div class="st-head"><span class="st-badge">Step 4 of 5</span><h2>📈 Subject Progress</h2><p>Tell us how ready you feel. We show how much you improved.</p></div>
+    <ol class="st-how"><li>Choose subject and topic</li><li>Move the slider</li><li>Save. Do it again after studying</li></ol>
+    <form id="stProgressForm" class="st-card">
+      <div class="st-two"><label class="st-label">1. Subject<input name="subject" class="st-input" list="stSubjects" required maxlength="60" placeholder="e.g. Physics"></label>
+      <label class="st-label">Topic / chapter<input name="topic" class="st-input" required maxlength="100" placeholder="e.g. Motion"></label></div>
+      <div class="st-label">2. How ready do you feel?</div>
+      <div class="st-slider"><input id="stProgressRange" name="current" type="range" min="0" max="100" step="5" value="50"><div class="st-slider-val"><b id="stProgressVal">50%</b><small id="stProgressPrev">First time for this topic</small></div></div>
+      <button class="btn btn-primary st-big" type="submit">✓ Save progress</button>
+    </form>
+    <div class="st-card"><h3>My progress</h3><div id="stProgressList" class="st-prog-list"></div></div>
+    <div class="st-foot"><button class="btn btn-ghost" data-go="goals" type="button">← Back: Goals</button><button class="btn btn-primary" data-go="record" type="button">Next: Study Record →</button></div>
+  </section>
+
+  <section id="screen-study-record" data-study-page="record" hidden>
+    <button class="back-btn" data-go="home" type="button">← Study Space</button>
+    <div class="st-head"><span class="st-badge">Step 5 of 5</span><h2>📅 Study Record</h2><p>Tap any date to see everything you did on that day.</p></div>
+    <div class="st-card"><div id="stRecordHost"></div></div>
+    <div class="st-foot"><button class="btn btn-ghost" data-go="progress" type="button">← Back: Progress</button><button class="btn btn-primary" data-go="home" type="button">Finish ✓</button></div>
+  </section>
+  <datalist id="stSubjects"></datalist>
 
   <!-- Dedicated inbox for student messages and admin replies -->
   <section id="screen-messages" hidden>
@@ -1367,7 +1445,7 @@ html[data-theme="dark"] a{color:#b9baff}
         <button class="admin-action-card" id="adminGoMcqHistory">📊<span>MCQ Result History</span><small>View objective exam results separately</small></button>
         <button class="admin-action-card" id="adminGoCqHistory">📝<span>CQ Result History</span><small>View written exam results separately</small></button>
         <button class="admin-action-card" id="adminGoLeaderboard">🏆<span>Leaderboard</span><small>Leaderboard for the most recently selected exam</small></button>
-        <button class="admin-action-card" id="adminGoStudyMonitor">📚<span>Student Study Monitor</span><small>Monitor routines, goals and subject progress</small></button>
+        <button class="admin-action-card" id="adminGoStudyMonitor">📚<span>Student Study Monitor</span><small>Date-wise study record of every student</small></button>
       </div>
     </div>
 
@@ -1387,10 +1465,10 @@ html[data-theme="dark"] a{color:#b9baff}
 
   <section id="screen-admin-study" hidden>
     <button class="back-btn" id="backFromAdminStudy" type="button">← Back to Admin Dashboard</button>
-    <div class="admin-head"><div><span class="admin-badge">📚 STUDY MONITOR</span><h2>Student Study Monitor</h2><p>শিক্ষার্থীদের Routine, Goal, Focus Time ও Subject Progress দেখো।</p></div><button class="btn btn-primary" id="refreshAdminStudy" type="button">↻ Refresh</button></div>
-    <div class="study-summary-grid" id="adminStudySummary"></div>
-    <div class="profile-card"><div class="study-card-head"><div><h3>👥 Student Study Reports</h3><p>নির্দিষ্ট শিক্ষার্থীর বিস্তারিত রিপোর্ট খুলতে নাম নির্বাচন করো।</p></div></div><input id="adminStudySearch" class="study-search" type="search" placeholder="শিক্ষার্থীর নাম দিয়ে খুঁজুন..."><div id="adminStudyList" class="study-list"><div class="empty-profile">Loading student reports…</div></div></div>
-    <div class="profile-card" id="adminStudyDetailCard" hidden><div class="study-card-head"><div><h3 id="adminStudyDetailTitle">Student details</h3><p id="adminStudyDetailSub"></p></div><button class="btn btn-ghost" id="closeAdminStudyDetail" type="button">Close</button></div><div id="adminStudyDetail"></div></div>
+    <div class="admin-head"><div><span class="admin-badge">📚 STUDY MONITOR</span><h2>Student Study Monitor</h2><p>See each student's focus time, routine, goals and subject progress.</p></div><button class="btn btn-primary" id="refreshAdminStudy" type="button">↻ Refresh</button></div>
+    <div class="st-today-grid" id="adminStudySummary" style="margin:14px 0"></div>
+    <div class="profile-card"><div class="admin-section-title"><div><h3>👥 Student Study Reports</h3><p>Pick a student to open their date-wise study record.</p></div></div><input id="adminStudySearch" class="st-input" type="search" placeholder="Search student name…"><div id="adminStudyList" class="study-list"><div class="empty-profile">Loading student reports…</div></div></div>
+    <div class="profile-card" id="adminStudyDetailCard" hidden><div class="admin-section-title"><div><h3 id="adminStudyDetailTitle">Student details</h3><p id="adminStudyDetailSub"></p></div><button class="btn btn-ghost" id="closeAdminStudyDetail" type="button">Close</button></div><div id="adminStudyDetail"></div></div>
   </section>
 
   <!-- CQ / Written Exam for students -->
@@ -3173,6 +3251,7 @@ function hideAllScreens(){
   if($("screen-admin-user")) $("screen-admin-user").hidden = true;
   if($("screen-admin-performance")) $("screen-admin-performance").hidden = true;
   if($("screen-study")) $("screen-study").hidden = true;
+  document.querySelectorAll("[data-study-page]").forEach(function(s){ s.hidden = true; });
   if($("screen-admin-study")) $("screen-admin-study").hidden = true;
   ["screen-admin-materials","screen-admin-mcq-history","screen-admin-cq-history","screen-live-class"].forEach(id=>{if($(id))$(id).hidden=true;});
   if($("screen-profile")) $("screen-profile").hidden = true;
@@ -5096,6 +5175,9 @@ window.addEventListener("popstate", async function(e){
     case "answerkey":
       if(state.selectedSubject && state.selectedChapter && state.selectedExam) showAnswerKeyForAdmin();
       break;
+    case "study":
+      if(typeof window.showStudySpace === "function") window.showStudySpace(target.page || "home");
+      break;
     case "exam":
       // Exam স্ক্রিনে সরাসরি ব্যাক/ফরোয়ার্ড করা নিরাপদ নয় (টাইমার/উত্তর হারাতে পারে),
       // তাই হোমেই ফিরিয়ে দাও
@@ -6671,78 +6753,420 @@ html:root:root body .mat-admin-empty{padding:14px;text-align:center;color:var(--
 
 
 <style id="student-study-space-styles">
-.study-summary-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:14px 0}.study-stat{padding:17px;border:1px solid var(--border);border-radius:18px;background:var(--card);box-shadow:var(--shadow);min-width:0}.study-stat span,.study-stat small{display:block;color:var(--muted);font-size:12px}.study-stat strong{display:block;font-size:25px;line-height:1.35;margin:5px 0;color:var(--text);overflow-wrap:anywhere}.study-card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px}.study-card-head h3{margin:0 0 4px}.study-card-head p{margin:0;color:var(--muted);font-size:12.5px;line-height:1.5}.study-live-dot{font-size:11px;font-weight:800;padding:6px 10px;border-radius:99px;background:#eef2ff;color:#5145cd;white-space:nowrap}.study-timer-face{font:800 clamp(42px,9vw,64px)/1.1 ui-monospace,monospace;letter-spacing:2px;text-align:center;padding:16px 8px;color:var(--primary)}.study-timer-settings{display:grid;grid-template-columns:1fr 1fr;gap:12px}.study-form-grid label,.study-timer-settings label{display:block;font-size:12px;font-weight:800;color:var(--muted)}.study-form-grid input,.study-form-grid select,.study-timer-settings input,.study-timer-settings select,.study-search{display:block;width:100%;margin-top:6px;min-height:43px;border:1px solid var(--border);border-radius:11px;padding:10px 12px;background:var(--bg);color:var(--text);font:inherit}.study-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.study-full{grid-column:1/-1}.study-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}.study-actions .btn{flex:1;min-width:110px}.study-list{display:grid;gap:9px;margin-top:14px}.study-row{display:flex;align-items:center;gap:10px;padding:12px;border:1px solid var(--border);border-radius:14px;background:var(--bg);min-width:0}.study-row-main{flex:1;min-width:0}.study-row-main strong{display:block;font-size:13.5px;overflow-wrap:anywhere}.study-row-main small{display:block;color:var(--muted);font-size:11.5px;line-height:1.5;overflow-wrap:anywhere}.study-row-actions{display:flex;gap:6px;flex-wrap:wrap}.study-mini-btn{border:1px solid var(--border);border-radius:9px;background:var(--card);color:var(--text);padding:7px 9px;font:700 11px var(--sans);cursor:pointer}.study-mini-btn.danger{color:#b91c1c;background:#fff1f2;border-color:#fecdd3}.study-done{text-decoration:line-through;opacity:.62}.study-progress-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}.study-progress-item{border:1px solid var(--border);border-radius:14px;padding:13px;background:var(--bg);min-width:0}.study-progress-item strong{display:block;font-size:13px;overflow-wrap:anywhere}.study-progress-item small{color:var(--muted);font-size:11px}.study-progress-track{height:8px;background:var(--border);border-radius:99px;overflow:hidden;margin:9px 0}.study-progress-track span{display:block;height:100%;background:linear-gradient(90deg,var(--primary),var(--primary2));border-radius:99px}.study-progress-meta{display:flex;justify-content:space-between;gap:8px;font-size:11px;color:var(--muted)}.study-privacy-note{font-size:12px;color:var(--muted);text-align:center;padding:12px}.study-search{margin:0 0 12px}.study-student-card{padding:14px;border:1px solid var(--border);border-radius:15px;background:var(--bg)}.study-student-card button{border:0;background:none;color:var(--primary);font:800 14px var(--sans);padding:0;cursor:pointer}.study-student-meta{font-size:11.5px;color:var(--muted);margin-top:5px}.study-report-block{margin:12px 0;padding:13px;border:1px solid var(--border);border-radius:14px}.study-report-block h4{margin:0 0 9px;font-size:14px}.study-report-line{padding:8px 0;border-bottom:1px solid var(--border);font-size:12px}.study-report-line:last-child{border:0}.study-report-line small{display:block;color:var(--muted);margin-top:3px}
-@media(max-width:650px){.study-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.study-summary-grid .study-stat:last-child{grid-column:1/-1}.study-progress-list{grid-template-columns:1fr}.study-form-grid,.study-timer-settings{grid-template-columns:1fr}.study-full{grid-column:auto}.study-row{align-items:flex-start;flex-wrap:wrap}.study-row-actions{width:100%}.study-row-actions button{flex:1}}
+#screen-study,[data-study-page],#screen-admin-study,#screen-profile,#screen-admin-user{--st-ink:var(--dr-ink,var(--text,#111));--st-muted:var(--dr-muted,var(--muted,#64748b));--st-card:var(--dr-card,var(--card,#fff));--st-line:var(--dr-line,var(--border,#e5e7eb));--st-soft:var(--dr-soft,#f3f4f6);--st-pink:var(--dr-pink,#d63a78)}
+.st-hero,.st-head{text-align:center;max-width:680px;margin:14px auto 18px}
+.st-hero h2,.st-head h2{margin:6px 0 6px;font-size:clamp(26px,5vw,36px)}
+.st-hero p,.st-head p{margin:0;color:var(--st-muted);font-size:15px;line-height:1.6}
+.st-badge{display:inline-block;background:var(--st-pink);color:#fff;border-radius:999px;padding:4px 12px;font-size:12px;font-weight:800;letter-spacing:.03em}
+[data-study-page]>*{max-width:720px;margin-left:auto;margin-right:auto}
+[data-study-page]>.back-btn{margin-left:0}
+.st-today{background:var(--st-card);border:1px solid var(--st-line);border-radius:22px;padding:16px;margin:0 auto 18px}
+.st-today-date{font-weight:800;color:var(--st-muted);font-size:13px;margin-bottom:10px;text-align:center}
+.st-today-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.st-stat{background:var(--st-soft);border-radius:16px;padding:14px 8px;text-align:center}
+.st-stat strong{display:block;font-size:28px;line-height:1.1;color:var(--st-ink)}
+.st-stat span{display:block;font-size:12px;color:var(--st-muted);margin-top:4px;line-height:1.3}
+.st-section-title{margin:6px 4px 10px;font-size:18px}
+.st-steps{display:grid;gap:12px}
+.st-step-card{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:var(--st-card);border:1px solid var(--st-line);border-radius:20px;padding:14px 16px;cursor:pointer;color:var(--st-ink);transition:transform .15s,border-color .15s}
+.st-step-card:hover{transform:translateY(-2px);border-color:var(--st-pink)}
+.st-num{flex:none;width:28px;height:28px;border-radius:50%;background:var(--st-ink);color:var(--st-card);display:grid;place-items:center;font-weight:800;font-size:13px}
+.st-ic{flex:none;width:48px;height:48px;border-radius:16px;background:var(--st-soft);display:grid;place-items:center;font-size:24px}
+.st-tx{flex:1;min-width:0}.st-tx b{display:block;font-size:16px;color:var(--st-ink)}.st-tx small{display:block;color:var(--st-muted);font-size:13px;line-height:1.4;margin-top:2px}
+.st-arrow{flex:none;font-size:28px;color:var(--st-muted)}
+.st-privacy{text-align:center;color:var(--st-muted);font-size:13px;line-height:1.6;margin:18px auto}
+.st-banner{background:#fff7ed;border:1px solid #fdba74;color:#7c2d12;border-radius:16px;padding:12px 14px;margin:0 auto 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;font-weight:700}
+.st-banner button{border:0;background:#ea580c;color:#fff;border-radius:999px;padding:8px 14px;font-weight:800;cursor:pointer}
+.st-how{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;list-style:none;padding:0;margin:0 auto 14px;counter-reset:st}
+.st-how li{counter-increment:st;background:var(--st-soft);border-radius:999px;padding:7px 13px;font-size:13px;font-weight:700;color:var(--st-ink)}
+.st-how li:before{content:counter(st);display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--st-pink);color:#fff;font-size:11px;margin-right:7px}
+.st-card{background:var(--st-card);border:1px solid var(--st-line);border-radius:22px;padding:18px;margin:0 auto 14px}
+.st-card h3{margin:0 0 12px;font-size:17px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.st-label{display:block;font-weight:800;font-size:14px;color:var(--st-ink);margin:12px 0 6px}
+.st-label:first-child{margin-top:0}
+.st-input,#screen-study-timer select{display:block;width:100%;box-sizing:border-box;margin-top:6px;min-height:48px;padding:11px 14px;border:1.5px solid var(--st-line);border-radius:14px;background:var(--st-soft);color:var(--st-ink);font:inherit;font-size:16px}
+.st-input:focus,#screen-study-timer select:focus{outline:0;border-color:var(--st-pink)}
+.st-two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.st-chips{display:flex;gap:8px;flex-wrap:wrap}
+.st-chips button{border:1.5px solid var(--st-line);background:var(--st-soft);color:var(--st-ink);border-radius:999px;padding:10px 16px;font-weight:800;cursor:pointer;font-size:14px}
+.st-chips button.on{background:var(--st-ink);color:var(--st-card);border-color:var(--st-ink)}
+.st-big{width:100%;min-height:52px;font-size:17px;margin-top:16px}
+.st-run{text-align:center}
+.st-run-sub{font-weight:800;color:var(--st-muted)}
+.st-clock{font:800 clamp(56px,16vw,92px)/1.05 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:2px;margin:10px 0;color:var(--st-ink)}
+.st-run-state{font-weight:700;color:var(--st-pink);margin-bottom:12px}
+.st-bar{height:10px;border-radius:99px;background:var(--st-soft);overflow:hidden;margin-bottom:16px}
+.st-bar span{display:block;height:100%;width:0;background:linear-gradient(90deg,#d63a78,#7c5cff);transition:width 1s linear}
+.st-row-btns{display:flex;gap:10px;flex-wrap:wrap}.st-row-btns .btn{flex:1;min-width:130px}
+.st-link{border:0;background:none;color:var(--st-muted);text-decoration:underline;margin-top:14px;cursor:pointer;font-size:13px}
+.st-done{text-align:center}.st-done-ic{font-size:52px}.st-done p{color:var(--st-muted);margin:6px 0 16px}
+.st-foot{display:flex;gap:10px;flex-wrap:wrap;margin:18px auto 30px}.st-foot .btn{flex:1;min-width:150px}
+.st-list{display:grid;gap:9px}
+.st-empty{color:var(--st-muted);text-align:center;padding:14px;border:1.5px dashed var(--st-line);border-radius:16px;font-size:14px}
+.st-row{display:flex;align-items:center;gap:10px;padding:12px;border:1px solid var(--st-line);border-radius:16px;background:var(--st-soft);min-width:0}
+.st-row.done{opacity:.75}.st-row.done .st-row-main strong{text-decoration:line-through}
+.st-row-main{flex:1;min-width:0}.st-row-main strong{display:block;font-size:15px;overflow-wrap:anywhere}.st-row-main small{display:block;color:var(--st-muted);font-size:12.5px;line-height:1.5;overflow-wrap:anywhere}
+.st-row-btns2{display:flex;gap:6px;flex-wrap:wrap}
+.st-mini{border:1px solid var(--st-line);border-radius:10px;background:var(--st-card);color:var(--st-ink);padding:8px 11px;font-weight:800;font-size:12.5px;cursor:pointer}
+.st-mini.ok{background:#dcfce7;border-color:#86efac;color:#14532d}.st-mini.danger{color:#b91c1c;background:#fff1f2;border-color:#fecdd3}
+.st-pill{background:var(--st-soft);border-radius:999px;padding:2px 10px;font-size:12px;font-weight:800;color:var(--st-muted)}.st-pill.ok{background:#dcfce7;color:#14532d}
+.st-daygroup{margin-bottom:14px}.st-daygroup h4{margin:0 0 8px;font-size:14px;display:flex;align-items:center;gap:8px}.st-daygroup.today h4{color:var(--st-pink)}
+.st-slider input[type=range]{width:100%;accent-color:#d63a78;height:34px}
+.st-slider-val{display:flex;align-items:baseline;justify-content:space-between;gap:10px}.st-slider-val b{font-size:34px}.st-slider-val small{color:var(--st-muted)}
+.st-prog-list{display:grid;gap:12px}
+.st-prog{border:1px solid var(--st-line);border-radius:16px;padding:12px;background:var(--st-soft)}
+.st-prog strong{display:block;margin-bottom:8px}
+.st-prog-track{height:10px;border-radius:99px;background:var(--st-card);overflow:hidden}.st-prog-track span{display:block;height:100%;background:linear-gradient(90deg,#14b8a6,#22c55e)}
+.st-prog-meta{display:flex;justify-content:space-between;gap:8px;font-size:13px;margin-top:8px;flex-wrap:wrap}.st-prog small{display:block;color:var(--st-muted);margin-top:4px}
+/* Study record calendar (used in Study Space, profile and admin) */
+.sr-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.sr-title{font-size:17px}
+.sr-nav{width:42px;height:42px;border-radius:50%;border:1px solid var(--st-line,var(--dr-line,#e5e7eb));background:var(--st-soft,var(--dr-soft,#f3f4f6));color:var(--st-ink,var(--dr-ink,#111));font-size:22px;line-height:1;cursor:pointer}
+.sr-sum{text-align:center;color:var(--st-muted,var(--dr-muted,#64748b));font-size:13px;margin-bottom:10px}
+.sr-week,.sr-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
+.sr-week span{text-align:center;font-size:11px;font-weight:800;color:var(--st-muted,var(--dr-muted,#64748b));padding:4px 0}
+.sr-cell{position:relative;aspect-ratio:1/1;min-height:42px;border-radius:12px;border:1.5px solid transparent;background:var(--st-soft,var(--dr-soft,#f3f4f6));color:var(--st-ink,var(--dr-ink,#111));font-weight:800;font-size:14px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:0}
+.sr-cell small{font-size:9.5px;font-weight:800;line-height:1;color:inherit;opacity:.85}
+.sr-cell.empty{visibility:hidden}
+.sr-cell.l1{background:#dcfce7;color:#14532d}.sr-cell.l2{background:#86efac;color:#14532d}.sr-cell.l3{background:#22c55e;color:#fff}.sr-cell.act{background:#e0e7ff;color:#312e81}
+.sr-cell.today{border-color:#d63a78}.sr-cell.sel{outline:3px solid var(--st-ink,var(--dr-ink,#111));outline-offset:1px}
+.sr-cell.future{opacity:.45}
+.sr-legend{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;font-size:11.5px;color:var(--st-muted,var(--dr-muted,#64748b));margin:10px 0}
+.sr-legend i{display:inline-block;width:12px;height:12px;border-radius:4px;vertical-align:-2px;margin-right:4px}
+.sr-day{margin-top:14px;border-top:1px solid var(--st-line,var(--dr-line,#e5e7eb));padding-top:14px}
+.sr-day h4{margin:0 0 10px;font-size:16px}
+.sr-tot{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:12px}
+.sr-tot div{background:var(--st-soft,var(--dr-soft,#f3f4f6));border-radius:12px;padding:10px 6px;text-align:center}
+.sr-tot b{display:block;font-size:20px}.sr-tot span{font-size:11px;color:var(--st-muted,var(--dr-muted,#64748b))}
+.sr-block{margin-bottom:12px}.sr-block h5{margin:0 0 6px;font-size:13.5px}
+.sr-line{padding:9px 11px;border:1px solid var(--st-line,var(--dr-line,#e5e7eb));border-radius:12px;margin-bottom:6px;background:var(--st-card,var(--dr-card,#fff))}
+.sr-line strong{display:block;font-size:14px;overflow-wrap:anywhere}.sr-line small{display:block;color:var(--st-muted,var(--dr-muted,#64748b));font-size:12px;line-height:1.5}
+.sr-none{text-align:center;color:var(--st-muted,var(--dr-muted,#64748b));padding:14px;border:1.5px dashed var(--st-line,var(--dr-line,#e5e7eb));border-radius:14px;font-size:14px}
+.sr-note{color:var(--st-muted,var(--dr-muted,#64748b));text-align:center;padding:12px}
+/* admin monitor */
+.st-admin-student{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px;border:1px solid var(--dr-line,#e5e7eb);border-radius:16px;background:var(--dr-soft,#f3f4f6);margin-bottom:8px}
+.st-admin-student b{display:block}.st-admin-student small{color:var(--dr-muted,#64748b)}
+.st-admin-student .btn{flex:none}
+@media(max-width:620px){.st-two{grid-template-columns:1fr}.st-today-grid{gap:8px}.st-stat strong{font-size:24px}.sr-tot{grid-template-columns:repeat(2,minmax(0,1fr))}.st-foot .btn{min-width:100%}.st-step-card{padding:12px}.st-ic{width:42px;height:42px;font-size:21px}}
 </style>
 
 <script id="student-study-space-logic">
 (function(){
- const $=id=>document.getElementById(id); if(!$('screen-study')) return;
+ const $=id=>document.getElementById(id);
+ if(!$('screen-study')) return;
  const TABLE='student_study_data';
- const blank=()=>({routine:[],goals:[],progress:[],sessions:[]});
- let data=blank(),timer={left:1500,total:1500,interval:null,running:false,paused:false,subject:'General',startedAt:null};
+ const DAYS=['Saturday','Sunday','Monday','Tuesday','Wednesday','Thursday','Friday'];
+ const PAGES={home:'screen-study',timer:'screen-study-timer',routine:'screen-study-routine',goals:'screen-study-goals',progress:'screen-study-progress',record:'screen-study-record'};
+ const TITLES={home:'Study Space',timer:'Focus Timer',routine:'Weekly Routine',goals:'Goals',progress:'Subject Progress',record:'Study Record'};
+ const blank=()=>({routine:[],goals:[],progress:[],sessions:[],routineDone:{},progressLog:[]});
+ const norm=raw=>{const d={...blank(),...(raw||{})};['routine','goals','progress','sessions','progressLog'].forEach(k=>{if(!Array.isArray(d[k]))d[k]=[];});if(!d.routineDone||typeof d.routineDone!=='object'||Array.isArray(d.routineDone))d.routineDone={};return d;};
+ let data=blank(),loaded=false;
  const uid=()=>Math.random().toString(36).slice(2,10)+Date.now().toString(36);
- const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const esc=v=>String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const me=()=>window.currentProfile||null;
  const client=()=>window.supabaseClient;
- const dayName=()=>new Date().toLocaleDateString('en-US',{weekday:'long'});
- const todayKey=()=>new Date().toISOString().slice(0,10);
- function toastStudy(msg,type='info'){if(typeof window.toast==='function')window.toast(msg,type,3200);else alert(msg);}
- async function loadData(){
-  const u=me(); if(!u||!client())throw new Error('Please sign in first.');
+ const pad=n=>String(n).padStart(2,'0');
+ const keyOf=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+ const todayKey=()=>keyOf(new Date());
+ const isoDate=iso=>{const d=new Date(iso);return isNaN(d)?null:keyOf(d);};
+ const sdate=s=>s.endedAt?isoDate(s.endedAt):(s.date||null);
+ const dayName=(d=new Date())=>DAYS[(d.getDay()+1)%7];
+ const longDate=k=>new Date(k+'T00:00:00').toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+ const fmtMin=m=>{m=Math.round(m||0);const h=Math.floor(m/60),r=m%60;return h?(h+'h'+(r?' '+r+'m':'')):(r+'m');};
+ const fmtTime=iso=>{const d=new Date(iso);return isNaN(d)?'':d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});};
+ function toastS(msg,type='info'){if(typeof window.toast==='function')window.toast(msg,type,3000);else alert(msg);}
+
+ /* ---------- data helpers (also used for profile + admin) ---------- */
+ function dayRecord(d,date){
+  const sessions=d.sessions.filter(s=>sdate(s)===date).sort((a,b)=>String(a.endedAt||'').localeCompare(String(b.endedAt||'')));
+  const minutes=sessions.reduce((n,s)=>n+(Number(s.minutes)||0),0);
+  const routine=d.routineDone[date]||[];
+  const goalsDone=d.goals.filter(g=>g.done&&g.completedAt&&isoDate(g.completedAt)===date);
+  const goalsAdded=d.goals.filter(g=>g.createdAt&&isoDate(g.createdAt)===date);
+  const logs=d.progressLog.filter(l=>l.date===date).slice();
+  d.progress.forEach(p=>{if(p.updatedAt&&isoDate(p.updatedAt)===date&&!d.progressLog.some(l=>l.pid===p.id))logs.push({pid:p.id,date,subject:p.subject,topic:p.topic,from:Number(p.baseline)||0,to:Number(p.current)||0});});
+  return {date,sessions,minutes,routine,goalsDone,goalsAdded,logs,active:minutes>0||routine.length>0||goalsDone.length>0||goalsAdded.length>0||logs.length>0};
+ }
+ function indexDates(d){
+  const m=new Map();const add=(k,min)=>{if(!k)return;const o=m.get(k)||{minutes:0,n:0};o.minutes+=(min||0);o.n++;m.set(k,o);};
+  d.sessions.forEach(s=>add(sdate(s),Number(s.minutes)||0));
+  Object.keys(d.routineDone).forEach(k=>(d.routineDone[k]||[]).forEach(()=>add(k,0)));
+  d.goals.forEach(g=>{if(g.done&&g.completedAt)add(isoDate(g.completedAt),0);if(g.createdAt)add(isoDate(g.createdAt),0);});
+  d.progressLog.forEach(l=>add(l.date,0));
+  d.progress.forEach(p=>{if(p.updatedAt&&!d.progressLog.some(l=>l.pid===p.id))add(isoDate(p.updatedAt),0);});
+  return m;
+ }
+ function effortSet(d){
+  const s=new Set();d.sessions.forEach(x=>{if((Number(x.minutes)||0)>0)s.add(sdate(x));});
+  Object.keys(d.routineDone).forEach(k=>{if((d.routineDone[k]||[]).length)s.add(k);});
+  d.goals.forEach(g=>{if(g.done&&g.completedAt)s.add(isoDate(g.completedAt));});return s;
+ }
+ function streak(d){const set=effortSet(d);let day=new Date();if(!set.has(keyOf(day)))day.setDate(day.getDate()-1);let n=0;while(set.has(keyOf(day))){n++;day.setDate(day.getDate()-1);}return n;}
+
+ function dayHTML(r){
+  if(!r.active)return '<div class="sr-none">No study activity was recorded on this day.</div>';
+  const blocks=[];
+  blocks.push('<div class="sr-tot"><div><b>'+fmtMin(r.minutes)+'</b><span>studied</span></div><div><b>'+r.sessions.length+'</b><span>sessions</span></div><div><b>'+(r.routine.length)+'</b><span>routine done</span></div><div><b>'+r.goalsDone.length+'</b><span>goals done</span></div></div>');
+  if(r.sessions.length)blocks.push('<div class="sr-block"><h5>⏱️ Focus sessions</h5>'+r.sessions.map(s=>'<div class="sr-line"><strong>'+esc(s.subject||'General study')+' · '+(Number(s.minutes)||0)+' min</strong><small>'+(s.endedAt?'Finished at '+fmtTime(s.endedAt):'')+'</small></div>').join('')+'</div>');
+  if(r.routine.length)blocks.push('<div class="sr-block"><h5>🗓️ Routine completed</h5>'+r.routine.map(x=>'<div class="sr-line"><strong>'+esc(x.subject)+(x.time?' · '+esc(x.time):'')+'</strong><small>'+esc(x.task||'')+'</small></div>').join('')+'</div>');
+  if(r.goalsDone.length)blocks.push('<div class="sr-block"><h5>✅ Goals completed</h5>'+r.goalsDone.map(g=>'<div class="sr-line"><strong>'+esc(g.title)+'</strong><small>'+esc(g.subject||'General')+'</small></div>').join('')+'</div>');
+  if(r.goalsAdded.length)blocks.push('<div class="sr-block"><h5>🎯 Goals added</h5>'+r.goalsAdded.map(g=>'<div class="sr-line"><strong>'+esc(g.title)+'</strong><small>'+esc(g.subject||'General')+(g.due?' · Deadline '+esc(g.due):'')+'</small></div>').join('')+'</div>');
+  if(r.logs.length)blocks.push('<div class="sr-block"><h5>📈 Progress updates</h5>'+r.logs.map(l=>{const diff=(Number(l.to)||0)-(Number(l.from)||0);return '<div class="sr-line"><strong>'+esc(l.subject)+' — '+esc(l.topic)+'</strong><small>'+(Number(l.from)||0)+'% → '+(Number(l.to)||0)+'% ('+(diff>=0?'+':'')+diff+'%)</small></div>';}).join('')+'</div>');
+  return blocks.join('');
+ }
+ /* calendar + day report. loader() -> Promise<data> */
+ function mountRecord(host,loader){
+  const now=new Date();const S={y:now.getFullYear(),m:now.getMonth(),sel:todayKey(),d:null};
+  host.innerHTML='<div class="sr"><div class="sr-top"><button type="button" class="sr-nav" data-sr="prev" aria-label="Previous month">‹</button><strong class="sr-title"></strong><button type="button" class="sr-nav" data-sr="next" aria-label="Next month">›</button></div><div class="sr-sum"></div><div class="sr-week">'+DAYS.map(x=>'<span>'+x.slice(0,3)+'</span>').join('')+'</div><div class="sr-grid"></div><div class="sr-legend"><span><i style="background:#dcfce7"></i>Studied</span><span><i style="background:#22c55e"></i>Studied a lot</span><span><i style="background:#e0e7ff"></i>Other activity</span></div><div class="sr-day"></div></div>';
+  const q=s=>host.querySelector(s);
+  function draw(){
+   if(!S.d){q('.sr-grid').innerHTML='';q('.sr-day').innerHTML='<div class="sr-note">Loading…</div>';return;}
+   const idx=indexDates(S.d),first=new Date(S.y,S.m,1),days=new Date(S.y,S.m+1,0).getDate(),off=(first.getDay()+1)%7,tk=todayKey();
+   q('.sr-title').textContent=first.toLocaleDateString('en-GB',{month:'long',year:'numeric'});
+   let mm=0,act=0,cells='';
+   for(let i=0;i<off;i++)cells+='<button class="sr-cell empty" tabindex="-1" disabled></button>';
+   for(let n=1;n<=days;n++){
+    const k=S.y+'-'+pad(S.m+1)+'-'+pad(n),o=idx.get(k);let cls='sr-cell';
+    if(o){act++;mm+=o.minutes;cls+=o.minutes>=90?' l3':o.minutes>=45?' l2':o.minutes>0?' l1':' act';}
+    if(k===tk)cls+=' today';if(k===S.sel)cls+=' sel';if(k>tk)cls+=' future';
+    cells+='<button type="button" class="'+cls+'" data-date="'+k+'">'+n+(o&&o.minutes?'<small>'+fmtMin(o.minutes)+'</small>':'')+'</button>';
+   }
+   q('.sr-grid').innerHTML=cells;
+   q('.sr-sum').textContent='This month: '+fmtMin(mm)+' studied · '+act+' active day'+(act===1?'':'s');
+   q('.sr-day').innerHTML='<h4>'+esc(longDate(S.sel))+'</h4>'+dayHTML(dayRecord(S.d,S.sel));
+  }
+  host.addEventListener('click',e=>{
+   const nav=e.target.closest('[data-sr]');if(nav){const dlt=nav.dataset.sr==='next'?1:-1;const d=new Date(S.y,S.m+dlt,1);S.y=d.getFullYear();S.m=d.getMonth();draw();return;}
+   const c=e.target.closest('.sr-cell[data-date]');if(c){S.sel=c.dataset.date;draw();}
+  });
+  async function refresh(){S.d=null;draw();try{S.d=norm(await loader());}catch(err){console.error('Study record:',err);q('.sr-day').innerHTML='<div class="sr-note">Could not load the study record.</div>';return;}draw();}
+  refresh();return {refresh};
+ }
+
+ /* ---------- load / save ---------- */
+ async function loadData(force){
+  if(loaded&&!force)return data;
+  const u=me();if(!u||!client())throw new Error('Please log in first.');
   const {data:row,error}=await client().from(TABLE).select('data').eq('user_id',u.user_id).maybeSingle();
-  if(error)throw error; data={...blank(),...(row?.data||{})};
-  ['routine','goals','progress','sessions'].forEach(k=>{if(!Array.isArray(data[k]))data[k]=[];});
-  renderAll();
+  if(error)throw error;data=norm(row&&row.data);loaded=true;return data;
  }
  async function saveData(){
-  const u=me();if(!u||!client())throw new Error('Please sign in first.');
+  const u=me();if(!u||!client())throw new Error('Please log in first.');
   const {error}=await client().from(TABLE).upsert({user_id:u.user_id,data,updated_at:new Date().toISOString()},{onConflict:'user_id'});
   if(error)throw error;
  }
- async function mutate(fn){try{fn();renderAll();await saveData();toastStudy('Study data saved to your profile.','success');}catch(e){console.error('Study Space save:',e);toastStudy('Save failed: '+(e.message||'Check Supabase SQL/RLS setup.'),'error');}}
- function renderAll(){renderRoutine();renderGoals();renderProgress();renderSessions();updateSummary();updateTimerSubjectOptions();}
- function updateSummary(){
-  const today=data.sessions.filter(x=>(x.date||String(x.endedAt||'').slice(0,10))===todayKey()).reduce((n,x)=>n+(Number(x.minutes)||0),0);
-  const done=data.goals.filter(x=>x.done).length;
-  $('studyTodayMinutes').textContent=today+' min';$('studyGoalCount').textContent=done+'/'+data.goals.length;$('studySubjectCount').textContent=new Set(data.progress.map(x=>x.subject)).size;
+ async function mutate(fn,msg){
+  try{fn();renderAll();await saveData();toastS(msg||'Saved to your profile ✓','success');return true;}
+  catch(e){console.error('Study Space save:',e);toastS('Could not save: '+(e.message||'check the Supabase setup'),'error');return false;}
  }
- function renderRoutine(){const box=$('studyRoutineList');if(!data.routine.length){box.innerHTML='<div class="empty-profile">এখনো কোনো Routine তৈরি করোনি।</div>';return;}
-  const sorted=[...data.routine].sort((a,b)=>['Saturday','Sunday','Monday','Tuesday','Wednesday','Thursday','Friday'].indexOf(a.day)-['Saturday','Sunday','Monday','Tuesday','Wednesday','Thursday','Friday'].indexOf(b.day)||String(a.time).localeCompare(String(b.time)));
-  box.innerHTML=sorted.map(x=>`<div class="study-row"><div class="study-row-main"><strong>${esc(x.day)} • ${esc(x.time)} — ${esc(x.subject)}</strong><small>${esc(x.task)}</small></div><div class="study-row-actions"><button class="study-mini-btn" data-routine-done="${x.id}">${x.done?'↶ Undo':'✓ Done today'}</button><button class="study-mini-btn danger" data-routine-del="${x.id}">Delete</button></div></div>`).join('');
-  box.querySelectorAll('[data-routine-done]').forEach(b=>b.onclick=()=>mutate(()=>{const x=data.routine.find(z=>z.id===b.dataset.routineDone);if(x)x.done=!x.done;}));
-  box.querySelectorAll('[data-routine-del]').forEach(b=>b.onclick=()=>mutate(()=>data.routine=data.routine.filter(x=>x.id!==b.dataset.routineDel)));
+
+ /* ---------- navigation ---------- */
+ let current='home';
+ function go(page,silent){
+  if(!me()){if(typeof window.openAuthModal==='function')window.openAuthModal('login');return;}
+  if(!PAGES[page])page='home';current=page;
+  document.querySelectorAll('.wrap > section').forEach(x=>x.hidden=true);
+  $(PAGES[page]).hidden=false;$('topSub').textContent=TITLES[page];
+  if(!silent&&typeof window.pushScreen==='function')window.pushScreen('study',{page});
+  window.scrollTo({top:0});
+  loadData().then(()=>{renderAll();if(page==='record')mountMyRecord();}).catch(e=>{console.error(e);toastS(e.message&&/relation|does not exist/i.test(e.message)?'Study Space is not set up yet. Run study-space-setup.sql in Supabase.':(e.message||'Could not load Study Space'),'error');});
+  renderAll();
  }
- function renderGoals(){const box=$('studyGoalList');if(!data.goals.length){box.innerHTML='<div class="empty-profile">লক্ষ্য যোগ করলে এখানে দেখা যাবে।</div>';return;}
-  box.innerHTML=data.goals.map(x=>`<div class="study-row"><div class="study-row-main ${x.done?'study-done':''}"><strong>${esc(x.title)}</strong><small>${esc(x.subject||'General')} • ${x.due?'Due: '+esc(x.due):'No deadline'} • ${x.done?'Completed':'Pending'}</small></div><div class="study-row-actions"><button class="study-mini-btn" data-goal-toggle="${x.id}">${x.done?'↶ Undo':'✓ Complete'}</button><button class="study-mini-btn danger" data-goal-del="${x.id}">Delete</button></div></div>`).join('');
-  box.querySelectorAll('[data-goal-toggle]').forEach(b=>b.onclick=()=>mutate(()=>{const x=data.goals.find(z=>z.id===b.dataset.goalToggle);if(x){x.done=!x.done;x.completedAt=x.done?new Date().toISOString():null;}}));
-  box.querySelectorAll('[data-goal-del]').forEach(b=>b.onclick=()=>mutate(()=>data.goals=data.goals.filter(x=>x.id!==b.dataset.goalDel)));
+ document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');if(!g)return;
+  const sec=g.closest('[data-study-page]');if(!sec)return;go(g.dataset.go);
+ });
+ let recMount=null;
+ function mountMyRecord(){const host=$('stRecordHost');if(!recMount){recMount=mountRecord(host,async()=>{await loadData();return data;});}else recMount.refresh();}
+
+ /* ---------- rendering ---------- */
+ function knownSubjects(){
+  const s=new Set();try{if(typeof examData!=='undefined')Object.keys(examData).forEach(k=>s.add(k));}catch(e){}
+  data.progress.forEach(x=>x.subject&&s.add(x.subject));data.routine.forEach(x=>x.subject&&s.add(x.subject));data.goals.forEach(x=>x.subject&&s.add(x.subject));data.sessions.forEach(x=>x.subject&&x.subject!=='General study'&&s.add(x.subject));
+  return [...s];
  }
- function renderProgress(){const box=$('studyProgressList');if(!data.progress.length){box.innerHTML='<div class="empty-profile study-full">বিষয় ও Topic যোগ করে প্রস্তুতির শতাংশ আপডেট করো।</div>';return;}
-  box.innerHTML=data.progress.map(x=>{const diff=Number(x.current)-Number(x.baseline||0);return `<div class="study-progress-item"><strong>${esc(x.subject)} — ${esc(x.topic)}</strong><div class="study-progress-track"><span style="width:${Math.max(0,Math.min(100,Number(x.current)||0))}%"></span></div><div class="study-progress-meta"><span>Preparation: ${Number(x.current)||0}%</span><span style="color:${diff>=0?'#16a34a':'#dc2626'}">${diff>=0?'+':''}${diff}% improvement</span></div><small>Previous: ${Number(x.baseline)||0}% • Updated ${new Date(x.updatedAt||Date.now()).toLocaleDateString()}</small></div>`;}).join('');
+ function renderAll(){
+  $('stSubjects').innerHTML=knownSubjects().map(x=>'<option value="'+esc(x)+'">').join('');
+  renderHome();renderTimerBits();renderRoutine();renderGoals();renderProgress();
  }
- function renderSessions(){const box=$('studySessionList');if(!data.sessions.length){box.innerHTML='<div class="empty-profile">Timer দিয়ে পড়ার সেশন সম্পন্ন করলে এখানে দেখা যাবে।</div>';return;}
-  box.innerHTML=[...data.sessions].slice(-12).reverse().map(x=>`<div class="study-row"><div class="study-row-main"><strong>${esc(x.subject||'General Study')} • ${Number(x.minutes)||0} মিনিট</strong><small>${x.endedAt?new Date(x.endedAt).toLocaleString():'Session saved'}</small></div></div>`).join('');
+ function renderHome(){
+  const tk=todayKey(),r=dayRecord(data,tk);
+  $('stTodayDate').textContent=longDate(tk);$('stTodayMin').textContent=r.minutes;$('stTodayGoals').textContent=r.goalsDone.length;$('stStreak').textContent=streak(data);
+  const b=$('stTimerBanner');
+  if(T.status==='running'||T.status==='paused'){b.hidden=false;b.innerHTML='<span>⏱️ Timer '+(T.status==='paused'?'paused':'running')+': '+clockText()+' left</span><button type="button" data-go="timer">Open timer</button>';}else b.hidden=true;
  }
- function updateTimerSubjectOptions(){const sel=$('studyTimerSubject'),prev=sel.value;const subjects=[...new Set(['General',...data.progress.map(x=>x.subject),...data.routine.map(x=>x.subject),...data.goals.map(x=>x.subject).filter(Boolean)])];sel.innerHTML=subjects.map(x=>`<option value="${esc(x)}">${esc(x==='General'?'সাধারণ পড়াশোনা':x)}</option>`).join('');if(subjects.includes(prev))sel.value=prev;}
- function timerDisplay(){const m=Math.floor(timer.left/60),s=timer.left%60;$('studyTimerDisplay').textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');$('studyTimerStatus').textContent=timer.running?'Focusing':timer.paused?'Paused':'Ready';$('studyTimerStart').disabled=timer.running;$('studyTimerPause').disabled=!timer.running;$('studyTimerPause').textContent=timer.paused?'▶ Resume':'Ⅱ Pause';$('studyTimerFinish').disabled=!(timer.running||timer.paused);}
- function stopInterval(){if(timer.interval){clearInterval(timer.interval);timer.interval=null;}}
- function startTimer(){if(timer.running)return;const mins=Math.max(1,Math.min(180,Number($('studyTimerMinutes').value)||25));if(!timer.paused){timer.total=mins*60;timer.left=timer.total;timer.subject=$('studyTimerSubject').value||'General';timer.startedAt=new Date().toISOString();}timer.running=true;timer.paused=false;stopInterval();timer.interval=setInterval(()=>{timer.left--;timerDisplay();if(timer.left<=0){timer.left=0;finishTimer(true);}},1000);timerDisplay();}
- function pauseTimer(){if(timer.running){stopInterval();timer.running=false;timer.paused=true;}else if(timer.paused){startTimer();return;}timerDisplay();}
- async function finishTimer(completed=false){stopInterval();const elapsed=Math.max(0,Math.round((timer.total-timer.left)/60));timer.running=false;timer.paused=false;if(elapsed>0){await mutate(()=>{data.sessions.push({id:uid(),subject:timer.subject,minutes:elapsed,startedAt:timer.startedAt,endedAt:new Date().toISOString(),date:todayKey(),completed});});}timer.left=timer.total=Number($('studyTimerMinutes').value||25)*60;timerDisplay();if(completed)toastStudy('অভিনন্দন! Focus session সম্পন্ন হয়েছে।','success');}
- function showStudy(){if(!me()){if(typeof window.openAuthModal==='function')window.openAuthModal('login');return;}if(typeof window.hideAllScreens==='function')window.hideAllScreens();document.querySelectorAll('.wrap > section').forEach(x=>x.hidden=true);$('screen-study').hidden=false;$('topSub').textContent='My Study Space';if(typeof window.pushScreen==='function')window.pushScreen('study',{});loadData().catch(e=>{console.error(e);$('studyRoutineList').innerHTML='<div class="empty-profile">Study data load failed. Supabase setup SQL চালাও।</div>';toastStudy(e.message||'Could not load Study Space','error');});window.scrollTo({top:0,behavior:'smooth'});}
- $('drawerStudy').addEventListener('click',()=>{document.getElementById('sideDrawer').classList.remove('open');document.getElementById('drawerBackdrop').classList.remove('open');showStudy();});
+ function sessionRow(s){return '<div class="st-row"><div class="st-row-main"><strong>'+esc(s.subject||'General study')+' · '+(Number(s.minutes)||0)+' min</strong><small>'+(s.endedAt?'Finished at '+fmtTime(s.endedAt):'')+'</small></div></div>';}
+ function renderTimerBits(){
+  const sel=$('stTimerSubject'),prev=sel.value;const subs=knownSubjects();
+  sel.innerHTML='<option value="General study">📖 General study</option>'+subs.map(x=>'<option value="'+esc(x)+'">'+esc(x)+'</option>').join('')+'<option value="__other">✏️ Other (type it)…</option>';
+  if(prev&&[...sel.options].some(o=>o.value===prev))sel.value=prev;
+  $('stTimerOther').hidden=sel.value!=='__other';
+  const today=dayRecord(data,todayKey()).sessions;
+  $('stTodaySessions').innerHTML=today.length?today.slice().reverse().map(sessionRow).join(''):'<div class="st-empty">No sessions yet today. Start your first one!</div>';
+ }
+ function renderRoutine(){
+  const chips=$('stDayChips');if(!chips.dataset.ready){chips.dataset.ready='1';chips.dataset.day=dayName();chips.innerHTML=DAYS.map(d=>'<button type="button" data-day="'+d+'"'+(d===dayName()?' class="on"':'')+'>'+d.slice(0,3)+'</button>').join('');}
+  chips.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.day===chips.dataset.day));
+  const tk=todayKey(),tn=dayName();$('stTodayName').textContent=tn;
+  const doneIds=new Set((data.routineDone[tk]||[]).map(x=>x.id));
+  const todays=data.routine.filter(x=>x.day===tn).sort((a,b)=>String(a.time).localeCompare(String(b.time)));
+  $('stRoutineToday').innerHTML=todays.length?todays.map(x=>'<div class="st-row'+(doneIds.has(x.id)?' done':'')+'"><div class="st-row-main"><strong>'+esc(x.time)+' · '+esc(x.subject)+'</strong><small>'+esc(x.task)+'</small></div><div class="st-row-btns2"><button class="st-mini'+(doneIds.has(x.id)?'':' ok')+'" data-rdone="'+x.id+'">'+(doneIds.has(x.id)?'↶ Undo':'✓ Done')+'</button></div></div>').join(''):'<div class="st-empty">Nothing planned for today. Add an item above.</div>';
+  $('stRoutineToday').querySelectorAll('[data-rdone]').forEach(b=>b.onclick=()=>mutate(()=>{const it=data.routine.find(z=>z.id===b.dataset.rdone);if(!it)return;const list=data.routineDone[tk]=data.routineDone[tk]||[];const i=list.findIndex(z=>z.id===it.id);if(i>=0)list.splice(i,1);else list.push({id:it.id,subject:it.subject,task:it.task,time:it.time});if(!list.length)delete data.routineDone[tk];}));
+  const week=DAYS.map(d=>{const items=data.routine.filter(x=>x.day===d).sort((a,b)=>String(a.time).localeCompare(String(b.time)));return '<div class="st-daygroup'+(d===tn?' today':'')+'"><h4>'+d+(d===tn?' <span class="st-pill">Today</span>':'')+'</h4>'+(items.length?items.map(x=>'<div class="st-row"><div class="st-row-main"><strong>'+esc(x.time)+' · '+esc(x.subject)+'</strong><small>'+esc(x.task)+'</small></div><div class="st-row-btns2"><button class="st-mini danger" data-rdel="'+x.id+'">Delete</button></div></div>').join('<div style="height:6px"></div>'):'<div class="st-empty">Free day</div>')+'</div>';}).join('');
+  $('stRoutineWeek').innerHTML=week;
+  $('stRoutineWeek').querySelectorAll('[data-rdel]').forEach(b=>b.onclick=()=>mutate(()=>{data.routine=data.routine.filter(x=>x.id!==b.dataset.rdel);},'Routine item deleted'));
+ }
+ function goalRow(g){return '<div class="st-row'+(g.done?' done':'')+'"><div class="st-row-main"><strong>'+esc(g.title)+'</strong><small>'+esc(g.subject||'General')+(g.due?' · Deadline '+esc(g.due):'')+(g.done&&g.completedAt?' · Completed '+esc(isoDate(g.completedAt)):'')+'</small></div><div class="st-row-btns2"><button class="st-mini'+(g.done?'':' ok')+'" data-gtoggle="'+g.id+'">'+(g.done?'↶ Undo':'✓ Done')+'</button><button class="st-mini danger" data-gdel="'+g.id+'">Delete</button></div></div>';}
+ function renderGoals(){
+  const todo=data.goals.filter(g=>!g.done),done=data.goals.filter(g=>g.done).sort((a,b)=>String(b.completedAt||'').localeCompare(String(a.completedAt||'')));
+  $('stGoalTodoCount').textContent=todo.length;$('stGoalDoneCount').textContent=done.length;
+  $('stGoalTodo').innerHTML=todo.length?todo.map(goalRow).join(''):'<div class="st-empty">No goals yet. Add your first goal above.</div>';
+  $('stGoalDone').innerHTML=done.length?done.map(goalRow).join(''):'<div class="st-empty">Completed goals will appear here.</div>';
+  const box=$('screen-study-goals');
+  box.querySelectorAll('[data-gtoggle]').forEach(b=>b.onclick=()=>mutate(()=>{const g=data.goals.find(z=>z.id===b.dataset.gtoggle);if(g){g.done=!g.done;g.completedAt=g.done?new Date().toISOString():null;}},'Goal updated ✓'));
+  box.querySelectorAll('[data-gdel]').forEach(b=>b.onclick=()=>mutate(()=>{data.goals=data.goals.filter(x=>x.id!==b.dataset.gdel);},'Goal deleted'));
+ }
+ function findProgress(subject,topic){return data.progress.find(x=>x.subject.toLowerCase()===subject.toLowerCase()&&x.topic.toLowerCase()===topic.toLowerCase());}
+ function updateProgressHint(){
+  const f=$('stProgressForm'),s=f.subject.value.trim(),t=f.topic.value.trim(),old=s&&t?findProgress(s,t):null;
+  $('stProgressVal').textContent=f.current.value+'%';$('stProgressPrev').textContent=old?'Last time: '+(Number(old.current)||0)+'%':'First time for this topic';
+ }
+ function renderProgress(){
+  const list=[...data.progress].sort((a,b)=>String(b.updatedAt||'').localeCompare(String(a.updatedAt||'')));
+  $('stProgressList').innerHTML=list.length?list.map(x=>{const cur=Number(x.current)||0,prev=Number(x.baseline)||0,diff=cur-prev,hist=data.progressLog.filter(l=>l.pid===x.id).slice(-3).reverse();
+   return '<div class="st-prog"><strong>'+esc(x.subject)+' — '+esc(x.topic)+'</strong><div class="st-prog-track"><span style="width:'+Math.max(0,Math.min(100,cur))+'%"></span></div><div class="st-prog-meta"><span><b>'+cur+'%</b> ready</span><span style="color:'+(diff>=0?'#16a34a':'#dc2626')+'">'+(diff>=0?'+':'')+diff+'% since last time</span></div><small>Updated '+esc(x.updatedAt?isoDate(x.updatedAt):'')+(hist.length?' · '+hist.map(h=>esc(h.date)+': '+h.to+'%').join(' · '):'')+'</small><div class="st-row-btns2" style="margin-top:8px"><button class="st-mini danger" data-pdel="'+x.id+'">Delete</button></div></div>';}).join(''):'<div class="st-empty">Add a subject and topic above to start tracking.</div>';
+  $('stProgressList').querySelectorAll('[data-pdel]').forEach(b=>b.onclick=()=>mutate(()=>{data.progress=data.progress.filter(x=>x.id!==b.dataset.pdel);},'Progress deleted'));
+ }
+
+ /* ---------- timer ---------- */
+ const T={status:'idle',left:1500,total:1500,subject:'General study',startedAt:null,endAt:0,interval:null};
+ const clockText=()=>pad(Math.floor(T.left/60))+':'+pad(T.left%60);
+ function showTimerState(){
+  $('stTimerSetup').hidden=T.status!=='idle';$('stTimerRun').hidden=!(T.status==='running'||T.status==='paused');$('stTimerDone').hidden=T.status!=='done';
+  $('stClock').textContent=clockText();$('stRunSubject').textContent=T.subject;
+  $('stRunState').textContent=T.status==='paused'?'Paused':'Focus time';$('stTimerPause').textContent=T.status==='paused'?'▶ Resume':'Ⅱ Pause';
+  $('stRunBar').style.width=Math.min(100,Math.round((1-(T.left/Math.max(1,T.total)))*100))+'%';
+  renderHome();
+ }
+ function stopTick(){if(T.interval){clearInterval(T.interval);T.interval=null;}}
+ function tick(){T.left=Math.max(0,Math.round((T.endAt-Date.now())/1000));showTimerState();if(T.left<=0)finishTimer(true);}
+ function chosenSubject(){const v=$('stTimerSubject').value;return v==='__other'?($('stTimerOther').value.trim()||'General study'):v;}
+ function startTimer(){
+  if(!me()){return;}
+  const mins=Math.max(1,Math.min(180,Number($('stTimerMinutes').value)||25));
+  T.total=mins*60;T.left=T.total;T.subject=chosenSubject();T.startedAt=new Date().toISOString();T.endAt=Date.now()+T.left*1000;T.status='running';
+  stopTick();T.interval=setInterval(tick,1000);showTimerState();
+ }
+ function pauseTimer(){
+  if(T.status==='running'){stopTick();T.left=Math.max(0,Math.round((T.endAt-Date.now())/1000));T.status='paused';}
+  else if(T.status==='paused'){T.endAt=Date.now()+T.left*1000;T.status='running';stopTick();T.interval=setInterval(tick,1000);}
+  showTimerState();
+ }
+ async function finishTimer(completed){
+  stopTick();const secs=Math.max(0,Math.round((T.total-Math.max(0,Math.round((T.endAt-Date.now())/1000)))));
+  const usedSecs=T.status==='paused'?(T.total-T.left):(completed?T.total:secs);
+  let mins=Math.round(usedSecs/60);if(mins===0&&usedSecs>=30)mins=1;
+  T.status='idle';
+  if(mins<1){toastS('Study at least 1 minute to save a session.','warning');T.left=T.total=(Number($('stTimerMinutes').value)||25)*60;showTimerState();return;}
+  const subject=T.subject,startedAt=T.startedAt;
+  const ok=await mutate(()=>{data.sessions.push({id:uid(),subject,minutes:mins,startedAt,endedAt:new Date().toISOString(),date:todayKey(),completed:!!completed});},'Study session saved ✓');
+  if(ok){T.status='done';$('stDoneTitle').textContent=completed?'Great job! Time is up 🎉':'Session saved!';$('stDoneText').textContent='You studied '+subject+' for '+mins+' minute'+(mins===1?'':'s')+'. It is saved in today\'s record.';try{if(navigator.vibrate)navigator.vibrate([200,100,200]);}catch(e){}}
+  T.left=T.total=(Number($('stTimerMinutes').value)||25)*60;showTimerState();
+ }
+ $('stTimerChips').addEventListener('click',e=>{const b=e.target.closest('button[data-min]');if(!b)return;$('stTimerMinutes').value=b.dataset.min;[...$('stTimerChips').children].forEach(c=>c.classList.toggle('on',c===b));});
+ $('stTimerMinutes').addEventListener('input',()=>{[...$('stTimerChips').children].forEach(c=>c.classList.toggle('on',c.dataset.min===$('stTimerMinutes').value));});
+ $('stTimerSubject').addEventListener('change',()=>{$('stTimerOther').hidden=$('stTimerSubject').value!=='__other';});
+ $('stTimerStart').addEventListener('click',startTimer);$('stTimerPause').addEventListener('click',pauseTimer);$('stTimerFinish').addEventListener('click',()=>finishTimer(false));
+ $('stTimerCancel').addEventListener('click',()=>{stopTick();T.status='idle';T.left=T.total=(Number($('stTimerMinutes').value)||25)*60;showTimerState();});
+ $('stStudyAgain').addEventListener('click',()=>{T.status='idle';showTimerState();});
+
+ /* ---------- forms ---------- */
+ $('stDayChips').addEventListener('click',e=>{const b=e.target.closest('button[data-day]');if(!b)return;$('stDayChips').dataset.day=b.dataset.day;renderRoutine();});
+ $('stRoutineForm').addEventListener('submit',e=>{e.preventDefault();const f=new FormData(e.currentTarget),form=e.currentTarget,day=$('stDayChips').dataset.day||dayName();
+  mutate(()=>{data.routine.push({id:uid(),day,time:f.get('time'),subject:String(f.get('subject')).trim(),task:String(f.get('task')).trim(),createdAt:new Date().toISOString()});form.reset();},'Added to your routine ✓');});
+ $('stGoalForm').addEventListener('submit',e=>{e.preventDefault();const f=new FormData(e.currentTarget),form=e.currentTarget;
+  mutate(()=>{data.goals.push({id:uid(),title:String(f.get('title')).trim(),subject:String(f.get('subject')||'').trim(),due:f.get('due')||null,done:false,createdAt:new Date().toISOString(),completedAt:null});form.reset();},'Goal added ✓');});
+ ['subject','topic'].forEach(n=>$('stProgressForm')[n].addEventListener('input',updateProgressHint));$('stProgressRange').addEventListener('input',updateProgressHint);
+ $('stProgressForm').addEventListener('submit',e=>{e.preventDefault();const form=e.currentTarget,f=new FormData(form),subject=String(f.get('subject')).trim(),topic=String(f.get('topic')).trim(),cur=Math.max(0,Math.min(100,Number(f.get('current'))));
+  mutate(()=>{const old=findProgress(subject,topic),now=new Date().toISOString(),from=old?Number(old.current)||0:0;let pid;if(old){old.baseline=from;old.current=cur;old.updatedAt=now;pid=old.id;}else{pid=uid();data.progress.push({id:pid,subject,topic,current:cur,baseline:0,updatedAt:now});}
+   data.progressLog.push({id:uid(),pid,date:todayKey(),subject,topic,from,to:cur,at:now});form.reset();$('stProgressRange').value=50;updateProgressHint();},'Progress saved ✓');});
+
+ /* ---------- entry points ---------- */
+ $('drawerStudy').addEventListener('click',()=>{$('sideDrawer').classList.remove('open');$('drawerBackdrop').classList.remove('open');go('home');});
  $('backFromStudy').addEventListener('click',()=>{if(typeof window.hideAllScreens==='function')window.hideAllScreens();$('screen-subjects').hidden=false;$('topSub').textContent='Choose a subject to begin';});
- $('studyRoutineForm').addEventListener('submit',e=>{e.preventDefault();const f=new FormData(e.currentTarget);mutate(()=>{data.routine.push({id:uid(),day:f.get('day'),time:f.get('time'),subject:String(f.get('subject')).trim(),task:String(f.get('task')).trim(),done:false});e.currentTarget.reset();});});
- $('studyGoalForm').addEventListener('submit',e=>{e.preventDefault();const f=new FormData(e.currentTarget);mutate(()=>{data.goals.push({id:uid(),title:String(f.get('title')).trim(),subject:String(f.get('subject')||'').trim(),due:f.get('due')||null,done:false,createdAt:new Date().toISOString()});e.currentTarget.reset();});});
- $('studyProgressForm').addEventListener('submit',e=>{e.preventDefault();const f=new FormData(e.currentTarget),subject=String(f.get('subject')).trim(),topic=String(f.get('topic')).trim(),current=Math.max(0,Math.min(100,Number(f.get('current')))),baseline=Math.max(0,Math.min(100,Number(f.get('baseline'))));mutate(()=>{const old=data.progress.find(x=>x.subject.toLowerCase()===subject.toLowerCase()&&x.topic.toLowerCase()===topic.toLowerCase());if(old){old.baseline=old.current;old.current=current;old.updatedAt=new Date().toISOString();}else data.progress.push({id:uid(),subject,topic,current,baseline,updatedAt:new Date().toISOString()});e.currentTarget.reset();});});
- $('studyTimerStart').addEventListener('click',startTimer);$('studyTimerPause').addEventListener('click',pauseTimer);$('studyTimerFinish').addEventListener('click',()=>finishTimer(false));$('studyTimerReset').addEventListener('click',()=>{stopInterval();timer.running=false;timer.paused=false;timer.left=timer.total=Math.max(1,Math.min(180,Number($('studyTimerMinutes').value)||25))*60;timerDisplay();});$('studyTimerMinutes').addEventListener('change',()=>{if(!timer.running&&!timer.paused){timer.left=timer.total=Math.max(1,Math.min(180,Number($('studyTimerMinutes').value)||25))*60;timerDisplay();}});timerDisplay();
- // Admin-only report: RLS must independently enforce admin SELECT.
- async function showAdminMonitor(){if(!me()?.is_admin){toastStudy('Admin access required.','error');return;}document.querySelectorAll('.wrap > section').forEach(x=>x.hidden=true);$('screen-admin-study').hidden=false;$('topSub').textContent='Student Study Monitor';$('adminStudyList').innerHTML='<div class="empty-profile">Loading student reports…</div>';$('adminStudyDetailCard').hidden=true;try{const {data:rows,error}=await client().from(TABLE).select('user_id,data,updated_at').order('updated_at',{ascending:false});if(error)throw error;const ids=(rows||[]).map(x=>x.user_id);let profiles=[];if(ids.length){const p=await client().from('profiles').select('user_id,username').in('user_id',ids);if(p.error)throw p.error;profiles=p.data||[];}const names=new Map(profiles.map(x=>[x.user_id,x.username]));window._adminStudyRows=(rows||[]).map(r=>({ ...r,username:names.get(r.user_id)||'Student',data:{...blank(),...(r.data||{})}}));const students=window._adminStudyRows;const totalM=students.reduce((n,s)=>n+(s.data.sessions||[]).reduce((a,x)=>a+(Number(x.minutes)||0),0),0);const goals=students.reduce((n,s)=>n+(s.data.goals||[]).filter(g=>g.done).length,0);const allGoals=students.reduce((n,s)=>n+(s.data.goals||[]).length,0);$('adminStudySummary').innerHTML=`<div class="study-stat"><span>Students tracked</span><strong>${students.length}</strong></div><div class="study-stat"><span>Total focus time</span><strong>${Math.round(totalM/60*10)/10} h</strong></div><div class="study-stat"><span>Goals completed</span><strong>${goals}/${allGoals}</strong></div>`;renderAdminList();}catch(e){console.error('Admin study monitor:',e);$('adminStudyList').innerHTML='<div class="empty-profile">Could not load study reports. Ensure the SQL setup and admin SELECT policy are applied.</div>';}}
- function renderAdminList(){const q=($('adminStudySearch').value||'').toLowerCase();const rows=(window._adminStudyRows||[]).filter(x=>x.username.toLowerCase().includes(q));$('adminStudyList').innerHTML=rows.length?rows.map((x,i)=>{const d=x.data||blank(),mins=d.sessions.reduce((a,z)=>a+(Number(z.minutes)||0),0),done=d.goals.filter(g=>g.done).length;return `<div class="study-student-card"><button type="button" data-study-student="${esc(x.user_id)}">${esc(x.username)}</button><div class="study-student-meta">${d.routine.length} routine items • ${done}/${d.goals.length} goals complete • ${Math.round(mins/60*10)/10} focus hours • Updated ${new Date(x.updated_at).toLocaleString()}</div></div>`;}).join(''):'<div class="empty-profile">No student study records found.</div>';$('adminStudyList').querySelectorAll('[data-study-student]').forEach(b=>b.addEventListener('click',()=>renderAdminDetail(b.dataset.studyStudent)));}
- function renderAdminDetail(id){const s=(window._adminStudyRows||[]).find(x=>x.user_id===id);if(!s)return;const d=s.data||blank();$('adminStudyDetailCard').hidden=false;$('adminStudyDetailTitle').textContent=s.username+' — Study Report';$('adminStudyDetailSub').textContent='Last updated: '+new Date(s.updated_at).toLocaleString();const block=(title,items,fn)=>`<div class="study-report-block"><h4>${title}</h4>${items.length?items.map(fn).join(''):'<div class="study-report-line">No data yet.</div>'}</div>`;$('adminStudyDetail').innerHTML=block('🗓️ Routine',d.routine,x=>`<div class="study-report-line"><strong>${esc(x.day)} ${esc(x.time)} — ${esc(x.subject)}</strong><small>${esc(x.task)} • ${x.done?'Done':'Pending'}</small></div>`)+block('🎯 Goals',d.goals,x=>`<div class="study-report-line"><strong>${esc(x.title)}</strong><small>${esc(x.subject||'General')} • ${x.done?'Completed':'Pending'} ${x.due?'• Due '+esc(x.due):''}</small></div>`)+block('📈 Subject progress',d.progress,x=>`<div class="study-report-line"><strong>${esc(x.subject)} — ${esc(x.topic)}</strong><small>${Number(x.current)||0}% current • ${Number(x.baseline)||0}% previous • ${Number(x.current)-Number(x.baseline||0)}% improvement</small></div>`)+block('⏱️ Focus sessions',d.sessions.slice(-20).reverse(),x=>`<div class="study-report-line"><strong>${esc(x.subject)} — ${Number(x.minutes)||0} minutes</strong><small>${x.endedAt?new Date(x.endedAt).toLocaleString():''}</small></div>`);$('adminStudyDetailCard').scrollIntoView({behavior:'smooth',block:'start'});}
- $('adminGoStudyMonitor')?.addEventListener('click',showAdminMonitor);$('backFromAdminStudy').addEventListener('click',()=>{if(typeof window.showAdminDashboard==='function')window.showAdminDashboard();else $('screen-admin').hidden=false;});$('refreshAdminStudy').addEventListener('click',showAdminMonitor);$('adminStudySearch').addEventListener('input',renderAdminList);$('closeAdminStudyDetail').addEventListener('click',()=>$('adminStudyDetailCard').hidden=true);
- window.showStudySpace=showStudy;window.showAdminStudyMonitor=showAdminMonitor;
+ window.showStudySpace=function(page){go(page||'home',true);};
+ showTimerState();updateProgressHint();
+
+ /* ---------- profile (student) ---------- */
+ let profMount=null;
+ function ensureProfileCard(){
+  const prof=$('screen-profile');if(!prof||$('profileStudyCard'))return;
+  const card=document.createElement('div');card.className='profile-card';card.id='profileStudyCard';
+  card.innerHTML='<h3>📚 My Study Record</h3><p class="card-hint">Tap a date to see everything you studied that day.</p><div id="profileStudyRecord"></div><button class="btn btn-ghost" id="profileOpenStudy" type="button" style="margin-top:12px">Open Study Space →</button>';
+  prof.appendChild(card);$('profileOpenStudy').addEventListener('click',()=>go('home'));
+ }
+ function syncProfile(){
+  const prof=$('screen-profile');if(!prof||prof.hidden||!me())return;ensureProfileCard();
+  const host=$('profileStudyRecord');if(!profMount){profMount=mountRecord(host,async()=>{await loadData();return data;});}else{loadData(true).then(()=>profMount.refresh()).catch(()=>{});}
+ }
+ if($('screen-profile'))new MutationObserver(syncProfile).observe($('screen-profile'),{attributes:true,attributeFilter:['hidden']});
+
+ /* ---------- admin: study record inside a student's profile + monitor ---------- */
+ let admMount=null,admFor=null;
+ async function loadStudentData(userId){
+  const {data:row,error}=await client().from(TABLE).select('data,updated_at').eq('user_id',userId).maybeSingle();
+  if(error)throw error;return row&&row.data;
+ }
+ function ensureAdminUserCard(){
+  const sec=$('screen-admin-user');if(!sec||$('adminUserStudyCard'))return;
+  const card=document.createElement('div');card.className='profile-card';card.id='adminUserStudyCard';
+  card.innerHTML='<h3>📚 Study Record</h3><p class="card-hint">Student\'s timer sessions, routine, goals and progress by date. Tap a date.</p><div id="adminUserStudyRecord"></div>';sec.appendChild(card);
+ }
+ function syncAdminUser(){
+  const sec=$('screen-admin-user');if(!sec||sec.hidden||!me()||!me().is_admin)return;ensureAdminUserCard();
+  let id=null;try{id=state.adminViewedUserId;}catch(e){}if(!id)return;
+  if(admFor===id&&admMount){return;}
+  admFor=id;admMount=mountRecord($('adminUserStudyRecord'),()=>loadStudentData(id));
+ }
+ if($('screen-admin-user')){new MutationObserver(syncAdminUser).observe($('screen-admin-user'),{attributes:true,attributeFilter:['hidden']});}
+ // when another student is opened while the page is already visible
+ document.addEventListener('click',()=>{setTimeout(()=>{const sec=$('screen-admin-user');if(sec&&!sec.hidden){let id=null;try{id=state.adminViewedUserId;}catch(e){}if(id&&id!==admFor){admMount=null;syncAdminUser();}}},700);},true);
+
+ async function showAdminMonitor(){
+  if(!me()||!me().is_admin){toastS('Admin access required.','error');return;}
+  document.querySelectorAll('.wrap > section').forEach(x=>x.hidden=true);$('screen-admin-study').hidden=false;$('topSub').textContent='Student Study Monitor';
+  $('adminStudyList').innerHTML='<div class="empty-profile">Loading student reports…</div>';$('adminStudyDetailCard').hidden=true;
+  try{
+   const {data:rows,error}=await client().from(TABLE).select('user_id,data,updated_at').order('updated_at',{ascending:false});if(error)throw error;
+   const ids=(rows||[]).map(x=>x.user_id);let names=new Map();
+   if(ids.length){const p=await client().from('profiles').select('user_id,username').in('user_id',ids);if(p.error)throw p.error;names=new Map((p.data||[]).map(x=>[x.user_id,x.username]));}
+   window._adminStudyRows=(rows||[]).map(r=>({...r,username:names.get(r.user_id)||'Student',data:norm(r.data)}));
+   const st=window._adminStudyRows,tk=todayKey();
+   const todayMin=st.reduce((n,s)=>n+dayRecord(s.data,tk).minutes,0),totalMin=st.reduce((n,s)=>n+s.data.sessions.reduce((a,x)=>a+(Number(x.minutes)||0),0),0),activeToday=st.filter(s=>dayRecord(s.data,tk).active).length;
+   $('adminStudySummary').innerHTML='<div class="st-stat"><strong>'+st.length+'</strong><span>students using Study Space</span></div><div class="st-stat"><strong>'+activeToday+'</strong><span>active today</span></div><div class="st-stat"><strong>'+fmtMin(todayMin)+'</strong><span>studied today (all)</span></div>';
+   renderAdminList();
+  }catch(e){console.error('Admin study monitor:',e);$('adminStudyList').innerHTML='<div class="empty-profile">Could not load study reports. Run study-space-setup.sql and check the admin read policy.</div>';}
+ }
+ function renderAdminList(){
+  const q=($('adminStudySearch').value||'').toLowerCase(),tk=todayKey();
+  const rows=(window._adminStudyRows||[]).filter(x=>x.username.toLowerCase().includes(q));
+  $('adminStudyList').innerHTML=rows.length?rows.map(x=>{const t=dayRecord(x.data,tk),tot=x.data.sessions.reduce((a,z)=>a+(Number(z.minutes)||0),0);return '<div class="st-admin-student"><div><b>'+esc(x.username)+'</b><small>Today '+fmtMin(t.minutes)+' · Total '+fmtMin(tot)+' · Streak '+streak(x.data)+' days · Updated '+esc(isoDate(x.updated_at)||'')+'</small></div><button class="btn btn-primary" type="button" data-study-student="'+esc(x.user_id)+'">View record</button></div>';}).join(''):'<div class="empty-profile">No student study records found.</div>';
+  $('adminStudyList').querySelectorAll('[data-study-student]').forEach(b=>b.addEventListener('click',()=>openAdminDetail(b.dataset.studyStudent)));
+ }
+ let detMount=null;
+ function openAdminDetail(id){
+  const s=(window._adminStudyRows||[]).find(x=>x.user_id===id);if(!s)return;
+  $('adminStudyDetailCard').hidden=false;$('adminStudyDetailTitle').textContent=s.username+' — Study Record';$('adminStudyDetailSub').textContent='Tap a date to see that day\'s activity.';
+  $('adminStudyDetail').innerHTML='<div id="adminStudyCal"></div><button class="btn btn-ghost" id="adminStudyOpenProfile" type="button" style="margin-top:12px">Open full student profile →</button>';
+  detMount=mountRecord($('adminStudyCal'),async()=>s.data);
+  $('adminStudyOpenProfile').onclick=()=>{if(typeof window.showAdminUserProfile==='function')window.showAdminUserProfile(id);};
+  $('adminStudyDetailCard').scrollIntoView({behavior:'smooth',block:'start'});
+ }
+ $('adminGoStudyMonitor')?.addEventListener('click',showAdminMonitor);
+ $('backFromAdminStudy')?.addEventListener('click',()=>{if(typeof window.showAdminDashboard==='function')window.showAdminDashboard();else $('screen-admin').hidden=false;});
+ $('refreshAdminStudy')?.addEventListener('click',showAdminMonitor);$('adminStudySearch')?.addEventListener('input',renderAdminList);$('closeAdminStudyDetail')?.addEventListener('click',()=>{$('adminStudyDetailCard').hidden=true;});
+ window.showAdminStudyMonitor=showAdminMonitor;
+ window.__studySpace={dayRecord,indexDates,mountRecord,norm};
 })();
 </script>
 
