@@ -1033,6 +1033,7 @@ html[data-theme="dark"] a{color:#b9baff}
     <button id="drawerHome"><span>⌂</span> Home</button>
     <button id="drawerDashboard"><span>▦</span> My Dashboard</button>
     <button id="drawerProfile"><span>♙</span> My Profile</button>
+    <button id="drawerStudy" hidden><span>📚</span> Study Space</button>
     <button id="drawerAdmin" hidden><span>🛡</span> Admin Dashboard</button>
     <button id="drawerLeaderboard" hidden><span>🏆</span> Leaderboard</button>
     <button id="drawerLiveClass"><span>📡</span> Live Class</button>
@@ -1189,6 +1190,41 @@ html[data-theme="dark"] a{color:#b9baff}
     <div class="profile-card"><h3>✍️ CQ / Written Exam Results</h3><p class="card-hint">Tap a CQ exam to view its CQ leaderboard</p><div id="profileWrittenResults"></div></div>
   </section>
 
+  <!-- Student Study Space -->
+  <section id="screen-study" hidden>
+    <button class="back-btn" id="backFromStudy" type="button">← Back to Home</button>
+    <div class="lede"><h2>📚 My Study Space</h2><p>নিজের রুটিন, লক্ষ্য, পড়ার সময় ও বিষয়ভিত্তিক অগ্রগতি এক জায়গায় রাখো।</p></div>
+    <div class="study-summary-grid">
+      <div class="study-stat"><span>আজকের Focus</span><strong id="studyTodayMinutes">0 min</strong><small>আজকের পড়ার সময়</small></div>
+      <div class="study-stat"><span>Completed Goals</span><strong id="studyGoalCount">0/0</strong><small>লক্ষ্য পূরণের হিসাব</small></div>
+      <div class="study-stat"><span>Subjects Tracked</span><strong id="studySubjectCount">0</strong><small>অগ্রগতি সংরক্ষিত</small></div>
+    </div>
+    <div class="profile-card study-card">
+      <div class="study-card-head"><div><h3>⏱️ Focus Timer</h3><p>Pomodoro বা নিজের মতো সময় নির্ধারণ করো।</p></div><span class="study-live-dot" id="studyTimerStatus">Ready</span></div>
+      <div class="study-timer-face" id="studyTimerDisplay">25:00</div>
+      <div class="study-timer-settings"><label>সময় (মিনিট)<input id="studyTimerMinutes" type="number" min="1" max="180" value="25"></label><label>বিষয়<select id="studyTimerSubject"><option value="General">সাধারণ পড়াশোনা</option></select></label></div>
+      <div class="study-actions"><button class="btn btn-primary" id="studyTimerStart">▶ Start</button><button class="btn btn-ghost" id="studyTimerPause" disabled>Ⅱ Pause</button><button class="btn btn-ghost" id="studyTimerFinish" disabled>✓ Finish &amp; Save</button><button class="btn btn-ghost" id="studyTimerReset">↺ Reset</button></div>
+      <p class="card-hint" id="studyTimerHint">Timer শেষ বা Finish করলে পড়ার সময় তোমার প্রোফাইলে সেভ হবে।</p>
+    </div>
+    <div class="profile-card study-card">
+      <div class="study-card-head"><div><h3>🗓️ My Study Routine</h3><p>সপ্তাহের প্রতিদিনের পড়ার পরিকল্পনা তৈরি করো।</p></div></div>
+      <form id="studyRoutineForm" class="study-form-grid"><label>দিন<select name="day"><option>Saturday</option><option>Sunday</option><option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option></select></label><label>সময়<input name="time" type="time" required></label><label>বিষয়<input name="subject" required maxlength="60" placeholder="যেমন: গণিত"></label><label>কী পড়বে?<input name="task" required maxlength="140" placeholder="যেমন: বীজগণিত অধ্যায় ৩"></label><button class="btn btn-primary study-full" type="submit">＋ Add to Routine</button></form>
+      <div id="studyRoutineList" class="study-list"></div>
+    </div>
+    <div class="profile-card study-card">
+      <div class="study-card-head"><div><h3>🎯 Study Goals</h3><p>ছোট ছোট লক্ষ্য তৈরি করো, শেষ হলে Complete করো।</p></div></div>
+      <form id="studyGoalForm" class="study-form-grid"><label class="study-full">Goal<input name="title" required maxlength="140" placeholder="যেমন: আজ ৩০টি গণিত MCQ সমাধান করব"></label><label>বিষয়<input name="subject" maxlength="60" placeholder="ঐচ্ছিক"></label><label>শেষ তারিখ<input name="due" type="date"></label><button class="btn btn-primary study-full" type="submit">＋ Add Goal</button></form>
+      <div id="studyGoalList" class="study-list"></div>
+    </div>
+    <div class="profile-card study-card">
+      <div class="study-card-head"><div><h3>📈 Subject-wise Progress</h3><p>প্রতিটি বিষয়/টপিক কতটুকু আয়ত্ত হয়েছে তা আপডেট করো। Improvement আগের মানের সঙ্গে তুলনা করে দেখাবে।</p></div></div>
+      <form id="studyProgressForm" class="study-form-grid"><label>বিষয়<input name="subject" required maxlength="60" placeholder="যেমন: পদার্থবিজ্ঞান"></label><label>Topic / Chapter<input name="topic" required maxlength="100" placeholder="যেমন: গতি"></label><label>বর্তমান প্রস্তুতি (%)<input name="current" type="number" min="0" max="100" required placeholder="যেমন: ৬৫"></label><label>আগের প্রস্তুতি (%)<input name="baseline" type="number" min="0" max="100" value="0" required></label><button class="btn btn-primary study-full" type="submit">＋ Save Progress</button></form>
+      <div id="studyProgressList" class="study-progress-list"></div>
+    </div>
+    <div class="profile-card study-card"><div class="study-card-head"><div><h3>🕘 Recent Study Sessions</h3><p>Timer দিয়ে সম্পন্ন করা পড়ার সেশন।</p></div></div><div id="studySessionList" class="study-list"></div></div>
+    <p class="study-privacy-note">🔒 তোমার Study Space-এর তথ্য তোমার অ্যাকাউন্টে সেভ থাকবে। Admin তোমার পড়ার অগ্রগতি মনিটর করতে পারবেন।</p>
+  </section>
+
   <!-- Dedicated inbox for student messages and admin replies -->
   <section id="screen-messages" hidden>
     <button class="back-btn" id="backFromMessages" type="button">← Back</button>
@@ -1331,6 +1367,7 @@ html[data-theme="dark"] a{color:#b9baff}
         <button class="admin-action-card" id="adminGoMcqHistory">📊<span>MCQ Result History</span><small>View objective exam results separately</small></button>
         <button class="admin-action-card" id="adminGoCqHistory">📝<span>CQ Result History</span><small>View written exam results separately</small></button>
         <button class="admin-action-card" id="adminGoLeaderboard">🏆<span>Leaderboard</span><small>Leaderboard for the most recently selected exam</small></button>
+        <button class="admin-action-card" id="adminGoStudyMonitor">📚<span>Student Study Monitor</span><small>Monitor routines, goals and subject progress</small></button>
       </div>
     </div>
 
@@ -1346,6 +1383,14 @@ html[data-theme="dark"] a{color:#b9baff}
     <div class="admin-head"><div><span class="admin-badge">🛡️ ADMIN REPORTS</span><h2 id="adminReportTitle">User Performance</h2><p id="adminReportDescription">Review user results and account status.</p></div><button class="btn btn-primary" id="refreshAdminReport">↻ Refresh</button></div>
     <div class="profile-card" id="adminReportChartCard" hidden><h3>📈 Overall Performance</h3><div class="chart-wrap"><canvas id="adminReportChart"></canvas></div></div>
     <div class="profile-card"><div id="adminReportContent"><div class="empty-profile">Choose a report.</div></div></div>
+  </section>
+
+  <section id="screen-admin-study" hidden>
+    <button class="back-btn" id="backFromAdminStudy" type="button">← Back to Admin Dashboard</button>
+    <div class="admin-head"><div><span class="admin-badge">📚 STUDY MONITOR</span><h2>Student Study Monitor</h2><p>শিক্ষার্থীদের Routine, Goal, Focus Time ও Subject Progress দেখো।</p></div><button class="btn btn-primary" id="refreshAdminStudy" type="button">↻ Refresh</button></div>
+    <div class="study-summary-grid" id="adminStudySummary"></div>
+    <div class="profile-card"><div class="study-card-head"><div><h3>👥 Student Study Reports</h3><p>নির্দিষ্ট শিক্ষার্থীর বিস্তারিত রিপোর্ট খুলতে নাম নির্বাচন করো।</p></div></div><input id="adminStudySearch" class="study-search" type="search" placeholder="শিক্ষার্থীর নাম দিয়ে খুঁজুন..."><div id="adminStudyList" class="study-list"><div class="empty-profile">Loading student reports…</div></div></div>
+    <div class="profile-card" id="adminStudyDetailCard" hidden><div class="study-card-head"><div><h3 id="adminStudyDetailTitle">Student details</h3><p id="adminStudyDetailSub"></p></div><button class="btn btn-ghost" id="closeAdminStudyDetail" type="button">Close</button></div><div id="adminStudyDetail"></div></div>
   </section>
 
   <!-- CQ / Written Exam for students -->
@@ -1619,6 +1664,7 @@ function updateAccountUI(){
   $("drawerLogout").hidden=!logged;
   $("drawerDashboard").hidden=!logged;
   $("drawerProfile").hidden=!logged;
+  if($("drawerStudy")) $("drawerStudy").hidden=!logged || admin;
   $("drawerAdmin").hidden=!admin;
   $("drawerLeaderboard").hidden=!admin;
 }
@@ -3126,6 +3172,8 @@ function hideAllScreens(){
   if($("screen-written-admin")) $("screen-written-admin").hidden = true;
   if($("screen-admin-user")) $("screen-admin-user").hidden = true;
   if($("screen-admin-performance")) $("screen-admin-performance").hidden = true;
+  if($("screen-study")) $("screen-study").hidden = true;
+  if($("screen-admin-study")) $("screen-admin-study").hidden = true;
   ["screen-admin-materials","screen-admin-mcq-history","screen-admin-cq-history","screen-live-class"].forEach(id=>{if($(id))$(id).hidden=true;});
   if($("screen-profile")) $("screen-profile").hidden = true;
   if($("screen-admin")) $("screen-admin").hidden = true;
@@ -6620,5 +6668,82 @@ html:root:root body .mat-admin-empty{padding:14px;text-align:center;color:var(--
 .live-notice-join{width:100%;min-height:48px}
 @media(max-width:600px){#liveAdminStage,#liveStudentStage{min-height:190px}.live-notice-card{padding:27px 20px 21px}}
 </style>
+
+
+<style id="student-study-space-styles">
+.study-summary-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:14px 0}.study-stat{padding:17px;border:1px solid var(--border);border-radius:18px;background:var(--card);box-shadow:var(--shadow);min-width:0}.study-stat span,.study-stat small{display:block;color:var(--muted);font-size:12px}.study-stat strong{display:block;font-size:25px;line-height:1.35;margin:5px 0;color:var(--text);overflow-wrap:anywhere}.study-card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px}.study-card-head h3{margin:0 0 4px}.study-card-head p{margin:0;color:var(--muted);font-size:12.5px;line-height:1.5}.study-live-dot{font-size:11px;font-weight:800;padding:6px 10px;border-radius:99px;background:#eef2ff;color:#5145cd;white-space:nowrap}.study-timer-face{font:800 clamp(42px,9vw,64px)/1.1 ui-monospace,monospace;letter-spacing:2px;text-align:center;padding:16px 8px;color:var(--primary)}.study-timer-settings{display:grid;grid-template-columns:1fr 1fr;gap:12px}.study-form-grid label,.study-timer-settings label{display:block;font-size:12px;font-weight:800;color:var(--muted)}.study-form-grid input,.study-form-grid select,.study-timer-settings input,.study-timer-settings select,.study-search{display:block;width:100%;margin-top:6px;min-height:43px;border:1px solid var(--border);border-radius:11px;padding:10px 12px;background:var(--bg);color:var(--text);font:inherit}.study-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.study-full{grid-column:1/-1}.study-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}.study-actions .btn{flex:1;min-width:110px}.study-list{display:grid;gap:9px;margin-top:14px}.study-row{display:flex;align-items:center;gap:10px;padding:12px;border:1px solid var(--border);border-radius:14px;background:var(--bg);min-width:0}.study-row-main{flex:1;min-width:0}.study-row-main strong{display:block;font-size:13.5px;overflow-wrap:anywhere}.study-row-main small{display:block;color:var(--muted);font-size:11.5px;line-height:1.5;overflow-wrap:anywhere}.study-row-actions{display:flex;gap:6px;flex-wrap:wrap}.study-mini-btn{border:1px solid var(--border);border-radius:9px;background:var(--card);color:var(--text);padding:7px 9px;font:700 11px var(--sans);cursor:pointer}.study-mini-btn.danger{color:#b91c1c;background:#fff1f2;border-color:#fecdd3}.study-done{text-decoration:line-through;opacity:.62}.study-progress-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}.study-progress-item{border:1px solid var(--border);border-radius:14px;padding:13px;background:var(--bg);min-width:0}.study-progress-item strong{display:block;font-size:13px;overflow-wrap:anywhere}.study-progress-item small{color:var(--muted);font-size:11px}.study-progress-track{height:8px;background:var(--border);border-radius:99px;overflow:hidden;margin:9px 0}.study-progress-track span{display:block;height:100%;background:linear-gradient(90deg,var(--primary),var(--primary2));border-radius:99px}.study-progress-meta{display:flex;justify-content:space-between;gap:8px;font-size:11px;color:var(--muted)}.study-privacy-note{font-size:12px;color:var(--muted);text-align:center;padding:12px}.study-search{margin:0 0 12px}.study-student-card{padding:14px;border:1px solid var(--border);border-radius:15px;background:var(--bg)}.study-student-card button{border:0;background:none;color:var(--primary);font:800 14px var(--sans);padding:0;cursor:pointer}.study-student-meta{font-size:11.5px;color:var(--muted);margin-top:5px}.study-report-block{margin:12px 0;padding:13px;border:1px solid var(--border);border-radius:14px}.study-report-block h4{margin:0 0 9px;font-size:14px}.study-report-line{padding:8px 0;border-bottom:1px solid var(--border);font-size:12px}.study-report-line:last-child{border:0}.study-report-line small{display:block;color:var(--muted);margin-top:3px}
+@media(max-width:650px){.study-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.study-summary-grid .study-stat:last-child{grid-column:1/-1}.study-progress-list{grid-template-columns:1fr}.study-form-grid,.study-timer-settings{grid-template-columns:1fr}.study-full{grid-column:auto}.study-row{align-items:flex-start;flex-wrap:wrap}.study-row-actions{width:100%}.study-row-actions button{flex:1}}
+</style>
+
+<script id="student-study-space-logic">
+(function(){
+ const $=id=>document.getElementById(id); if(!$('screen-study')) return;
+ const TABLE='student_study_data';
+ const blank=()=>({routine:[],goals:[],progress:[],sessions:[]});
+ let data=blank(),timer={left:1500,total:1500,interval:null,running:false,paused:false,subject:'General',startedAt:null};
+ const uid=()=>Math.random().toString(36).slice(2,10)+Date.now().toString(36);
+ const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const me=()=>window.currentProfile||null;
+ const client=()=>window.supabaseClient;
+ const dayName=()=>new Date().toLocaleDateString('en-US',{weekday:'long'});
+ const todayKey=()=>new Date().toISOString().slice(0,10);
+ function toastStudy(msg,type='info'){if(typeof window.toast==='function')window.toast(msg,type,3200);else alert(msg);}
+ async function loadData(){
+  const u=me(); if(!u||!client())throw new Error('Please sign in first.');
+  const {data:row,error}=await client().from(TABLE).select('data').eq('user_id',u.user_id).maybeSingle();
+  if(error)throw error; data={...blank(),...(row?.data||{})};
+  ['routine','goals','progress','sessions'].forEach(k=>{if(!Array.isArray(data[k]))data[k]=[];});
+  renderAll();
+ }
+ async function saveData(){
+  const u=me();if(!u||!client())throw new Error('Please sign in first.');
+  const {error}=await client().from(TABLE).upsert({user_id:u.user_id,data,updated_at:new Date().toISOString()},{onConflict:'user_id'});
+  if(error)throw error;
+ }
+ async function mutate(fn){try{fn();renderAll();await saveData();toastStudy('Study data saved to your profile.','success');}catch(e){console.error('Study Space save:',e);toastStudy('Save failed: '+(e.message||'Check Supabase SQL/RLS setup.'),'error');}}
+ function renderAll(){renderRoutine();renderGoals();renderProgress();renderSessions();updateSummary();updateTimerSubjectOptions();}
+ function updateSummary(){
+  const today=data.sessions.filter(x=>(x.date||String(x.endedAt||'').slice(0,10))===todayKey()).reduce((n,x)=>n+(Number(x.minutes)||0),0);
+  const done=data.goals.filter(x=>x.done).length;
+  $('studyTodayMinutes').textContent=today+' min';$('studyGoalCount').textContent=done+'/'+data.goals.length;$('studySubjectCount').textContent=new Set(data.progress.map(x=>x.subject)).size;
+ }
+ function renderRoutine(){const box=$('studyRoutineList');if(!data.routine.length){box.innerHTML='<div class="empty-profile">এখনো কোনো Routine তৈরি করোনি।</div>';return;}
+  const sorted=[...data.routine].sort((a,b)=>['Saturday','Sunday','Monday','Tuesday','Wednesday','Thursday','Friday'].indexOf(a.day)-['Saturday','Sunday','Monday','Tuesday','Wednesday','Thursday','Friday'].indexOf(b.day)||String(a.time).localeCompare(String(b.time)));
+  box.innerHTML=sorted.map(x=>`<div class="study-row"><div class="study-row-main"><strong>${esc(x.day)} • ${esc(x.time)} — ${esc(x.subject)}</strong><small>${esc(x.task)}</small></div><div class="study-row-actions"><button class="study-mini-btn" data-routine-done="${x.id}">${x.done?'↶ Undo':'✓ Done today'}</button><button class="study-mini-btn danger" data-routine-del="${x.id}">Delete</button></div></div>`).join('');
+  box.querySelectorAll('[data-routine-done]').forEach(b=>b.onclick=()=>mutate(()=>{const x=data.routine.find(z=>z.id===b.dataset.routineDone);if(x)x.done=!x.done;}));
+  box.querySelectorAll('[data-routine-del]').forEach(b=>b.onclick=()=>mutate(()=>data.routine=data.routine.filter(x=>x.id!==b.dataset.routineDel)));
+ }
+ function renderGoals(){const box=$('studyGoalList');if(!data.goals.length){box.innerHTML='<div class="empty-profile">লক্ষ্য যোগ করলে এখানে দেখা যাবে।</div>';return;}
+  box.innerHTML=data.goals.map(x=>`<div class="study-row"><div class="study-row-main ${x.done?'study-done':''}"><strong>${esc(x.title)}</strong><small>${esc(x.subject||'General')} • ${x.due?'Due: '+esc(x.due):'No deadline'} • ${x.done?'Completed':'Pending'}</small></div><div class="study-row-actions"><button class="study-mini-btn" data-goal-toggle="${x.id}">${x.done?'↶ Undo':'✓ Complete'}</button><button class="study-mini-btn danger" data-goal-del="${x.id}">Delete</button></div></div>`).join('');
+  box.querySelectorAll('[data-goal-toggle]').forEach(b=>b.onclick=()=>mutate(()=>{const x=data.goals.find(z=>z.id===b.dataset.goalToggle);if(x){x.done=!x.done;x.completedAt=x.done?new Date().toISOString():null;}}));
+  box.querySelectorAll('[data-goal-del]').forEach(b=>b.onclick=()=>mutate(()=>data.goals=data.goals.filter(x=>x.id!==b.dataset.goalDel)));
+ }
+ function renderProgress(){const box=$('studyProgressList');if(!data.progress.length){box.innerHTML='<div class="empty-profile study-full">বিষয় ও Topic যোগ করে প্রস্তুতির শতাংশ আপডেট করো।</div>';return;}
+  box.innerHTML=data.progress.map(x=>{const diff=Number(x.current)-Number(x.baseline||0);return `<div class="study-progress-item"><strong>${esc(x.subject)} — ${esc(x.topic)}</strong><div class="study-progress-track"><span style="width:${Math.max(0,Math.min(100,Number(x.current)||0))}%"></span></div><div class="study-progress-meta"><span>Preparation: ${Number(x.current)||0}%</span><span style="color:${diff>=0?'#16a34a':'#dc2626'}">${diff>=0?'+':''}${diff}% improvement</span></div><small>Previous: ${Number(x.baseline)||0}% • Updated ${new Date(x.updatedAt||Date.now()).toLocaleDateString()}</small></div>`;}).join('');
+ }
+ function renderSessions(){const box=$('studySessionList');if(!data.sessions.length){box.innerHTML='<div class="empty-profile">Timer দিয়ে পড়ার সেশন সম্পন্ন করলে এখানে দেখা যাবে।</div>';return;}
+  box.innerHTML=[...data.sessions].slice(-12).reverse().map(x=>`<div class="study-row"><div class="study-row-main"><strong>${esc(x.subject||'General Study')} • ${Number(x.minutes)||0} মিনিট</strong><small>${x.endedAt?new Date(x.endedAt).toLocaleString():'Session saved'}</small></div></div>`).join('');
+ }
+ function updateTimerSubjectOptions(){const sel=$('studyTimerSubject'),prev=sel.value;const subjects=[...new Set(['General',...data.progress.map(x=>x.subject),...data.routine.map(x=>x.subject),...data.goals.map(x=>x.subject).filter(Boolean)])];sel.innerHTML=subjects.map(x=>`<option value="${esc(x)}">${esc(x==='General'?'সাধারণ পড়াশোনা':x)}</option>`).join('');if(subjects.includes(prev))sel.value=prev;}
+ function timerDisplay(){const m=Math.floor(timer.left/60),s=timer.left%60;$('studyTimerDisplay').textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');$('studyTimerStatus').textContent=timer.running?'Focusing':timer.paused?'Paused':'Ready';$('studyTimerStart').disabled=timer.running;$('studyTimerPause').disabled=!timer.running;$('studyTimerPause').textContent=timer.paused?'▶ Resume':'Ⅱ Pause';$('studyTimerFinish').disabled=!(timer.running||timer.paused);}
+ function stopInterval(){if(timer.interval){clearInterval(timer.interval);timer.interval=null;}}
+ function startTimer(){if(timer.running)return;const mins=Math.max(1,Math.min(180,Number($('studyTimerMinutes').value)||25));if(!timer.paused){timer.total=mins*60;timer.left=timer.total;timer.subject=$('studyTimerSubject').value||'General';timer.startedAt=new Date().toISOString();}timer.running=true;timer.paused=false;stopInterval();timer.interval=setInterval(()=>{timer.left--;timerDisplay();if(timer.left<=0){timer.left=0;finishTimer(true);}},1000);timerDisplay();}
+ function pauseTimer(){if(timer.running){stopInterval();timer.running=false;timer.paused=true;}else if(timer.paused){startTimer();return;}timerDisplay();}
+ async function finishTimer(completed=false){stopInterval();const elapsed=Math.max(0,Math.round((timer.total-timer.left)/60));timer.running=false;timer.paused=false;if(elapsed>0){await mutate(()=>{data.sessions.push({id:uid(),subject:timer.subject,minutes:elapsed,startedAt:timer.startedAt,endedAt:new Date().toISOString(),date:todayKey(),completed});});}timer.left=timer.total=Number($('studyTimerMinutes').value||25)*60;timerDisplay();if(completed)toastStudy('অভিনন্দন! Focus session সম্পন্ন হয়েছে।','success');}
+ function showStudy(){if(!me()){if(typeof window.openAuthModal==='function')window.openAuthModal('login');return;}if(typeof window.hideAllScreens==='function')window.hideAllScreens();document.querySelectorAll('.wrap > section').forEach(x=>x.hidden=true);$('screen-study').hidden=false;$('topSub').textContent='My Study Space';if(typeof window.pushScreen==='function')window.pushScreen('study',{});loadData().catch(e=>{console.error(e);$('studyRoutineList').innerHTML='<div class="empty-profile">Study data load failed. Supabase setup SQL চালাও।</div>';toastStudy(e.message||'Could not load Study Space','error');});window.scrollTo({top:0,behavior:'smooth'});}
+ $('drawerStudy').addEventListener('click',()=>{document.getElementById('sideDrawer').classList.remove('open');document.getElementById('drawerBackdrop').classList.remove('open');showStudy();});
+ $('backFromStudy').addEventListener('click',()=>{if(typeof window.hideAllScreens==='function')window.hideAllScreens();$('screen-subjects').hidden=false;$('topSub').textContent='Choose a subject to begin';});
+ $('studyRoutineForm').addEventListener('submit',e=>{e.preventDefault();const f=new FormData(e.currentTarget);mutate(()=>{data.routine.push({id:uid(),day:f.get('day'),time:f.get('time'),subject:String(f.get('subject')).trim(),task:String(f.get('task')).trim(),done:false});e.currentTarget.reset();});});
+ $('studyGoalForm').addEventListener('submit',e=>{e.preventDefault();const f=new FormData(e.currentTarget);mutate(()=>{data.goals.push({id:uid(),title:String(f.get('title')).trim(),subject:String(f.get('subject')||'').trim(),due:f.get('due')||null,done:false,createdAt:new Date().toISOString()});e.currentTarget.reset();});});
+ $('studyProgressForm').addEventListener('submit',e=>{e.preventDefault();const f=new FormData(e.currentTarget),subject=String(f.get('subject')).trim(),topic=String(f.get('topic')).trim(),current=Math.max(0,Math.min(100,Number(f.get('current')))),baseline=Math.max(0,Math.min(100,Number(f.get('baseline'))));mutate(()=>{const old=data.progress.find(x=>x.subject.toLowerCase()===subject.toLowerCase()&&x.topic.toLowerCase()===topic.toLowerCase());if(old){old.baseline=old.current;old.current=current;old.updatedAt=new Date().toISOString();}else data.progress.push({id:uid(),subject,topic,current,baseline,updatedAt:new Date().toISOString()});e.currentTarget.reset();});});
+ $('studyTimerStart').addEventListener('click',startTimer);$('studyTimerPause').addEventListener('click',pauseTimer);$('studyTimerFinish').addEventListener('click',()=>finishTimer(false));$('studyTimerReset').addEventListener('click',()=>{stopInterval();timer.running=false;timer.paused=false;timer.left=timer.total=Math.max(1,Math.min(180,Number($('studyTimerMinutes').value)||25))*60;timerDisplay();});$('studyTimerMinutes').addEventListener('change',()=>{if(!timer.running&&!timer.paused){timer.left=timer.total=Math.max(1,Math.min(180,Number($('studyTimerMinutes').value)||25))*60;timerDisplay();}});timerDisplay();
+ // Admin-only report: RLS must independently enforce admin SELECT.
+ async function showAdminMonitor(){if(!me()?.is_admin){toastStudy('Admin access required.','error');return;}document.querySelectorAll('.wrap > section').forEach(x=>x.hidden=true);$('screen-admin-study').hidden=false;$('topSub').textContent='Student Study Monitor';$('adminStudyList').innerHTML='<div class="empty-profile">Loading student reports…</div>';$('adminStudyDetailCard').hidden=true;try{const {data:rows,error}=await client().from(TABLE).select('user_id,data,updated_at').order('updated_at',{ascending:false});if(error)throw error;const ids=(rows||[]).map(x=>x.user_id);let profiles=[];if(ids.length){const p=await client().from('profiles').select('user_id,username').in('user_id',ids);if(p.error)throw p.error;profiles=p.data||[];}const names=new Map(profiles.map(x=>[x.user_id,x.username]));window._adminStudyRows=(rows||[]).map(r=>({ ...r,username:names.get(r.user_id)||'Student',data:{...blank(),...(r.data||{})}}));const students=window._adminStudyRows;const totalM=students.reduce((n,s)=>n+(s.data.sessions||[]).reduce((a,x)=>a+(Number(x.minutes)||0),0),0);const goals=students.reduce((n,s)=>n+(s.data.goals||[]).filter(g=>g.done).length,0);const allGoals=students.reduce((n,s)=>n+(s.data.goals||[]).length,0);$('adminStudySummary').innerHTML=`<div class="study-stat"><span>Students tracked</span><strong>${students.length}</strong></div><div class="study-stat"><span>Total focus time</span><strong>${Math.round(totalM/60*10)/10} h</strong></div><div class="study-stat"><span>Goals completed</span><strong>${goals}/${allGoals}</strong></div>`;renderAdminList();}catch(e){console.error('Admin study monitor:',e);$('adminStudyList').innerHTML='<div class="empty-profile">Could not load study reports. Ensure the SQL setup and admin SELECT policy are applied.</div>';}}
+ function renderAdminList(){const q=($('adminStudySearch').value||'').toLowerCase();const rows=(window._adminStudyRows||[]).filter(x=>x.username.toLowerCase().includes(q));$('adminStudyList').innerHTML=rows.length?rows.map((x,i)=>{const d=x.data||blank(),mins=d.sessions.reduce((a,z)=>a+(Number(z.minutes)||0),0),done=d.goals.filter(g=>g.done).length;return `<div class="study-student-card"><button type="button" data-study-student="${esc(x.user_id)}">${esc(x.username)}</button><div class="study-student-meta">${d.routine.length} routine items • ${done}/${d.goals.length} goals complete • ${Math.round(mins/60*10)/10} focus hours • Updated ${new Date(x.updated_at).toLocaleString()}</div></div>`;}).join(''):'<div class="empty-profile">No student study records found.</div>';$('adminStudyList').querySelectorAll('[data-study-student]').forEach(b=>b.addEventListener('click',()=>renderAdminDetail(b.dataset.studyStudent)));}
+ function renderAdminDetail(id){const s=(window._adminStudyRows||[]).find(x=>x.user_id===id);if(!s)return;const d=s.data||blank();$('adminStudyDetailCard').hidden=false;$('adminStudyDetailTitle').textContent=s.username+' — Study Report';$('adminStudyDetailSub').textContent='Last updated: '+new Date(s.updated_at).toLocaleString();const block=(title,items,fn)=>`<div class="study-report-block"><h4>${title}</h4>${items.length?items.map(fn).join(''):'<div class="study-report-line">No data yet.</div>'}</div>`;$('adminStudyDetail').innerHTML=block('🗓️ Routine',d.routine,x=>`<div class="study-report-line"><strong>${esc(x.day)} ${esc(x.time)} — ${esc(x.subject)}</strong><small>${esc(x.task)} • ${x.done?'Done':'Pending'}</small></div>`)+block('🎯 Goals',d.goals,x=>`<div class="study-report-line"><strong>${esc(x.title)}</strong><small>${esc(x.subject||'General')} • ${x.done?'Completed':'Pending'} ${x.due?'• Due '+esc(x.due):''}</small></div>`)+block('📈 Subject progress',d.progress,x=>`<div class="study-report-line"><strong>${esc(x.subject)} — ${esc(x.topic)}</strong><small>${Number(x.current)||0}% current • ${Number(x.baseline)||0}% previous • ${Number(x.current)-Number(x.baseline||0)}% improvement</small></div>`)+block('⏱️ Focus sessions',d.sessions.slice(-20).reverse(),x=>`<div class="study-report-line"><strong>${esc(x.subject)} — ${Number(x.minutes)||0} minutes</strong><small>${x.endedAt?new Date(x.endedAt).toLocaleString():''}</small></div>`);$('adminStudyDetailCard').scrollIntoView({behavior:'smooth',block:'start'});}
+ $('adminGoStudyMonitor')?.addEventListener('click',showAdminMonitor);$('backFromAdminStudy').addEventListener('click',()=>{if(typeof window.showAdminDashboard==='function')window.showAdminDashboard();else $('screen-admin').hidden=false;});$('refreshAdminStudy').addEventListener('click',showAdminMonitor);$('adminStudySearch').addEventListener('input',renderAdminList);$('closeAdminStudyDetail').addEventListener('click',()=>$('adminStudyDetailCard').hidden=true);
+ window.showStudySpace=showStudy;window.showAdminStudyMonitor=showAdminMonitor;
+})();
+</script>
 
 </html>
