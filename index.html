@@ -3392,7 +3392,7 @@ function hideAllScreens(){
 
 // 1. Subject লিস্ট রেন্ডার
 function renderSubjects(){
-  const grids={SSC:$("subjectGridSSC"),HSC:$("subjectGrid"),Admission:$("subjectGridAdmission")};
+  const grids={HSC:$("subjectGrid")};
   Object.values(grids).forEach(g=>{ if(g) g.innerHTML=""; });
   const icons = {"আইসিটি":"💻","রসায়ন":"🧪","পদার্থবিজ্ঞান":"⚛️","গণিত":"🧮","জীববিজ্ঞান":"🧬","ইংরেজি":"📖"};
   const levelOf=n=>{ const v=String((examData[n]&&examData[n].section)||"HSC").trim().toLowerCase(); return v==="ssc"?"SSC":(v==="admission"?"Admission":"HSC"); };
