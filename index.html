@@ -4594,14 +4594,46 @@ async function requestExamNotifications(){
   return true;
  }catch(e){console.error('Push setup failed:',e);toast('Notification setup হয়নি: '+(e.message||'Unknown error')+' — setup guide দেখো।','error',6000);return false;}
 }
+/* ---- phone push (admin events). Always explains WHY it failed, in Bangla, to the admin ---- */
+const PUSH_HELP={
+  NO_AUTH:"Admin hishebe login koro, tarpor abar chesta koro.",
+  NOT_ADMIN:"Shudhu admin notification pathate pare.",
+  NO_SECRET:"Supabase → Edge Functions → Secrets e FIREBASE_SERVICE_ACCOUNT nai. Firebase theke paoa puro JSON file-ta oi nam-e save koro.",
+  BAD_JSON:"FIREBASE_SERVICE_ACCOUNT-er JSON bhul. File-er PURO lekha (shuru { theke shesh } porjonto) ek-bare paste koro, ar Save/Add dao.",
+  BAD_KEY:"JSON-e private_key ba client_email nai. Firebase → Project settings → Service accounts → 'Generate new private key' diye notun file nao.",
+  TOKEN_FAIL:"Google service account key-ta grohon korchhe na. Notun private key generate kore secret-e abar bosao.",
+  FCM_API_DISABLED:"Firebase Cloud Messaging API (V1) bondho. Google Cloud Console → APIs → 'Firebase Cloud Messaging API' → Enable koro.",
+  FCM_FAIL:"Firebase message grohon kore ni. Service account-er project ar website-er Firebase project (exam-center-8c4bf) ek kina dekho.",
+  NO_DB_KEY:"Function Supabase-er secret key paachhe na. Function ta abar Deploy koro.",
+  DB_FAIL:"push_subscriptions table porte parini. Table-ta ache kina dekho.",
+  JWT:"Edge Functions → send-push → Settings e 'Enforce JWT verification' OFF koro, tarpor Deploy koro.",
+  MISSING:"send-push function deploy kora nai ba nam bhul. Function-er nam thik 'send-push' hote hobe.",
+  SERVER_ERROR:"Function-er bhitore error hoyeche. Supabase → Edge Functions → send-push → Logs dekho."
+};
+async function drInvokePush(payload){
+  try{
+    if(!supabaseClient) return {ok:false,code:"SERVER_ERROR",error:"Supabase client nai."};
+    const {data,error}=await supabaseClient.functions.invoke('send-push',{body:payload});
+    if(error){
+      let status=0,text="",j=null;
+      try{ const r=error.context; status=r&&r.status||0; if(r&&r.clone){ text=await r.clone().text(); try{ j=JSON.parse(text); }catch(e){} } }catch(e){}
+      const msg=(j&&(j.error||j.message))||text||error.message||"";
+      let code=(j&&j.code&&typeof j.code==='string')?j.code:"";
+      if(!code){ if(status===404||/not found/i.test(msg)) code="MISSING"; else if(status===401||status===403||/jwt|unauthor/i.test(msg)) code="JWT"; else code="SERVER_ERROR"; }
+      return {ok:false,code,error:String(msg).slice(0,300),status};
+    }
+    return data||{ok:true};
+  }catch(e){ return {ok:false,code:"SERVER_ERROR",error:String(e&&e.message||e)}; }
+}
+let _pushWarnAt=0;
 async function sendArbijoyPushEvent(payload){
- try{
-  if(!supabaseClient)return;
-  const {data,error}=await supabaseClient.functions.invoke('send-push',{body:payload});
-  if(error)throw error;
-  if(data?.error)throw new Error(data.error);
-  return data;
- }catch(e){console.warn('Background push event was not sent. Complete Supabase/Firebase server setup first.',e);return null;}
+  const r=await drInvokePush(payload);
+  if(r && r.ok===false){
+    console.warn("Push not sent ["+r.code+"]: "+r.error);
+    if(typeof isAdmin==="function" && isAdmin() && Date.now()-_pushWarnAt>45000){ _pushWarnAt=Date.now(); toast("🔔 Phone notification jayni: "+(PUSH_HELP[r.code]||r.error),"error",9000); }
+    return r;
+  }
+  return r;
 }
 let knownCqExamIds=null;try{const saved=JSON.parse(localStorage.getItem('arbijoy_known_cq_exams')||'null');if(Array.isArray(saved))knownCqExamIds=new Set(saved);}catch(e){}
 async function checkNewCqExamNotifications(){
@@ -7710,6 +7742,7 @@ html:root:root body .level-section.open>.level-head{border-color:#7c8cf8;box-sha
 @media(max-width:560px){.level-count{display:none}.level-badge{width:50px;height:50px;font-size:24px}}
 </style>
 <style id="v40-styles">
+.nt-diag{margin-top:12px;display:grid;gap:6px}.nt-step{padding:9px 12px;border-radius:12px;background:var(--dr-soft,#eee2c6);font-weight:700;font-size:14px}.nt-step.bad{background:#fee2e2;color:#7f1d1d}.nt-step small{font-weight:500;opacity:.8;margin-left:6px;overflow-wrap:anywhere}.nt-fix{padding:12px 14px;border-radius:14px;background:#fff4e5;color:#7c4a03;font-weight:700;line-height:1.55}.nt-fix.ok{background:#d9f3e6;color:#14532d}.nt-raw{color:var(--dr-muted,#5a5645);overflow-wrap:anywhere}
 /* ===== bottom navigation (phones) ===== */
 .bottom-nav{display:none}
 @media(max-width:700px){
@@ -7916,15 +7949,25 @@ body.dr-exam-protect #screen-exam{-webkit-user-select:none;user-select:none;-web
    '<form id="adminNotifyForm" class="st-two-col"><label>Type<select id="ntType"><option value="mcq_created">📝 New MCQ exam</option><option value="custom">📢 Announcement</option></select></label>'+
    '<label>Title<input id="ntTitle" maxlength="80" placeholder="e.g. New MCQ exam added" required></label>'+
    '<label>Message<input id="ntBody" maxlength="140" placeholder="e.g. ICT Chapter 3 · Exam 2 is now open" required></label>'+
-   '<button class="btn btn-primary" type="submit">Send to all students</button></form>';
+   '<button class="btn btn-primary" type="submit">Send to all students</button></form>'+
+   '<button class="btn btn-ghost" id="ntCheck" type="button" style="margin-top:12px">🔧 Check notification setup</button><div id="ntDiag" class="nt-diag" hidden></div>';
   if(host&&host.parentNode)host.parentNode.insertBefore(card,host.nextSibling);else sec.appendChild(card);
   const type=$('ntType');type.addEventListener('change',()=>{if(type.value==='mcq_created'&&!$('ntTitle').value)$('ntTitle').value='New MCQ exam added';});
   $('adminNotifyForm').addEventListener('submit',async e=>{e.preventDefault();const b=e.target.querySelector('button');b.disabled=true;
-   try{const r=await sendArbijoyPushEvent({event:type.value,title:$('ntTitle').value.trim(),body:$('ntBody').value.trim()});
-    if(r&&!r.error){note('✅ Notification sent'+(typeof r.sent==='number'?' to '+r.sent+' device(s)':''),'success');$('ntBody').value='';}
-    else note('Could not send. Deploy the send-push function (see README) and try again.','error');}
+   try{const r=await drInvokePush({event:type.value,title:$('ntTitle').value.trim(),body:$('ntBody').value.trim()});
+    if(r&&r.ok!==false){note(r.sent===0?'No student has turned on Notify yet.':'✅ Notification sent'+(typeof r.sent==='number'?' to '+r.sent+' device(s)':''),r.sent===0?'warning':'success');$('ntBody').value='';}
+    else note('Jayni: '+(PUSH_HELP[r.code]||r.error),'error');}
    catch(err){note('Could not send: '+(err.message||err),'error');}
    b.disabled=false;});
+  $('ntCheck').addEventListener('click',async()=>{
+   const box=$('ntDiag');box.hidden=false;box.textContent='Checking…';
+   const r=await drInvokePush({event:'ping'});
+   const L={admin:'Admin login',secret:'Firebase secret (FIREBASE_SERVICE_ACCOUNT)',project:'Firebase project',google:'Google key',students:'Students with Notify on',login:'Login',supabase_key:'Supabase key'};
+   const steps=r.steps||[];let h='';
+   steps.forEach(s=>{h+='<div class="nt-step '+(s.ok?'ok':'bad')+'">'+(s.ok?'✅ ':'❌ ')+(L[s.name]||s.name)+(s.detail?' <small>'+String(s.detail).replace(/[<>&]/g,'')+'</small>':'')+'</div>';});
+   if(r.ok===false){h+='<div class="nt-fix">👉 '+(PUSH_HELP[r.code]||r.error||'Unknown problem')+'</div><small class="nt-raw">'+String(r.code||'')+': '+String(r.error||'').replace(/[<>&]/g,'').slice(0,240)+'</small>';}
+   else{const n=(typeof r.devices==='number')?r.devices:0;h+=n>0?'<div class="nt-fix ok">🎉 Shob thik ache. '+n+' ta student device-e notification jabe.</div>':'<div class="nt-fix">ℹ️ Setup thik. Kintu ekhono kono student Notify chape ni. Student-ke 🔔 Notify chapte bolo.</div>';}
+   box.innerHTML=h;});
   if(window.__drAcc){window.__drAcc.makeAcc(card);window.__drAcc.closeAcc(card);}
  }
  const t=setInterval(()=>{if($('screen-admin')){ensure();if($('adminNotifyCard'))clearInterval(t);}},800);
