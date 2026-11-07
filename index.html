@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1059,25 +1060,32 @@ html[data-theme="dark"] a{color:#b9baff}
   <!-- স্ক্রিন 1: Subject লিস্ট -->
   <section id="screen-subjects">
     <div class="lede">
-      <h2>Choose Your Subject</h2>
-      <p>Pick your level, then choose a subject to get started.</p>
-    </div>
-    <div class="level-tabs">
-      <button type="button" class="level-tab" data-level="SSC">🎓 SSC</button>
-      <button type="button" class="level-tab" data-level="HSC">📘 HSC</button>
-      <button type="button" class="level-tab" data-level="Admission">🏫 Admission</button>
+      <h2>Choose Your Level</h2>
+      <p>Tap SSC, HSC or Admission to open its subjects.</p>
     </div>
     <div class="level-section" id="levelSSC">
-      <div class="level-head"><span class="level-badge">🎓</span><div><h3>SSC</h3><p>Secondary School Certificate</p></div><span class="level-count" id="levelCountSSC"></span></div>
-      <div class="subject-grid" id="subjectGridSSC"></div>
+      <button type="button" class="level-head" data-level="SSC" aria-expanded="false" aria-controls="subjectGridSSC">
+        <span class="level-badge">🎓</span>
+        <span class="level-tx"><b>SSC</b><small>Secondary School Certificate</small></span>
+        <span class="level-count" id="levelCountSSC"></span><span class="level-chev">▾</span>
+      </button>
+      <div class="level-body"><div class="subject-grid" id="subjectGridSSC"></div></div>
     </div>
     <div class="level-section" id="levelHSC">
-      <div class="level-head"><span class="level-badge">📘</span><div><h3>HSC</h3><p>Higher Secondary Certificate</p></div><span class="level-count" id="levelCountHSC"></span></div>
-      <div class="subject-grid" id="subjectGrid"></div>
+      <button type="button" class="level-head" data-level="HSC" aria-expanded="false" aria-controls="subjectGrid">
+        <span class="level-badge">📘</span>
+        <span class="level-tx"><b>HSC</b><small>Higher Secondary Certificate</small></span>
+        <span class="level-count" id="levelCountHSC"></span><span class="level-chev">▾</span>
+      </button>
+      <div class="level-body"><div class="subject-grid" id="subjectGrid"></div></div>
     </div>
     <div class="level-section" id="levelAdmission">
-      <div class="level-head"><span class="level-badge">🏫</span><div><h3>Admission</h3><p>University &amp; admission preparation</p></div><span class="level-count" id="levelCountAdmission"></span></div>
-      <div class="subject-grid" id="subjectGridAdmission"></div>
+      <button type="button" class="level-head" data-level="Admission" aria-expanded="false" aria-controls="subjectGridAdmission">
+        <span class="level-badge">🏫</span>
+        <span class="level-tx"><b>Admission</b><small>University &amp; admission preparation</small></span>
+        <span class="level-count" id="levelCountAdmission"></span><span class="level-chev">▾</span>
+      </button>
+      <div class="level-body"><div class="subject-grid" id="subjectGridAdmission"></div></div>
     </div>
   </section>
 
@@ -1520,6 +1528,7 @@ html[data-theme="dark"] a{color:#b9baff}
     <div class="written-card">
       <div class="admin-section-title"><div><h3 id="writtenAdminFormTitle">Create Written Exam</h3><p>One question per line. Students will write answers in text boxes.</p></div></div>
       <div class="written-admin-grid">
+        <label>Level<select id="writtenLevelSelect"><option value="SSC">SSC</option><option value="HSC" selected>HSC</option><option value="Admission">Admission</option></select></label>
         <label>Subject<select id="writtenSubjectSelect"></select></label>
         <label>Chapter<select id="writtenChapterSelect"></select></label>
         <label>Exam Title<input id="writtenTitleInput" maxlength="120" placeholder="CQ Exam 1"></label>
@@ -1885,7 +1894,8 @@ async function handleAuthSubmit(e){
       if(result.error && /invalid login/i.test(result.error.message||"")){          // older accounts (made before this update)
         const low=username.toLowerCase();
         if(/^[a-z0-9_]{3,20}$/.test(low)){
-          const old=await supabaseClient.auth.signInWithPassword({email:legacyEmail(low),password});
+          let old=await supabaseClient.auth.signInWithPassword({email:legacyEmail(low),password});
+          if(old.error) old=await supabaseClient.auth.signInWithPassword({email:legacyEmail(low),password:creds.password});   // older account whose password was reset
           if(!old.error) result=old;
         }
       }
@@ -3384,27 +3394,28 @@ function hideAllScreens(){
 function renderSubjects(){
   const grids={SSC:$("subjectGridSSC"),HSC:$("subjectGrid"),Admission:$("subjectGridAdmission")};
   Object.values(grids).forEach(g=>{ if(g) g.innerHTML=""; });
-  const counts={SSC:0,HSC:0,Admission:0};
   const icons = {"আইসিটি":"💻","রসায়ন":"🧪","পদার্থবিজ্ঞান":"⚛️","গণিত":"🧮","জীববিজ্ঞান":"🧬","ইংরেজি":"📖"};
   const levelOf=n=>{ const v=String((examData[n]&&examData[n].section)||"HSC").trim().toLowerCase(); return v==="ssc"?"SSC":(v==="admission"?"Admission":"HSC"); };
-  Object.keys(examData).forEach((name)=>{
-    const lvl=levelOf(name), grid=grids[lvl];
-    const card = document.createElement("button");
-    card.className = "subject-card";
-    const chapterCount = Object.keys(examData[name].chapters).length;
-    card.innerHTML = `
-      <div class="card-icon">${icons[name] || "📚"}</div>
-      <div class="subject-card-copy"><h3>${name}</h3>
-      <div class="subject-meta"><span class="pill">📚 ${bnNum(chapterCount)} chapters</span></div></div>
-      <div class="card-arrow" aria-hidden="true">↗</div>`;
-    card.addEventListener("click", ()=>showChapters(name));
-    grid.appendChild(card); counts[lvl]++;
-  });
-  const names={SSC:"SSC",HSC:"HSC",Admission:"Admission"};
-  Object.keys(grids).forEach(k=>{
-    const g=grids[k]; if(!g) return;
-    if(!counts[k]) g.innerHTML='<div class="level-empty"><span>🚧</span><div><b>Coming soon</b><small>'+names[k]+' subjects will be added here.</small></div></div>';
-    const c=$("levelCount"+k); if(c) c.textContent=counts[k]+(counts[k]===1?" subject":" subjects");
+  const all=Object.keys(examData);
+  const own={SSC:all.filter(n=>levelOf(n)==="SSC"),HSC:all.filter(n=>levelOf(n)==="HSC"),Admission:all.filter(n=>levelOf(n)==="Admission")};
+  // SSC and Admission show the same subject cards as HSC until their own subjects are added
+  const list={SSC:own.SSC.length?own.SSC:own.HSC,HSC:own.HSC,Admission:own.Admission.length?own.Admission:own.HSC};
+  Object.keys(grids).forEach(lvl=>{
+    const grid=grids[lvl]; if(!grid) return;
+    list[lvl].forEach(name=>{
+      const card = document.createElement("button");
+      card.className = "subject-card";
+      const chapterCount = Object.keys(examData[name].chapters).length;
+      card.innerHTML = `
+        <div class="card-icon">${icons[name] || "📚"}</div>
+        <div class="subject-card-copy"><h3>${name}</h3>
+        <div class="subject-meta"><span class="pill">📚 ${bnNum(chapterCount)} chapters</span></div></div>
+        <div class="card-arrow" aria-hidden="true">↗</div>`;
+      card.addEventListener("click", ()=>{ state.selectedLevel=lvl; if(window.drMaterials&&window.drMaterials.remerge) window.drMaterials.remerge(); showChapters(name); });
+      grid.appendChild(card);
+    });
+    if(!list[lvl].length) grid.innerHTML='<div class="level-empty"><span>🚧</span><div><b>Coming soon</b><small>'+lvl+' subjects will be added here.</small></div></div>';
+    const c=$("levelCount"+lvl); if(c) c.textContent=list[lvl].length+(list[lvl].length===1?" subject":" subjects");
   });
 }
 
@@ -3466,11 +3477,12 @@ $("backToChaptersFromHub").addEventListener("click", ()=> showChapters(state.sel
 // 3. Exam লিস্ট দেখানো
 async function getActiveWrittenExams(subject, chapter){
   if(!supabaseClient) return [];
-  let q=supabaseClient.from("written_exams").select("id,subject,chapter,title,time_minutes,total_marks,questions,active,created_at,updated_at").eq("subject",subject).eq("chapter",chapter).order("created_at",{ascending:true});
+  let q=supabaseClient.from("written_exams").select("*").eq("subject",subject).eq("chapter",chapter).order("created_at",{ascending:true});
   if(!isAdmin()) q=q.eq("active",true);
   const {data,error}=await q;
   if(error){ console.error("Written exam load failed",error); return []; }
-  return data||[];
+  const LV=(state.selectedLevel||"HSC");
+  return (data||[]).filter(r=>(r.level||"HSC")===LV);
 }
 
 async function showExams(subject, chapter){
@@ -3736,24 +3748,25 @@ function updateWrittenChapterOptions(){ const sub=$("writtenSubjectSelect").valu
 let editingWrittenExamId=null;
 async function loadWrittenAdminList(){
   const box=$("writtenAdminList"); box.innerHTML='<div class="mat-empty">⏳ Loading...</div>';
-  const {data,error}=await supabaseClient.from("written_exams").select("id,subject,chapter,title,time_minutes,total_marks,questions,active,created_at,updated_at").order("created_at",{ascending:false});
+  const {data,error}=await supabaseClient.from("written_exams").select("*").order("created_at",{ascending:false});
   if(error){console.error(error);box.innerHTML='<div class="empty-profile">Could not load written exams. Check SQL/RLS setup.</div>';return;}
   if(!data.length){box.innerHTML='<div class="empty-profile">No written exams created yet.</div>';return;}
-  box.innerHTML=""; data.forEach(ex=>{const card=document.createElement("div");card.className="written-submit-card"; const h=document.createElement("h4");h.textContent=ex.title;const p=document.createElement("p");p.textContent=`${ex.subject} → ${ex.chapter} • ${ex.questions.length} questions • ${ex.time_minutes} min • ${ex.total_marks} marks • ${ex.active?"Active":"Hidden"}`;const actions=document.createElement("div");actions.className="action-row";actions.style.margin="12px 0 0";actions.innerHTML=`<button class="btn btn-ghost" data-lb="${ex.id}">🏆 Leaderboard</button><button class="btn btn-ghost" data-edit="${ex.id}">✏️ Edit</button><button class="btn btn-ghost" data-toggle="${ex.id}">${ex.active?"Hide":"Activate"}</button><button class="btn" data-delete="${ex.id}" style="color:#dc2626">Delete</button>`;card.append(h,p,actions);box.appendChild(card);});
+  box.innerHTML=""; data.forEach(ex=>{const card=document.createElement("div");card.className="written-submit-card"; const h=document.createElement("h4");h.textContent=ex.title;const p=document.createElement("p");p.textContent=`${ex.level||"HSC"} • ${ex.subject} → ${ex.chapter} • ${ex.questions.length} questions • ${ex.time_minutes} min • ${ex.total_marks} marks • ${ex.active?"Active":"Hidden"}`;const actions=document.createElement("div");actions.className="action-row";actions.style.margin="12px 0 0";actions.innerHTML=`<button class="btn btn-ghost" data-lb="${ex.id}">🏆 Leaderboard</button><button class="btn btn-ghost" data-edit="${ex.id}">✏️ Edit</button><button class="btn btn-ghost" data-toggle="${ex.id}">${ex.active?"Hide":"Activate"}</button><button class="btn" data-delete="${ex.id}" style="color:#dc2626">Delete</button>`;card.append(h,p,actions);box.appendChild(card);});
   box.querySelectorAll('[data-lb]').forEach(b=>b.addEventListener('click',()=>showWrittenLeaderboard(b.dataset.lb,data.find(x=>x.id===b.dataset.lb))));box.querySelectorAll('[data-edit]').forEach(b=>b.addEventListener('click',()=>editWrittenExam(data.find(x=>x.id===b.dataset.edit))));
   box.querySelectorAll('[data-toggle]').forEach(b=>b.addEventListener('click',()=>toggleWrittenExam(b.dataset.toggle,data.find(x=>x.id===b.dataset.toggle).active)));
   box.querySelectorAll('[data-delete]').forEach(b=>b.addEventListener('click',()=>deleteWrittenExam(b.dataset.delete)));
 }
-function editWrittenExam(ex){ editingWrittenExamId=ex.id; populateWrittenFormSubjects(); $("writtenSubjectSelect").value=ex.subject; updateWrittenChapterOptions(); $("writtenChapterSelect").value=ex.chapter; $("writtenTitleInput").value=ex.title; $("writtenTimeInput").value=ex.time_minutes; $("writtenMarksInput").value=ex.total_marks; $("writtenActiveInput").value=String(!!ex.active); $("writtenQuestionsInput").value=(ex.questions||[]).join("\n"); $("writtenAdminFormTitle").textContent="Edit Written Exam"; $("saveWrittenExamBtn").textContent="💾 Update Written Exam"; $("cancelWrittenEditBtn").hidden=false; window.scrollTo({top:0,behavior:"smooth"}); }
+function editWrittenExam(ex){ editingWrittenExamId=ex.id; populateWrittenFormSubjects(); if($("writtenLevelSelect")) $("writtenLevelSelect").value=ex.level||"HSC"; $("writtenSubjectSelect").value=ex.subject; updateWrittenChapterOptions(); $("writtenChapterSelect").value=ex.chapter; $("writtenTitleInput").value=ex.title; $("writtenTimeInput").value=ex.time_minutes; $("writtenMarksInput").value=ex.total_marks; $("writtenActiveInput").value=String(!!ex.active); $("writtenQuestionsInput").value=(ex.questions||[]).join("\n"); $("writtenAdminFormTitle").textContent="Edit Written Exam"; $("saveWrittenExamBtn").textContent="💾 Update Written Exam"; $("cancelWrittenEditBtn").hidden=false; window.scrollTo({top:0,behavior:"smooth"}); }
 function resetWrittenForm(){ editingWrittenExamId=null; $("writtenTitleInput").value=""; $("writtenTimeInput").value=60; $("writtenMarksInput").value=50; $("writtenActiveInput").value="true"; $("writtenQuestionsInput").value=""; $("writtenAdminFormTitle").textContent="Create Written Exam"; $("saveWrittenExamBtn").textContent="💾 Save Written Exam"; $("cancelWrittenEditBtn").hidden=true; }
 async function saveWrittenExam(){
  if(!isAdmin()) return;
  const wasEditing=!!editingWrittenExamId;
  const questions=$("writtenQuestionsInput").value.split(/\n+/).map(x=>x.trim()).filter(Boolean);
- const payload={subject:$("writtenSubjectSelect").value,chapter:$("writtenChapterSelect").value,title:$("writtenTitleInput").value.trim(),time_minutes:Number($("writtenTimeInput").value),total_marks:Number($("writtenMarksInput").value),questions,active:$("writtenActiveInput").value==="true"};
+ const payload={level:($("writtenLevelSelect")?$("writtenLevelSelect").value:"HSC"),subject:$("writtenSubjectSelect").value,chapter:$("writtenChapterSelect").value,title:$("writtenTitleInput").value.trim(),time_minutes:Number($("writtenTimeInput").value),total_marks:Number($("writtenMarksInput").value),questions,active:$("writtenActiveInput").value==="true"};
  if(!payload.title||!questions.length||payload.time_minutes<1||payload.total_marks<1){toast("Enter title, at least one question, time, and total marks.","warning",3200);return;}
- const q=wasEditing?supabaseClient.from("written_exams").update(payload).eq("id",editingWrittenExamId):supabaseClient.from("written_exams").insert(payload);
- const {error}=await q;
+ const runSave=(pl)=>wasEditing?supabaseClient.from("written_exams").update(pl).eq("id",editingWrittenExamId):supabaseClient.from("written_exams").insert(pl);
+ let {error}=await runSave(payload);
+ if(error && /level/i.test(error.message||"")){ const pl2={...payload}; delete pl2.level; ({error}=await runSave(pl2)); if(!error) toast("Saved, but the Level column is missing. Run setup-v39.sql in Supabase so SSC/Admission work.","warning",5200); }
  if(error){console.error(error);toast("Could not save written exam.","error",3200);return;}
  if(!wasEditing && payload.active){void sendArbijoyPushEvent({event:"exam_created",subject:payload.subject,chapter:payload.chapter,title:payload.title});}
  toast(wasEditing?"Written exam updated":"Written exam created","success");resetWrittenForm();await loadWrittenAdminList();
@@ -6659,19 +6672,22 @@ html:root:root body #akMarks .ak-hint{margin-top:6px;font-size:13px;color:var(--
  function G(n){try{return (new Function('return typeof '+n+'!=="undefined"?'+n+':undefined'))();}catch(e){return undefined;}}
  function cl(){return G('supabaseClient');}
  function note(m,t){try{toast(m,t||'info',3200);}catch(e){alert(m);}}
+ function curLevel(){var S=G('state');return (S&&S.selectedLevel)||'HSC';}
+ function itemOf(r){return r.type==='video'?{type:'video',title:r.title,youtubeId:r.url,_id:r.id,_createdAt:r.created_at}:{type:'pdf',title:r.title,url:r.url,_id:r.id,_createdAt:r.created_at};}
  function merge(){
   var md=G('materialsData');if(!md)return;
   merged.forEach(function(m){var a=md[m.s]&&md[m.s][m.c];if(a){var i=a.indexOf(m.item);if(i>-1)a.splice(i,1);}});merged=[];
+  var lv=curLevel();
   dbRows.forEach(function(r){
+   if((r.level||'HSC')!==lv)return;
    if(!md[r.subject])md[r.subject]={};if(!md[r.subject][r.chapter])md[r.subject][r.chapter]=[];
-   var it=r.type==='video'?{type:'video',title:r.title,youtubeId:r.url,_id:r.id,_createdAt:r.created_at}:{type:'pdf',title:r.title,url:r.url,_id:r.id,_createdAt:r.created_at};
-   md[r.subject][r.chapter].push(it);merged.push({s:r.subject,c:r.chapter,item:it});
+   var it=itemOf(r);md[r.subject][r.chapter].push(it);merged.push({s:r.subject,c:r.chapter,item:it});
   });
  }
  function ready(){window.__drMatReady=true;if(window.drNewBadges)window.drNewBadges.decorate();}
  function load(){
   var c=cl();if(!c){return;}
-  c.from(TABLE).select('id,subject,chapter,type,title,url,created_at').order('created_at',{ascending:true}).then(function(r){
+  c.from(TABLE).select('*').order('created_at',{ascending:true}).then(function(r){
    if(r&&!r.error&&Array.isArray(r.data)){dbRows=r.data;merge();renderList();}
    else if(r&&r.error)console.debug('study_materials not available yet:',r.error.message);
    ready();
@@ -6701,7 +6717,7 @@ html:root:root body #akMarks .ak-hint{margin-top:6px;font-size:13px;color:var(--
   dbRows.slice().reverse().forEach(function(r){
    var row=document.createElement('div');row.className='mat-admin-item';
    var ic=document.createElement('div');ic.className='mi-ic';ic.textContent=r.type==='video'?'▶️':'📄';
-   var tx=document.createElement('div');tx.className='mi-tx';var a=document.createElement('strong');a.textContent=r.title;var b=document.createElement('small');b.textContent=r.subject+' → '+r.chapter;tx.appendChild(a);tx.appendChild(b);
+   var tx=document.createElement('div');tx.className='mi-tx';var a=document.createElement('strong');a.textContent=r.title;var b=document.createElement('small');b.textContent=(r.level||'HSC')+' • '+r.subject+' → '+r.chapter;tx.appendChild(a);tx.appendChild(b);
    var del=document.createElement('button');del.type='button';del.textContent='🗑 Delete';
    del.addEventListener('click',async function(){
     var ok=true;try{ok=await customConfirm('Delete "'+r.title+'"? Students will no longer see it.',{okText:'Yes, delete',cancelText:'Keep',icon:'🗑️'});}catch(e){}
@@ -6716,7 +6732,7 @@ html:root:root body #akMarks .ak-hint{margin-top:6px;font-size:13px;color:var(--
   var sec=document.getElementById('adminMaterialsPageContent');if(!sec||document.getElementById('adminMaterialsCard'))return;
   var card=document.createElement('div');card.className='profile-card admin-card';card.id='adminMaterialsCard';
   card.innerHTML='<div class="admin-section-title"><div><h3>📎 Study Materials (PDF / Video)</h3><p>Paste a PDF or YouTube link here. Students see it instantly, no code change needed.</p></div></div>'+
-   '<form id="matAddForm" class="mat-admin-form"><label>Subject<select id="matSubject"></select></label><label>Chapter<select id="matChapter"></select></label>'+
+   '<form id="matAddForm" class="mat-admin-form"><label>Level<select id="matLevel"><option value="SSC">SSC</option><option value="HSC" selected>HSC</option><option value="Admission">Admission</option></select></label><label>Subject<select id="matSubject"></select></label><label>Chapter<select id="matChapter"></select></label>'+
    '<label>Type<select id="matType"><option value="pdf">📄 PDF notes</option><option value="video">▶️ YouTube video</option></select></label>'+
    '<label>Title<input id="matTitle" maxlength="140" placeholder="e.g. Chapter 2 notes, part 1" required></label>'+
    '<label class="wide">Link<input id="matUrl" type="url" placeholder="https://..." required></label>'+
@@ -6731,7 +6747,9 @@ html:root:root body #akMarks .ak-hint{margin-top:6px;font-size:13px;color:var(--
    if(!subjSel.value||!chapSel.value){note('Choose a subject and a chapter first.','warning');return;}
    btn.disabled=true;
    try{
-    var res=await cl().from(TABLE).insert({subject:subjSel.value,chapter:chapSel.value,type:type,title:titleIn.value.trim(),url:link}).select();
+    var row={level:card.querySelector('#matLevel').value,subject:subjSel.value,chapter:chapSel.value,type:type,title:titleIn.value.trim(),url:link};
+    var res=await cl().from(TABLE).insert(row).select();
+    if(res.error&&/level/i.test(res.error.message||'')){delete row.level;res=await cl().from(TABLE).insert(row).select();if(!res.error)note('Saved, but the Level column is missing. Run setup-v39.sql in Supabase so SSC/Admission work.','warning');}
     if(res.error)throw res.error;
     note('✅ Material added. Students can see it now.','success');titleIn.value='';urlIn.value='';load();
    }catch(err){
@@ -6743,7 +6761,7 @@ html:root:root body #akMarks .ak-hint{margin-top:6px;font-size:13px;color:var(--
  }
  function init(){buildAdminCard();setTimeout(load,900);setInterval(load,120000);setTimeout(function(){if(!window.__drMatReady)ready();},5000);
   var pb=document.getElementById('profileBtn');if(pb)new MutationObserver(function(){setTimeout(load,900);}).observe(pb,{attributes:true,attributeFilter:['hidden']});
-  window.drMaterials={reload:load};}
+  window.drMaterials={reload:load,remerge:function(){merge();},rows:function(){return dbRows;},itemOf:itemOf};}
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
 </script>
@@ -6760,14 +6778,18 @@ html:root:root body #akMarks .ak-hint{margin-top:6px;font-size:13px;color:var(--
  function save(){try{localStorage.setItem(PFX+uid(),JSON.stringify(st()));}catch(e){}}
  function items(){
   var out=[],ed=G('examData'),md=G('materialsData');
-  if(ed)Object.keys(ed).forEach(function(s){var ch=(ed[s]&&ed[s].chapters)||{};Object.keys(ch).forEach(function(c){Object.keys((ch[c]&&ch[c].exams)||{}).forEach(function(e){out.push({id:'exam|'+s+'|'+c+'|'+e,s:s,c:c,k:'exam'});});});});
-  if(md)Object.keys(md).forEach(function(s){Object.keys(md[s]||{}).forEach(function(c){(md[s][c]||[]).forEach(function(it){out.push({id:'mat|'+s+'|'+c+'|'+hash(JSON.stringify(it)),s:s,c:c,k:'mat'});});});});
-  writtenList.forEach(function(w){out.push({id:'cq|'+w.id,s:w.subject,c:w.chapter,k:'exam',t:w.title});});
+  if(ed)Object.keys(ed).forEach(function(s){var ch=(ed[s]&&ed[s].chapters)||{};Object.keys(ch).forEach(function(c){Object.keys((ch[c]&&ch[c].exams)||{}).forEach(function(e){out.push({id:'exam|'+s+'|'+c+'|'+e,s:s,c:c,k:'exam',lv:'ALL'});});});});
+  if(md)Object.keys(md).forEach(function(s){Object.keys(md[s]||{}).forEach(function(c){(md[s][c]||[]).forEach(function(it){if(it&&it._id)return;out.push({id:'mat|'+s+'|'+c+'|'+hash(JSON.stringify(it)),s:s,c:c,k:'mat',lv:'ALL'});});});});
+  var dm=window.drMaterials;if(dm&&dm.rows)dm.rows().forEach(function(r){var it=dm.itemOf(r);out.push({id:'mat|'+r.subject+'|'+r.chapter+'|'+hash(JSON.stringify(it)),s:r.subject,c:r.chapter,k:'mat',lv:r.level||'HSC'});});
+  writtenList.forEach(function(w){out.push({id:'cq|'+w.id,s:w.subject,c:w.chapter,k:'exam',t:w.title,lv:w.level||'HSC'});});
   return out;
  }
  function baseline(){var s=st();if(s.base||!writtenReady||!window.__drMatReady)return;items().forEach(function(i){s.subj[i.id]=1;s.chap[i.id]=1;s.sec[i.id]=1;s.item[i.id]=1;});s.base=true;save();}
  function ack(level,pred){var s=st(),ch=false;items().forEach(function(i){if(pred(i)&&!s[level][i.id]){s[level][i.id]=1;ch=true;}});if(ch)save();}
  function unseen(level,pred){if(isAdm())return false;var s=st();if(!s.base)return false;return items().some(function(i){return pred(i)&&!s[level][i.id];});}
+ function lv(){var S=G('state');return (S&&S.selectedLevel)||'HSC';}
+ function vis(i,L){return i.lv==='ALL'||i.lv===L;}
+ function levelOfCard(card){var sec=card.closest&&card.closest('.level-section');return sec?sec.id.replace('level',''):lv();}
  function badge(){var b=document.createElement('span');b.className='new-badge';b.textContent='NEW';return b;}
  function setBadge(host,on){if(!host)return;var ex=host.querySelector(':scope > .new-badge');if(on&&!ex)host.appendChild(badge());else if(!on&&ex)ex.remove();}
  function nameOf(h3){var c=h3.cloneNode(true);c.querySelectorAll('.new-badge').forEach(function(x){x.remove();});return c.textContent.trim();}
@@ -6779,11 +6801,11 @@ html:root:root body #akMarks .ak-hint{margin-top:6px;font-size:13px;color:var(--
   if(busy)return;busy=true;
   try{
    baseline();var S=G('state')||{};
-   document.querySelectorAll('#screen-subjects .subject-card').forEach(function(c){var h=c.querySelector('h3');if(!h)return;var n=nameOf(h);setBadge(h,unseen('subj',function(i){return i.s===n;}));});
-   document.querySelectorAll('#chapterGrid .subject-card').forEach(function(c){var h=c.querySelector('h3');if(!h)return;var n=nameOf(h);setBadge(h,unseen('chap',function(i){return i.s===S.selectedSubject&&i.c===n;}));});
+   document.querySelectorAll('#screen-subjects .subject-card').forEach(function(c){var h=c.querySelector('h3');if(!h)return;var n=nameOf(h);setBadge(h,unseen('subj',function(i){return i.s===n&&vis(i,levelOfCard(c));}));});
+   document.querySelectorAll('#chapterGrid .subject-card').forEach(function(c){var h=c.querySelector('h3');if(!h)return;var n=nameOf(h);setBadge(h,unseen('chap',function(i){return i.s===S.selectedSubject&&i.c===n&&vis(i,lv());}));});
    if(S.selectedSubject&&S.selectedChapter){
-    setBadge(document.querySelector('#hubGoExams h3'),unseen('sec',function(i){return i.k==='exam'&&i.s===S.selectedSubject&&i.c===S.selectedChapter;}));
-    setBadge(document.querySelector('#hubGoMaterials h3'),unseen('sec',function(i){return i.k==='mat'&&i.s===S.selectedSubject&&i.c===S.selectedChapter;}));
+    setBadge(document.querySelector('#hubGoExams h3'),unseen('sec',function(i){return i.k==='exam'&&i.s===S.selectedSubject&&i.c===S.selectedChapter&&vis(i,lv());}));
+    setBadge(document.querySelector('#hubGoMaterials h3'),unseen('sec',function(i){return i.k==='mat'&&i.s===S.selectedSubject&&i.c===S.selectedChapter&&vis(i,lv());}));
    }
    document.querySelectorAll('#examGrid .subject-card').forEach(function(c){var h=c.querySelector('h3');if(!h)return;var n=nameOf(h),id=writtenId(S.selectedSubject,S.selectedChapter,n)||('exam|'+S.selectedSubject+'|'+S.selectedChapter+'|'+n);setBadge(h,itemNew(id));});
    var ids=matIds(S.selectedSubject,S.selectedChapter);
@@ -6794,19 +6816,19 @@ html:root:root body #akMarks .ak-hint{margin-top:6px;font-size:13px;color:var(--
  function schedule(d){clearTimeout(tid);tid=setTimeout(decorate,d||90);}
  function track(id,kind){
   var el=document.getElementById(id);if(!el)return;var S=G('state')||{};
-  if(!el.hidden&&!rec[id]&&S.selectedSubject&&S.selectedChapter){rec[id]={s:S.selectedSubject,c:S.selectedChapter};ack('sec',function(i){return i.k===kind&&i.s===rec[id].s&&i.c===rec[id].c;});}
-  else if(el.hidden&&rec[id]){var r=rec[id];rec[id]=null;ack('item',function(i){return i.k===kind&&i.s===r.s&&i.c===r.c;});}
+  if(!el.hidden&&!rec[id]&&S.selectedSubject&&S.selectedChapter){rec[id]={s:S.selectedSubject,c:S.selectedChapter,L:lv()};ack('sec',function(i){return i.k===kind&&i.s===rec[id].s&&i.c===rec[id].c&&vis(i,rec[id].L);});}
+  else if(el.hidden&&rec[id]){var r=rec[id];rec[id]=null;ack('item',function(i){return i.k===kind&&i.s===r.s&&i.c===r.c&&vis(i,r.L);});}
  }
  function onScreens(){
   var S=G('state')||{},sc=document.getElementById('screen-chapters'),hub=document.getElementById('screen-chapterhub');
-  if(sc&&!sc.hidden&&S.selectedSubject)ack('subj',function(i){return i.s===S.selectedSubject;});
-  if(hub&&!hub.hidden&&S.selectedSubject&&S.selectedChapter)ack('chap',function(i){return i.s===S.selectedSubject&&i.c===S.selectedChapter;});
+  if(sc&&!sc.hidden&&S.selectedSubject)ack('subj',function(i){return i.s===S.selectedSubject&&vis(i,lv());});
+  if(hub&&!hub.hidden&&S.selectedSubject&&S.selectedChapter)ack('chap',function(i){return i.s===S.selectedSubject&&i.c===S.selectedChapter&&vis(i,lv());});
   track('screen-exams','exam');track('screen-materials','mat');
   schedule(60);
  }
  function fetchWritten(){
   var c=G('supabaseClient');if(!c)return;
-  c.from('written_exams').select('id,subject,chapter,title').eq('active',true).then(function(r){if(r&&!r.error&&r.data)writtenList=r.data;writtenReady=true;schedule(10);},function(){writtenReady=true;schedule(10);});
+  c.from('written_exams').select('*').eq('active',true).then(function(r){if(r&&!r.error&&r.data)writtenList=r.data;writtenReady=true;schedule(10);},function(){writtenReady=true;schedule(10);});
  }
  function init(){
   var wrap=document.querySelector('.wrap')||document.body;
@@ -7455,31 +7477,36 @@ html[data-theme="dark"] #levelSSC .level-badge{background:#1b3a33}html[data-them
 <script id="home-levels">
 (function(){
  const $=id=>document.getElementById(id);
+ function setOpen(level,open,scroll){
+  document.querySelectorAll('.level-section').forEach(s=>{
+   const on=open&&s.id==='level'+level;
+   s.classList.toggle('open',on);const h=s.querySelector('.level-head');if(h)h.setAttribute('aria-expanded',String(on));
+  });
+  try{if(open){state.selectedLevel=level;sessionStorage.setItem('drLevelOpen',level);}else sessionStorage.removeItem('drLevelOpen');}catch(e){}
+  if(open&&scroll){const sec=$('level'+level);if(sec)setTimeout(()=>sec.scrollIntoView({behavior:'smooth',block:'start'}),60);}
+ }
  document.addEventListener('click',e=>{
-  const t=e.target.closest('.level-tab');if(!t)return;
-  const sec=$('level'+t.dataset.level);if(!sec)return;
-  document.querySelectorAll('.level-tab').forEach(x=>x.classList.toggle('on',x===t));
-  sec.scrollIntoView({behavior:'smooth',block:'start'});
+  const h=e.target.closest('.level-head');if(!h)return;
+  const lvl=h.dataset.level,isOpen=$('level'+lvl).classList.contains('open');
+  setOpen(lvl,!isOpen,!isOpen);
  });
+ try{const l=sessionStorage.getItem('drLevelOpen');if(l&&$('level'+l))setOpen(l,true,false);}catch(e){}
 })();
 </script>
 
 <script id="account-security">
 (function(){
  const $=id=>document.getElementById(id);
- const FN=(typeof SUPABASE_URL!=='undefined'?SUPABASE_URL:'')+'/functions/v1/account-recovery';
- const note=(m,t)=>{try{toast(m,t||'info',3500);}catch(e){alert(m);}};
- async function call(action,payload,needAuth){
-  const h={'Content-Type':'application/json','apikey':SUPABASE_ANON_KEY};
-  if(needAuth){const {data:{session}}=await supabaseClient.auth.getSession();if(!session)throw new Error('Please log in first.');h.Authorization='Bearer '+session.access_token;}
-  else h.Authorization='Bearer '+SUPABASE_ANON_KEY;
-  let res;try{res=await fetch(FN,{method:'POST',headers:h,body:JSON.stringify({action,...payload})});}catch(e){throw new Error('Network problem. Please check your internet and try again.');}
-  const body=await res.json().catch(()=>({}));
-  if(!res.ok||body.error)throw new Error(body.error||(res.status===404?'Account recovery is not set up yet. Ask the admin to deploy the account-recovery function.':'Request failed'));
-  return body;
+ const SETUP_MSG='Password reset is not set up yet. Please ask the admin to run the setup SQL in Supabase, or contact your teacher on WhatsApp.';
+ const MSG={wrong:'Wrong answer or account not found.',locked:'Too many wrong attempts. Please try again after 15 minutes.',noquestion:'No recovery question is set for this account. Please ask your teacher (admin) to reset your password.',invalid:'Please check the details and try again.',forbidden:'Admin access required.',login:'Please log in first.'};
+ async function rpc(name,args){
+  let res;try{res=await supabaseClient.rpc(name,args||{});}catch(e){throw new Error('Network problem. Please check your internet and try again.');}
+  if(res.error){const m=(res.error.message||'')+' '+(res.error.code||'');if(/could not find the function|PGRST202|schema cache|not find/i.test(m))throw new Error('SETUP');throw new Error(res.error.message||'Request failed');}
+  return res.data;
  }
- window.drCallRecovery=call;
-
+ const friendly=e=>e.message==='SETUP'?SETUP_MSG:e.message;
+ const note=(m,t)=>{try{toast(m,t||'info',3800);}catch(e){alert(m);}};
+ window.drRpc=rpc;
  /* ---------- Forgot password (login screen) ---------- */
  const rm=$('resetModal');
  function resetStep(n){$('resetStep1').hidden=n!==1;$('resetStep2').hidden=n!==2;$('resetMsg').textContent='';}
@@ -7496,10 +7523,10 @@ html[data-theme="dark"] #levelSSC .level-badge{background:#1b3a33}html[data-them
   const u=$('resetUsername').value.trim();if(!u){$('resetMsg').textContent='Please type your username.';return;}
   $('resetFindBtn').disabled=true;$('resetMsg').textContent='';
   try{
-   const r=await call('get_question',{username:u});
-   if(!r.has){$('resetMsg').innerHTML='No recovery question was set for this account. Please ask your teacher (admin) to reset your password, for example on <a href="https://wa.me/8801995125480" target="_blank" rel="noopener">WhatsApp</a>.';}
-   else{$('resetQuestion').textContent=r.question;resetStep(2);setTimeout(()=>$('resetAnswer').focus(),60);}
-  }catch(e){$('resetMsg').textContent=e.message;}
+   const q=await rpc('get_recovery_question',{p_username:u});
+   if(!q){$('resetMsg').innerHTML='No recovery question was set for this account. Please ask your teacher (admin) to reset your password, for example on <a href="https://wa.me/8801995125480" target="_blank" rel="noopener">WhatsApp</a>.';}
+   else{$('resetQuestion').textContent=q;resetStep(2);setTimeout(()=>$('resetAnswer').focus(),60);}
+  }catch(e){if(e.message==='SETUP')$('resetMsg').innerHTML='Password reset is not set up yet. Please ask the admin to run the setup SQL in Supabase, or contact your teacher on <a href="https://wa.me/8801995125480" target="_blank" rel="noopener">WhatsApp</a>.';else $('resetMsg').textContent=e.message;}
   $('resetFindBtn').disabled=false;
  });
  $('resetDoBtn')?.addEventListener('click',async()=>{
@@ -7508,10 +7535,11 @@ html[data-theme="dark"] #levelSSC .level-badge{background:#1b3a33}html[data-them
   if(!p){$('resetMsg').textContent='Please type a new password.';return;}
   $('resetDoBtn').disabled=true;$('resetMsg').textContent='';
   try{
-   await call('reset',{username:u,answer:a,password:await derivePassword(p)});
+   const r=await rpc('reset_password_with_answer',{p_username:u,p_answer:a,p_password:await derivePassword(p)});
+   if(r!=='ok')throw new Error(MSG[r]||MSG.wrong);
    note('✅ Password changed. Please log in with your new password.','success');
    rm.hidden=true;openAuthModal('login');$('authUsername').value=u;setTimeout(()=>$('authPassword').focus(),80);
-  }catch(e){$('resetMsg').textContent=e.message;}
+  }catch(e){$('resetMsg').textContent=friendly(e);}
   $('resetDoBtn').disabled=false;
  });
 
@@ -7525,13 +7553,13 @@ html[data-theme="dark"] #levelSSC .level-badge{background:#1b3a33}html[data-them
    '<form id="recoveryForm" class="st-two-col"><label>Question<select id="recQ">'+Q.map(q=>'<option>'+q+'</option>').join('')+'</select></label><label>Your answer (not case sensitive)<input id="recA" maxlength="80" autocomplete="off" required></label><button class="btn btn-primary" type="submit">Save recovery answer</button></form>';
   prof.appendChild(card);recCard=card;
   $('recoveryForm').addEventListener('submit',async e=>{e.preventDefault();const b=e.target.querySelector('button');b.disabled=true;
-   try{await call('set_recovery',{question:$('recQ').value,answer:$('recA').value},true);$('recA').value='';$('recoveryStatus').textContent='✅ Saved. You can now reset your password with this question.';note('Recovery answer saved ✓','success');}
-   catch(err){note(err.message,'error');}b.disabled=false;});
+   try{const r=await rpc('set_my_recovery',{p_question:$('recQ').value,p_answer:$('recA').value});if(r!=='ok')throw new Error(MSG[r]||'Could not save.');$('recA').value='';$('recoveryStatus').textContent='✅ Saved. You can now reset your password with this question.';note('Recovery answer saved ✓','success');}
+   catch(err){note(friendly(err),'error');}b.disabled=false;});
   if(window.__drAcc){window.__drAcc.makeAcc(card);window.__drAcc.closeAcc(card);}
  }
  async function refreshRecoveryStatus(){
   if(!window.currentProfile||!$('recoveryStatus'))return;
-  try{const r=await call('get_question',{username:window.currentProfile.username});if(r.has)$('recoveryStatus').textContent='✅ Recovery question is set: "'+r.question+'". You can change it below.';}catch(e){}
+  try{const q=await rpc('get_recovery_question',{p_username:window.currentProfile.username});if(q)$('recoveryStatus').textContent='✅ Recovery question is set: "'+q+'". You can change it below.';}catch(e){}
  }
  if($('screen-profile'))new MutationObserver(()=>{const p=$('screen-profile');if(p.hidden||!window.currentProfile)return;ensureRecoveryCard();if(window.__drAcc&&recCard)window.__drAcc.closeAcc(recCard);refreshRecoveryStatus();}).observe($('screen-profile'),{attributes:true,attributeFilter:['hidden']});
 
@@ -7547,13 +7575,33 @@ html[data-theme="dark"] #levelSSC .level-badge{background:#1b3a33}html[data-them
    const pw=$('adminResetPass').value;if(!pw)return;
    const ok=await customConfirm('Reset this student\'s password to the one you typed?',{okText:'Yes, reset',cancelText:'Cancel',icon:'🔑'});if(!ok)return;
    const b=e.target.querySelector('button');b.disabled=true;
-   try{await call('admin_reset',{user_id:id,password:await derivePassword(pw)},true);$('adminResetPass').value='';note('✅ Password reset. Tell the student the new password.','success');}
-   catch(err){note(err.message,'error');}b.disabled=false;});
+   try{const r=await rpc('admin_reset_password',{p_user_id:id,p_password:await derivePassword(pw)});if(r!=='ok')throw new Error(MSG[r]||'Could not reset.');$('adminResetPass').value='';note('✅ Password reset. Tell the student the new password.','success');}
+   catch(err){note(friendly(err),'error');}b.disabled=false;});
   if(window.__drAcc){window.__drAcc.makeAcc(card);window.__drAcc.closeAcc(card);}
  }
  if($('screen-admin-user'))new MutationObserver(()=>{const s=$('screen-admin-user');if(s.hidden||!window.currentProfile||!window.currentProfile.is_admin)return;ensureAdminReset();const c=$('adminResetCard');if(c&&window.__drAcc)window.__drAcc.closeAcc(c);}).observe($('screen-admin-user'),{attributes:true,attributeFilter:['hidden']});
- window.drSetRecoveryAfterSignup=async function(q,a){if(!a||!String(a).trim())return;try{await call('set_recovery',{question:q,answer:a},true);}catch(e){console.debug('recovery not saved',e.message);}};
+ window.drSetRecoveryAfterSignup=async function(q,a){if(!a||!String(a).trim())return;try{await rpc('set_my_recovery',{p_question:q,p_answer:a});}catch(e){console.debug('recovery not saved',e.message);}};
 })();
 </script>
 
+<style id="v39-styles">
+/* ===== login / sign up / every popup must scroll on small screens ===== */
+html:root:root body .modal-overlay{overflow-y:auto!important;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;align-items:flex-start!important;padding:14px 12px!important}
+html:root:root body .modal-overlay[hidden]{display:none!important}
+html:root:root body .modal-overlay>.modal{margin:auto!important;max-height:none!important;flex:none}
+html:root:root body:has(.modal-overlay:not([hidden])){overflow:hidden}
+/* ===== home: tap a level to open its subject cards ===== */
+.level-tabs{display:none!important}
+.level-section{margin:0 auto 14px;max-width:1100px;scroll-margin-top:200px}
+html:root:root body .level-head{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--dr-card,#fffbf2);border:1px solid var(--dr-line,#e2d4b4);border-radius:26px;padding:16px 18px;cursor:pointer;color:var(--dr-ink,#1a1830);box-shadow:0 12px 30px rgba(70,50,10,.08);transition:transform .18s,border-color .18s,box-shadow .18s}
+html:root:root body .level-head:hover{transform:translateY(-2px);border-color:#7c8cf8}
+html:root:root body .level-section.open>.level-head{border-color:#7c8cf8;box-shadow:0 16px 36px rgba(90,110,220,.18)}
+.level-badge{flex:none;width:58px;height:58px;border-radius:20px;display:grid;place-items:center;font-size:28px;border:1px solid var(--dr-line,#e2d4b4)}
+.level-tx{flex:1;min-width:0}.level-tx b{display:block;font-size:clamp(21px,4.6vw,26px);letter-spacing:-.02em}.level-tx small{display:block;margin-top:3px;color:var(--dr-muted,#5a5645);font-size:13.5px}
+.level-chev{flex:none;width:34px;height:34px;border-radius:50%;background:var(--dr-soft,#eee2c6);display:grid;place-items:center;font-size:15px;transition:transform .25s}
+.level-section.open .level-chev{transform:rotate(180deg)}
+.level-section:not(.open) .level-body{display:none}
+.level-body{padding:18px 2px 8px;animation:stIn .45s cubic-bezier(.22,.8,.3,1)}
+@media(max-width:560px){.level-count{display:none}.level-badge{width:50px;height:50px;font-size:24px}}
+</style>
 </html>
