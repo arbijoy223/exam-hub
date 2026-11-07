@@ -1059,10 +1059,7 @@ html[data-theme="dark"] a{color:#b9baff}
 
   <!-- স্ক্রিন 1: Subject লিস্ট -->
   <section id="screen-subjects">
-    <div class="lede">
-      <h2>Choose Your Level</h2>
-      <p>Tap SSC, HSC or Admission to open its subjects.</p>
-    </div>
+    <div class="lede"><h2>Choose Your Level</h2><p>Tap SSC, HSC or Admission to open its subjects.</p></div>
     <div class="level-section" id="levelSSC">
       <button type="button" class="level-head" data-level="SSC" aria-expanded="false" aria-controls="subjectGridSSC">
         <span class="level-badge">🎓</span>
@@ -1236,6 +1233,8 @@ html[data-theme="dark"] a{color:#b9baff}
       <button class="st-step-card" data-go="progress" type="button"><span class="st-num">4</span><span class="st-ic">📈</span><span class="st-tx"><b>Subject Progress</b><small>Tell us how ready you feel in each topic</small></span><span class="st-arrow">›</span></button>
       <button class="st-step-card" data-go="record" type="button"><span class="st-num">5</span><span class="st-ic">📅</span><span class="st-tx"><b>Study Record</b><small>See everything you did on any date</small></span><span class="st-arrow">›</span></button>
     </div>
+    <h3 class="st-section-title">Extras</h3>
+    <div class="st-steps"><button class="st-step-card" data-go="alarm" type="button"><span class="st-ic">⏰</span><span class="st-tx"><b>Study Alarm</b><small>Ring your phone for study tasks</small></span><span class="st-status" id="stSAlarm"></span><span class="st-arrow">›</span></button></div>
     <p class="st-privacy">🔒 Your Study Space is saved to your account. Your teacher (admin) can view it from your profile to help you improve.</p>
   </section>
 
@@ -1328,6 +1327,27 @@ html[data-theme="dark"] a{color:#b9baff}
     <div class="st-stepper" data-step="5"><i></i><i></i><i></i><i></i><i></i></div>
     <div class="st-card"><div id="stRecordHost"></div></div>
     <div class="st-foot"><button class="btn btn-ghost" data-go="progress" type="button">← Back: Progress</button><button class="btn btn-primary" data-go="home" type="button">Finish ✓</button></div>
+  </section>
+  <section id="screen-study-alarm" data-study-page="alarm" hidden>
+    <button class="back-btn" data-go="home" type="button">← Study Space</button>
+    <div class="st-head"><span class="st-badge">Extra tool</span><h2>⏰ Study Alarm</h2><p>Set alarms for your study tasks. Your phone rings and vibrates when it is time.</p></div>
+    <ol class="st-how"><li>Pick a time</li><li>Write the task</li><li>Choose repeat days</li></ol>
+    <form id="stAlarmForm" class="st-card">
+      <div class="st-two"><label class="st-label">1. Time<input name="time" type="time" class="st-input" required></label>
+      <label class="st-label">2. What is it for?<input name="label" class="st-input" maxlength="80" placeholder="e.g. Physics revision"></label></div>
+      <div class="st-label">3. Repeat (leave empty for one time only)</div>
+      <div class="st-chips" id="stAlarmDays"></div>
+      <button class="btn btn-primary st-big" type="submit">⏰ Set alarm</button>
+    </form>
+    <div class="st-card"><h3>My alarms</h3><div id="stAlarmList" class="st-list"></div></div>
+    <div class="st-card"><h3>🔔 Ringtone and permission</h3>
+      <p class="card-hint" style="margin-top:0">A website cannot read your phone's ringtone list directly. Choose any sound file from your phone (for example your favourite ringtone) and it will play when the alarm rings. Allow notifications too, so your phone also alerts you with its own notification sound.</p>
+      <div class="st-row"><div class="st-row-main"><strong id="stRingName">Default alarm tone</strong><small>Played when an alarm rings</small></div></div>
+      <div class="st-row-btns" style="margin-top:10px"><label class="btn btn-ghost" style="cursor:pointer;text-align:center">🎵 Choose ringtone from phone<input id="stRingFile" type="file" accept="audio/*" hidden></label><button class="btn btn-ghost" id="stRingTest" type="button">▶ Test sound</button><button class="btn btn-ghost" id="stRingClear" type="button" hidden>Use default tone</button></div>
+      <div class="st-row-btns" style="margin-top:10px"><button class="btn btn-primary" id="stNotifyAllow" type="button">🔔 Allow alarm notifications</button></div>
+      <p class="card-hint">Alarms ring while the website is open (including in the background on most phones). Keep the site open or add it to your home screen.</p>
+    </div>
+    <div class="st-foot"><button class="btn btn-ghost" data-go="home" type="button">← Study Space</button></div>
   </section>
   <datalist id="stSubjects"></datalist>
 
@@ -3391,31 +3411,44 @@ function hideAllScreens(){
 }
 
 // 1. Subject লিস্ট রেন্ডার
+/* ===== Levels: SSC / HSC / Admission =====
+   Every level shows the same subject NAMES, but each level has its own chapters, MCQ exams, CQ exams and materials.
+   HSC keeps the original subjects. For SSC and Admission a subject is stored as  "Name [SSC]"  /  "Name [Admission]".
+   To add MCQ exams for SSC / Admission, fill the chapters of that subject in the code, for example:
+     examData["আইসিটি [SSC]"].chapters["Chapter 1: ..."] = { exams: { "Exam 1": { time: 20, questions: [ ... ] } } };
+   (same format as the HSC subjects above). CQ exams, study materials and extra chapters are added from the Admin dashboard. */
+const LEVELS=["SSC","HSC","Admission"];
+function plainName(n){ return String(n).replace(/\s*\[(SSC|Admission)\]\s*$/,""); }
+function levelOf(n){ const m=String(n).match(/\[(SSC|Admission)\]\s*$/); if(m) return m[1]; const v=String((examData[n]&&examData[n].section)||"HSC").trim().toLowerCase(); return v==="ssc"?"SSC":(v==="admission"?"Admission":"HSC"); }
+function ensureLevelSubjects(){
+  Object.keys(examData).forEach(n=>{
+    if(levelOf(n)!=="HSC") return;
+    ["SSC","Admission"].forEach(l=>{ const k=n+" ["+l+"]"; if(!examData[k]) examData[k]={section:l,chapters:{}}; });
+  });
+}
+function subjectsForLevel(level){ ensureLevelSubjects(); return Object.keys(examData).filter(n=>levelOf(n)===level).map(n=>({key:n,label:plainName(n)})); }
 function renderSubjects(){
-  const grids={HSC:$("subjectGrid")};
+  ensureLevelSubjects();
+  const grids={SSC:$("subjectGridSSC"),HSC:$("subjectGrid"),Admission:$("subjectGridAdmission")};
   Object.values(grids).forEach(g=>{ if(g) g.innerHTML=""; });
   const icons = {"আইসিটি":"💻","রসায়ন":"🧪","পদার্থবিজ্ঞান":"⚛️","গণিত":"🧮","জীববিজ্ঞান":"🧬","ইংরেজি":"📖"};
-  const levelOf=n=>{ const v=String((examData[n]&&examData[n].section)||"HSC").trim().toLowerCase(); return v==="ssc"?"SSC":(v==="admission"?"Admission":"HSC"); };
-  const all=Object.keys(examData);
-  const own={SSC:all.filter(n=>levelOf(n)==="SSC"),HSC:all.filter(n=>levelOf(n)==="HSC"),Admission:all.filter(n=>levelOf(n)==="Admission")};
-  // SSC and Admission show the same subject cards as HSC until their own subjects are added
-  const list={SSC:own.SSC.length?own.SSC:own.HSC,HSC:own.HSC,Admission:own.Admission.length?own.Admission:own.HSC};
-  Object.keys(grids).forEach(lvl=>{
-    const grid=grids[lvl]; if(!grid) return;
-    list[lvl].forEach(name=>{
-      const card = document.createElement("button");
-      card.className = "subject-card";
-      const chapterCount = Object.keys(examData[name].chapters).length;
-      card.innerHTML = `
-        <div class="card-icon">${icons[name] || "📚"}</div>
-        <div class="subject-card-copy"><h3>${name}</h3>
-        <div class="subject-meta"><span class="pill">📚 ${bnNum(chapterCount)} chapters</span></div></div>
-        <div class="card-arrow" aria-hidden="true">↗</div>`;
-      card.addEventListener("click", ()=>{ state.selectedLevel=lvl; if(window.drMaterials&&window.drMaterials.remerge) window.drMaterials.remerge(); showChapters(name); });
-      grid.appendChild(card);
-    });
-    if(!list[lvl].length) grid.innerHTML='<div class="level-empty"><span>🚧</span><div><b>Coming soon</b><small>'+lvl+' subjects will be added here.</small></div></div>';
-    const c=$("levelCount"+lvl); if(c) c.textContent=list[lvl].length+(list[lvl].length===1?" subject":" subjects");
+  const count={SSC:0,HSC:0,Admission:0};
+  Object.keys(examData).forEach((name)=>{
+    const lvl=levelOf(name), grid=grids[lvl]; if(!grid) return;
+    const card = document.createElement("button");
+    card.className = "subject-card"; card.dataset.key=name;
+    const chapterCount = Object.keys(examData[name].chapters||{}).length;
+    card.innerHTML = `
+      <div class="card-icon">${icons[plainName(name)] || "📚"}</div>
+      <div class="subject-card-copy"><h3>${plainName(name)}</h3>
+      <div class="subject-meta"><span class="pill">📚 ${bnNum(chapterCount)} chapters</span></div></div>
+      <div class="card-arrow" aria-hidden="true">↗</div>`;
+    card.addEventListener("click", ()=>{ state.selectedLevel=lvl; showChapters(name); });
+    grid.appendChild(card); count[lvl]++;
+  });
+  LEVELS.forEach(l=>{
+    const g=grids[l]; if(g && !count[l]) g.innerHTML='<div class="level-empty"><span>🚧</span><div><b>Coming soon</b><small>'+l+' subjects will be added here.</small></div></div>';
+    const c=$("levelCount"+l); if(c) c.textContent=count[l]+(count[l]===1?" subject":" subjects");
   });
 }
 
@@ -3429,12 +3462,13 @@ function showChapters(subject){
   state.selectedSubject = subject;
   hideAllScreens();
   $("screen-chapters").hidden = false;
-  $("chapterSubjectName").textContent = subject;
-  $("topSub").textContent = subject;
+  $("chapterSubjectName").textContent = plainName(subject)+(levelOf(subject)!=="HSC"?" ("+levelOf(subject)+")":"");
+  $("topSub").textContent = plainName(subject);
   
   const grid = $("chapterGrid");
   grid.innerHTML = "";
   const chapters = Object.keys(examData[subject].chapters);
+  if(!chapters.length){ grid.innerHTML='<div class="level-empty"><span>🚧</span><div><b>No chapters yet</b><small>Chapters, exams and materials for '+plainName(subject)+' ('+levelOf(subject)+') will appear here soon.</small></div></div>'; }
   chapters.forEach((chapterName,i)=>{
     const card = document.createElement("button");
     card.className = "subject-card";
@@ -3477,12 +3511,11 @@ $("backToChaptersFromHub").addEventListener("click", ()=> showChapters(state.sel
 // 3. Exam লিস্ট দেখানো
 async function getActiveWrittenExams(subject, chapter){
   if(!supabaseClient) return [];
-  let q=supabaseClient.from("written_exams").select("*").eq("subject",subject).eq("chapter",chapter).order("created_at",{ascending:true});
+  let q=supabaseClient.from("written_exams").select("id,subject,chapter,title,time_minutes,total_marks,questions,active,created_at,updated_at").eq("subject",subject).eq("chapter",chapter).order("created_at",{ascending:true});
   if(!isAdmin()) q=q.eq("active",true);
   const {data,error}=await q;
   if(error){ console.error("Written exam load failed",error); return []; }
-  const LV=(state.selectedLevel||"HSC");
-  return (data||[]).filter(r=>(r.level||"HSC")===LV);
+  return data||[];
 }
 
 async function showExams(subject, chapter){
@@ -3743,30 +3776,29 @@ async function showWrittenAdmin(){
   if(!isAdmin()) return; hideAllScreens(); $("screen-written-admin").hidden=false; $("topSub").textContent="CQ / Written Exams"; pushScreen("written-admin",{}); populateWrittenFormSubjects(); await loadWrittenAdminList();
 }
 function populateWrittenFormSubjects(){
-  const ss=$("writtenSubjectSelect"), old=ss.value; ss.innerHTML=""; Object.keys(examData).forEach(sub=>{const o=document.createElement("option");o.value=sub;o.textContent=sub;ss.appendChild(o)}); if(old && [...ss.options].some(o=>o.value===old)) ss.value=old; updateWrittenChapterOptions(); }
+  const ss=$("writtenSubjectSelect"), old=ss.value; ss.innerHTML=""; const lvSel=$("writtenLevelSelect"); subjectsForLevel(lvSel?lvSel.value:"HSC").forEach(s=>{const o=document.createElement("option");o.value=s.key;o.textContent=s.label;ss.appendChild(o)}); if(old && [...ss.options].some(o=>o.value===old)) ss.value=old; updateWrittenChapterOptions(); }
 function updateWrittenChapterOptions(){ const sub=$("writtenSubjectSelect").value, cs=$("writtenChapterSelect"), old=cs.value; cs.innerHTML=""; Object.keys((examData[sub]||{chapters:{}}).chapters||{}).forEach(ch=>{const o=document.createElement("option");o.value=ch;o.textContent=ch;cs.appendChild(o)}); if(old && [...cs.options].some(o=>o.value===old)) cs.value=old; }
 let editingWrittenExamId=null;
 async function loadWrittenAdminList(){
   const box=$("writtenAdminList"); box.innerHTML='<div class="mat-empty">⏳ Loading...</div>';
-  const {data,error}=await supabaseClient.from("written_exams").select("*").order("created_at",{ascending:false});
+  const {data,error}=await supabaseClient.from("written_exams").select("id,subject,chapter,title,time_minutes,total_marks,questions,active,created_at,updated_at").order("created_at",{ascending:false});
   if(error){console.error(error);box.innerHTML='<div class="empty-profile">Could not load written exams. Check SQL/RLS setup.</div>';return;}
   if(!data.length){box.innerHTML='<div class="empty-profile">No written exams created yet.</div>';return;}
-  box.innerHTML=""; data.forEach(ex=>{const card=document.createElement("div");card.className="written-submit-card"; const h=document.createElement("h4");h.textContent=ex.title;const p=document.createElement("p");p.textContent=`${ex.level||"HSC"} • ${ex.subject} → ${ex.chapter} • ${ex.questions.length} questions • ${ex.time_minutes} min • ${ex.total_marks} marks • ${ex.active?"Active":"Hidden"}`;const actions=document.createElement("div");actions.className="action-row";actions.style.margin="12px 0 0";actions.innerHTML=`<button class="btn btn-ghost" data-lb="${ex.id}">🏆 Leaderboard</button><button class="btn btn-ghost" data-edit="${ex.id}">✏️ Edit</button><button class="btn btn-ghost" data-toggle="${ex.id}">${ex.active?"Hide":"Activate"}</button><button class="btn" data-delete="${ex.id}" style="color:#dc2626">Delete</button>`;card.append(h,p,actions);box.appendChild(card);});
+  box.innerHTML=""; data.forEach(ex=>{const card=document.createElement("div");card.className="written-submit-card"; const h=document.createElement("h4");h.textContent=ex.title;const p=document.createElement("p");p.textContent=`${levelOf(ex.subject)} • ${plainName(ex.subject)} → ${ex.chapter} • ${ex.questions.length} questions • ${ex.time_minutes} min • ${ex.total_marks} marks • ${ex.active?"Active":"Hidden"}`;const actions=document.createElement("div");actions.className="action-row";actions.style.margin="12px 0 0";actions.innerHTML=`<button class="btn btn-ghost" data-lb="${ex.id}">🏆 Leaderboard</button><button class="btn btn-ghost" data-edit="${ex.id}">✏️ Edit</button><button class="btn btn-ghost" data-toggle="${ex.id}">${ex.active?"Hide":"Activate"}</button><button class="btn" data-delete="${ex.id}" style="color:#dc2626">Delete</button>`;card.append(h,p,actions);box.appendChild(card);});
   box.querySelectorAll('[data-lb]').forEach(b=>b.addEventListener('click',()=>showWrittenLeaderboard(b.dataset.lb,data.find(x=>x.id===b.dataset.lb))));box.querySelectorAll('[data-edit]').forEach(b=>b.addEventListener('click',()=>editWrittenExam(data.find(x=>x.id===b.dataset.edit))));
   box.querySelectorAll('[data-toggle]').forEach(b=>b.addEventListener('click',()=>toggleWrittenExam(b.dataset.toggle,data.find(x=>x.id===b.dataset.toggle).active)));
   box.querySelectorAll('[data-delete]').forEach(b=>b.addEventListener('click',()=>deleteWrittenExam(b.dataset.delete)));
 }
-function editWrittenExam(ex){ editingWrittenExamId=ex.id; populateWrittenFormSubjects(); if($("writtenLevelSelect")) $("writtenLevelSelect").value=ex.level||"HSC"; $("writtenSubjectSelect").value=ex.subject; updateWrittenChapterOptions(); $("writtenChapterSelect").value=ex.chapter; $("writtenTitleInput").value=ex.title; $("writtenTimeInput").value=ex.time_minutes; $("writtenMarksInput").value=ex.total_marks; $("writtenActiveInput").value=String(!!ex.active); $("writtenQuestionsInput").value=(ex.questions||[]).join("\n"); $("writtenAdminFormTitle").textContent="Edit Written Exam"; $("saveWrittenExamBtn").textContent="💾 Update Written Exam"; $("cancelWrittenEditBtn").hidden=false; window.scrollTo({top:0,behavior:"smooth"}); }
+function editWrittenExam(ex){ editingWrittenExamId=ex.id; if($("writtenLevelSelect")) $("writtenLevelSelect").value=levelOf(ex.subject); populateWrittenFormSubjects(); $("writtenSubjectSelect").value=ex.subject; updateWrittenChapterOptions(); $("writtenChapterSelect").value=ex.chapter; $("writtenTitleInput").value=ex.title; $("writtenTimeInput").value=ex.time_minutes; $("writtenMarksInput").value=ex.total_marks; $("writtenActiveInput").value=String(!!ex.active); $("writtenQuestionsInput").value=(ex.questions||[]).join("\n"); $("writtenAdminFormTitle").textContent="Edit Written Exam"; $("saveWrittenExamBtn").textContent="💾 Update Written Exam"; $("cancelWrittenEditBtn").hidden=false; window.scrollTo({top:0,behavior:"smooth"}); }
 function resetWrittenForm(){ editingWrittenExamId=null; $("writtenTitleInput").value=""; $("writtenTimeInput").value=60; $("writtenMarksInput").value=50; $("writtenActiveInput").value="true"; $("writtenQuestionsInput").value=""; $("writtenAdminFormTitle").textContent="Create Written Exam"; $("saveWrittenExamBtn").textContent="💾 Save Written Exam"; $("cancelWrittenEditBtn").hidden=true; }
 async function saveWrittenExam(){
  if(!isAdmin()) return;
  const wasEditing=!!editingWrittenExamId;
  const questions=$("writtenQuestionsInput").value.split(/\n+/).map(x=>x.trim()).filter(Boolean);
- const payload={level:($("writtenLevelSelect")?$("writtenLevelSelect").value:"HSC"),subject:$("writtenSubjectSelect").value,chapter:$("writtenChapterSelect").value,title:$("writtenTitleInput").value.trim(),time_minutes:Number($("writtenTimeInput").value),total_marks:Number($("writtenMarksInput").value),questions,active:$("writtenActiveInput").value==="true"};
+ const payload={subject:$("writtenSubjectSelect").value,chapter:$("writtenChapterSelect").value,title:$("writtenTitleInput").value.trim(),time_minutes:Number($("writtenTimeInput").value),total_marks:Number($("writtenMarksInput").value),questions,active:$("writtenActiveInput").value==="true"};
  if(!payload.title||!questions.length||payload.time_minutes<1||payload.total_marks<1){toast("Enter title, at least one question, time, and total marks.","warning",3200);return;}
- const runSave=(pl)=>wasEditing?supabaseClient.from("written_exams").update(pl).eq("id",editingWrittenExamId):supabaseClient.from("written_exams").insert(pl);
- let {error}=await runSave(payload);
- if(error && /level/i.test(error.message||"")){ const pl2={...payload}; delete pl2.level; ({error}=await runSave(pl2)); if(!error) toast("Saved, but the Level column is missing. Run setup-v39.sql in Supabase so SSC/Admission work.","warning",5200); }
+ const q=wasEditing?supabaseClient.from("written_exams").update(payload).eq("id",editingWrittenExamId):supabaseClient.from("written_exams").insert(payload);
+ const {error}=await q;
  if(error){console.error(error);toast("Could not save written exam.","error",3200);return;}
  if(!wasEditing && payload.active){void sendArbijoyPushEvent({event:"exam_created",subject:payload.subject,chapter:payload.chapter,title:payload.title});}
  toast(wasEditing?"Written exam updated":"Written exam created","success");resetWrittenForm();await loadWrittenAdminList();
@@ -5463,7 +5495,7 @@ setTimeout(()=>{
  function attachPanels(){addFeedbackPanel('screen-result','mcq');addFeedbackPanel('screen-written-result','written');}
  const obs=new MutationObserver(()=>{attachPanels();});['screen-result','screen-written-result'].forEach(id=>{if($(id))obs.observe($(id),{attributes:true,attributeFilter:['hidden']});});attachPanels();
  async function loadInbox(){const box=$('messageInboxList'),c=client();if(!box||!c)return;box.innerHTML='<div class="empty-profile">Loading messages…</div>';try{const uid=await userId(),admin=!!profile()?.is_admin;let q=c.from('exam_messages').select('id,user_id,username,exam_title,subject,message,admin_reply,replied_at,user_reply,user_replied_at,created_at,status,sender_id,sender_role').order('created_at',{ascending:false}).limit(100);if(!admin)q=q.eq('user_id',uid);const {data,error}=await q;if(error)throw error;if(!data?.length){box.innerHTML='<div class="empty-profile">এখনো কোনো মেসেজ নেই।</div>';return;}if(!admin&&data.some(m=>m.sender_role)){const dm=data.filter(m=>m.sender_role).sort((a,b)=>new Date(a.created_at)-new Date(b.created_at));box.innerHTML='<div class="chat-thread" id="studentDirectThread"></div><form id="studentDirectForm" class="chat-compose"><textarea name="message" maxlength="3000" required placeholder="Admin-কে উত্তর লিখো…"></textarea><button class="btn btn-primary" type="submit">Send ➤</button></form>';const thread=$('studentDirectThread');dm.forEach(m=>{const b=document.createElement('div');b.className='chat-bubble '+(m.sender_role==='student'?'mine':'theirs');b.innerHTML='<div>'+esc(m.message)+'</div><small>'+esc(m.sender_role==='admin'?'Admin':(m.username||'You'))+' · '+(m.created_at?new Date(m.created_at).toLocaleString():'')+'</small>';thread.appendChild(b);});thread.scrollTop=thread.scrollHeight;$('studentDirectForm').onsubmit=async e=>{e.preventDefault();const f=e.currentTarget,txt=f.elements.message.value.trim();if(!txt)return;const btn=f.querySelector('button');btn.disabled=true;try{const me=await userId(),pr=profile()||{};const {error}=await c.from('exam_messages').insert({user_id:me,username:pr.username||'Student',exam_title:'Direct message',subject:'Direct chat',message:txt,status:'open',sender_id:me,sender_role:'student'});if(error)throw error;f.reset();await loadInbox();}catch(err){alert('Reply পাঠানো যায়নি: '+err.message);}finally{btn.disabled=false;}};return;}box.innerHTML='';data.forEach(m=>{const el=document.createElement('article');el.className='admin-message-item';el.innerHTML=`<div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><strong>${admin?'👤 '+esc(m.username||'Student'):'💬 '+esc(m.exam_title||'Exam')}</strong><span class="pill">${esc(m.status||'open')}</span></div><small>${esc(m.exam_title||'Exam')} · ${esc(m.subject||'General')} · ${m.created_at?new Date(m.created_at).toLocaleString():''}</small><p><b>${admin?'Student message':'Your message'}:</b><br>${esc(m.message)}</p>${m.admin_reply?`<div class="admin-reply-box"><strong>✉️ Reply from Admin</strong><p>${esc(m.admin_reply)}</p><small>${m.replied_at?new Date(m.replied_at).toLocaleString():''}</small></div>`:''}${m.user_reply?`<div class="admin-reply-box"><strong>💬 Reply from User</strong><p>${esc(m.user_reply)}</p><small>${m.user_replied_at?new Date(m.user_replied_at).toLocaleString():''}</small></div>`:''}${!admin?`<div style="margin-top:10px"><label>Reply to Admin<textarea data-userreply="${esc(m.id)}" maxlength="3000" placeholder="Admin-কে উত্তর লিখো…">${esc(m.user_reply||'')}</textarea></label><button class="btn btn-primary" data-senduserreply="${esc(m.id)}">↩ Send reply</button></div>`:''}${admin?`<div style="margin-top:10px"><label>Reply to ${esc(m.username||'Student')}<textarea data-replytext="${esc(m.id)}" maxlength="3000" placeholder="Write a reply…">${esc(m.admin_reply||'')}</textarea></label><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button class="btn btn-primary" data-sendreply="${esc(m.id)}">↩ Send reply</button><button class="btn btn-ghost" data-resolve="${esc(m.id)}">✓ Mark resolved</button></div></div>`:''}`;
- if(!admin){el.querySelector('[data-senduserreply]')?.addEventListener('click',async ev=>{const reply=el.querySelector('[data-userreply]').value.trim();if(!reply){alert('Reply লিখো।');return;}ev.currentTarget.disabled=true;try{const {error}=await c.from('exam_messages').update({user_reply:reply,user_replied_at:new Date().toISOString(),status:'open'}).eq('id',m.id).eq('user_id',await userId());if(error)throw error;await loadInbox();}catch(e){alert('Reply পাঠানো যায়নি: '+e.message);}finally{ev.currentTarget.disabled=false;}});}if(admin){el.querySelector('[data-sendreply]').addEventListener('click',async ev=>{const id=ev.currentTarget.dataset.sendreply,reply=el.querySelector('[data-replytext]').value.trim();if(!reply){alert('Reply লিখুন।');return;}ev.currentTarget.disabled=true;try{const {error}=await c.from('exam_messages').update({admin_reply:reply,replied_at:new Date().toISOString(),status:'replied'}).eq('id',id);if(error)throw error;await loadInbox();}catch(e){alert('Reply পাঠানো যায়নি: '+e.message);}finally{ev.currentTarget.disabled=false;}});el.querySelector('[data-resolve]').addEventListener('click',async ev=>{try{const {error}=await c.from('exam_messages').update({status:'resolved'}).eq('id',m.id);if(error)throw error;await loadInbox();}catch(e){alert('Status update failed: '+e.message);}});}box.appendChild(el);});}catch(e){box.innerHTML='<p style="color:#dc2626">মেসেজ লোড হয়নি: '+esc(e.message)+'<br>Supabase SQL setup ও RLS policy যাচাই করো।</p>';}}
+ if(!admin){el.querySelector('[data-senduserreply]')?.addEventListener('click',async ev=>{const reply=el.querySelector('[data-userreply]').value.trim();if(!reply){alert('Reply লিখো।');return;}ev.currentTarget.disabled=true;try{const {error}=await c.from('exam_messages').update({user_reply:reply,user_replied_at:new Date().toISOString(),status:'open'}).eq('id',m.id).eq('user_id',await userId());if(error)throw error;await loadInbox();}catch(e){alert('Reply পাঠানো যায়নি: '+e.message);}finally{ev.currentTarget.disabled=false;}});}if(admin){el.querySelector('[data-sendreply]').addEventListener('click',async ev=>{const id=ev.currentTarget.dataset.sendreply,reply=el.querySelector('[data-replytext]').value.trim();if(!reply){alert('Reply লিখুন।');return;}ev.currentTarget.disabled=true;try{const {error}=await c.from('exam_messages').update({admin_reply:reply,replied_at:new Date().toISOString(),status:'replied'}).eq('id',id);if(error)throw error;void sendArbijoyPushEvent({event:'message_sent',user_id:m.user_id,title:'💬 New reply from your teacher',body:reply.slice(0,110)});await loadInbox();}catch(e){alert('Reply পাঠানো যায়নি: '+e.message);}finally{ev.currentTarget.disabled=false;}});el.querySelector('[data-resolve]').addEventListener('click',async ev=>{try{const {error}=await c.from('exam_messages').update({status:'resolved'}).eq('id',m.id);if(error)throw error;await loadInbox();}catch(e){alert('Status update failed: '+e.message);}});}box.appendChild(el);});}catch(e){box.innerHTML='<p style="color:#dc2626">মেসেজ লোড হয়নি: '+esc(e.message)+'<br>Supabase SQL setup ও RLS policy যাচাই করো।</p>';}}
  function openMessages(){if(!profile()){alert('Messages দেখতে আগে login করো।');return;}const admin=!!profile()?.is_admin;try{localStorage.setItem('examhub_msg_seen_'+(profile()?.user_id||'current')+'_'+(admin?'admin':'user'),new Date().toISOString());}catch(e){}document.querySelectorAll('.wrap > section').forEach(s=>s.hidden=true);if($('screen-messages'))$('screen-messages').hidden=false;$('messagesHeading').textContent=admin?'📨 Student Messages':'💬 Message';$('messagesSubheading').textContent=admin?'Student complaints, messages and replies.':'তোমার পাঠানো মেসেজ ও Reply from Admin এখানে দেখাবে।';$('messagesListTitle').textContent=admin?'Student complaints inbox':'Your messages & replies';if($('newMessageCard'))$('newMessageCard').hidden=admin;$('topSub').textContent='Messages';history.pushState({screen:'messages'},'','#messages');loadInbox();userId().then(uid=>{try{localStorage.setItem('examhub_msg_seen_'+uid+'_'+(admin?'admin':'user'),new Date().toISOString());}catch(e){}updateNav();}).catch(()=>{});window.scrollTo({top:0,behavior:'smooth'});}
  $('standaloneMessageForm')?.addEventListener('submit',async e=>{e.preventDefault();const form=e.currentTarget,status=$('standaloneMessageStatus'),btn=form.querySelector('button[type=submit]');try{const c=client(),uid=await userId(),msg=form.elements.message.value.trim();if(!msg)throw Error('Message লিখতে হবে।');btn.disabled=true;status.textContent='Sending…';const pr=profile()||{};const {error}=await c.from('exam_messages').insert({user_id:uid,username:pr.username||'Student',exam_title:'General message',subject:form.elements.subject.value.trim()||'General',message:msg,status:'open'});if(error)throw error;form.reset();status.textContent='✅ Message sent!';await loadInbox();}catch(err){status.textContent='পাঠানো যায়নি: '+err.message;}finally{btn.disabled=false;}});$('navMessagesBtn')?.addEventListener('click',openMessages);$('refreshMessagesBtn')?.addEventListener('click',loadInbox);$('backFromMessages')?.addEventListener('click',()=>{if(profile()?.is_admin)showAdminDashboard();else{hideAllScreens();$('screen-subjects').hidden=false;$('topSub').textContent='Choose a subject to begin';}});
  let activeDirectUser=null,activeDirectName='Student';
@@ -5473,7 +5505,7 @@ setTimeout(()=>{
    $('messagesHeading').textContent='💬 Chat with '+activeDirectName;$('messagesSubheading').textContent='Private conversation';$('messagesListTitle').textContent='Conversation';$('newMessageCard').hidden=true;
    const box=$('messageInboxList');box.innerHTML='<div class="chat-thread" id="directChatThread">Loading conversation…</div><form id="directChatForm" class="chat-compose"><textarea name="message" maxlength="3000" required placeholder="Message লিখুন…"></textarea><button class="btn btn-primary" type="submit">Send ➤</button></form>';
    history.pushState({screen:'messages',userId:targetId},'','#messages');await loadDirectConversation();
-   $('directChatForm').onsubmit=async e=>{e.preventDefault();const form=e.currentTarget,txt=form.elements.message.value.trim();if(!txt)return;const btn=form.querySelector('button');btn.disabled=true;try{const uid=await userId(),{error}=await client().from('exam_messages').insert({user_id:activeDirectUser,username:activeDirectName,exam_title:'Direct message',subject:'Direct chat',message:txt,status:'open',sender_id:uid,sender_role:'admin'});if(error)throw error;form.reset();await loadDirectConversation();}catch(err){alert('Message পাঠানো যায়নি: '+err.message);}finally{btn.disabled=false;}};
+   $('directChatForm').onsubmit=async e=>{e.preventDefault();const form=e.currentTarget,txt=form.elements.message.value.trim();if(!txt)return;const btn=form.querySelector('button');btn.disabled=true;try{const uid=await userId(),{error}=await client().from('exam_messages').insert({user_id:activeDirectUser,username:activeDirectName,exam_title:'Direct message',subject:'Direct chat',message:txt,status:'open',sender_id:uid,sender_role:'admin'});if(error)throw error;void sendArbijoyPushEvent({event:'message_sent',user_id:activeDirectUser,title:'💬 New message from your teacher',body:txt.slice(0,110)});form.reset();await loadDirectConversation();}catch(err){alert('Message পাঠানো যায়নি: '+err.message);}finally{btn.disabled=false;}};
  };
  async function loadDirectConversation(){const box=$('directChatThread');if(!box||!activeDirectUser)return;try{const uid=await userId(),{data,error}=await client().from('exam_messages').select('id,user_id,username,message,created_at,sender_id,sender_role').eq('user_id',activeDirectUser).not('sender_role','is',null).order('created_at',{ascending:true}).limit(300);if(error)throw error;box.innerHTML='';(data||[]).forEach(m=>{const b=document.createElement('div');b.className='chat-bubble '+(m.sender_id===uid?'mine':'theirs');b.innerHTML='<div>'+esc(m.message)+'</div><small>'+esc(m.sender_role==='admin'?'Admin':(m.username||'Student'))+' · '+(m.created_at?new Date(m.created_at).toLocaleString(): '')+'</small>';box.appendChild(b);});if(!data?.length)box.innerHTML='<div class="empty-profile">এখনো কোনো মেসেজ নেই। কথোপকথন শুরু করো।</div>';box.scrollTop=box.scrollHeight;}catch(e){box.innerHTML='<p>Conversation load হয়নি: '+esc(e.message)+'</p>';}}
  async function updateNav(){const b=$('navMessagesBtn');if(!b)return;const pr=profile();b.hidden=!pr;const label=pr?.is_admin?'📨 Message':'💬 Message';if(!b.querySelector('.message-unread-badge'))b.innerHTML=label+'<span class="message-unread-badge" hidden>0</span>';else b.childNodes[0].textContent=label+' ';if(!pr||!client())return;try{const c=client(),uid=await userId(),key='examhub_msg_seen_'+uid+'_'+(pr.is_admin?'admin':'user');let seen=0;try{seen=Date.parse(localStorage.getItem(key)||'')||0;}catch(e){}let q=c.from('exam_messages').select('id,status,admin_reply,user_reply,user_id,created_at,replied_at,user_replied_at,sender_role,sender_id');if(pr.is_admin)q=q.or('created_at.gt.'+new Date(seen).toISOString()+',user_replied_at.gt.'+new Date(seen).toISOString());else q=q.eq('user_id',uid);const {data,error}=await q;if(error)throw error;const count=(data||[]).filter(m=>pr.is_admin?(Math.max(Date.parse(m.created_at||0)||0,Date.parse(m.user_replied_at||0)||0)>seen):((m.sender_role==='admin' || !!m.admin_reply) && Math.max(Date.parse(m.created_at||0)||0,Date.parse(m.replied_at||0)||0)>seen)).length;const badge=b.querySelector('.message-unread-badge');if(badge){badge.hidden=count<1;badge.textContent=count>99?'99+':String(count);}}catch(e){const badge=b.querySelector('.message-unread-badge');if(badge)badge.hidden=true;}}setInterval(updateNav,12000);updateNav();
@@ -5939,7 +5971,7 @@ setTimeout(()=>{
  }
 
  /* ---------- wiring ---------- */
- $('liveCreateForm')?.addEventListener('submit',async e=>{e.preventDefault();if(!admin())return;const btn=$('liveCreateForm').querySelector('button[type="submit"]');btn.disabled=true;btn.textContent='Starting…';try{const r=await api('create',{title:$('liveTitle').value.trim(),subject:$('liveSubject').value.trim(),description:$('liveDescription').value.trim()});$('liveCreateForm').reset();activeClass=r.class_id;await connectRoom(r,true);}catch(err){alert('ক্লাস তৈরি হয়নি: '+err.message);showList();}finally{btn.disabled=false;btn.textContent='Create & Start Live';}});
+ $('liveCreateForm')?.addEventListener('submit',async e=>{e.preventDefault();if(!admin())return;const btn=$('liveCreateForm').querySelector('button[type="submit"]');btn.disabled=true;btn.textContent='Starting…';try{const r=await api('create',{title:$('liveTitle').value.trim(),subject:$('liveSubject').value.trim(),description:$('liveDescription').value.trim()});$('liveCreateForm').reset();activeClass=r.class_id;try{if(typeof sendArbijoyPushEvent==='function')void sendArbijoyPushEvent({event:'live_started',title:$('liveTitle').value||r.title||'Live class',subject:r.subject||'',class_id:r.class_id});}catch(e){}await connectRoom(r,true);}catch(err){alert('ক্লাস তৈরি হয়নি: '+err.message);showList();}finally{btn.disabled=false;btn.textContent='Create & Start Live';}});
  $('refreshLiveClasses')?.addEventListener('click',loadClasses);
  $('liveSoundBtn')?.addEventListener('click',async()=>{try{await room.startAudio();}catch(e){}$('liveSoundBtn').hidden=room?room.canPlaybackAudio!==false:true;$('liveAudioSink').querySelectorAll('audio').forEach(a=>{const p=a.play();if(p&&p.catch)p.catch(()=>{});});});
  $('liveMicBtn')?.addEventListener('click',async()=>{if(!room)return;try{await room.localParticipant.setMicrophoneEnabled(!room.localParticipant.isMicrophoneEnabled);micOnSince=Date.now();micPeak=0;micWarned=false;}catch(e){status('Microphone: '+e.message);}syncButtons();});
@@ -6672,22 +6704,19 @@ html:root:root body #akMarks .ak-hint{margin-top:6px;font-size:13px;color:var(--
  function G(n){try{return (new Function('return typeof '+n+'!=="undefined"?'+n+':undefined'))();}catch(e){return undefined;}}
  function cl(){return G('supabaseClient');}
  function note(m,t){try{toast(m,t||'info',3200);}catch(e){alert(m);}}
- function curLevel(){var S=G('state');return (S&&S.selectedLevel)||'HSC';}
- function itemOf(r){return r.type==='video'?{type:'video',title:r.title,youtubeId:r.url,_id:r.id,_createdAt:r.created_at}:{type:'pdf',title:r.title,url:r.url,_id:r.id,_createdAt:r.created_at};}
  function merge(){
   var md=G('materialsData');if(!md)return;
   merged.forEach(function(m){var a=md[m.s]&&md[m.s][m.c];if(a){var i=a.indexOf(m.item);if(i>-1)a.splice(i,1);}});merged=[];
-  var lv=curLevel();
   dbRows.forEach(function(r){
-   if((r.level||'HSC')!==lv)return;
    if(!md[r.subject])md[r.subject]={};if(!md[r.subject][r.chapter])md[r.subject][r.chapter]=[];
-   var it=itemOf(r);md[r.subject][r.chapter].push(it);merged.push({s:r.subject,c:r.chapter,item:it});
+   var it=r.type==='video'?{type:'video',title:r.title,youtubeId:r.url,_id:r.id,_createdAt:r.created_at}:{type:'pdf',title:r.title,url:r.url,_id:r.id,_createdAt:r.created_at};
+   md[r.subject][r.chapter].push(it);merged.push({s:r.subject,c:r.chapter,item:it});
   });
  }
  function ready(){window.__drMatReady=true;if(window.drNewBadges)window.drNewBadges.decorate();}
  function load(){
   var c=cl();if(!c){return;}
-  c.from(TABLE).select('*').order('created_at',{ascending:true}).then(function(r){
+  c.from(TABLE).select('id,subject,chapter,type,title,url,created_at').order('created_at',{ascending:true}).then(function(r){
    if(r&&!r.error&&Array.isArray(r.data)){dbRows=r.data;merge();renderList();}
    else if(r&&r.error)console.debug('study_materials not available yet:',r.error.message);
    ready();
@@ -6705,7 +6734,7 @@ html:root:root body #akMarks .ak-hint{margin-top:6px;font-size:13px;color:var(--
  }
  var subjSel,chapSel,typeSel,titleIn,urlIn,listBox;
  function fillSubjects(){
-  var ed=G('examData')||{};subjSel.innerHTML='';Object.keys(ed).forEach(function(s){var o=document.createElement('option');o.value=s;o.textContent=s;subjSel.appendChild(o);});fillChapters();
+  var lvl=(document.getElementById('matLevel')||{}).value||'HSC';var list=window.subjectsForLevel?window.subjectsForLevel(lvl):Object.keys(G('examData')||{}).map(function(s){return{key:s,label:s};});subjSel.innerHTML='';list.forEach(function(s){var o=document.createElement('option');o.value=s.key;o.textContent=s.label;subjSel.appendChild(o);});fillChapters();
  }
  function fillChapters(){
   var ed=G('examData')||{},ch=(ed[subjSel.value]&&ed[subjSel.value].chapters)||{};chapSel.innerHTML='';
@@ -6717,7 +6746,7 @@ html:root:root body #akMarks .ak-hint{margin-top:6px;font-size:13px;color:var(--
   dbRows.slice().reverse().forEach(function(r){
    var row=document.createElement('div');row.className='mat-admin-item';
    var ic=document.createElement('div');ic.className='mi-ic';ic.textContent=r.type==='video'?'▶️':'📄';
-   var tx=document.createElement('div');tx.className='mi-tx';var a=document.createElement('strong');a.textContent=r.title;var b=document.createElement('small');b.textContent=(r.level||'HSC')+' • '+r.subject+' → '+r.chapter;tx.appendChild(a);tx.appendChild(b);
+   var tx=document.createElement('div');tx.className='mi-tx';var a=document.createElement('strong');a.textContent=r.title;var b=document.createElement('small');b.textContent=(window.levelOf?levelOf(r.subject):'HSC')+' • '+(window.plainName?plainName(r.subject):r.subject)+' → '+r.chapter;tx.appendChild(a);tx.appendChild(b);
    var del=document.createElement('button');del.type='button';del.textContent='🗑 Delete';
    del.addEventListener('click',async function(){
     var ok=true;try{ok=await customConfirm('Delete "'+r.title+'"? Students will no longer see it.',{okText:'Yes, delete',cancelText:'Keep',icon:'🗑️'});}catch(e){}
@@ -6740,16 +6769,14 @@ html:root:root body #akMarks .ak-hint{margin-top:6px;font-size:13px;color:var(--
    '<div id="matAdminList" class="mat-admin-list"></div>';
   sec.appendChild(card);
   subjSel=card.querySelector('#matSubject');chapSel=card.querySelector('#matChapter');typeSel=card.querySelector('#matType');titleIn=card.querySelector('#matTitle');urlIn=card.querySelector('#matUrl');listBox=card.querySelector('#matAdminList');
-  subjSel.addEventListener('change',fillChapters);fillSubjects();renderList();
+  subjSel.addEventListener('change',fillChapters);card.querySelector('#matLevel').addEventListener('change',fillSubjects);fillSubjects();renderList();
   card.querySelector('#matAddForm').addEventListener('submit',async function(e){
    e.preventDefault();var btn=card.querySelector('#matAddBtn'),type=typeSel.value,link=fixLink(type,urlIn.value);
    if(!link){note(type==='video'?'Please paste a valid YouTube link.':'Please paste a valid link starting with https://','warning');return;}
    if(!subjSel.value||!chapSel.value){note('Choose a subject and a chapter first.','warning');return;}
    btn.disabled=true;
    try{
-    var row={level:card.querySelector('#matLevel').value,subject:subjSel.value,chapter:chapSel.value,type:type,title:titleIn.value.trim(),url:link};
-    var res=await cl().from(TABLE).insert(row).select();
-    if(res.error&&/level/i.test(res.error.message||'')){delete row.level;res=await cl().from(TABLE).insert(row).select();if(!res.error)note('Saved, but the Level column is missing. Run setup-v39.sql in Supabase so SSC/Admission work.','warning');}
+    var res=await cl().from(TABLE).insert({subject:subjSel.value,chapter:chapSel.value,type:type,title:titleIn.value.trim(),url:link}).select();
     if(res.error)throw res.error;
     note('✅ Material added. Students can see it now.','success');titleIn.value='';urlIn.value='';load();
    }catch(err){
@@ -6761,7 +6788,7 @@ html:root:root body #akMarks .ak-hint{margin-top:6px;font-size:13px;color:var(--
  }
  function init(){buildAdminCard();setTimeout(load,900);setInterval(load,120000);setTimeout(function(){if(!window.__drMatReady)ready();},5000);
   var pb=document.getElementById('profileBtn');if(pb)new MutationObserver(function(){setTimeout(load,900);}).observe(pb,{attributes:true,attributeFilter:['hidden']});
-  window.drMaterials={reload:load,remerge:function(){merge();},rows:function(){return dbRows;},itemOf:itemOf};}
+  window.drMaterials={reload:load};}
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
 </script>
@@ -6778,18 +6805,14 @@ html:root:root body #akMarks .ak-hint{margin-top:6px;font-size:13px;color:var(--
  function save(){try{localStorage.setItem(PFX+uid(),JSON.stringify(st()));}catch(e){}}
  function items(){
   var out=[],ed=G('examData'),md=G('materialsData');
-  if(ed)Object.keys(ed).forEach(function(s){var ch=(ed[s]&&ed[s].chapters)||{};Object.keys(ch).forEach(function(c){Object.keys((ch[c]&&ch[c].exams)||{}).forEach(function(e){out.push({id:'exam|'+s+'|'+c+'|'+e,s:s,c:c,k:'exam',lv:'ALL'});});});});
-  if(md)Object.keys(md).forEach(function(s){Object.keys(md[s]||{}).forEach(function(c){(md[s][c]||[]).forEach(function(it){if(it&&it._id)return;out.push({id:'mat|'+s+'|'+c+'|'+hash(JSON.stringify(it)),s:s,c:c,k:'mat',lv:'ALL'});});});});
-  var dm=window.drMaterials;if(dm&&dm.rows)dm.rows().forEach(function(r){var it=dm.itemOf(r);out.push({id:'mat|'+r.subject+'|'+r.chapter+'|'+hash(JSON.stringify(it)),s:r.subject,c:r.chapter,k:'mat',lv:r.level||'HSC'});});
-  writtenList.forEach(function(w){out.push({id:'cq|'+w.id,s:w.subject,c:w.chapter,k:'exam',t:w.title,lv:w.level||'HSC'});});
+  if(ed)Object.keys(ed).forEach(function(s){var ch=(ed[s]&&ed[s].chapters)||{};Object.keys(ch).forEach(function(c){Object.keys((ch[c]&&ch[c].exams)||{}).forEach(function(e){out.push({id:'exam|'+s+'|'+c+'|'+e,s:s,c:c,k:'exam'});});});});
+  if(md)Object.keys(md).forEach(function(s){Object.keys(md[s]||{}).forEach(function(c){(md[s][c]||[]).forEach(function(it){out.push({id:'mat|'+s+'|'+c+'|'+hash(JSON.stringify(it)),s:s,c:c,k:'mat'});});});});
+  writtenList.forEach(function(w){out.push({id:'cq|'+w.id,s:w.subject,c:w.chapter,k:'exam',t:w.title});});
   return out;
  }
  function baseline(){var s=st();if(s.base||!writtenReady||!window.__drMatReady)return;items().forEach(function(i){s.subj[i.id]=1;s.chap[i.id]=1;s.sec[i.id]=1;s.item[i.id]=1;});s.base=true;save();}
  function ack(level,pred){var s=st(),ch=false;items().forEach(function(i){if(pred(i)&&!s[level][i.id]){s[level][i.id]=1;ch=true;}});if(ch)save();}
  function unseen(level,pred){if(isAdm())return false;var s=st();if(!s.base)return false;return items().some(function(i){return pred(i)&&!s[level][i.id];});}
- function lv(){var S=G('state');return (S&&S.selectedLevel)||'HSC';}
- function vis(i,L){return i.lv==='ALL'||i.lv===L;}
- function levelOfCard(card){var sec=card.closest&&card.closest('.level-section');return sec?sec.id.replace('level',''):lv();}
  function badge(){var b=document.createElement('span');b.className='new-badge';b.textContent='NEW';return b;}
  function setBadge(host,on){if(!host)return;var ex=host.querySelector(':scope > .new-badge');if(on&&!ex)host.appendChild(badge());else if(!on&&ex)ex.remove();}
  function nameOf(h3){var c=h3.cloneNode(true);c.querySelectorAll('.new-badge').forEach(function(x){x.remove();});return c.textContent.trim();}
@@ -6801,11 +6824,11 @@ html:root:root body #akMarks .ak-hint{margin-top:6px;font-size:13px;color:var(--
   if(busy)return;busy=true;
   try{
    baseline();var S=G('state')||{};
-   document.querySelectorAll('#screen-subjects .subject-card').forEach(function(c){var h=c.querySelector('h3');if(!h)return;var n=nameOf(h);setBadge(h,unseen('subj',function(i){return i.s===n&&vis(i,levelOfCard(c));}));});
-   document.querySelectorAll('#chapterGrid .subject-card').forEach(function(c){var h=c.querySelector('h3');if(!h)return;var n=nameOf(h);setBadge(h,unseen('chap',function(i){return i.s===S.selectedSubject&&i.c===n&&vis(i,lv());}));});
+   document.querySelectorAll('#screen-subjects .subject-card').forEach(function(c){var h=c.querySelector('h3');if(!h)return;var n=c.dataset.key||nameOf(h);setBadge(h,unseen('subj',function(i){return i.s===n;}));});
+   document.querySelectorAll('#chapterGrid .subject-card').forEach(function(c){var h=c.querySelector('h3');if(!h)return;var n=nameOf(h);setBadge(h,unseen('chap',function(i){return i.s===S.selectedSubject&&i.c===n;}));});
    if(S.selectedSubject&&S.selectedChapter){
-    setBadge(document.querySelector('#hubGoExams h3'),unseen('sec',function(i){return i.k==='exam'&&i.s===S.selectedSubject&&i.c===S.selectedChapter&&vis(i,lv());}));
-    setBadge(document.querySelector('#hubGoMaterials h3'),unseen('sec',function(i){return i.k==='mat'&&i.s===S.selectedSubject&&i.c===S.selectedChapter&&vis(i,lv());}));
+    setBadge(document.querySelector('#hubGoExams h3'),unseen('sec',function(i){return i.k==='exam'&&i.s===S.selectedSubject&&i.c===S.selectedChapter;}));
+    setBadge(document.querySelector('#hubGoMaterials h3'),unseen('sec',function(i){return i.k==='mat'&&i.s===S.selectedSubject&&i.c===S.selectedChapter;}));
    }
    document.querySelectorAll('#examGrid .subject-card').forEach(function(c){var h=c.querySelector('h3');if(!h)return;var n=nameOf(h),id=writtenId(S.selectedSubject,S.selectedChapter,n)||('exam|'+S.selectedSubject+'|'+S.selectedChapter+'|'+n);setBadge(h,itemNew(id));});
    var ids=matIds(S.selectedSubject,S.selectedChapter);
@@ -6816,19 +6839,19 @@ html:root:root body #akMarks .ak-hint{margin-top:6px;font-size:13px;color:var(--
  function schedule(d){clearTimeout(tid);tid=setTimeout(decorate,d||90);}
  function track(id,kind){
   var el=document.getElementById(id);if(!el)return;var S=G('state')||{};
-  if(!el.hidden&&!rec[id]&&S.selectedSubject&&S.selectedChapter){rec[id]={s:S.selectedSubject,c:S.selectedChapter,L:lv()};ack('sec',function(i){return i.k===kind&&i.s===rec[id].s&&i.c===rec[id].c&&vis(i,rec[id].L);});}
-  else if(el.hidden&&rec[id]){var r=rec[id];rec[id]=null;ack('item',function(i){return i.k===kind&&i.s===r.s&&i.c===r.c&&vis(i,r.L);});}
+  if(!el.hidden&&!rec[id]&&S.selectedSubject&&S.selectedChapter){rec[id]={s:S.selectedSubject,c:S.selectedChapter};ack('sec',function(i){return i.k===kind&&i.s===rec[id].s&&i.c===rec[id].c;});}
+  else if(el.hidden&&rec[id]){var r=rec[id];rec[id]=null;ack('item',function(i){return i.k===kind&&i.s===r.s&&i.c===r.c;});}
  }
  function onScreens(){
   var S=G('state')||{},sc=document.getElementById('screen-chapters'),hub=document.getElementById('screen-chapterhub');
-  if(sc&&!sc.hidden&&S.selectedSubject)ack('subj',function(i){return i.s===S.selectedSubject&&vis(i,lv());});
-  if(hub&&!hub.hidden&&S.selectedSubject&&S.selectedChapter)ack('chap',function(i){return i.s===S.selectedSubject&&i.c===S.selectedChapter&&vis(i,lv());});
+  if(sc&&!sc.hidden&&S.selectedSubject)ack('subj',function(i){return i.s===S.selectedSubject;});
+  if(hub&&!hub.hidden&&S.selectedSubject&&S.selectedChapter)ack('chap',function(i){return i.s===S.selectedSubject&&i.c===S.selectedChapter;});
   track('screen-exams','exam');track('screen-materials','mat');
   schedule(60);
  }
  function fetchWritten(){
   var c=G('supabaseClient');if(!c)return;
-  c.from('written_exams').select('*').eq('active',true).then(function(r){if(r&&!r.error&&r.data)writtenList=r.data;writtenReady=true;schedule(10);},function(){writtenReady=true;schedule(10);});
+  c.from('written_exams').select('id,subject,chapter,title').eq('active',true).then(function(r){if(r&&!r.error&&r.data)writtenList=r.data;writtenReady=true;schedule(10);},function(){writtenReady=true;schedule(10);});
  }
  function init(){
   var wrap=document.querySelector('.wrap')||document.body;
@@ -7038,10 +7061,10 @@ html:root:root body [data-study-page] .btn-primary *{color:#fff!important}
  if(!$('screen-study')) return;
  const TABLE='student_study_data';
  const DAYS=['Saturday','Sunday','Monday','Tuesday','Wednesday','Thursday','Friday'];
- const PAGES={home:'screen-study',timer:'screen-study-timer',routine:'screen-study-routine',goals:'screen-study-goals',progress:'screen-study-progress',record:'screen-study-record'};
- const TITLES={home:'Study Space',timer:'Focus Timer',routine:'Weekly Routine',goals:'Goals',progress:'Subject Progress',record:'Study Record'};
- const blank=()=>({routine:[],goals:[],progress:[],sessions:[],routineDone:{},progressLog:[]});
- const norm=raw=>{const d={...blank(),...(raw||{})};['routine','goals','progress','sessions','progressLog'].forEach(k=>{if(!Array.isArray(d[k]))d[k]=[];});if(!d.routineDone||typeof d.routineDone!=='object'||Array.isArray(d.routineDone))d.routineDone={};return d;};
+ const PAGES={alarm:'screen-study-alarm',home:'screen-study',timer:'screen-study-timer',routine:'screen-study-routine',goals:'screen-study-goals',progress:'screen-study-progress',record:'screen-study-record'};
+ const TITLES={alarm:'Study Alarm',home:'Study Space',timer:'Focus Timer',routine:'Weekly Routine',goals:'Goals',progress:'Subject Progress',record:'Study Record'};
+ const blank=()=>({routine:[],goals:[],progress:[],sessions:[],routineDone:{},progressLog:[],alarms:[]});
+ const norm=raw=>{const d={...blank(),...(raw||{})};['routine','goals','progress','sessions','progressLog','alarms'].forEach(k=>{if(!Array.isArray(d[k]))d[k]=[];});if(!d.routineDone||typeof d.routineDone!=='object'||Array.isArray(d.routineDone))d.routineDone={};return d;};
  let data=blank(),loaded=false;
  const uid=()=>Math.random().toString(36).slice(2,10)+Date.now().toString(36);
  const esc=v=>String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -7174,7 +7197,7 @@ html:root:root body [data-study-page] .btn-primary *{color:#fff!important}
  }
  function renderAll(){
   $('stSubjects').innerHTML=knownSubjects().map(x=>'<option value="'+esc(x)+'">').join('');
-  renderHome();renderTimerBits();renderRoutine();renderGoals();renderProgress();
+  renderHome();renderTimerBits();renderRoutine();renderGoals();renderProgress();if(typeof renderAlarm==='function')renderAlarm();
  }
  function renderHome(){
   const tk=todayKey(),r=dayRecord(data,tk),goal=Number(data.dailyGoal)||60,name=(me()&&me().username)||'there';
@@ -7429,8 +7452,90 @@ html:root:root body [data-study-page] .btn-primary *{color:#fff!important}
  }
  window.addEventListener('pagehide',flushOnExit);
  document.addEventListener('visibilitychange',()=>{if(document.hidden)persistTimer();else if(T.status==='running')refreshToken();});
- let recTries=0;const recIv=setInterval(()=>{recTries++;if(me()){clearInterval(recIv);recoverTimer();}else if(recTries>120)clearInterval(recIv);},1000);
+ let recTries=0;const recIv=setInterval(()=>{recTries++;if(me()){clearInterval(recIv);recoverTimer();loadData().then(()=>{cacheAlarms();renderAlarm();}).catch(()=>{});}else if(recTries>120)clearInterval(recIv);},1000);
  window.__drAcc={makeAcc,closeAcc};
+
+ /* ---------- ⏰ Study alarms ---------- */
+ let audioCtx=null,beepTimer=null,ringEl=null,ringId=null,vibTimer=null,customAudio=null,customUrl=null;const snoozed={},fired=new Set();
+ const actx=()=>{if(!audioCtx){const C=window.AudioContext||window.webkitAudioContext;if(C)try{audioCtx=new C();}catch(e){}}return audioCtx;};
+ ['pointerdown','keydown','touchstart'].forEach(ev=>document.addEventListener(ev,()=>{const c=actx();if(c&&c.state==='suspended')c.resume().catch(()=>{});},{passive:true}));
+ function idb(){return new Promise((res,rej)=>{try{const r=indexedDB.open('drAlarm',1);r.onupgradeneeded=()=>r.result.createObjectStore('kv');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error);}catch(e){rej(e);}});}
+ async function idbGet(k){try{const db=await idb();return await new Promise(res=>{const t=db.transaction('kv').objectStore('kv').get(k);t.onsuccess=()=>res(t.result||null);t.onerror=()=>res(null);});}catch(e){return null;}}
+ async function idbSet(k,v){try{const db=await idb();return await new Promise(res=>{const t=db.transaction('kv','readwrite');t.objectStore('kv').put(v,k);t.oncomplete=()=>res(true);t.onerror=()=>res(false);});}catch(e){return false;}}
+ async function idbDel(k){try{const db=await idb();return await new Promise(res=>{const t=db.transaction('kv','readwrite');t.objectStore('kv').delete(k);t.oncomplete=()=>res(true);t.onerror=()=>res(false);});}catch(e){return false;}}
+ const AKEY=()=>'drAlarmCache_'+(me()&&me().user_id);
+ function cacheAlarms(){try{localStorage.setItem(AKEY(),JSON.stringify(data.alarms||[]));}catch(e){}}
+ function alarmList(){if(loaded)return data.alarms||[];try{return JSON.parse(localStorage.getItem(AKEY())||'[]');}catch(e){return[];}}
+ const DOW=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+ function repeatText(a){const d=a.days||[];if(!d.length)return 'Once';if(d.length===7)return 'Every day';return d.slice().sort().map(i=>DOW[i]).join(', ');}
+ function renderAlarm(){
+  const box=$('stAlarmList');if(!box)return;const list=(data.alarms||[]).slice().sort((a,b)=>String(a.time).localeCompare(String(b.time)));
+  box.innerHTML=list.length?list.map(a=>'<div class="st-alarm-row"><div class="st-alarm-time">'+esc(a.time)+'</div><div class="st-alarm-main"><strong>'+esc(a.label||'Study time')+'</strong><small>'+repeatText(a)+'</small></div><label class="st-switch"><input type="checkbox" data-atoggle="'+a.id+'"'+(a.enabled?' checked':'')+'><span></span></label><button class="st-mini danger" data-adel="'+a.id+'">Delete</button></div>').join(''):'<div class="st-empty">No alarms yet. Add your first one above.</div>';
+  box.querySelectorAll('[data-atoggle]').forEach(c=>c.onchange=()=>mutate(()=>{const a=data.alarms.find(x=>x.id===c.dataset.atoggle);if(a)a.enabled=c.checked;cacheAlarms();},'Alarm updated ✓'));
+  box.querySelectorAll('[data-adel]').forEach(b=>b.onclick=()=>mutate(()=>{data.alarms=data.alarms.filter(x=>x.id!==b.dataset.adel);cacheAlarms();},'Alarm deleted'));
+  const on=(data.alarms||[]).filter(a=>a.enabled).length;const s=$('stSAlarm');if(s)s.textContent=on?on+' on':'';
+  cacheAlarms();
+ }
+ async function refreshRingtoneInfo(){const r=await idbGet('ringtone');$('stRingName').textContent=r&&r.name?('🎵 '+r.name):'Default alarm tone';$('stRingClear').hidden=!(r&&r.name);}
+ function stopSound(){if(beepTimer){clearInterval(beepTimer);beepTimer=null;}if(vibTimer){clearInterval(vibTimer);vibTimer=null;}try{navigator.vibrate&&navigator.vibrate(0);}catch(e){}if(customAudio){try{customAudio.pause();}catch(e){}customAudio=null;}if(customUrl){URL.revokeObjectURL(customUrl);customUrl=null;}}
+ function beep(){const c=actx();if(!c)return;const t=c.currentTime;[[880,0],[660,.24],[880,.5],[660,.74]].forEach(p=>{const o=c.createOscillator(),g=c.createGain();o.type='square';o.frequency.value=p[0];g.gain.setValueAtTime(.0001,t+p[1]);g.gain.exponentialRampToValueAtTime(.35,t+p[1]+.02);g.gain.exponentialRampToValueAtTime(.0001,t+p[1]+.2);o.connect(g);g.connect(c.destination);o.start(t+p[1]);o.stop(t+p[1]+.22);});}
+ async function startSound(){
+  stopSound();let r=await idbGet('ringtone');
+  if(r&&r.blob){try{customUrl=URL.createObjectURL(r.blob);customAudio=new Audio(customUrl);customAudio.loop=true;customAudio.volume=1;await customAudio.play();}catch(e){customAudio=null;}}
+  if(!customAudio){beep();beepTimer=setInterval(beep,1400);}
+  try{if(navigator.vibrate){navigator.vibrate([600,300,600,300,900]);vibTimer=setInterval(()=>navigator.vibrate([600,300,600,300,900]),3000);}}catch(e){}
+ }
+ async function systemNotice(a){
+  try{if(!('Notification' in window)||Notification.permission!=='granted')return;
+   const reg=navigator.serviceWorker&&await navigator.serviceWorker.getRegistration();
+   const opts={body:a.label||'Time to study!',tag:'dr-alarm-'+a.id,requireInteraction:true,vibrate:[600,300,600,300,900],renotify:true,icon:'icons/icon-192.png'};
+   if(reg&&reg.showNotification)await reg.showNotification('⏰ '+a.time+' — Study alarm',opts);else new Notification('⏰ '+a.time+' — Study alarm',opts);
+  }catch(e){}
+ }
+ function ring(a){
+  if(ringId)return;ringId=a.id;
+  if(!ringEl){ringEl=document.createElement('div');ringEl.id='alarmRing';ringEl.hidden=true;ringEl.innerHTML='<div><div class="ar-ic">⏰</div><div class="ar-time"></div><div class="ar-label"></div><div class="ar-btns"><button class="ar-snooze" type="button">Snooze 5 min</button><button class="ar-stop" type="button">Stop</button></div></div>';document.body.appendChild(ringEl);
+   ringEl.querySelector('.ar-stop').onclick=()=>endRing(false);ringEl.querySelector('.ar-snooze').onclick=()=>endRing(true);}
+  ringEl.querySelector('.ar-time').textContent=a.time;ringEl.querySelector('.ar-label').textContent=a.label||'Time to study!';ringEl.hidden=false;
+  startSound();systemNotice(a);
+ }
+ async function endRing(snooze){
+  const id=ringId;ringId=null;stopSound();if(ringEl)ringEl.hidden=true;
+  try{const reg=navigator.serviceWorker&&await navigator.serviceWorker.getRegistration();if(reg&&reg.getNotifications){(await reg.getNotifications({tag:'dr-alarm-'+id})).forEach(n=>n.close());}}catch(e){}
+  if(snooze)snoozed[id]=Date.now()+5*60000;
+ }
+ function alarmTick(){
+  if(!me()||ringId)return;const list=alarmList(),now=new Date(),nowMin=now.getHours()*60+now.getMinutes(),dk=keyOf(now);
+  for(const a of list){
+   if(!a.enabled)continue;
+   if(snoozed[a.id]&&Date.now()>=snoozed[a.id]){delete snoozed[a.id];ring(a);return;}
+   const [h,m]=String(a.time).split(':').map(Number);if(isNaN(h)||isNaN(m))continue;
+   const diff=(nowMin-(h*60+m)+1440)%1440;if(diff>2)continue;
+   const days=a.days||[];if(days.length&&!days.includes(now.getDay()))continue;
+   const fk=a.id+'|'+dk+'|'+a.time;if(fired.has(fk))continue;fired.add(fk);
+   if(!days.length){a.enabled=false;cacheAlarms();if(loaded){saveData().catch(()=>{});renderAlarm();}}
+   ring(a);return;
+  }
+ }
+ setInterval(alarmTick,1000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)alarmTick();});
+ (function wireAlarmUI(){
+  const chips=$('stAlarmDays');if(!chips)return;
+  chips.innerHTML=[1,2,3,4,5,6,0].map(i=>'<button type="button" data-d="'+i+'">'+DOW[i]+'</button>').join('');
+  chips.addEventListener('click',e=>{const b=e.target.closest('button[data-d]');if(b)b.classList.toggle('on');});
+  $('stAlarmForm').addEventListener('submit',e=>{e.preventDefault();const f=e.currentTarget,time=f.time.value,label=String(f.label.value||'').trim()||'Study time';if(!time)return;
+   const days=[...chips.querySelectorAll('button.on')].map(b=>Number(b.dataset.d));
+   mutate(()=>{data.alarms.push({id:uid(),time,label,days,enabled:true,createdAt:new Date().toISOString()});cacheAlarms();f.reset();chips.querySelectorAll('button').forEach(b=>b.classList.remove('on'));},'Alarm set ⏰');
+   if('Notification' in window&&Notification.permission==='default')Notification.requestPermission().catch(()=>{});});
+  $('stRingFile').addEventListener('change',async e=>{const file=e.target.files&&e.target.files[0];if(!file)return;
+   if(!/^audio\//.test(file.type)&&!/\.(mp3|m4a|aac|wav|ogg|opus|amr)$/i.test(file.name)){toastS('Please choose an audio file (mp3, m4a, wav, ogg).','warning');return;}
+   if(file.size>6*1024*1024){toastS('That file is too large. Choose a ringtone under 6 MB.','warning');return;}
+   const ok=await idbSet('ringtone',{name:file.name,blob:file});toastS(ok?'Ringtone saved ✓':'Could not save the ringtone on this device.',ok?'success':'error');e.target.value='';refreshRingtoneInfo();});
+  $('stRingClear').addEventListener('click',async()=>{await idbDel('ringtone');refreshRingtoneInfo();toastS('Using the default alarm tone','info');});
+  $('stRingTest').addEventListener('click',async()=>{await startSound();setTimeout(stopSound,4000);});
+  $('stNotifyAllow').addEventListener('click',async()=>{if(!('Notification' in window)){toastS('This browser does not support notifications.','warning');return;}const p=await Notification.requestPermission();toastS(p==='granted'?'Alarm notifications allowed ✓':'Notifications are blocked. Allow them in your browser settings.',p==='granted'?'success':'warning');});
+  refreshRingtoneInfo();
+ })();
+
  window.__studySpace={dayRecord,indexDates,mountRecord,norm};
 })();
 </script>
@@ -7604,4 +7709,226 @@ html:root:root body .level-section.open>.level-head{border-color:#7c8cf8;box-sha
 .level-body{padding:18px 2px 8px;animation:stIn .45s cubic-bezier(.22,.8,.3,1)}
 @media(max-width:560px){.level-count{display:none}.level-badge{width:50px;height:50px;font-size:24px}}
 </style>
+<style id="v40-styles">
+/* ===== bottom navigation (phones) ===== */
+.bottom-nav{display:none}
+@media(max-width:700px){
+ html:root:root body .bottom-nav{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:900;gap:2px;justify-content:space-around;padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px));background:var(--dr-card,#fffbf2);border-top:1px solid var(--dr-line,#e2d4b4);box-shadow:0 -10px 30px rgba(70,50,10,.12);border-radius:22px 22px 0 0}
+ .bottom-nav button{position:relative;flex:1;min-width:0;border:0;background:none;color:var(--dr-muted,#5a5645);padding:6px 2px;border-radius:16px;display:flex;flex-direction:column;align-items:center;gap:2px;font:inherit;cursor:pointer}
+ .bottom-nav button[hidden]{display:none}
+ .bn-ic{font-size:22px;line-height:1;transition:transform .15s}
+ .bn-tx{font-size:11px;font-weight:800;letter-spacing:.01em}
+ .bottom-nav button.on{color:var(--dr-ink,#1a1830);background:var(--dr-soft,#eee2c6)}
+ .bottom-nav button.on .bn-ic{transform:translateY(-2px) scale(1.12)}
+ .bottom-nav button:active .bn-ic{transform:scale(.9)}
+ .bn-dot{position:absolute;top:4px;right:calc(50% - 20px);width:10px;height:10px;border-radius:50%;background:#e11d2e;box-shadow:0 0 8px 2px rgba(225,29,46,.65);animation:liveBlink 1.2s ease-in-out infinite}
+ .bn-dot[hidden]{display:none}
+ /* top bar keeps only the less-used buttons */
+ html:root:root body .account-area :is(#navHomeBtn,#profileBtn,#adminBtn,#navMessagesBtn,#navStudyBtn,#navLiveBtn){display:none!important}
+ html:root:root body .wrap{padding-bottom:96px!important}
+ html:root:root body .site-footer{margin-bottom:76px}
+ html:root:root body.dr-in-exam .bottom-nav,html:root:root body.dr-exam-protect .bottom-nav,html:root:root body.live-fs-lock .bottom-nav{display:none!important}
+}
+@media(min-width:701px){html:root:root body #navLiveBtn.has-live:after{content:"";width:9px;height:9px;border-radius:50%;background:#e11d2e;box-shadow:0 0 8px 2px rgba(225,29,46,.65);animation:liveBlink 1.2s ease-in-out infinite}}
+/* ===== MCQ exam protection ===== */
+#examShield{position:fixed;inset:0;z-index:20000;background:#0b0b18;display:grid;place-items:center;text-align:center;color:#fff;padding:24px}
+#examShield[hidden]{display:none}
+#examShield b{display:block;font-size:24px;margin-bottom:10px}#examShield span{display:block;color:#cbd5e1;line-height:1.6;max-width:320px}
+#examWatermark{display:none;position:fixed;inset:0;z-index:9990;pointer-events:none;background-repeat:repeat}
+body.dr-exam-protect #examWatermark{display:block}
+html[data-theme="dark"] #examWatermark{filter:invert(1)}
+body.dr-exam-protect #screen-exam{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+@media print{body.dr-exam-protect *{display:none!important}}
+/* ===== alarm page ===== */
+.st-alarm-row{display:flex;align-items:center;gap:12px;padding:13px;border:1px solid var(--st-line);border-radius:18px;background:var(--st-soft)}
+.st-alarm-time{font:800 26px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--st-ink)}
+.st-alarm-main{flex:1;min-width:0}.st-alarm-main strong{display:block;font-size:14.5px;overflow-wrap:anywhere}.st-alarm-main small{display:block;color:var(--st-muted);font-size:12px;margin-top:2px}
+.st-switch{position:relative;flex:none;width:50px;height:30px}.st-switch input{opacity:0;width:100%;height:100%;position:absolute;inset:0;margin:0;cursor:pointer;z-index:2}
+.st-switch span{position:absolute;inset:0;border-radius:99px;background:var(--st-line);transition:background .2s}.st-switch span:after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.25);transition:transform .2s}
+.st-switch input:checked+span{background:linear-gradient(135deg,#7c8cf8,#5fc8b5)}.st-switch input:checked+span:after{transform:translateX(20px)}
+#alarmRing{position:fixed;inset:0;z-index:21000;display:grid;place-items:center;padding:20px;background:radial-gradient(circle at 50% 30%,#4f46e5,#1e1b4b 70%);color:#fff;text-align:center}
+#alarmRing[hidden]{display:none}
+#alarmRing .ar-ic{font-size:72px;animation:alarmShake .6s infinite}
+#alarmRing .ar-time{font:800 56px/1.1 ui-monospace,monospace;margin:8px 0}#alarmRing .ar-label{font-size:20px;font-weight:700;margin-bottom:26px;overflow-wrap:anywhere}
+#alarmRing .ar-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+#alarmRing button{border:0;border-radius:999px;padding:16px 28px;font-size:17px;font-weight:800;cursor:pointer}
+#alarmRing .ar-stop{background:#fff;color:#1e1b4b}#alarmRing .ar-snooze{background:rgba(255,255,255,.18);color:#fff}
+@keyframes alarmShake{0%,100%{transform:rotate(-14deg)}50%{transform:rotate(14deg)}}
+</style>
+
+<script id="custom-chapters">
+/* Chapters that the admin adds from the website (shown for every subject, mainly SSC / Admission) */
+(function(){
+ const $=id=>document.getElementById(id);
+ let rows=[],added=[];
+ const note=(m,t)=>{try{toast(m,t||'info',3500);}catch(e){alert(m);}};
+ function apply(){
+  added.forEach(a=>{try{const ch=examData[a.s]&&examData[a.s].chapters;if(ch&&ch[a.c]&&ch[a.c]._custom)delete ch[a.c];}catch(e){}});added=[];
+  rows.forEach(r=>{const sub=examData[r.subject];if(!sub)return;sub.chapters=sub.chapters||{};if(!sub.chapters[r.chapter]){sub.chapters[r.chapter]={exams:{},_custom:true};added.push({s:r.subject,c:r.chapter});}});
+  try{renderSubjects();}catch(e){}
+  try{const S=state;if(!$('screen-chapters').hidden&&S.selectedSubject)showChapters(S.selectedSubject);}catch(e){}
+  fillAdmin();
+ }
+ async function load(){
+  if(!window.supabaseClient)return;
+  try{const r=await supabaseClient.from('custom_chapters').select('*').order('created_at',{ascending:true});
+   if(!r.error&&Array.isArray(r.data)){rows=r.data;apply();}else if(r.error)console.debug('custom_chapters not ready:',r.error.message);}catch(e){}
+ }
+ /* ----- admin card (inside the Study Materials page) ----- */
+ let lvSel,subSel,nameIn,listBox;
+ function fillAdmin(){
+  if(!subSel)return;const cur=subSel.value;const list=window.subjectsForLevel?window.subjectsForLevel(lvSel.value):[];
+  subSel.innerHTML='';list.forEach(s=>{const o=document.createElement('option');o.value=s.key;o.textContent=s.label;subSel.appendChild(o);});
+  if(cur&&[...subSel.options].some(o=>o.value===cur))subSel.value=cur;
+  listBox.innerHTML='';
+  const mine=rows.filter(r=>{try{return levelOf(r.subject)===lvSel.value;}catch(e){return true;}});
+  if(!mine.length){listBox.innerHTML='<div class="mat-admin-empty">No chapters added from the website for this level yet.</div>';return;}
+  mine.slice().reverse().forEach(r=>{
+   const row=document.createElement('div');row.className='mat-admin-item';
+   row.innerHTML='<div class="mi-ic">📖</div><div class="mi-tx"><strong></strong><small></small></div>';
+   row.querySelector('strong').textContent=r.chapter;row.querySelector('small').textContent=r.subject;
+   const del=document.createElement('button');del.type='button';del.textContent='🗑 Delete';
+   del.addEventListener('click',async()=>{const ok=await customConfirm('Delete chapter "'+r.chapter+'"? Its exams and materials will be hidden.',{okText:'Yes, delete',cancelText:'Keep',icon:'🗑️'});if(!ok)return;
+    const x=await supabaseClient.from('custom_chapters').delete().eq('id',r.id);if(x.error){note('Could not delete: '+x.error.message,'error');return;}rows=rows.filter(z=>z.id!==r.id);apply();note('Chapter deleted','success');});
+   row.appendChild(del);listBox.appendChild(row);
+  });
+ }
+ function build(){
+  const page=$('screen-admin-materials');if(!page||$('adminChaptersCard'))return;
+  const card=document.createElement('div');card.className='profile-card admin-card';card.id='adminChaptersCard';
+  card.innerHTML='<div class="admin-section-title"><div><h3>➕ Add Chapter</h3><p>SSC / Admission subjects start with no chapters. Add a chapter here, then add its CQ exams and materials.</p></div></div>'+
+   '<form id="chapterAddForm" class="mat-admin-form"><label>Level<select id="chLevel"><option value="SSC">SSC</option><option value="HSC" selected>HSC</option><option value="Admission">Admission</option></select></label><label>Subject<select id="chSubject"></select></label>'+
+   '<label class="wide">Chapter name<input id="chName" maxlength="140" required placeholder="e.g. Chapter 1: Number System"></label><button class="btn btn-primary" type="submit">➕ Add chapter</button></form><div id="chList" class="mat-admin-list"></div>';
+  page.appendChild(card);lvSel=$('chLevel');subSel=$('chSubject');nameIn=$('chName');listBox=$('chList');
+  lvSel.addEventListener('change',fillAdmin);fillAdmin();
+  $('chapterAddForm').addEventListener('submit',async e=>{e.preventDefault();const b=e.target.querySelector('button');
+   if(!subSel.value){note('Choose a subject first.','warning');return;}b.disabled=true;
+   try{const r=await supabaseClient.from('custom_chapters').insert({subject:subSel.value,chapter:nameIn.value.trim()}).select();
+    if(r.error)throw r.error;nameIn.value='';note('✅ Chapter added','success');await load();}
+   catch(err){const m=String(err&&err.message||err);note(/duplicate|unique/i.test(m)?'This chapter already exists.':(/relation|does not exist|schema cache/i.test(m)?'Run setup-v40.sql in Supabase first.':'Could not add: '+m),'error');}
+   b.disabled=false;});
+ }
+ function init(){build();setTimeout(load,1000);setInterval(load,180000);
+  const pb=$('profileBtn');if(pb)new MutationObserver(()=>setTimeout(load,900)).observe(pb,{attributes:true,attributeFilter:['hidden']});
+  window.drChapters={reload:load};}
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+
+<script id="exam-protect">
+/* MCQ exam only: deterrents against screenshots / copying / printing (a browser can never block them 100%) */
+(function(){
+ const $=id=>document.getElementById(id);
+ const exam=()=>$('screen-exam');
+ const active=()=>{const e=exam();return !!(e&&!e.hidden);};
+ let shield=null,wm=null,timer=null;
+ function ensure(){
+  if(!shield){shield=document.createElement('div');shield.id='examShield';shield.innerHTML='<div><b>🔒 Exam hidden</b><span id="examShieldMsg">Screenshots and screen recording are not allowed during the exam.</span></div>';shield.hidden=true;document.body.appendChild(shield);}
+  if(!wm){wm=document.createElement('div');wm.id='examWatermark';wm.setAttribute('aria-hidden','true');document.body.appendChild(wm);}
+ }
+ function paintWatermark(){
+  if(!wm)return;const u=(window.currentProfile&&window.currentProfile.username)||'student';
+  const t=(u+'  •  '+new Date().toLocaleDateString('en-GB')).replace(/[<>&"]/g,'');
+  const svg='<svg xmlns="http://www.w3.org/2000/svg" width="320" height="200"><text x="20" y="110" transform="rotate(-24 160 100)" font-family="Arial,sans-serif" font-size="17" font-weight="700" fill="#000" fill-opacity="0.09">'+t+'</text></svg>';
+  wm.style.backgroundImage='url("data:image/svg+xml;utf8,'+encodeURIComponent(svg)+'")';
+ }
+ function cover(msg,ms){
+  if(!active())return;ensure();$('examShieldMsg').textContent=msg||'Screenshots and screen recording are not allowed during the exam.';shield.hidden=false;
+  clearTimeout(timer);if(ms)timer=setTimeout(()=>{shield.hidden=true;},ms);
+ }
+ function uncover(){if(shield){clearTimeout(timer);shield.hidden=true;}}
+ function sync(){ensure();const on=active();document.body.classList.toggle('dr-exam-protect',on);if(on)paintWatermark();else uncover();}
+ const wrap=document.querySelector('.wrap')||document.body;
+ new MutationObserver(sync).observe(wrap,{attributes:true,attributeFilter:['hidden'],subtree:true});sync();
+ document.addEventListener('keydown',e=>{
+  if(!active())return;const k=(e.key||'').toLowerCase();
+  const combo=(e.ctrlKey||e.metaKey)&&(k==='p'||k==='s'||k==='u'||(e.shiftKey&&(k==='s'||k==='i'||k==='c')));
+  const mac=e.metaKey&&e.shiftKey&&['3','4','5','s'].includes(k);
+  if(k==='printscreen'||combo||mac){e.preventDefault();try{navigator.clipboard&&navigator.clipboard.writeText(' ');}catch(x){}cover('Screenshots are not allowed during the exam.',2500);}
+ },true);
+ document.addEventListener('keyup',e=>{if(active()&&(e.key||'').toLowerCase()==='printscreen'){try{navigator.clipboard&&navigator.clipboard.writeText(' ');}catch(x){}cover('Screenshots are not allowed during the exam.',2500);}},true);
+ ['contextmenu','copy','cut','dragstart','selectstart'].forEach(ev=>document.addEventListener(ev,e=>{if(active()&&exam().contains(e.target))e.preventDefault();},true));
+ document.addEventListener('visibilitychange',()=>{if(!active())return;if(document.hidden)cover('Come back to the exam to continue.');else setTimeout(uncover,500);});
+ window.addEventListener('blur',()=>{if(active())cover('Come back to the exam to continue.');});
+ window.addEventListener('focus',()=>{if(active())setTimeout(uncover,400);});
+ window.addEventListener('beforeprint',()=>{if(active())cover('Printing is not allowed during the exam.');});
+ window.addEventListener('afterprint',()=>setTimeout(uncover,600));
+})();
+</script>
+
+<script id="nav-quick">
+/* Quick buttons: Study Space + Live Class in the navbar, and a thumb-friendly bottom bar on phones */
+(function(){
+ const $=id=>document.getElementById(id);
+ function mk(){
+  const area=document.querySelector('.account-area');
+  if(area&&!$('navStudyBtn')){
+   const st=document.createElement('button');st.className='account-btn';st.id='navStudyBtn';st.type='button';st.hidden=true;st.innerHTML='📚 Study';
+   const lv=document.createElement('button');lv.className='account-btn';lv.id='navLiveBtn';lv.type='button';lv.hidden=true;lv.innerHTML='🔴 Live';
+   const after=$('navHomeBtn');if(after&&after.nextSibling){area.insertBefore(st,after.nextSibling);area.insertBefore(lv,st.nextSibling);}else{area.appendChild(st);area.appendChild(lv);}
+   st.addEventListener('click',()=>$('drawerStudy').click());lv.addEventListener('click',()=>$('drawerLiveClass').click());
+  }
+  if($('bottomNav'))return;
+  const nav=document.createElement('nav');nav.id='bottomNav';nav.className='bottom-nav';nav.setAttribute('aria-label','Main navigation');
+  nav.innerHTML=[['home','🏠','Home'],['study','📚','Study'],['admin','🛡️','Admin'],['live','🔴','Live'],['msg','💬','Chat'],['me','👤','Profile'],['login','🔐','Log in']].map(x=>'<button type="button" data-act="'+x[0]+'" hidden><span class="bn-ic">'+x[1]+'</span><span class="bn-tx">'+x[2]+'</span><i class="bn-dot" hidden></i></button>').join('');
+  document.body.appendChild(nav);
+  nav.addEventListener('click',e=>{const b=e.target.closest('button[data-act]');if(!b)return;
+   const map={home:'navHomeBtn',study:'drawerStudy',admin:'adminBtn',live:'drawerLiveClass',msg:'navMessagesBtn',me:'profileBtn',login:'authActionBtn'};
+   const t=$(map[b.dataset.act]);if(t)t.click();});
+ }
+ function screenId(){const s=document.querySelectorAll('.wrap > section');for(const x of s){if(!x.hidden)return x.id.replace('screen-','');}return 'subjects';}
+ function sync(){
+  const logged=!!($('profileBtn')&&!$('profileBtn').hidden),adm=!!($('adminBtn')&&!$('adminBtn').hidden),nav=$('bottomNav');if(!nav)return;
+  const show=(a,on)=>{const b=nav.querySelector('[data-act="'+a+'"]');if(b)b.hidden=!on;};
+  show('home',true);show('study',logged&&!adm);show('admin',adm);show('live',logged);show('msg',logged);show('me',logged);show('login',!logged);
+  const ns=$('navStudyBtn'),nl=$('navLiveBtn');if(ns)ns.hidden=!(logged&&!adm);if(nl)nl.hidden=!logged;
+  const id=screenId();let act='home';
+  if(id.indexOf('study')===0)act='study';else if(id==='live-class')act='live';else if(id==='messages')act='msg';else if(id==='profile')act='me';else if(id.indexOf('admin')===0||id==='written-admin')act='admin';
+  nav.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.act===act&&!b.hidden));
+  const hasLive=!!($('drawerLiveClass')&&$('drawerLiveClass').classList.contains('has-live'));
+  const ld=nav.querySelector('[data-act="live"] .bn-dot');if(ld)ld.hidden=!hasLive;
+  [$('navLiveBtn')].forEach(b=>{if(b)b.classList.toggle('has-live',hasLive);});
+  const unread=!!document.querySelector('#navMessagesBtn .message-unread-badge:not([hidden])');const md=nav.querySelector('[data-act="msg"] .bn-dot');if(md)md.hidden=!unread;
+  // top buttons highlight
+  ['navStudyBtn:study','navLiveBtn:live'].forEach(p=>{const [i,a]=p.split(':');const b=$(i);if(b)b.classList.toggle('nav-active',act===a);});
+ }
+ function init(){
+  mk();sync();
+  const wrap=document.querySelector('.wrap')||document.body;
+  new MutationObserver(sync).observe(wrap,{attributes:true,attributeFilter:['hidden'],subtree:true});
+  ['profileBtn','adminBtn','navMessagesBtn','drawerStudy','drawerLiveClass'].forEach(id=>{const el=$(id);if(el)new MutationObserver(sync).observe(el,{attributes:true,subtree:true,attributeFilter:['hidden','class']});});
+  setInterval(sync,2500);
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+
+<script id="admin-push">
+/* Admin: send a push notification to every student (for example when a new MCQ exam is added) */
+(function(){
+ const $=id=>document.getElementById(id);
+ const note=(m,t)=>{try{toast(m,t||'info',3500);}catch(e){alert(m);}};
+ function ensure(){
+  const sec=$('screen-admin');if(!sec||$('adminNotifyCard'))return;
+  const anchor=$('adminGoMaterials');const host=anchor&&anchor.closest('.admin-card');
+  const card=document.createElement('div');card.className='profile-card admin-card';card.id='adminNotifyCard';
+  card.innerHTML='<h3>📣 Send Notification</h3><p class="card-hint">Sends a push notification to every student who tapped Notify. New CQ exams, grading, replies and live classes are sent automatically. Use this for a new MCQ exam or any announcement.</p>'+
+   '<form id="adminNotifyForm" class="st-two-col"><label>Type<select id="ntType"><option value="mcq_created">📝 New MCQ exam</option><option value="custom">📢 Announcement</option></select></label>'+
+   '<label>Title<input id="ntTitle" maxlength="80" placeholder="e.g. New MCQ exam added" required></label>'+
+   '<label>Message<input id="ntBody" maxlength="140" placeholder="e.g. ICT Chapter 3 · Exam 2 is now open" required></label>'+
+   '<button class="btn btn-primary" type="submit">Send to all students</button></form>';
+  if(host&&host.parentNode)host.parentNode.insertBefore(card,host.nextSibling);else sec.appendChild(card);
+  const type=$('ntType');type.addEventListener('change',()=>{if(type.value==='mcq_created'&&!$('ntTitle').value)$('ntTitle').value='New MCQ exam added';});
+  $('adminNotifyForm').addEventListener('submit',async e=>{e.preventDefault();const b=e.target.querySelector('button');b.disabled=true;
+   try{const r=await sendArbijoyPushEvent({event:type.value,title:$('ntTitle').value.trim(),body:$('ntBody').value.trim()});
+    if(r&&!r.error){note('✅ Notification sent'+(typeof r.sent==='number'?' to '+r.sent+' device(s)':''),'success');$('ntBody').value='';}
+    else note('Could not send. Deploy the send-push function (see README) and try again.','error');}
+   catch(err){note('Could not send: '+(err.message||err),'error');}
+   b.disabled=false;});
+  if(window.__drAcc){window.__drAcc.makeAcc(card);window.__drAcc.closeAcc(card);}
+ }
+ const t=setInterval(()=>{if($('screen-admin')){ensure();if($('adminNotifyCard'))clearInterval(t);}},800);
+})();
+</script>
+
 </html>
