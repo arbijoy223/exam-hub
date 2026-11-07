@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1061,9 +1060,25 @@ html[data-theme="dark"] a{color:#b9baff}
   <section id="screen-subjects">
     <div class="lede">
       <h2>Choose Your Subject</h2>
-      <p>Each subject contains chapters and exams. Choose a subject to get started.</p>
+      <p>Pick your level, then choose a subject to get started.</p>
     </div>
-    <div class="subject-grid" id="subjectGrid"></div>
+    <div class="level-tabs">
+      <button type="button" class="level-tab" data-level="SSC">🎓 SSC</button>
+      <button type="button" class="level-tab" data-level="HSC">📘 HSC</button>
+      <button type="button" class="level-tab" data-level="Admission">🏫 Admission</button>
+    </div>
+    <div class="level-section" id="levelSSC">
+      <div class="level-head"><span class="level-badge">🎓</span><div><h3>SSC</h3><p>Secondary School Certificate</p></div><span class="level-count" id="levelCountSSC"></span></div>
+      <div class="subject-grid" id="subjectGridSSC"></div>
+    </div>
+    <div class="level-section" id="levelHSC">
+      <div class="level-head"><span class="level-badge">📘</span><div><h3>HSC</h3><p>Higher Secondary Certificate</p></div><span class="level-count" id="levelCountHSC"></span></div>
+      <div class="subject-grid" id="subjectGrid"></div>
+    </div>
+    <div class="level-section" id="levelAdmission">
+      <div class="level-head"><span class="level-badge">🏫</span><div><h3>Admission</h3><p>University &amp; admission preparation</p></div><span class="level-count" id="levelCountAdmission"></span></div>
+      <div class="subject-grid" id="subjectGridAdmission"></div>
+    </div>
   </section>
 
   <!-- স্ক্রিন 2: Chapter লিস্ট -->
@@ -1591,18 +1606,44 @@ html[data-theme="dark"] a{color:#b9baff}
     <div class="auth-tabs"><button class="auth-tab active" id="authTabLogin">Log in</button><button class="auth-tab" id="authTabSignup">Sign up</button></div>
     <form class="auth-form" id="authForm">
       <label for="authUsername">Username</label>
-      <input id="authUsername" type="text" autocomplete="username" placeholder="e.g. bijoy_123" minlength="3" maxlength="20" required>
+      <input id="authUsername" type="text" autocomplete="username" placeholder="Any name you like" maxlength="80" required>
       <label for="authPassword">Password</label>
-      <input id="authPassword" type="password" autocomplete="current-password" placeholder="At least 6 characters" minlength="6" required>
+      <input id="authPassword" type="password" autocomplete="current-password" placeholder="Any password you like" required>
+      <div class="auth-forgot-row" id="authForgotRow"><button type="button" class="auth-forgot" id="authForgotBtn">Forgot password?</button></div>
       <div id="signupAvatarField" class="signup-avatar-field" hidden>
         <label for="signupAvatarInput">Profile picture <span style="font-weight:500;color:var(--muted)">(optional)</span></label>
         <input id="signupAvatarInput" type="file" accept="image/*">
         <div class="signup-avatar-preview-row"><img id="signupAvatarPreview" alt="Profile picture preview" hidden><span>Choose a photo (optional, max 5 MB)</span></div>
       </div>
-      <div class="auth-note">Sign in with your username. Your password should be secrete from others.</div>
+      <div id="signupRecoveryField" class="signup-avatar-field" hidden>
+        <label for="signupRecQ">Recovery question <span style="font-weight:500;color:var(--muted)">(optional, helps if you forget your password)</span></label>
+        <select id="signupRecQ"><option>What is the name of your first school?</option><option>What is your mother's nickname?</option><option>What was the name of your childhood best friend?</option><option>What is your favourite teacher's name?</option><option>In which village / town were you born?</option></select>
+        <input id="signupRecA" type="text" maxlength="80" autocomplete="off" placeholder="Your answer (not case sensitive)">
+      </div>
+      <div class="auth-note">You can use any username and any password. Upper and lower case do not matter.</div>
       <div class="auth-error" id="authError"></div>
       <div class="modal-buttons"><button type="button" class="btn btn-ghost" id="authCancelBtn">Cancel</button><button type="submit" class="btn btn-primary" id="authSubmitBtn">Log in</button></div>
     </form>
+  </div>
+</div>
+
+<!-- Forgot password -->
+<div class="modal-overlay" id="resetModal" hidden>
+  <div class="modal auth-modal">
+    <h3>🔑 Reset your password</h3>
+    <div id="resetStep1">
+      <p>Type your username. We will ask your secret recovery question.</p>
+      <label for="resetUsername">Username</label><input id="resetUsername" type="text" autocomplete="username">
+      <div class="modal-buttons"><button type="button" class="btn btn-ghost" id="resetCancel1">Back</button><button type="button" class="btn btn-primary" id="resetFindBtn">Next</button></div>
+    </div>
+    <div id="resetStep2" hidden>
+      <p>Answer your recovery question and choose a new password.</p>
+      <span id="resetQuestion"></span>
+      <label for="resetAnswer">Your answer</label><input id="resetAnswer" type="text" autocomplete="off">
+      <label for="resetNewPass">New password (any password you like)</label><input id="resetNewPass" type="password" autocomplete="new-password">
+      <div class="modal-buttons"><button type="button" class="btn btn-ghost" id="resetCancel2">Cancel</button><button type="button" class="btn btn-primary" id="resetDoBtn">Change password</button></div>
+    </div>
+    <div class="reset-msg" id="resetMsg" role="alert"></div>
   </div>
 </div>
 <script>
@@ -1680,9 +1721,39 @@ Object.defineProperty(window,"currentProfile",{configurable:true,get:()=>current
 let authMode = "login";
 let pendingExamAfterLogin = null;
 
-function usernameEmail(username){ return username.toLowerCase()+"@login.examcenter.local"; }
-function cleanUsername(v){ return v.trim().toLowerCase(); }
-function validUsername(v){ return /^[a-z0-9_]{3,20}$/.test(v); }
+const AUTH_DOMAIN="login.examcenter.local";
+function legacyEmail(u){ return u.toLowerCase()+"@"+AUTH_DOMAIN; }            // accounts made before this update
+function cleanUsername(v){ return String(v==null?"":v).trim(); }              // shown exactly as typed
+function validUsername(v){ return v.length>0; }                                // no other rules
+function _sha256Fallback(ascii){
+  function rr(v,n){return (v>>>n)|(v<<(32-n));}
+  var mp=Math.pow,mw=mp(2,32),L='length',i,j,res='',words=[],bl=ascii[L]*8,hash=_sha256Fallback.h=_sha256Fallback.h||[],k=_sha256Fallback.k=_sha256Fallback.k||[],pc=k[L],comp={};
+  for(var c=2;pc<64;c++){if(!comp[c]){for(i=0;i<313;i+=c)comp[i]=c;hash[pc]=(mp(c,.5)*mw)|0;k[pc++]=(mp(c,1/3)*mw)|0;}}
+  ascii+='\x80';while(ascii[L]%64-56)ascii+='\x00';
+  for(i=0;i<ascii[L];i++){j=ascii.charCodeAt(i);words[i>>2]|=j<<((3-i)%4)*8;}
+  words[words[L]]=((bl/mw)|0);words[words[L]]=bl;
+  for(j=0;j<words[L];){
+    var w=words.slice(j,j+=16),old=hash;hash=hash.slice(0,8);
+    for(i=0;i<64;i++){
+      var w15=w[i-15],w2=w[i-2],a=hash[0],e=hash[4];
+      var t1=hash[7]+(rr(e,6)^rr(e,11)^rr(e,25))+((e&hash[5])^((~e)&hash[6]))+k[i]+(w[i]=(i<16)?w[i]:(w[i-16]+(rr(w15,7)^rr(w15,18)^(w15>>>3))+w[i-7]+(rr(w2,17)^rr(w2,19)^(w2>>>10)))|0);
+      var t2=(rr(a,2)^rr(a,13)^rr(a,22))+((a&hash[1])^(a&hash[2])^(hash[1]&hash[2]));
+      hash=[(t1+t2)|0].concat(hash);hash[4]=(hash[4]+t1)|0;
+    }
+    for(i=0;i<8;i++)hash[i]=(hash[i]+old[i])|0;
+  }
+  for(i=0;i<8;i++){for(j=3;j+1;j--){var b=(hash[i]>>(j*8))&255;res+=((b<16)?0:'')+b.toString(16);}}
+  return res;
+}
+async function sha256Hex(str){
+  try{ if(window.crypto&&window.crypto.subtle){ const buf=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(str)); return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,"0")).join(""); } }catch(e){}
+  return _sha256Fallback(unescape(encodeURIComponent(str)));
+}
+// Supabase needs a valid e-mail and a 6+ character password. We build both from whatever the student typed
+// (any characters, any length, upper/lower case treated the same), so there are no rules for the student.
+async function derivePassword(pw){ return "p"+await sha256Hex("p:"+String(pw).toLowerCase()); }
+async function deriveEmail(username){ return "u"+(await sha256Hex("u:"+String(username).trim().toLowerCase())).slice(0,40)+"@"+AUTH_DOMAIN; }
+async function authCreds(username,password){ return {email:await deriveEmail(username),password:await derivePassword(password)}; }
 function authReady(){
   if(supabaseClient) return true;
   toast("Supabase configuration is missing", "warning", 3500);
@@ -1703,30 +1774,57 @@ function setAuthMode(mode){
   $("authTabLogin").classList.toggle("active",mode==="login"); $("authTabSignup").classList.toggle("active",mode==="signup");
   $("authPassword").autocomplete=mode==="login"?"current-password":"new-password";
   if($("signupAvatarField")) $("signupAvatarField").hidden=mode!=="signup";
+  if($("signupRecoveryField")) $("signupRecoveryField").hidden=mode!=="signup";
+  if($("authForgotRow")) $("authForgotRow").hidden=mode!=="login";
 }
 
+let profileRetry=0,profileRetryTimer=null;
+function readCachedProfile(uid){ try{ const c=JSON.parse(localStorage.getItem("drProfileCache")||"null"); return c&&c.user_id===uid?c:null; }catch(e){ return null; } }
+function cacheProfile(p){ try{ const q={user_id:p.user_id,username:p.username,is_admin:p.is_admin,blocked:false,avatar_url:(p.avatar_url&&String(p.avatar_url).length<4000)?p.avatar_url:null}; localStorage.setItem("drProfileCache",JSON.stringify(q)); }catch(e){} }
+function scheduleProfileRetry(){
+  if(profileRetryTimer||profileRetry>=10) return;
+  profileRetry++;
+  profileRetryTimer=setTimeout(async()=>{ profileRetryTimer=null; await loadCurrentProfile(); }, Math.min(30000,3000*profileRetry));
+}
+window.addEventListener("online",()=>{ profileRetry=0; if(supabaseClient) loadCurrentProfile(); });
 async function loadCurrentProfile(){
   if(!supabaseClient) return null;
-  const {data:{user}}=await supabaseClient.auth.getUser();
-  if(!user){ currentProfile=null; updateAccountUI(); return null; }
-  const {data,error}=await supabaseClient.from("profiles").select("username,is_admin,blocked,avatar_url").eq("user_id",user.id).single();
+  // getSession() reads the saved login on this device, so a weak network can never log the student out.
+  let session=null;
+  try{ const r=await supabaseClient.auth.getSession(); session=r&&r.data&&r.data.session; }catch(e){}
+  if(!session){ currentProfile=null; updateAccountUI(); return null; }
+  const user=session.user;
+  let data=null,error=null;
+  try{ const r=await supabaseClient.from("profiles").select("username,is_admin,blocked,avatar_url").eq("user_id",user.id).single(); data=r.data; error=r.error; }catch(e){ error=e; }
   if(error || !data){
-    console.error(error || "Profile not found");
-    currentProfile=null;
-    await supabaseClient.auth.signOut();
-    updateAccountUI();
-    toast("Could not load your profile. Please log in again.", "error", 3500);
-    return null;
+    const missing=error && (error.code==="PGRST116" || /0 rows|no rows/i.test(error.message||""));
+    if(missing){                      // the account truly has no profile -> sign out
+      console.error(error||"Profile not found");
+      currentProfile=null;
+      await supabaseClient.auth.signOut();
+      updateAccountUI();
+      toast("Could not load your profile. Please log in again.", "error", 3500);
+      return null;
+    }
+    // temporary problem (network / server): stay logged in, use the saved profile and retry quietly
+    console.warn("Profile load failed, keeping you logged in:", error&&error.message);
+    const c=readCachedProfile(user.id);
+    if(c && !currentProfile){ currentProfile={...c,avatar_url:normalizeAvatarUrl(c.avatar_url)||null}; state.studentName=currentProfile.username; updateAccountUI(); }
+    scheduleProfileRetry();
+    return currentProfile;
   }
+  profileRetry=0;
   currentProfile={user_id:user.id,username:data.username,is_admin:!!data.is_admin,blocked:!!data.blocked,avatar_url:normalizeAvatarUrl(data.avatar_url)||normalizeAvatarUrl(user.user_metadata?.avatar_data_url)||null};
   state.studentName=currentProfile.username;
   if(currentProfile.blocked){
     currentProfile=null;
+    try{ localStorage.removeItem("drProfileCache"); }catch(e){}
     await supabaseClient.auth.signOut();
     updateAccountUI();
     toast("🚫 Your account has been blocked.", "error", 4000);
     return null;
   }
+  cacheProfile(currentProfile);
   updateAccountUI(); return currentProfile;
 }
 function updateAccountUI(){
@@ -1773,23 +1871,38 @@ async function handleAuthSubmit(e){
   e.preventDefault(); if(!authReady()) return;
   const username=cleanUsername($("authUsername").value); const password=$("authPassword").value;
   $("authError").textContent="";
-  if(!validUsername(username)){ $("authError").textContent="Username must be 3–20 characters and use only a-z, 0-9, and underscore (_)."; return; }
-  if(password.length<6){ $("authError").textContent="Password must be at least 6 characters."; return; }
+  if(!username){ $("authError").textContent="Please type a username."; return; }
+  if(!password){ $("authError").textContent="Please type a password."; return; }
   $("authSubmitBtn").disabled=true;
   try{
-    let result;
-    let avatarData=null;
-    if(authMode==="signup" && $("signupAvatarInput").files?.[0]) avatarData=await openImageCropper($("signupAvatarInput").files[0]);
-    if(authMode==="signup") result=await supabaseClient.auth.signUp({email:usernameEmail(username),password,options:{data:{username,...(avatarData?{avatar_data_url:avatarData}:{})}}});
-    else result=await supabaseClient.auth.signInWithPassword({email:usernameEmail(username),password});
+    let result; let avatarData=null;
+    const creds=await authCreds(username,password);
+    if(authMode==="signup"){
+      if($("signupAvatarInput").files?.[0]) avatarData=await openImageCropper($("signupAvatarInput").files[0]);
+      result=await supabaseClient.auth.signUp({email:creds.email,password:creds.password,options:{data:{username,...(avatarData?{avatar_data_url:avatarData}:{})}}});
+    }else{
+      result=await supabaseClient.auth.signInWithPassword({email:creds.email,password:creds.password});
+      if(result.error && /invalid login/i.test(result.error.message||"")){          // older accounts (made before this update)
+        const low=username.toLowerCase();
+        if(/^[a-z0-9_]{3,20}$/.test(low)){
+          const old=await supabaseClient.auth.signInWithPassword({email:legacyEmail(low),password});
+          if(!old.error) result=old;
+        }
+      }
+    }
     if(result.error) throw result.error;
     if(authMode==="signup" && !result.data.session){
-      $("authError").textContent="Account created successfully। Supabase-এ Email Confirmations বন্ধ করলে username/password দিয়ে সরাসরি Log in হবে।";
+      $("authError").textContent="Account created. Please turn OFF 'Confirm email' in Supabase (Authentication → Providers → Email) so students can log in with username and password.";
       return;
     }
     await loadCurrentProfile(); closeAuthModal(); setTimeout(()=>{checkCqNotifications();checkAdminPending();},1200); toast(authMode==="login"?"👋 Logged in successfully":"🎉 Account created successfully", "success", 2500);
+    if(authMode==="signup" && window.drSetRecoveryAfterSignup){ window.drSetRecoveryAfterSignup($("signupRecQ")?$("signupRecQ").value:"", $("signupRecA")?$("signupRecA").value:""); }
     if(pendingExamAfterLogin){ const p=pendingExamAfterLogin; pendingExamAfterLogin=null; state.selectedExam=p.exam; askForName(state.selectedSubject,state.selectedChapter,p.exam); }
-  }catch(err){ console.error(err); $("authError").textContent=err.message||"Unable to log in."; }
+  }catch(err){
+    console.error(err);
+    const m=String(err&&err.message||"");
+    $("authError").textContent=/invalid login/i.test(m)?"Wrong username or password.":(/already registered|already been registered|already exists/i.test(m)?"This username is already taken. Please choose another one.":(m||"Unable to log in."));
+  }
   finally{ $("authSubmitBtn").disabled=false; }
 }
 
@@ -3269,40 +3382,29 @@ function hideAllScreens(){
 
 // 1. Subject লিস্ট রেন্ডার
 function renderSubjects(){
-  const grid = $("subjectGrid");
-  grid.innerHTML = "";
-  const subjects = Object.keys(examData);
+  const grids={SSC:$("subjectGridSSC"),HSC:$("subjectGrid"),Admission:$("subjectGridAdmission")};
+  Object.values(grids).forEach(g=>{ if(g) g.innerHTML=""; });
+  const counts={SSC:0,HSC:0,Admission:0};
   const icons = {"আইসিটি":"💻","রসায়ন":"🧪","পদার্থবিজ্ঞান":"⚛️","গণিত":"🧮","জীববিজ্ঞান":"🧬","ইংরেজি":"📖"};
-
-  subjects.forEach((name,i)=>{
+  const levelOf=n=>{ const v=String((examData[n]&&examData[n].section)||"HSC").trim().toLowerCase(); return v==="ssc"?"SSC":(v==="admission"?"Admission":"HSC"); };
+  Object.keys(examData).forEach((name)=>{
+    const lvl=levelOf(name), grid=grids[lvl];
     const card = document.createElement("button");
     card.className = "subject-card";
     const chapterCount = Object.keys(examData[name].chapters).length;
-
-    // এই Subjectে কোনো Study Material আছে কিনা, আর থাকলে এই ডিভাইসে
-    // এই ব্যাজটা আগে কখনো দেখানো হয়েছে কিনা চেক করো
-    const hasMaterials = materialsData[name] && Object.values(materialsData[name]).some(arr => arr && arr.length > 0);
-    const badgeKey = "newBadgeSeen_" + name;
-    const showBadge = false;
-
     card.innerHTML = `
       <div class="card-icon">${icons[name] || "📚"}</div>
-      <div class="subject-card-copy"><h3>${name}${showBadge ? ' <span class="new-badge">NEW</span>' : ''}</h3>
+      <div class="subject-card-copy"><h3>${name}</h3>
       <div class="subject-meta"><span class="pill">📚 ${bnNum(chapterCount)} chapters</span></div></div>
       <div class="card-arrow" aria-hidden="true">↗</div>`;
     card.addEventListener("click", ()=>showChapters(name));
-    grid.appendChild(card);
-
-    if(showBadge){
-      try{ localStorage.setItem(badgeKey, "1"); }catch(e){} // প্রথমবার দেখানো মাত্রই চিরতরে বন্ধ করে দাও
-      setTimeout(()=>{
-        const b = card.querySelector(".new-badge");
-        if(b){
-          b.classList.add("fade-out");
-          setTimeout(()=> b.remove(), 400);
-        }
-      }, 10000); // 10 সেকেন্ড পর মুছে যাবে
-    }
+    grid.appendChild(card); counts[lvl]++;
+  });
+  const names={SSC:"SSC",HSC:"HSC",Admission:"Admission"};
+  Object.keys(grids).forEach(k=>{
+    const g=grids[k]; if(!g) return;
+    if(!counts[k]) g.innerHTML='<div class="level-empty"><span>🚧</span><div><b>Coming soon</b><small>'+names[k]+' subjects will be added here.</small></div></div>';
+    const c=$("levelCount"+k); if(c) c.textContent=counts[k]+(counts[k]===1?" subject":" subjects");
   });
 }
 
@@ -6677,7 +6779,7 @@ html:root:root body #akMarks .ak-hint{margin-top:6px;font-size:13px;color:var(--
   if(busy)return;busy=true;
   try{
    baseline();var S=G('state')||{};
-   document.querySelectorAll('#subjectGrid .subject-card').forEach(function(c){var h=c.querySelector('h3');if(!h)return;var n=nameOf(h);setBadge(h,unseen('subj',function(i){return i.s===n;}));});
+   document.querySelectorAll('#screen-subjects .subject-card').forEach(function(c){var h=c.querySelector('h3');if(!h)return;var n=nameOf(h);setBadge(h,unseen('subj',function(i){return i.s===n;}));});
    document.querySelectorAll('#chapterGrid .subject-card').forEach(function(c){var h=c.querySelector('h3');if(!h)return;var n=nameOf(h);setBadge(h,unseen('chap',function(i){return i.s===S.selectedSubject&&i.c===n;}));});
    if(S.selectedSubject&&S.selectedChapter){
     setBadge(document.querySelector('#hubGoExams h3'),unseen('sec',function(i){return i.k==='exam'&&i.s===S.selectedSubject&&i.c===S.selectedChapter;}));
@@ -7111,7 +7213,12 @@ html:root:root body [data-study-page] .btn-primary *{color:#fff!important}
  }
 
  /* ---------- timer ---------- */
- const T={status:'idle',left:1500,total:1500,subject:'General study',startedAt:null,endAt:0,interval:null};
+ const T={status:'idle',sid:null,left:1500,total:1500,subject:'General study',startedAt:null,endAt:0,interval:null};
+ const TKEY=()=>'drTimerV1_'+(me()&&me().user_id);
+ const PKEY=()=>'drPendSess_'+(me()&&me().user_id);
+ function persistTimer(){try{if(T.status!=='running'&&T.status!=='paused'){localStorage.removeItem(TKEY());return;}localStorage.setItem(TKEY(),JSON.stringify({sid:T.sid,subject:T.subject,total:T.total,startedAt:T.startedAt,endAt:T.endAt,status:T.status,left:T.left,hb:Date.now()}));}catch(e){}}
+ function refreshToken(){try{client().auth.getSession().then(r=>{window.__drToken=r&&r.data&&r.data.session&&r.data.session.access_token;});}catch(e){}}
+ function queueSession(s){try{const a=JSON.parse(localStorage.getItem(PKEY())||'[]');a.push(s);localStorage.setItem(PKEY(),JSON.stringify(a));}catch(e){}}
  const clockText=()=>pad(Math.floor(T.left/60))+':'+pad(T.left%60);
  function showTimerState(){
   $('stTimerSetup').hidden=T.status!=='idle';$('stTimerRun').hidden=!(T.status==='running'||T.status==='paused');$('stTimerDone').hidden=T.status!=='done';
@@ -7121,27 +7228,30 @@ html:root:root body [data-study-page] .btn-primary *{color:#fff!important}
   renderHome();
  }
  function stopTick(){if(T.interval){clearInterval(T.interval);T.interval=null;}}
- function tick(){T.left=Math.max(0,Math.round((T.endAt-Date.now())/1000));showTimerState();if(T.left<=0)finishTimer(true);}
+ let tickN=0;
+ function tick(){T.left=Math.max(0,Math.round((T.endAt-Date.now())/1000));persistTimer();if(++tickN%600===0)refreshToken();showTimerState();if(T.left<=0)finishTimer(true);}
  function chosenSubject(){const v=$('stTimerSubject').value;return v==='__other'?($('stTimerOther').value.trim()||'General study'):v;}
  function startTimer(){
   if(!me()){return;}
   const mins=Math.max(1,Math.min(180,Number($('stTimerMinutes').value)||25));
-  T.total=mins*60;T.left=T.total;T.subject=chosenSubject();T.startedAt=new Date().toISOString();T.endAt=Date.now()+T.left*1000;T.status='running';
-  stopTick();T.interval=setInterval(tick,1000);showTimerState();
+  T.sid=uid();T.total=mins*60;T.left=T.total;T.subject=chosenSubject();T.startedAt=new Date().toISOString();T.endAt=Date.now()+T.left*1000;T.status='running';
+  stopTick();T.interval=setInterval(tick,1000);refreshToken();persistTimer();showTimerState();
  }
  function pauseTimer(){
   if(T.status==='running'){stopTick();T.left=Math.max(0,Math.round((T.endAt-Date.now())/1000));T.status='paused';}
   else if(T.status==='paused'){T.endAt=Date.now()+T.left*1000;T.status='running';stopTick();T.interval=setInterval(tick,1000);}
-  showTimerState();
+  persistTimer();showTimerState();
  }
  async function finishTimer(completed){
   stopTick();const secs=Math.max(0,Math.round((T.total-Math.max(0,Math.round((T.endAt-Date.now())/1000)))));
   const usedSecs=T.status==='paused'?(T.total-T.left):(completed?T.total:secs);
   let mins=Math.round(usedSecs/60);if(mins===0&&usedSecs>=30)mins=1;
-  T.status='idle';
+  T.status='idle';persistTimer();
   if(mins<1){toastS('Study at least 1 minute to save a session.','warning');T.left=T.total=(Number($('stTimerMinutes').value)||25)*60;showTimerState();return;}
   const subject=T.subject,startedAt=T.startedAt;
-  const ok=await mutate(()=>{data.sessions.push({id:uid(),subject,minutes:mins,startedAt,endedAt:new Date().toISOString(),date:todayKey(),completed:!!completed});},'Study session saved ✓');
+  const sess={id:T.sid||uid(),subject,minutes:mins,startedAt,endedAt:new Date().toISOString(),date:todayKey(),completed:!!completed};
+  const ok=await mutate(()=>{if(!data.sessions.some(x=>x.id===sess.id))data.sessions.push(sess);},'Study session saved ✓');
+  if(!ok)queueSession(sess);
   if(ok){T.status='done';$('stDoneTitle').textContent=completed?'Great job! Time is up 🎉':'Session saved!';$('stDoneText').textContent='You studied '+subject+' for '+mins+' minute'+(mins===1?'':'s')+'. It is saved in today\'s record.';try{if(navigator.vibrate)navigator.vibrate([200,100,200]);}catch(e){}}
   T.left=T.total=(Number($('stTimerMinutes').value)||25)*60;showTimerState();
  }
@@ -7149,7 +7259,7 @@ html:root:root body [data-study-page] .btn-primary *{color:#fff!important}
  $('stTimerMinutes').addEventListener('input',()=>{[...$('stTimerChips').children].forEach(c=>c.classList.toggle('on',c.dataset.min===$('stTimerMinutes').value));});
  $('stTimerSubject').addEventListener('change',()=>{$('stTimerOther').hidden=$('stTimerSubject').value!=='__other';});
  $('stTimerStart').addEventListener('click',startTimer);$('stTimerPause').addEventListener('click',pauseTimer);$('stTimerFinish').addEventListener('click',()=>finishTimer(false));
- $('stTimerCancel').addEventListener('click',()=>{stopTick();T.status='idle';T.left=T.total=(Number($('stTimerMinutes').value)||25)*60;showTimerState();});
+ $('stTimerCancel').addEventListener('click',()=>{stopTick();T.status='idle';persistTimer();T.left=T.total=(Number($('stTimerMinutes').value)||25)*60;showTimerState();});
  $('stStudyAgain').addEventListener('click',()=>{T.status='idle';showTimerState();});
 
  /* ---------- forms ---------- */
@@ -7259,6 +7369,46 @@ html:root:root body [data-study-page] .btn-primary *{color:#fff!important}
  $('backFromAdminStudy')?.addEventListener('click',()=>{if(typeof window.showAdminDashboard==='function')window.showAdminDashboard();else $('screen-admin').hidden=false;});
  $('refreshAdminStudy')?.addEventListener('click',showAdminMonitor);$('adminStudySearch')?.addEventListener('input',renderAdminList);$('closeAdminStudyDetail')?.addEventListener('click',()=>{$('adminStudyDetailCard').hidden=true;});
  window.showAdminStudyMonitor=showAdminMonitor;
+
+ /* ---------- if the app closes unexpectedly, the studied time is saved automatically ---------- */
+ async function recoverTimer(){
+  const u=me();if(!u)return;let st=null,pend=[];
+  try{st=JSON.parse(localStorage.getItem(TKEY())||'null');}catch(e){}
+  try{pend=JSON.parse(localStorage.getItem(PKEY())||'[]');}catch(e){}
+  if(!st&&!pend.length)return;
+  if(st&&T.sid===st.sid&&(T.status==='running'||T.status==='paused'))return;
+  try{await loadData(true);}catch(e){return;}
+  const added=[];
+  if(st){
+   const endMs=st.status==='running'?Math.min(st.hb||0,st.endAt||0):(st.hb||Date.now());
+   const secs=st.status==='paused'?Math.max(0,(st.total||0)-(st.left||0)):Math.max(0,Math.round((endMs-new Date(st.startedAt).getTime())/1000));
+   let mins=Math.round(secs/60);if(mins===0&&secs>=30)mins=1;
+   if(mins>=1&&!data.sessions.some(x=>x.id===st.sid)){const end=new Date(endMs);added.push({id:st.sid,subject:st.subject||'General study',minutes:mins,startedAt:st.startedAt,endedAt:end.toISOString(),date:keyOf(end),completed:false,recovered:true});}
+  }
+  pend.forEach(s=>{if(!data.sessions.some(x=>x.id===s.id)&&!added.some(x=>x.id===s.id))added.push(s);});
+  try{localStorage.removeItem(TKEY());}catch(e){}
+  if(!added.length){try{localStorage.removeItem(PKEY());}catch(e){}return;}
+  data.sessions.push(...added);
+  try{await saveData();localStorage.removeItem(PKEY());const tot=added.reduce((n,s)=>n+(s.minutes||0),0);renderAll();toastS('⏱ Your last study session ('+tot+' min) was saved automatically ✓','success');}
+  catch(e){try{localStorage.setItem(PKEY(),JSON.stringify(added));}catch(x){}console.error('Timer recovery:',e);}
+ }
+ function flushOnExit(){
+  if(T.status!=='running'&&T.status!=='paused')return;
+  persistTimer();
+  try{
+   const left=T.status==='running'?Math.max(0,Math.round((T.endAt-Date.now())/1000)):T.left,secs=T.total-left;
+   let mins=Math.round(secs/60);if(mins===0&&secs>=30)mins=1;
+   if(mins<1||!window.__drToken||!me()||data.sessions.some(x=>x.id===T.sid))return;
+   const copy=JSON.parse(JSON.stringify(data));
+   copy.sessions.push({id:T.sid,subject:T.subject,minutes:mins,startedAt:T.startedAt,endedAt:new Date().toISOString(),date:todayKey(),completed:false,recovered:true});
+   const body=JSON.stringify({user_id:me().user_id,data:copy,updated_at:new Date().toISOString()});if(body.length>60000)return;
+   fetch(SUPABASE_URL+'/rest/v1/student_study_data?on_conflict=user_id',{method:'POST',keepalive:true,headers:{apikey:SUPABASE_ANON_KEY,Authorization:'Bearer '+window.__drToken,'Content-Type':'application/json',Prefer:'resolution=merge-duplicates,return=minimal'},body:body});
+  }catch(e){}
+ }
+ window.addEventListener('pagehide',flushOnExit);
+ document.addEventListener('visibilitychange',()=>{if(document.hidden)persistTimer();else if(T.status==='running')refreshToken();});
+ let recTries=0;const recIv=setInterval(()=>{recTries++;if(me()){clearInterval(recIv);recoverTimer();}else if(recTries>120)clearInterval(recIv);},1000);
+ window.__drAcc={makeAcc,closeAcc};
  window.__studySpace={dayRecord,indexDates,mountRecord,norm};
 })();
 </script>
@@ -7270,5 +7420,140 @@ html:root:root body #homeHeroCarousel .hero-slide:before{background:linear-gradi
 html:root:root body #homeHeroCarousel .hero-slide h2{text-shadow:0 2px 14px rgba(0,0,0,.6)}
 @media(max-width:700px){html:root:root body #homeHeroCarousel .hero-slide:before{background:linear-gradient(to top,rgba(10,10,32,.88) 0%,rgba(10,10,32,.5) 50%,rgba(10,10,32,.12) 100%)!important}}
 </style>
+
+<style id="v38-styles">
+/* levels on the home page */
+.level-tabs{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:0 auto 22px}
+.level-tab{border:1.5px solid var(--dr-line,#e2d4b4);background:var(--dr-card,#fffbf2);color:var(--dr-ink,#1a1830);border-radius:999px;padding:10px 20px;font-weight:800;font-size:14.5px;cursor:pointer;box-shadow:0 6px 16px rgba(70,50,10,.06);transition:transform .15s,border-color .15s,background .15s}
+.level-tab:hover{transform:translateY(-2px);border-color:#7c8cf8}
+.level-tab.on{background:linear-gradient(135deg,#6b7bf2,#4fc0ad);color:#fff;border-color:transparent}
+.level-section{margin:0 0 34px;scroll-margin-top:210px}
+.level-head{display:flex;align-items:center;gap:14px;margin:0 4px 16px}
+.level-badge{flex:none;width:52px;height:52px;border-radius:18px;display:grid;place-items:center;font-size:26px;border:1px solid var(--dr-line,#e2d4b4)}
+#levelSSC .level-badge{background:#d6efe4}#levelHSC .level-badge{background:#e5e0f9}#levelAdmission .level-badge{background:#fbe2d3}
+html[data-theme="dark"] #levelSSC .level-badge{background:#1b3a33}html[data-theme="dark"] #levelHSC .level-badge{background:#29264a}html[data-theme="dark"] #levelAdmission .level-badge{background:#3a2b24}
+.level-head h3{margin:0;font-size:clamp(22px,4.6vw,28px);letter-spacing:-.02em;color:var(--dr-ink,#1a1830)}
+.level-head p{margin:3px 0 0;color:var(--dr-muted,#5a5645);font-size:13.5px}
+.level-count{margin-left:auto;background:var(--dr-soft,#eee2c6);border-radius:999px;padding:5px 12px;font-size:12px;font-weight:800;color:var(--dr-muted,#5a5645);white-space:nowrap}
+.level-empty{grid-column:1/-1;display:flex;align-items:center;gap:14px;padding:20px;border:1.5px dashed var(--dr-line,#e2d4b4);border-radius:22px;color:var(--dr-muted,#5a5645)}
+.level-empty span{font-size:30px}.level-empty b{display:block;color:var(--dr-ink,#1a1830);font-size:16px}.level-empty small{display:block;margin-top:2px;font-size:13px}
+/* auth: forgot password + recovery fields */
+.auth-forgot-row{text-align:right;margin:-4px 0 6px}
+.auth-forgot{border:0;background:none;color:var(--dr-pink,#d63a78);font-weight:800;font-size:13px;cursor:pointer;text-decoration:underline}
+#signupRecoveryField{display:grid;gap:8px}
+#signupRecoveryField[hidden]{display:none!important}
+#resetModal .modal{max-width:430px}
+#resetModal p{margin:0 0 12px;color:var(--dr-muted,#5a5645);line-height:1.5}
+#resetModal label{display:block;font-weight:800;margin:12px 0 6px}
+#resetModal input,#signupRecoveryField input,#signupRecoveryField select{width:100%;box-sizing:border-box}
+#resetQuestion{display:block;padding:12px 14px;background:var(--dr-soft,#eee2c6);border-radius:14px;font-weight:800;margin:6px 0}
+.reset-msg{min-height:20px;margin:10px 0 0;color:#b91c1c;font-weight:700;font-size:13.5px;line-height:1.5}
+.reset-msg a{color:var(--dr-pink,#d63a78)}
+.st-two-col{display:grid;gap:12px}.st-two-col label{display:block;font-weight:800;font-size:14px}.st-two-col :is(input,select){display:block;width:100%;box-sizing:border-box;margin-top:6px;padding:11px 14px;min-height:46px}
+</style>
+
+<script id="home-levels">
+(function(){
+ const $=id=>document.getElementById(id);
+ document.addEventListener('click',e=>{
+  const t=e.target.closest('.level-tab');if(!t)return;
+  const sec=$('level'+t.dataset.level);if(!sec)return;
+  document.querySelectorAll('.level-tab').forEach(x=>x.classList.toggle('on',x===t));
+  sec.scrollIntoView({behavior:'smooth',block:'start'});
+ });
+})();
+</script>
+
+<script id="account-security">
+(function(){
+ const $=id=>document.getElementById(id);
+ const FN=(typeof SUPABASE_URL!=='undefined'?SUPABASE_URL:'')+'/functions/v1/account-recovery';
+ const note=(m,t)=>{try{toast(m,t||'info',3500);}catch(e){alert(m);}};
+ async function call(action,payload,needAuth){
+  const h={'Content-Type':'application/json','apikey':SUPABASE_ANON_KEY};
+  if(needAuth){const {data:{session}}=await supabaseClient.auth.getSession();if(!session)throw new Error('Please log in first.');h.Authorization='Bearer '+session.access_token;}
+  else h.Authorization='Bearer '+SUPABASE_ANON_KEY;
+  let res;try{res=await fetch(FN,{method:'POST',headers:h,body:JSON.stringify({action,...payload})});}catch(e){throw new Error('Network problem. Please check your internet and try again.');}
+  const body=await res.json().catch(()=>({}));
+  if(!res.ok||body.error)throw new Error(body.error||(res.status===404?'Account recovery is not set up yet. Ask the admin to deploy the account-recovery function.':'Request failed'));
+  return body;
+ }
+ window.drCallRecovery=call;
+
+ /* ---------- Forgot password (login screen) ---------- */
+ const rm=$('resetModal');
+ function resetStep(n){$('resetStep1').hidden=n!==1;$('resetStep2').hidden=n!==2;$('resetMsg').textContent='';}
+ function openReset(){
+  $('authModal').hidden=true;rm.hidden=false;resetStep(1);
+  $('resetUsername').value=($('authUsername').value||'').trim();$('resetAnswer').value='';$('resetNewPass').value='';
+  setTimeout(()=>$('resetUsername').focus(),60);
+ }
+ function closeReset(backToLogin){rm.hidden=true;if(backToLogin){openAuthModal('login');}}
+ $('authForgotBtn')?.addEventListener('click',openReset);
+ $('resetCancel1')?.addEventListener('click',()=>closeReset(true));
+ $('resetCancel2')?.addEventListener('click',()=>closeReset(true));
+ $('resetFindBtn')?.addEventListener('click',async()=>{
+  const u=$('resetUsername').value.trim();if(!u){$('resetMsg').textContent='Please type your username.';return;}
+  $('resetFindBtn').disabled=true;$('resetMsg').textContent='';
+  try{
+   const r=await call('get_question',{username:u});
+   if(!r.has){$('resetMsg').innerHTML='No recovery question was set for this account. Please ask your teacher (admin) to reset your password, for example on <a href="https://wa.me/8801995125480" target="_blank" rel="noopener">WhatsApp</a>.';}
+   else{$('resetQuestion').textContent=r.question;resetStep(2);setTimeout(()=>$('resetAnswer').focus(),60);}
+  }catch(e){$('resetMsg').textContent=e.message;}
+  $('resetFindBtn').disabled=false;
+ });
+ $('resetDoBtn')?.addEventListener('click',async()=>{
+  const u=$('resetUsername').value.trim(),a=$('resetAnswer').value,p=$('resetNewPass').value;
+  if(!a.trim()){$('resetMsg').textContent='Please type your answer.';return;}
+  if(!p){$('resetMsg').textContent='Please type a new password.';return;}
+  $('resetDoBtn').disabled=true;$('resetMsg').textContent='';
+  try{
+   await call('reset',{username:u,answer:a,password:await derivePassword(p)});
+   note('✅ Password changed. Please log in with your new password.','success');
+   rm.hidden=true;openAuthModal('login');$('authUsername').value=u;setTimeout(()=>$('authPassword').focus(),80);
+  }catch(e){$('resetMsg').textContent=e.message;}
+  $('resetDoBtn').disabled=false;
+ });
+
+ /* ---------- Set / change recovery question (student profile) ---------- */
+ const Q=['What is the name of your first school?','What is your mother\'s nickname?','What was the name of your childhood best friend?','What is your favourite teacher\'s name?','In which village / town were you born?'];
+ let recCard=null;
+ function ensureRecoveryCard(){
+  const prof=$('screen-profile');if(!prof||$('recoveryCard'))return;
+  const card=document.createElement('div');card.className='profile-card';card.id='recoveryCard';
+  card.innerHTML='<h3>🔐 Account Recovery</h3><p class="card-hint" id="recoveryStatus">Set a secret question so you can reset your password if you forget it.</p>'+
+   '<form id="recoveryForm" class="st-two-col"><label>Question<select id="recQ">'+Q.map(q=>'<option>'+q+'</option>').join('')+'</select></label><label>Your answer (not case sensitive)<input id="recA" maxlength="80" autocomplete="off" required></label><button class="btn btn-primary" type="submit">Save recovery answer</button></form>';
+  prof.appendChild(card);recCard=card;
+  $('recoveryForm').addEventListener('submit',async e=>{e.preventDefault();const b=e.target.querySelector('button');b.disabled=true;
+   try{await call('set_recovery',{question:$('recQ').value,answer:$('recA').value},true);$('recA').value='';$('recoveryStatus').textContent='✅ Saved. You can now reset your password with this question.';note('Recovery answer saved ✓','success');}
+   catch(err){note(err.message,'error');}b.disabled=false;});
+  if(window.__drAcc){window.__drAcc.makeAcc(card);window.__drAcc.closeAcc(card);}
+ }
+ async function refreshRecoveryStatus(){
+  if(!window.currentProfile||!$('recoveryStatus'))return;
+  try{const r=await call('get_question',{username:window.currentProfile.username});if(r.has)$('recoveryStatus').textContent='✅ Recovery question is set: "'+r.question+'". You can change it below.';}catch(e){}
+ }
+ if($('screen-profile'))new MutationObserver(()=>{const p=$('screen-profile');if(p.hidden||!window.currentProfile)return;ensureRecoveryCard();if(window.__drAcc&&recCard)window.__drAcc.closeAcc(recCard);refreshRecoveryStatus();}).observe($('screen-profile'),{attributes:true,attributeFilter:['hidden']});
+
+ /* ---------- Admin: reset a student's password ---------- */
+ function ensureAdminReset(){
+  const sec=$('screen-admin-user');if(!sec||$('adminResetCard'))return;
+  const card=document.createElement('div');card.className='profile-card';card.id='adminResetCard';
+  card.innerHTML='<h3>🔑 Reset Password</h3><p class="card-hint">If the student forgot the password, set a new one here and tell it to the student. The student can change it later.</p>'+
+   '<form id="adminResetForm" class="st-two-col"><label>New password for this student<input id="adminResetPass" type="text" autocomplete="off" required placeholder="Type any new password"></label><button class="btn btn-primary" type="submit">Reset password</button></form>';
+  sec.appendChild(card);
+  $('adminResetForm').addEventListener('submit',async e=>{e.preventDefault();
+   let id=null;try{id=state.adminViewedUserId;}catch(x){}if(!id){note('Open a student first.','warning');return;}
+   const pw=$('adminResetPass').value;if(!pw)return;
+   const ok=await customConfirm('Reset this student\'s password to the one you typed?',{okText:'Yes, reset',cancelText:'Cancel',icon:'🔑'});if(!ok)return;
+   const b=e.target.querySelector('button');b.disabled=true;
+   try{await call('admin_reset',{user_id:id,password:await derivePassword(pw)},true);$('adminResetPass').value='';note('✅ Password reset. Tell the student the new password.','success');}
+   catch(err){note(err.message,'error');}b.disabled=false;});
+  if(window.__drAcc){window.__drAcc.makeAcc(card);window.__drAcc.closeAcc(card);}
+ }
+ if($('screen-admin-user'))new MutationObserver(()=>{const s=$('screen-admin-user');if(s.hidden||!window.currentProfile||!window.currentProfile.is_admin)return;ensureAdminReset();const c=$('adminResetCard');if(c&&window.__drAcc)window.__drAcc.closeAcc(c);}).observe($('screen-admin-user'),{attributes:true,attributeFilter:['hidden']});
+ window.drSetRecoveryAfterSignup=async function(q,a){if(!a||!String(a).trim())return;try{await call('set_recovery',{question:q,answer:a},true);}catch(e){console.debug('recovery not saved',e.message);}};
+})();
+</script>
 
 </html>
