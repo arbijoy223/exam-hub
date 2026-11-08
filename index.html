@@ -7961,7 +7961,7 @@ body.dr-exam-protect #screen-exam{-webkit-user-select:none;user-select:none;-web
    b.disabled=false;});
   $('ntCheck').addEventListener('click',async()=>{
    const box=$('ntDiag');box.hidden=false;box.textContent='Checking…';
-   const r=await drInvokePush({event:'ping'});
+   const r=await drInvokePush({event:'ping',project:(typeof ARBIJOY_FIREBASE_CONFIG!=='undefined'?ARBIJOY_FIREBASE_CONFIG.projectId:undefined)});
    const L={admin:'Admin login',secret:'Firebase secret (FIREBASE_SERVICE_ACCOUNT)',project:'Firebase project',google:'Google key',students:'Students with Notify on',login:'Login',supabase_key:'Supabase key'};
    const steps=r.steps||[];let h='';
    steps.forEach(s=>{h+='<div class="nt-step '+(s.ok?'ok':'bad')+'">'+(s.ok?'✅ ':'❌ ')+(L[s.name]||s.name)+(s.detail?' <small>'+String(s.detail).replace(/[<>&]/g,'')+'</small>':'')+'</div>';});
