@@ -1,4 +1,5 @@
-const CACHE_NAME = "ar-bijoy-exam-center-v3";
+
+const CACHE_NAME = "ar-bijoy-exam-center-v4";
 
 const APP_SHELL = [
   "./",
@@ -8,93 +9,171 @@ const APP_SHELL = [
   "./icons/icon-512.png"
 ];
 
+const STATIC_EXTENSIONS = [
+  ".css",
+  ".js",
+  ".png",
+  ".jpg",
+  ".jpeg",
+  ".webp",
+  ".svg",
+  ".ico",
+  ".woff",
+  ".woff2",
+  ".ttf"
+];
 
 // ==============================
 // INSTALL
 // ==============================
 
 self.addEventListener("install", event => {
-
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(APP_SHELL))
-      .then(() => self.skipWaiting())
+    (async () => {
+      const cache = await caches.open(CACHE_NAME);
+
+      // One missing file should not break the entire installation.
+      await Promise.allSettled(
+        APP_SHELL.map(async path => {
+          try {
+            const response = await fetch(path, {
+              cache: "reload"
+            });
+
+            if (response.ok && response.type === "basic") {
+              await cache.put(path, response);
+            }
+          } catch (error) {
+            console.warn("Could not cache:", path, error);
+          }
+        })
+      );
+
+      await self.skipWaiting();
+    })()
   );
-
 });
-
 
 // ==============================
 // ACTIVATE
 // ==============================
 
 self.addEventListener("activate", event => {
-
   event.waitUntil(
+    (async () => {
+      const keys = await caches.keys();
 
-    caches.keys().then(keys => {
-
-      return Promise.all(
-
+      await Promise.all(
         keys
-          .filter(key => key !== CACHE_NAME)
+          .filter(key =>
+            key.startsWith("ar-bijoy-exam-center-") &&
+            key !== CACHE_NAME
+          )
           .map(key => caches.delete(key))
-
       );
 
-    }).then(() => self.clients.claim())
-
+      await self.clients.claim();
+    })()
   );
-
 });
-
 
 // ==============================
 // FETCH
 // ==============================
 
 self.addEventListener("fetch", event => {
+  const request = event.request;
 
-  if (event.request.method !== "GET") return;
+  if (request.method !== "GET") return;
+
+  const url = new URL(request.url);
+
+  // Never intercept third-party requests, including Supabase.
+  if (url.origin !== self.location.origin) return;
+
+  // Never cache API, authentication, storage or realtime requests.
+  const excludedPaths = [
+    "/rest/v1/",
+    "/auth/v1/",
+    "/storage/v1/",
+    "/functions/v1/",
+    "/realtime/v1/"
+  ];
+
+  if (excludedPaths.some(path => url.pathname.includes(path))) {
+    return;
+  }
+
+  // ==============================
+  // PAGE NAVIGATION: NETWORK FIRST
+  // ==============================
+
+  if (request.mode === "navigate") {
+    event.respondWith(
+      (async () => {
+        try {
+          const response = await fetch(request);
+
+          if (response.ok && response.type === "basic") {
+            const cache = await caches.open(CACHE_NAME);
+            await cache.put(request, response.clone());
+          }
+
+          return response;
+        } catch (error) {
+          const cached =
+            await caches.match(request) ||
+            await caches.match("./index.html") ||
+            await caches.match("./");
+
+          if (cached) return cached;
+
+          return new Response("You are offline. Please reconnect.", {
+            status: 503,
+            headers: {
+              "Content-Type": "text/plain; charset=utf-8"
+            }
+          });
+        }
+      })()
+    );
+
+    return;
+  }
+
+  // ==============================
+  // STATIC ASSETS ONLY
+  // ==============================
+
+  const isStaticAsset = STATIC_EXTENSIONS.some(ext =>
+    url.pathname.toLowerCase().endsWith(ext)
+  );
+
+  if (!isStaticAsset) return;
 
   event.respondWith(
+    (async () => {
+      try {
+        const response = await fetch(request);
 
-    fetch(event.request)
-
-      .then(response => {
-
-        // Network থেকে নতুন file পাওয়া গেছে
-        if (
-          response &&
-          response.status === 200 &&
-          response.type === "basic"
-        ) {
-
-          const copy = response.clone();
-
-          caches.open(CACHE_NAME)
-            .then(cache => {
-              cache.put(event.request, copy);
-            });
-
+        if (response.ok && response.type === "basic") {
+          const cache = await caches.open(CACHE_NAME);
+          await cache.put(request, response.clone());
         }
 
         return response;
+      } catch (error) {
+        const cached = await caches.match(request);
 
-      })
+        if (cached) return cached;
 
-      .catch(() => {
-
-        // Internet না থাকলে cached version দেখাবে
-        return caches.match(event.request)
-          .then(cached => {
-
-            return cached || caches.match("./index.html");
-
-          });
-
-      })
-
+        return new Response("Asset unavailable offline.", {
+          status: 503,
+          headers: {
+            "Content-Type": "text/plain; charset=utf-8"
+          }
+        });
+      }
+    })()
   );
-
 });
