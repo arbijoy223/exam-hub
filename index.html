@@ -5540,7 +5540,7 @@ setTimeout(()=>{
    $('directChatForm').onsubmit=async e=>{e.preventDefault();const form=e.currentTarget,txt=form.elements.message.value.trim();if(!txt)return;const btn=form.querySelector('button');btn.disabled=true;try{const uid=await userId(),{error}=await client().from('exam_messages').insert({user_id:activeDirectUser,username:activeDirectName,exam_title:'Direct message',subject:'Direct chat',message:txt,status:'open',sender_id:uid,sender_role:'admin'});if(error)throw error;void sendArbijoyPushEvent({event:'message_sent',user_id:activeDirectUser,title:'💬 New message from your teacher',body:txt.slice(0,110)});form.reset();await loadDirectConversation();}catch(err){alert('Message পাঠানো যায়নি: '+err.message);}finally{btn.disabled=false;}};
  };
  async function loadDirectConversation(){const box=$('directChatThread');if(!box||!activeDirectUser)return;try{const uid=await userId(),{data,error}=await client().from('exam_messages').select('id,user_id,username,message,created_at,sender_id,sender_role').eq('user_id',activeDirectUser).not('sender_role','is',null).order('created_at',{ascending:true}).limit(300);if(error)throw error;box.innerHTML='';(data||[]).forEach(m=>{const b=document.createElement('div');b.className='chat-bubble '+(m.sender_id===uid?'mine':'theirs');b.innerHTML='<div>'+esc(m.message)+'</div><small>'+esc(m.sender_role==='admin'?'Admin':(m.username||'Student'))+' · '+(m.created_at?new Date(m.created_at).toLocaleString(): '')+'</small>';box.appendChild(b);});if(!data?.length)box.innerHTML='<div class="empty-profile">এখনো কোনো মেসেজ নেই। কথোপকথন শুরু করো।</div>';box.scrollTop=box.scrollHeight;}catch(e){box.innerHTML='<p>Conversation load হয়নি: '+esc(e.message)+'</p>';}}
- async function updateNav(){const b=$('navMessagesBtn');if(!b)return;const pr=profile();b.hidden=!pr;const label=pr?.is_admin?'📨 Message':'💬 Message';if(!b.querySelector('.message-unread-badge'))b.innerHTML=label+'<span class="message-unread-badge" hidden>0</span>';else b.childNodes[0].textContent=label+' ';if(!pr||!client())return;try{const c=client(),uid=await userId(),key='examhub_msg_seen_'+uid+'_'+(pr.is_admin?'admin':'user');let seen=0;try{seen=Date.parse(localStorage.getItem(key)||'')||0;}catch(e){}let q=c.from('exam_messages').select('id,status,admin_reply,user_reply,user_id,created_at,replied_at,user_replied_at,sender_role,sender_id');if(pr.is_admin)q=q.or('created_at.gt.'+new Date(seen).toISOString()+',user_replied_at.gt.'+new Date(seen).toISOString());else q=q.eq('user_id',uid);const {data,error}=await q;if(error)throw error;const count=(data||[]).filter(m=>pr.is_admin?(Math.max(Date.parse(m.created_at||0)||0,Date.parse(m.user_replied_at||0)||0)>seen):((m.sender_role==='admin' || !!m.admin_reply) && Math.max(Date.parse(m.created_at||0)||0,Date.parse(m.replied_at||0)||0)>seen)).length;const badge=b.querySelector('.message-unread-badge');if(badge){badge.hidden=count<1;badge.textContent=count>99?'99+':String(count);}}catch(e){const badge=b.querySelector('.message-unread-badge');if(badge)badge.hidden=true;}}setInterval(updateNav,12000);updateNav();
+ async function updateNav(){const b=$('navMessagesBtn');if(!b)return;const pr=profile();b.hidden=!pr;const label=pr?.is_admin?'📨 Message':'💬 Message';if(!b.querySelector('.message-unread-badge'))b.innerHTML=label+'<span class="message-unread-badge" hidden>0</span>';else b.childNodes[0].textContent=label+' ';if(!pr||!client())return;try{const c=client(),uid=await userId(),key='examhub_msg_seen_'+uid+'_'+(pr.is_admin?'admin':'user');let seen=0;try{seen=Date.parse(localStorage.getItem(key)||'')||0;}catch(e){}let q=c.from('exam_messages').select('id,status,admin_reply,user_reply,user_id,created_at,replied_at,user_replied_at,sender_role,sender_id');if(pr.is_admin)q=q.or('created_at.gt.'+new Date(seen).toISOString()+',user_replied_at.gt.'+new Date(seen).toISOString());else q=q.eq('user_id',uid);const {data,error}=await q;if(error)throw error;const count=(data||[]).filter(m=>pr.is_admin?(Math.max(Date.parse(m.created_at||0)||0,Date.parse(m.user_replied_at||0)||0)>seen):((m.sender_role==='admin' || !!m.admin_reply) && Math.max(Date.parse(m.created_at||0)||0,Date.parse(m.replied_at||0)||0)>seen)).length;const badge=b.querySelector('.message-unread-badge');if(badge){badge.hidden=count<1;badge.textContent=count>99?'99+':String(count);}}catch(e){const badge=b.querySelector('.message-unread-badge');if(badge)badge.hidden=true;}}window.__updateNav=updateNav;setInterval(updateNav,12000);updateNav();
  async function loadTopThreeLegacy(){const box=$('heroTopThree'),c=client();if(!box||!c)return;try{
  const [{data:users,error:ue},{data:rs,error:re},{data:ws,error:we}]=await Promise.all([c.from('profiles').select('user_id,username,is_admin,blocked,created_at').eq('is_admin',false).eq('blocked',false),c.from('results').select('user_id,percent,correct,total,attempted_at'),c.from('written_submissions').select('user_id,exam_id,status,score,graded_at,submitted_at').eq('status','graded').not('score','is',null)]);if(ue)throw ue;if(re)throw re;if(we)throw we;
  const exids=[...new Set((ws||[]).map(x=>x.exam_id).filter(Boolean))];let exs=[];if(exids.length){const ex=await c.from('written_exams').select('id,total_marks').in('id',exids);if(ex.error)throw ex.error;exs=ex.data||[];}const maxMap=new Map(exs.map(x=>[x.id,Number(x.total_marks)||0]));const stats=new Map((users||[]).map(u=>[u.user_id,{username:u.username||'Student',sum:0,n:0}]));(rs||[]).forEach(r=>{const x=stats.get(r.user_id);if(x){x.sum+=Number(r.percent)||0;x.n++;}});(ws||[]).forEach(r=>{const x=stats.get(r.user_id),max=maxMap.get(r.exam_id)||0;if(x&&max>0){x.sum+=(Number(r.score)||0)/max*100;x.n++;}});const top=[...stats.entries()].filter(([id,x])=>x.n>0).map(([id,x])=>({id,username:x.username,avg:Math.round(x.sum/x.n)})).sort((a,b)=>b.avg-a.avg||a.username.localeCompare(b.username)).slice(0,3);if(!top.length){box.innerHTML='<div class="hero-top-user"><span class="medal">🏆</span><div><strong>Top 3 coming soon</strong><small>Admin User Performance report অনুযায়ী ranking</small></div></div>';return;}const medals=['🥇','🥈','🥉'];box.innerHTML=top.map((u,i)=>'<div class="hero-top-user"><span class="medal">'+medals[i]+'</span><div><strong>'+esc(u.username)+'</strong><small>'+u.avg+'% average · Admin report ranking</small></div></div>').join('');
@@ -7976,8 +7976,11 @@ body.dr-exam-protect #screen-exam{-webkit-user-select:none;user-select:none;-web
 </script>
 
 <style id="v43-styles">
-/* ================= TOP NAVBAR: Notify · Log out · Dark/Light · Profile(photo) · ⋮ menu ================= */
-html:root:root body .account-area{display:flex!important;flex-wrap:wrap!important;align-items:center;gap:8px!important;overflow:visible!important}
+/* ================= TOP NAVBAR: buttons fill the whole line ================= */
+html:root:root body .menu-trigger{width:46px!important;height:46px!important;min-height:46px;padding:0 10px!important;background:transparent!important;border:0!important;box-shadow:none!important;border-radius:14px!important;display:flex!important;flex-direction:column;justify-content:center;align-items:flex-start;gap:5px!important;flex:0 0 46px}
+html:root:root body .menu-trigger>span{display:block!important;height:3px!important;border-radius:3px;background:var(--dr-ink,#1a1830)!important;width:26px!important}
+html:root:root body .menu-trigger>span:nth-child(3){width:16px!important}
+html:root:root body .menu-trigger:before{content:none!important}
 html:root:root body .account-area #navHomeBtn{order:1}
 html:root:root body .account-area #navStudyBtn{order:2}
 html:root:root body .account-area #navLiveBtn{order:3}
@@ -7987,31 +7990,33 @@ html:root:root body .account-area #enableNotificationsBtn{order:6}
 html:root:root body .account-area #authActionBtn{order:7}
 html:root:root body .account-area #themeToggleBtn{order:8}
 html:root:root body .account-area #profileBtn{order:9}
-/* the 3-dot menu button */
-html:root:root body .menu-trigger{width:46px!important;height:46px!important;min-height:46px;padding:0!important;border-radius:50%!important;background:var(--dr-card,#fffbf2)!important;border:1px solid var(--dr-line,#e2d4b4)!important;box-shadow:0 2px 8px rgba(70,50,10,.08)!important;display:grid!important;place-items:center;gap:0!important;flex:none}
-html:root:root body .menu-trigger>span{display:none!important}
-html:root:root body .menu-trigger:before{content:"⋮";font-size:28px;line-height:1;font-weight:900;color:var(--dr-ink,#1a1830)}
-/* profile photo button */
 html:root:root body #profileBtn:not([hidden]){display:inline-flex!important}
-html:root:root body #profileBtn .nav-profile-avatar{width:34px;height:34px}
-@media(max-width:700px){
-  html:root:root body .topbar-inner{grid-template-columns:minmax(0,1fr) auto!important;gap:10px 8px!important}
-  html:root:root body .brand{grid-column:1/-1!important;grid-row:1!important}
-  html:root:root body .nav-search-wrap{grid-column:1/-1!important;grid-row:2!important}
-  html:root:root body .account-area{grid-column:1!important;grid-row:3!important;width:auto!important;justify-content:flex-end!important;padding:0!important}
-  html:root:root body .menu-trigger{grid-column:2!important;grid-row:3!important;justify-self:end;align-self:center;margin:0!important}
-  html:root:root body .account-area .account-btn{flex:0 0 auto!important;min-height:46px!important;padding:8px 12px!important;font-size:13.5px!important;width:auto!important}
-  html:root:root body .account-area #enableNotificationsBtn{margin-right:auto}
-  html:root:root body .account-area #themeToggleBtn{padding:8px 13px!important}
-  html:root:root body .account-area #themeToggleLabel{display:none}
-  html:root:root body .account-area #profileBtn:not([hidden]){width:46px!important;height:46px;padding:4px!important;justify-content:center;border-radius:50%!important}
-  html:root:root body .account-area #profileBtn #navProfileName{display:none}
-  html:root:root body .account-area #profileBtn .nav-profile-avatar{width:36px;height:36px}
+html:root:root body #profileBtn .nav-profile-avatar{width:34px;height:34px;flex:none}
+html:root:root body #profileBtn #navProfileName{display:inline!important;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media(min-width:701px){
+  html:root:root body .nav-search-wrap{max-width:none!important;flex:1 1 240px!important}
+  html:root:root body .menu-trigger{order:10}
 }
+@media(max-width:700px){
+  html:root:root body .topbar-inner{display:flex!important;flex-wrap:wrap!important;gap:8px!important;align-items:stretch!important;padding:10px 12px!important}
+  html:root:root body .brand{flex:1 1 100%!important;order:0!important}
+  html:root:root body .nav-search-wrap{flex:1 1 100%!important;order:1!important;max-width:none!important;width:100%!important}
+  html:root:root body .account-area{display:contents!important}
+  html:root:root body .account-area .account-btn{flex:1 1 auto!important;width:auto!important;min-width:0;min-height:46px!important;margin:0!important;padding:8px 10px!important;font-size:13.5px!important;justify-content:center}
+  html:root:root body .account-area #enableNotificationsBtn{order:2!important}
+  html:root:root body .account-area #authActionBtn{order:3!important}
+  html:root:root body .account-area #themeToggleBtn{order:4!important}
+  html:root:root body .menu-trigger{order:5!important;grid-column:auto!important;grid-row:auto!important;position:relative!important;align-self:center;margin:0!important}
+  html:root:root body .account-area #profileBtn{order:6!important;flex:1 1 100%!important;padding:5px 12px!important;border-radius:999px!important;justify-content:center;gap:8px}
+}
+@media(min-width:471px) and (max-width:700px){
+  html:root:root body .account-area #profileBtn{order:5!important;flex:1 1 auto!important}
+  html:root:root body .menu-trigger{order:6!important}
+}
+@media(max-width:400px){html:root:root body .account-area #themeToggleLabel{display:none}}
 /* Notify: a small attention animation every 3 seconds */
 @keyframes notifyAttn{0%,64%,100%{transform:none;box-shadow:0 0 0 0 rgba(214,58,120,0)}68%{transform:rotate(-9deg) scale(1.07);box-shadow:0 0 0 0 rgba(214,58,120,.55)}72%{transform:rotate(9deg) scale(1.07)}76%{transform:rotate(-7deg) scale(1.05);box-shadow:0 0 0 10px rgba(214,58,120,0)}80%{transform:rotate(6deg)}84%{transform:rotate(-3deg)}88%{transform:none}}
 html:root:root body #enableNotificationsBtn:not([hidden]){animation:notifyAttn 3s ease-in-out infinite!important;transform-origin:50% 60%}
-html:root:root body #enableNotificationsBtn:not([hidden]):after{animation:drPulse 1.8s infinite}
 /* ================= HERO TEXT: two colours + entrance animation ================= */
 @keyframes heroUp{from{opacity:0;transform:translateY(18px);filter:blur(7px)}to{opacity:1;transform:none;filter:blur(0)}}
 @keyframes heroShine{0%{background-position:0% 50%}100%{background-position:200% 50%}}
@@ -8024,6 +8029,28 @@ html:root:root body #homeHeroCarousel .hero-slide h2 .h-b{background:linear-grad
 html:root:root body #homeHeroCarousel .hero-slide h2 .h-a{color:#fff!important}
 html:root:root body #homeHeroCarousel .hero-slide p .p-a{color:#f1f5ff!important;-webkit-text-fill-color:#f1f5ff!important}
 html:root:root body #homeHeroCarousel .hero-slide p .p-b{color:#9eeaff!important;-webkit-text-fill-color:#9eeaff!important;font-weight:700}
+/* ================= TOP PERFORMERS: animated podium chips ================= */
+@keyframes chipIn{from{opacity:0;transform:translateY(-18px) scale(.78)}60%{transform:translateY(4px) scale(1.05)}to{opacity:1;transform:none}}
+@keyframes chipFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@keyframes chipShine{0%,68%{transform:translateX(-140%)}100%{transform:translateX(140%)}}
+@keyframes medalPop{0%,100%{transform:scale(1) rotate(0)}25%{transform:scale(1.28) rotate(-12deg)}50%{transform:scale(1.1) rotate(9deg)}75%{transform:scale(1.05) rotate(0)}}
+@keyframes nameShimmer{0%{background-position:0% 50%}100%{background-position:200% 50%}}
+html:root:root body #homeHeroCarousel .hero-top-three .hero-top-user{position:relative;overflow:hidden;border-radius:999px!important;padding:6px 18px 6px 9px!important;gap:8px!important;backdrop-filter:blur(8px);animation:chipIn .75s cubic-bezier(.22,.8,.3,1) backwards,chipFloat 3.4s ease-in-out 1.2s infinite;background:linear-gradient(135deg,rgba(255,255,255,.97),rgba(255,247,226,.97))!important}
+html:root:root body #homeHeroCarousel .hero-top-three .hero-top-user:before{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 35%,rgba(255,255,255,.85) 50%,transparent 65%);transform:translateX(-140%);animation:chipShine 4.5s ease-in-out infinite;pointer-events:none}
+html:root:root body #homeHeroCarousel .hero-top-three .hero-top-user:nth-child(2){animation-delay:.18s,1.4s}
+html:root:root body #homeHeroCarousel .hero-top-three .hero-top-user:nth-child(3){animation-delay:.34s,1.6s}
+html:root:root body #homeHeroCarousel .hero-top-three .hero-top-user:nth-child(4){animation-delay:.5s,1.8s}
+html:root:root body #homeHeroCarousel .hero-top-three .hero-top-user .medal{display:inline-block;font-size:22px;animation:medalPop 2.8s ease-in-out infinite;filter:drop-shadow(0 2px 4px rgba(0,0,0,.25))}
+html:root:root body #homeHeroCarousel .hero-top-three .hero-top-user strong{background-size:200% 100%!important;-webkit-background-clip:text!important;background-clip:text!important;-webkit-text-fill-color:transparent!important;color:transparent!important;font-weight:900!important;animation:nameShimmer 3s linear infinite}
+html:root:root body #homeHeroCarousel .hero-top-three .hero-top-user:nth-child(1){box-shadow:0 0 0 2px #f2c230,0 10px 26px rgba(242,194,48,.45)!important}
+html:root:root body #homeHeroCarousel .hero-top-three .hero-top-user:nth-child(1) strong{background-image:linear-gradient(90deg,#7a4b00,#e0a800,#7a4b00)!important}
+html:root:root body #homeHeroCarousel .hero-top-three .hero-top-user:nth-child(2){box-shadow:0 0 0 2px #c3cad6,0 10px 24px rgba(0,0,0,.3)!important}
+html:root:root body #homeHeroCarousel .hero-top-three .hero-top-user:nth-child(2) strong{background-image:linear-gradient(90deg,#3f4a5c,#9aa6ba,#3f4a5c)!important}
+html:root:root body #homeHeroCarousel .hero-top-three .hero-top-user:nth-child(3){box-shadow:0 0 0 2px #d68a4e,0 10px 24px rgba(0,0,0,.3)!important}
+html:root:root body #homeHeroCarousel .hero-top-three .hero-top-user:nth-child(3) strong{background-image:linear-gradient(90deg,#6e3610,#d27a3a,#6e3610)!important}
+html:root:root body #homeHeroCarousel .hero-top-three .hero-top-user.me{box-shadow:0 0 0 2px #d63a78,0 10px 26px rgba(214,58,120,.45)!important;background:linear-gradient(135deg,#ffe3ee,#fffbf2)!important}
+html:root:root body #homeHeroCarousel .hero-top-three .hero-top-user.me strong{background-image:linear-gradient(90deg,#b4235f,#ff5c9a,#b4235f)!important}
+html:root:root body #homeHeroCarousel .hero-top-three .hero-top-user:nth-child(1):after{content:"👑";position:absolute;top:-1px;right:8px;font-size:12px;animation:medalPop 2.8s ease-in-out infinite}
 @media(prefers-reduced-motion:reduce){.hero-slide-content .h-a,.hero-slide-content .h-b,.hero-slide-content .p-a,.hero-slide-content .p-b{opacity:1!important;animation:none!important}}
 </style>
 
@@ -8057,6 +8084,81 @@ html:root:root body #homeHeroCarousel .hero-slide p .p-b{color:#9eeaff!important
  }
  function init(){typing();hero();}
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+
+<script id="profile-edit">
+/* Edit name (needs the password), remove profile photo, and open a new teacher message as soon as the student opens the app */
+(function(){
+ const $=id=>document.getElementById(id);
+ const note=(m,t)=>{try{toast(m,t||'info',3800);}catch(e){alert(m);}};
+ const cp=()=>window.currentProfile;
+ const MSG={wrong_password:'The password is not correct.',taken:'This name is already used by someone else.',invalid:'Please type a valid name.',login:'Please log in again.'};
+ function syncRemove(){const b=$('removeProfileAvatarBtn');if(b)b.hidden=!(cp()&&cp().avatar_url);}
+ function showInitial(){
+  const p=cp();if(!p)return;const init=String(p.username||'U').charAt(0).toUpperCase();
+  try{renderAvatar($('profileAvatar'),p.avatar_url||null,init);renderAvatar($('navProfileAvatar'),p.avatar_url||null,init);}catch(e){}
+  const da=$('drawerAvatar');if(da){if(p.avatar_url){da.textContent='';da.style.backgroundImage='url("'+p.avatar_url+'")';}else{da.style.backgroundImage='';da.textContent=init;}}
+ }
+ /* ---------- rename modal ---------- */
+ function renameModal(){
+  let m=$('renameModal');if(m)return m;
+  m=document.createElement('div');m.className='modal-overlay';m.id='renameModal';m.hidden=true;
+  m.innerHTML='<div class="modal auth-modal"><h3>✏️ Change your name</h3><p class="card-hint" style="margin-top:0">Your new name is saved on the server and you will use it for your next logins. Type your password to confirm.</p><label for="renameInput" style="display:block;font-weight:800;margin:12px 0 6px">New name</label><input id="renameInput" maxlength="80" autocomplete="off"><label for="renamePass" style="display:block;font-weight:800;margin:12px 0 6px">Your password</label><input id="renamePass" type="password" autocomplete="current-password"><div class="reset-msg" id="renameMsg" role="alert"></div><div class="modal-buttons"><button class="btn btn-ghost" id="renameCancel" type="button">Cancel</button><button class="btn btn-primary" id="renameSave" type="button">Save name</button></div></div>';
+  document.body.appendChild(m);
+  $('renameCancel').onclick=()=>{m.hidden=true;};
+  $('renameSave').onclick=async()=>{
+   const name=$('renameInput').value.trim(),pw=$('renamePass').value,box=$('renameMsg');box.textContent='';
+   if(!name){box.textContent='Please type your new name.';return;}
+   if(!pw){box.textContent='Please type your password.';return;}
+   if(cp()&&name===cp().username){box.textContent='This is already your name.';return;}
+   const btn=$('renameSave');btn.disabled=true;
+   try{
+    const r=await supabaseClient.rpc('change_my_username',{p_new:name,p_derived:await derivePassword(pw),p_raw:pw});
+    if(r.error){const t=(r.error.message||'')+' '+(r.error.code||'');throw new Error(/could not find|PGRST202|schema cache/i.test(t)?'Name change is not set up yet. Ask the admin to run setup-v44.sql in Supabase.':r.error.message);}
+    if(r.data!=='ok'){box.textContent=MSG[r.data]||'Could not change the name.';btn.disabled=false;return;}
+    const p=cp();p.username=name;try{state.studentName=name;}catch(e){}try{cacheProfile(p);}catch(e){}
+    try{updateAccountUI();}catch(e){}if($('profileUsername'))$('profileUsername').textContent=name;showInitial();
+    m.hidden=true;$('renamePass').value='';note('✅ Name changed. Use "'+name+'" the next time you log in.','success');
+   }catch(e){box.textContent=e.message||'Could not change the name.';}
+   btn.disabled=false;
+  };
+  return m;
+ }
+ function ensureButtons(){
+  const ch=$('changeProfileAvatarBtn');if(!ch||$('editProfileNameBtn'))return;
+  const ed=document.createElement('button');ed.className='btn btn-ghost';ed.id='editProfileNameBtn';ed.type='button';ed.textContent='✏️ Edit name';
+  const rm=document.createElement('button');rm.className='btn btn-ghost';rm.id='removeProfileAvatarBtn';rm.type='button';rm.textContent='🗑 Remove photo';
+  ch.parentNode.insertBefore(ed,ch.nextSibling);ch.parentNode.insertBefore(rm,ed.nextSibling);
+  ed.onclick=()=>{if(!cp()){openAuthModal('login');return;}const m=renameModal();$('renameInput').value=cp().username||'';$('renamePass').value='';$('renameMsg').textContent='';m.hidden=false;setTimeout(()=>$('renameInput').focus(),60);};
+  rm.onclick=async()=>{
+   if(!cp())return;const ok=await customConfirm('Remove your profile photo?',{okText:'Yes, remove',cancelText:'Keep it',icon:'🗑️'});if(!ok)return;rm.disabled=true;
+   try{
+    const {data:{user},error}=await supabaseClient.auth.getUser();if(error||!user)throw new Error('Please log in again.');
+    const m=await supabaseClient.auth.updateUser({data:{avatar_data_url:null}});if(m.error)throw m.error;
+    const p=await supabaseClient.from('profiles').update({avatar_url:null}).eq('user_id',user.id);if(p.error)throw p.error;
+    cp().avatar_url=null;try{cacheProfile(cp());}catch(e){}showInitial();syncRemove();note('Profile photo removed','success');
+   }catch(e){note(e.message||'Could not remove the photo.','error');}
+   rm.disabled=false;
+  };
+  syncRemove();
+ }
+ const prof=$('screen-profile');
+ if(prof)new MutationObserver(()=>{if(!prof.hidden){ensureButtons();syncRemove();}}).observe(prof,{attributes:true,attributeFilter:['hidden']});
+ setInterval(syncRemove,1500);
+
+ /* ---------- a new message from the teacher opens by itself when the student enters the app ---------- */
+ let armedUntil=0,seen=false,hiddenAt=0;
+ const busy=()=>{const ex=['screen-exam','screen-written-exam'].some(id=>{const e=$(id);return e&&!e.hidden;});const live=$('liveStudentRoom')&&!$('liveStudentRoom').hidden;const modal=[...document.querySelectorAll('.modal-overlay')].some(m=>!m.hidden);const msg=$('screen-messages')&&!$('screen-messages').hidden;return ex||live||modal||msg;};
+ function arm(ms){armedUntil=Date.now()+ms;if(window.__updateNav)window.__updateNav();}
+ setInterval(()=>{
+  const p=cp();if(!p){return;}
+  if(!seen){seen=true;arm(30000);}
+  if(p.is_admin||Date.now()>armedUntil)return;
+  const b=document.querySelector('#navMessagesBtn .message-unread-badge');
+  if(b&&!b.hidden&&!busy()){armedUntil=0;const n=$('navMessagesBtn');if(n){n.click();note('💬 You have a new message from your teacher','info');}}
+ },900);
+ document.addEventListener('visibilitychange',()=>{if(document.hidden)hiddenAt=Date.now();else if(hiddenAt&&Date.now()-hiddenAt>15000){arm(25000);}});
 })();
 </script>
 
