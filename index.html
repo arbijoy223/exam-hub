@@ -3032,7 +3032,7 @@ const examData = {
         ]
       },
       "Exam 2 (বোর্ড প্রশ্নভিত্তিক - সেট ২)": {
-        examTime: 20,
+        examTime: 25,
         questions: [
           { q: "প্রাসের অনুভূমিক পাল্লা (R) এর সর্বাধিক মান কত কোণে পাওয়া যায়?", options: ["0°", "30°", "45°", "90°"], answer: 2 },
           { q: "সমবেগে চলমান বস্তুর ক্ষেত্রে ত্বরণের মান কত?", options: ["অসীম", "১", "শূন্য", "ঋণাত্মক"], answer: 2 },
@@ -3067,7 +3067,7 @@ const examData = {
         ]
       },
       "Exam 3 (বোর্ড প্রশ্নভিত্তিক - সেট ৩)": {
-        examTime: 20,
+        examTime: 25,
         questions: [
           { q: "গতির সমীকরণ v = u + at এ কয়টি রাশি রয়েছে?", options: ["২টি", "৩টি", "৪টি", "৫টি"], answer: 2 },
           { q: "গ্যালিলিওর পড়ন্ত বস্তুর কয়টি সূত্র রয়েছে?", options: ["১টি", "২টি", "৩টি", "৪টি"], answer: 2 },
@@ -3112,7 +3112,7 @@ const examData = {
       exams: {
 
         "Tense": {
-          examTime: 15,
+          examTime: 20,
           questions: [
             { q: "He ___ to school every day.", options: ["go", "goes", "gone", "going"], answer: 1 },
             { q: "I ___ a book now.", options: ["read", "reads", "am reading", "have read"], answer: 2 },
@@ -3138,7 +3138,7 @@ const examData = {
         },
 
         "Right form of verbs": {
-          examTime: 15,
+          examTime: 20,
           questions: [
             { q: "It is high time we ___ our country.", options: ["develop", "developed", "developing", "have developed"], answer: 1 },
             { q: "I would rather ___ than beg.", options: ["starve", "to starve", "starving", "starved"], answer: 0 },
@@ -3164,7 +3164,7 @@ const examData = {
         },
 
         "Article": {
-          examTime: 15,
+          examTime: 20,
           questions: [
             { q: "He is ___ university student.", options: ["a", "an", "the", "no article"], answer: 0 },
             { q: "I saw ___ one-eyed man.", options: ["a", "an", "the", "no article"], answer: 0 },
@@ -3190,7 +3190,7 @@ const examData = {
         },
 
         "Subject Verb Agreement": {
-          examTime: 15,
+          examTime: 20,
           questions: [
             { q: "Bread and butter ___ my favorite breakfast.", options: ["are", "is", "were", "have"], answer: 1 },
             { q: "Neither he nor his friends ___ present.", options: ["was", "were", "is", "has"], answer: 1 },
@@ -3400,6 +3400,7 @@ function hideAllScreens(){
   if($("screen-admin-performance")) $("screen-admin-performance").hidden = true;
   if($("screen-study")) $("screen-study").hidden = true;
   document.querySelectorAll("[data-study-page]").forEach(function(s){ s.hidden = true; });
+  document.querySelectorAll("[data-extra-page]").forEach(function(s){ s.hidden = true; });
   if($("screen-admin-study")) $("screen-admin-study").hidden = true;
   ["screen-admin-materials","screen-admin-mcq-history","screen-admin-cq-history","screen-live-class"].forEach(id=>{if($(id))$(id).hidden=true;});
   if($("screen-profile")) $("screen-profile").hidden = true;
@@ -5526,7 +5527,7 @@ setTimeout(()=>{
  panel.addEventListener('submit',async e=>{e.preventDefault();const status=panel.querySelector('.feedback-status'),btn=panel.querySelector('button[type=submit]');try{const c=client(),uid=await userId(),msg=panel.elements.message.value.trim();if(!msg)throw Error('Message লিখতে হবে।');btn.disabled=true;status.textContent='Sending…';const pr=profile()||{},examTitle=kind==='written'?($('writtenResultSub')?.textContent||'CQ / Written exam'):($('scoreSub')?.textContent||'MCQ exam');const {error}=await c.from('exam_messages').insert({user_id:uid,username:pr.username||'Student',exam_title:examTitle,subject:panel.elements.subject.value.trim()||null,message:msg,status:'open'});if(error)throw error;panel.reset();status.textContent='✅ Message sent. Admin will review it.';status.style.color='#16a34a';}catch(err){status.textContent='পাঠানো যায়নি: '+(err.message||'Unknown error')+' — SQL setup চালানো হয়েছে কি না দেখো।';status.style.color='#dc2626';}finally{btn.disabled=false;}});target.appendChild(panel);}
  function attachPanels(){addFeedbackPanel('screen-result','mcq');addFeedbackPanel('screen-written-result','written');}
  const obs=new MutationObserver(()=>{attachPanels();});['screen-result','screen-written-result'].forEach(id=>{if($(id))obs.observe($(id),{attributes:true,attributeFilter:['hidden']});});attachPanels();
- async function loadInbox(){const box=$('messageInboxList'),c=client();if(!box||!c)return;box.innerHTML='<div class="empty-profile">Loading messages…</div>';try{const uid=await userId(),admin=!!profile()?.is_admin;let q=c.from('exam_messages').select('id,user_id,username,exam_title,subject,message,admin_reply,replied_at,user_reply,user_replied_at,created_at,status,sender_id,sender_role').order('created_at',{ascending:false}).limit(100);if(!admin)q=q.eq('user_id',uid);const {data,error}=await q;if(error)throw error;if(!data?.length){box.innerHTML='<div class="empty-profile">এখনো কোনো মেসেজ নেই।</div>';return;}if(!admin&&data.some(m=>m.sender_role)){const dm=data.filter(m=>m.sender_role).sort((a,b)=>new Date(a.created_at)-new Date(b.created_at));box.innerHTML='<div class="chat-thread" id="studentDirectThread"></div><form id="studentDirectForm" class="chat-compose"><textarea name="message" maxlength="3000" required placeholder="Admin-কে উত্তর লিখো…"></textarea><button class="btn btn-primary" type="submit">Send ➤</button></form>';const thread=$('studentDirectThread');dm.forEach(m=>{const b=document.createElement('div');b.className='chat-bubble '+(m.sender_role==='student'?'mine':'theirs');b.innerHTML='<div>'+esc(m.message)+'</div><small>'+esc(m.sender_role==='admin'?'Admin':(m.username||'You'))+' · '+(m.created_at?new Date(m.created_at).toLocaleString():'')+'</small>';thread.appendChild(b);});thread.scrollTop=thread.scrollHeight;$('studentDirectForm').onsubmit=async e=>{e.preventDefault();const f=e.currentTarget,txt=f.elements.message.value.trim();if(!txt)return;const btn=f.querySelector('button');btn.disabled=true;try{const me=await userId(),pr=profile()||{};const {error}=await c.from('exam_messages').insert({user_id:me,username:pr.username||'Student',exam_title:'Direct message',subject:'Direct chat',message:txt,status:'open',sender_id:me,sender_role:'student'});if(error)throw error;f.reset();await loadInbox();}catch(err){alert('Reply পাঠানো যায়নি: '+err.message);}finally{btn.disabled=false;}};return;}box.innerHTML='';data.forEach(m=>{const el=document.createElement('article');el.className='admin-message-item';el.innerHTML=`<div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><strong>${admin?'👤 '+esc(m.username||'Student'):'💬 '+esc(m.exam_title||'Exam')}</strong><span class="pill">${esc(m.status||'open')}</span></div><small>${esc(m.exam_title||'Exam')} · ${esc(m.subject||'General')} · ${m.created_at?new Date(m.created_at).toLocaleString():''}</small><p><b>${admin?'Student message':'Your message'}:</b><br>${esc(m.message)}</p>${m.admin_reply?`<div class="admin-reply-box"><strong>✉️ Reply from Admin</strong><p>${esc(m.admin_reply)}</p><small>${m.replied_at?new Date(m.replied_at).toLocaleString():''}</small></div>`:''}${m.user_reply?`<div class="admin-reply-box"><strong>💬 Reply from User</strong><p>${esc(m.user_reply)}</p><small>${m.user_replied_at?new Date(m.user_replied_at).toLocaleString():''}</small></div>`:''}${!admin?`<div style="margin-top:10px"><label>Reply to Admin<textarea data-userreply="${esc(m.id)}" maxlength="3000" placeholder="Admin-কে উত্তর লিখো…">${esc(m.user_reply||'')}</textarea></label><button class="btn btn-primary" data-senduserreply="${esc(m.id)}">↩ Send reply</button></div>`:''}${admin?`<div style="margin-top:10px"><label>Reply to ${esc(m.username||'Student')}<textarea data-replytext="${esc(m.id)}" maxlength="3000" placeholder="Write a reply…">${esc(m.admin_reply||'')}</textarea></label><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button class="btn btn-primary" data-sendreply="${esc(m.id)}">↩ Send reply</button><button class="btn btn-ghost" data-resolve="${esc(m.id)}">✓ Mark resolved</button></div></div>`:''}`;
+ async function loadInbox(){const box=$('messageInboxList'),c=client();if(!box||!c)return;box.innerHTML='<div class="empty-profile">Loading messages…</div>';try{const uid=await userId(),admin=!!profile()?.is_admin;let q=c.from('exam_messages').select('id,user_id,username,exam_title,subject,message,admin_reply,replied_at,user_reply,user_replied_at,created_at,status,sender_id,sender_role').order('created_at',{ascending:false}).limit(100);if(!admin)q=q.eq('user_id',uid);else q=q.or('status.is.null,status.neq.resolved');const {data,error}=await q;if(error)throw error;if(!data?.length){box.innerHTML='<div class="empty-profile">এখনো কোনো মেসেজ নেই।</div>';return;}if(!admin&&data.some(m=>m.sender_role)){const dm=data.filter(m=>m.sender_role).sort((a,b)=>new Date(a.created_at)-new Date(b.created_at));box.innerHTML='<div class="chat-thread" id="studentDirectThread"></div><form id="studentDirectForm" class="chat-compose"><textarea name="message" maxlength="3000" required placeholder="Admin-কে উত্তর লিখো…"></textarea><button class="btn btn-primary" type="submit">Send ➤</button></form>';const thread=$('studentDirectThread');dm.forEach(m=>{const b=document.createElement('div');b.className='chat-bubble '+(m.sender_role==='student'?'mine':'theirs');b.innerHTML='<div>'+esc(m.message)+'</div><small>'+esc(m.sender_role==='admin'?'Admin':(m.username||'You'))+' · '+(m.created_at?new Date(m.created_at).toLocaleString():'')+'</small>';thread.appendChild(b);});thread.scrollTop=thread.scrollHeight;$('studentDirectForm').onsubmit=async e=>{e.preventDefault();const f=e.currentTarget,txt=f.elements.message.value.trim();if(!txt)return;const btn=f.querySelector('button');btn.disabled=true;try{const me=await userId(),pr=profile()||{};const {error}=await c.from('exam_messages').insert({user_id:me,username:pr.username||'Student',exam_title:'Direct message',subject:'Direct chat',message:txt,status:'open',sender_id:me,sender_role:'student'});if(error)throw error;f.reset();await loadInbox();}catch(err){alert('Reply পাঠানো যায়নি: '+err.message);}finally{btn.disabled=false;}};return;}box.innerHTML='';data.forEach(m=>{const el=document.createElement('article');el.className='admin-message-item';el.innerHTML=`<div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><strong>${admin?'👤 '+esc(m.username||'Student'):'💬 '+esc(m.exam_title||'Exam')}</strong><span class="pill">${esc(m.status||'open')}</span></div><small>${esc(m.exam_title||'Exam')} · ${esc(m.subject||'General')} · ${m.created_at?new Date(m.created_at).toLocaleString():''}</small><p><b>${admin?'Student message':'Your message'}:</b><br>${esc(m.message)}</p>${m.admin_reply?`<div class="admin-reply-box"><strong>✉️ Reply from Admin</strong><p>${esc(m.admin_reply)}</p><small>${m.replied_at?new Date(m.replied_at).toLocaleString():''}</small></div>`:''}${m.user_reply?`<div class="admin-reply-box"><strong>💬 Reply from User</strong><p>${esc(m.user_reply)}</p><small>${m.user_replied_at?new Date(m.user_replied_at).toLocaleString():''}</small></div>`:''}${!admin?`<div style="margin-top:10px"><label>Reply to Admin<textarea data-userreply="${esc(m.id)}" maxlength="3000" placeholder="Admin-কে উত্তর লিখো…">${esc(m.user_reply||'')}</textarea></label><button class="btn btn-primary" data-senduserreply="${esc(m.id)}">↩ Send reply</button></div>`:''}${admin?`<div style="margin-top:10px"><label>Reply to ${esc(m.username||'Student')}<textarea data-replytext="${esc(m.id)}" maxlength="3000" placeholder="Write a reply…">${esc(m.admin_reply||'')}</textarea></label><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button class="btn btn-primary" data-sendreply="${esc(m.id)}">↩ Send reply</button><button class="btn btn-ghost" data-resolve="${esc(m.id)}">✓ Mark resolved</button></div></div>`:''}`;
  if(!admin){el.querySelector('[data-senduserreply]')?.addEventListener('click',async ev=>{const reply=el.querySelector('[data-userreply]').value.trim();if(!reply){alert('Reply লিখো।');return;}ev.currentTarget.disabled=true;try{const {error}=await c.from('exam_messages').update({user_reply:reply,user_replied_at:new Date().toISOString(),status:'open'}).eq('id',m.id).eq('user_id',await userId());if(error)throw error;await loadInbox();}catch(e){alert('Reply পাঠানো যায়নি: '+e.message);}finally{ev.currentTarget.disabled=false;}});}if(admin){el.querySelector('[data-sendreply]').addEventListener('click',async ev=>{const id=ev.currentTarget.dataset.sendreply,reply=el.querySelector('[data-replytext]').value.trim();if(!reply){alert('Reply লিখুন।');return;}ev.currentTarget.disabled=true;try{const {error}=await c.from('exam_messages').update({admin_reply:reply,replied_at:new Date().toISOString(),status:'replied'}).eq('id',id);if(error)throw error;void sendArbijoyPushEvent({event:'message_sent',user_id:m.user_id,title:'💬 New reply from your teacher',body:reply.slice(0,110)});await loadInbox();}catch(e){alert('Reply পাঠানো যায়নি: '+e.message);}finally{ev.currentTarget.disabled=false;}});el.querySelector('[data-resolve]').addEventListener('click',async ev=>{try{const {error}=await c.from('exam_messages').update({status:'resolved'}).eq('id',m.id);if(error)throw error;await loadInbox();}catch(e){alert('Status update failed: '+e.message);}});}box.appendChild(el);});}catch(e){box.innerHTML='<p style="color:#dc2626">মেসেজ লোড হয়নি: '+esc(e.message)+'<br>Supabase SQL setup ও RLS policy যাচাই করো।</p>';}}
  function openMessages(){if(!profile()){alert('Messages দেখতে আগে login করো।');return;}const admin=!!profile()?.is_admin;try{localStorage.setItem('examhub_msg_seen_'+(profile()?.user_id||'current')+'_'+(admin?'admin':'user'),new Date().toISOString());}catch(e){}document.querySelectorAll('.wrap > section').forEach(s=>s.hidden=true);if($('screen-messages'))$('screen-messages').hidden=false;$('messagesHeading').textContent=admin?'📨 Student Messages':'💬 Message';$('messagesSubheading').textContent=admin?'Student complaints, messages and replies.':'তোমার পাঠানো মেসেজ ও Reply from Admin এখানে দেখাবে।';$('messagesListTitle').textContent=admin?'Student complaints inbox':'Your messages & replies';if($('newMessageCard'))$('newMessageCard').hidden=admin;$('topSub').textContent='Messages';history.pushState({screen:'messages'},'','#messages');loadInbox();userId().then(uid=>{try{localStorage.setItem('examhub_msg_seen_'+uid+'_'+(admin?'admin':'user'),new Date().toISOString());}catch(e){}updateNav();}).catch(()=>{});window.scrollTo({top:0,behavior:'smooth'});}
  $('standaloneMessageForm')?.addEventListener('submit',async e=>{e.preventDefault();const form=e.currentTarget,status=$('standaloneMessageStatus'),btn=form.querySelector('button[type=submit]');try{const c=client(),uid=await userId(),msg=form.elements.message.value.trim();if(!msg)throw Error('Message লিখতে হবে।');btn.disabled=true;status.textContent='Sending…';const pr=profile()||{};const {error}=await c.from('exam_messages').insert({user_id:uid,username:pr.username||'Student',exam_title:'General message',subject:form.elements.subject.value.trim()||'General',message:msg,status:'open'});if(error)throw error;form.reset();status.textContent='✅ Message sent!';await loadInbox();}catch(err){status.textContent='পাঠানো যায়নি: '+err.message;}finally{btn.disabled=false;}});$('navMessagesBtn')?.addEventListener('click',openMessages);$('refreshMessagesBtn')?.addEventListener('click',loadInbox);$('backFromMessages')?.addEventListener('click',()=>{if(profile()?.is_admin)showAdminDashboard();else{hideAllScreens();$('screen-subjects').hidden=false;$('topSub').textContent='Choose a subject to begin';}});
@@ -5545,13 +5546,19 @@ setTimeout(()=>{
  const [{data:users,error:ue},{data:rs,error:re},{data:ws,error:we}]=await Promise.all([c.from('profiles').select('user_id,username,is_admin,blocked,created_at').eq('is_admin',false).eq('blocked',false),c.from('results').select('user_id,percent,correct,total,attempted_at'),c.from('written_submissions').select('user_id,exam_id,status,score,graded_at,submitted_at').eq('status','graded').not('score','is',null)]);if(ue)throw ue;if(re)throw re;if(we)throw we;
  const exids=[...new Set((ws||[]).map(x=>x.exam_id).filter(Boolean))];let exs=[];if(exids.length){const ex=await c.from('written_exams').select('id,total_marks').in('id',exids);if(ex.error)throw ex.error;exs=ex.data||[];}const maxMap=new Map(exs.map(x=>[x.id,Number(x.total_marks)||0]));const stats=new Map((users||[]).map(u=>[u.user_id,{username:u.username||'Student',sum:0,n:0}]));(rs||[]).forEach(r=>{const x=stats.get(r.user_id);if(x){x.sum+=Number(r.percent)||0;x.n++;}});(ws||[]).forEach(r=>{const x=stats.get(r.user_id),max=maxMap.get(r.exam_id)||0;if(x&&max>0){x.sum+=(Number(r.score)||0)/max*100;x.n++;}});const top=[...stats.entries()].filter(([id,x])=>x.n>0).map(([id,x])=>({id,username:x.username,avg:Math.round(x.sum/x.n)})).sort((a,b)=>b.avg-a.avg||a.username.localeCompare(b.username)).slice(0,3);if(!top.length){box.innerHTML='<div class="hero-top-user"><span class="medal">🏆</span><div><strong>Top 3 coming soon</strong><small>Admin User Performance report অনুযায়ী ranking</small></div></div>';return;}const medals=['🥇','🥈','🥉'];box.innerHTML=top.map((u,i)=>'<div class="hero-top-user"><span class="medal">'+medals[i]+'</span><div><strong>'+esc(u.username)+'</strong><small>'+u.avg+'% average · Admin report ranking</small></div></div>').join('');
  }catch(e){console.debug('Top-three report ranking unavailable',e.message);}}
+ let _topCfg={t:0,v:null};
+ window.__resetTopCfg=function(){_topCfg.t=0;};
+ async function topConfig(c){ if(Date.now()-_topCfg.t<30000) return _topCfg.v; _topCfg.t=Date.now(); try{ const r=await c.from('app_settings').select('value').eq('key','top_performers').maybeSingle(); _topCfg.v=(r&&r.data&&r.data.value)||null; }catch(e){ _topCfg.v=null; } return _topCfg.v; }
+ function topLabel(cfg){ let s=(typeof plainName==='function'?plainName(cfg.subject):cfg.subject); try{ const l=levelOf(cfg.subject); if(l!=='HSC') s+=' ('+l+')'; }catch(e){} if(cfg.chapter) s+=' · '+String(cfg.chapter).split(':')[0].slice(0,26); return s; }
  function topChip(medal,name,pct,more,cls){return '<div class="hero-top-user'+(cls?' '+cls:'')+'"><span class="medal">'+medal+'</span><div><strong>'+esc(name)+'</strong><small><b>'+pct+'%</b><span class="more"> '+more+'</span></small></div></div>';}
  function isLogged(){const b=document.getElementById('profileBtn');return !!(b&&!b.hidden);}
  function isAdminUser(){const b=document.getElementById('adminBtn');return !!(b&&!b.hidden);}
  async function loadTopThree(){
   const box=$('heroTopThree'),c=client();if(!box||!c)return;
   try{
-   const {data,error}=await c.rpc('get_top_performers',{top_n:3});
+   const cfg=await topConfig(c), scoped=!!(cfg&&cfg.subject);
+   const {data,error}=scoped?await c.rpc('get_top_performers_scope',{p_top:3,p_subject:cfg.subject,p_chapter:cfg.chapter||null}):await c.rpc('get_top_performers',{top_n:3});
+   box.setAttribute('data-label',scoped?('🏆 Top in '+topLabel(cfg)):'');
    if(error)throw error;
    const rows=data||[],medals=['🥇','🥈','🥉'];
    const top=rows.filter(r=>Number(r.pos)<=3),mine=rows.find(r=>r.is_me);
@@ -7876,12 +7883,14 @@ body.dr-exam-protect #screen-exam{-webkit-user-select:none;user-select:none;-web
  new MutationObserver(sync).observe(wrap,{attributes:true,attributeFilter:['hidden'],subtree:true});sync();
  document.addEventListener('keydown',e=>{
   if(!active())return;const k=(e.key||'').toLowerCase();
-  const combo=(e.ctrlKey||e.metaKey)&&(k==='p'||k==='s'||k==='u'||(e.shiftKey&&(k==='s'||k==='i'||k==='c')));
+  const combo=((e.ctrlKey||e.metaKey)&&(k==='p'||k==='s'||k==='u'||k==='c'||k==='a'||k==='x'||k==='insert'||(e.shiftKey&&(k==='s'||k==='i'||k==='c'))))||(e.ctrlKey&&k==='insert');
   const mac=e.metaKey&&e.shiftKey&&['3','4','5','s'].includes(k);
   if(k==='printscreen'||combo||mac){e.preventDefault();try{navigator.clipboard&&navigator.clipboard.writeText(' ');}catch(x){}cover('Screenshots are not allowed during the exam.',2500);}
  },true);
  document.addEventListener('keyup',e=>{if(active()&&(e.key||'').toLowerCase()==='printscreen'){try{navigator.clipboard&&navigator.clipboard.writeText(' ');}catch(x){}cover('Screenshots are not allowed during the exam.',2500);}},true);
- ['contextmenu','copy','cut','dragstart','selectstart'].forEach(ev=>document.addEventListener(ev,e=>{if(active()&&exam().contains(e.target))e.preventDefault();},true));
+ ['copy','cut'].forEach(ev=>document.addEventListener(ev,e=>{if(active()){e.preventDefault();try{e.clipboardData&&e.clipboardData.setData('text/plain','');}catch(x){}}},true));
+ ['contextmenu','dragstart','selectstart'].forEach(ev=>document.addEventListener(ev,e=>{if(active()&&exam().contains(e.target))e.preventDefault();},true));
+ document.addEventListener('selectionchange',()=>{if(!active())return;const s=window.getSelection&&getSelection();if(s&&s.rangeCount&&!s.isCollapsed)s.removeAllRanges();});
  document.addEventListener('visibilitychange',()=>{if(!active())return;if(document.hidden)cover('Come back to the exam to continue.');else setTimeout(uncover,500);});
  window.addEventListener('blur',()=>{if(active())cover('Come back to the exam to continue.');});
  window.addEventListener('focus',()=>{if(active())setTimeout(uncover,400);});
@@ -7976,7 +7985,7 @@ body.dr-exam-protect #screen-exam{-webkit-user-select:none;user-select:none;-web
 </script>
 
 <style id="v43-styles">
-/* ================= TOP NAVBAR: buttons fill the whole line ================= */
+/* ================= TOP NAVBAR: Notify · Log out · Dark · Announce on one line, Profile + menu below ================= */
 html:root:root body .menu-trigger{width:46px!important;height:46px!important;min-height:46px;padding:0 10px!important;background:transparent!important;border:0!important;box-shadow:none!important;border-radius:14px!important;display:flex!important;flex-direction:column;justify-content:center;align-items:flex-start;gap:5px!important;flex:0 0 46px}
 html:root:root body .menu-trigger>span{display:block!important;height:3px!important;border-radius:3px;background:var(--dr-ink,#1a1830)!important;width:26px!important}
 html:root:root body .menu-trigger>span:nth-child(3){width:16px!important}
@@ -7989,31 +7998,61 @@ html:root:root body .account-area #adminBtn{order:5}
 html:root:root body .account-area #enableNotificationsBtn{order:6}
 html:root:root body .account-area #authActionBtn{order:7}
 html:root:root body .account-area #themeToggleBtn{order:8}
-html:root:root body .account-area #profileBtn{order:9}
+html:root:root body .account-area #navAnnounceBtn{order:9;position:relative}
+html:root:root body .account-area #profileBtn{order:10}
 html:root:root body #profileBtn:not([hidden]){display:inline-flex!important}
 html:root:root body #profileBtn .nav-profile-avatar{width:34px;height:34px;flex:none}
 html:root:root body #profileBtn #navProfileName{display:inline!important;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nav-break{display:none}
+.an-badge{position:absolute;top:-7px;right:-3px;min-width:20px;height:20px;border-radius:999px;background:#e11d2e;color:#fff;font-size:11px;font-weight:900;display:grid;place-items:center;padding:0 5px;box-shadow:0 2px 8px rgba(225,29,46,.55);font-style:normal}
+.an-badge[hidden]{display:none}
+@keyframes annAttn{0%,55%,100%{transform:none;box-shadow:0 0 0 0 rgba(245,158,11,0)}60%{transform:rotate(-8deg) scale(1.08);box-shadow:0 0 0 0 rgba(245,158,11,.6)}66%{transform:rotate(8deg) scale(1.08)}72%{transform:rotate(-6deg) scale(1.05);box-shadow:0 0 0 11px rgba(245,158,11,0)}78%{transform:rotate(4deg)}84%{transform:none}}
+@keyframes annGlow{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+html:root:root body .account-area #navAnnounceBtn.has-new{animation:annAttn 2.4s ease-in-out infinite!important;background:linear-gradient(120deg,#fff4d6,#ffe0ec,#fff4d6)!important;background-size:200% 100%!important;border-color:#f59e0b!important;transform-origin:50% 60%}
+html:root:root body .account-area #navAnnounceBtn.has-new .an-ic{display:inline-block;animation:medalPop 1.6s ease-in-out infinite}
 @media(min-width:701px){
   html:root:root body .nav-search-wrap{max-width:none!important;flex:1 1 240px!important}
-  html:root:root body .menu-trigger{order:10}
+  html:root:root body .menu-trigger{order:11}
 }
 @media(max-width:700px){
   html:root:root body .topbar-inner{display:flex!important;flex-wrap:wrap!important;gap:8px!important;align-items:stretch!important;padding:10px 12px!important}
   html:root:root body .brand{flex:1 1 100%!important;order:0!important}
   html:root:root body .nav-search-wrap{flex:1 1 100%!important;order:1!important;max-width:none!important;width:100%!important}
   html:root:root body .account-area{display:contents!important}
-  html:root:root body .account-area .account-btn{flex:1 1 auto!important;width:auto!important;min-width:0;min-height:46px!important;margin:0!important;padding:8px 10px!important;font-size:13.5px!important;justify-content:center}
-  html:root:root body .account-area #enableNotificationsBtn{order:2!important}
-  html:root:root body .account-area #authActionBtn{order:3!important}
-  html:root:root body .account-area #themeToggleBtn{order:4!important}
-  html:root:root body .menu-trigger{order:5!important;grid-column:auto!important;grid-row:auto!important;position:relative!important;align-self:center;margin:0!important}
-  html:root:root body .account-area #profileBtn{order:6!important;flex:1 1 100%!important;padding:5px 12px!important;border-radius:999px!important;justify-content:center;gap:8px}
-}
-@media(min-width:471px) and (max-width:700px){
-  html:root:root body .account-area #profileBtn{order:5!important;flex:1 1 auto!important}
-  html:root:root body .menu-trigger{order:6!important}
+  html:root:root body .account-area .account-btn{width:auto!important;min-width:0!important;min-height:46px!important;margin:0!important;padding:8px 6px!important;font-size:12.5px!important;justify-content:center;white-space:nowrap}
+  html:root:root body .account-area #enableNotificationsBtn{order:2!important;flex:1.15 1 0!important}
+  html:root:root body .account-area #authActionBtn{order:3!important;flex:1.1 1 0!important}
+  html:root:root body .account-area #themeToggleBtn{order:4!important;flex:.7 1 0!important}
+  html:root:root body .account-area #navAnnounceBtn{order:5!important;flex:1.5 1 0!important;gap:4px}
+  html:root:root body .nav-break{display:block!important;order:6!important;flex:0 0 100%;height:0;margin:-4px 0}
+  html:root:root body .account-area #profileBtn{order:7!important;flex:1 1 0!important;padding:5px 12px!important;border-radius:999px!important;justify-content:center;gap:8px}
+  html:root:root body .menu-trigger{order:8!important;grid-column:auto!important;grid-row:auto!important;position:relative!important;align-self:center;margin:0!important}
+  html:root:root body .topbar-inner:has(#profileBtn[hidden]) .nav-break{display:none!important}
+  html:root:root body .topbar-inner:has(#profileBtn[hidden]) .menu-trigger{order:6!important}
 }
 @media(max-width:400px){html:root:root body .account-area #themeToggleLabel{display:none}}
+/* ================= TOP "BIJOY EXAM CENTER" BRAND ================= */
+@keyframes brandBorder{0%{background-position:0 0,0% 50%}100%{background-position:0 0,300% 50%}}
+@keyframes logoFloat{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-3px) rotate(-4deg)}}
+@keyframes brandShimmer{0%{background-position:0% 50%}100%{background-position:200% 50%}}
+html:root:root body .brand{padding:9px 22px 9px 9px!important;gap:14px!important;border-radius:28px!important;border:2px solid transparent!important;background:linear-gradient(var(--dr-card,#fffbf2),var(--dr-card,#fffbf2)) padding-box,linear-gradient(120deg,#d63a78,#7c5cff,#14b8a6,#f59e0b,#d63a78) border-box!important;background-size:100% 100%,300% 300%!important;animation:brandBorder 7s linear infinite;box-shadow:0 14px 34px rgba(124,92,255,.24)!important}
+html:root:root body .brand .seal{width:58px!important;height:58px!important;flex:0 0 58px!important;animation:logoFloat 3.8s ease-in-out infinite;box-shadow:0 12px 26px rgba(124,92,255,.55)!important;position:relative}
+html:root:root body .brand .seal:after{content:"";position:absolute;inset:-5px;border-radius:20px;border:2px solid rgba(124,92,255,.35);animation:drPulse 2.4s infinite}
+html:root:root body .brand-text{font-size:25px!important;letter-spacing:-.035em}
+html:root:root body .brand-text .b1{background:linear-gradient(90deg,#d63a78,#7c5cff,#14b8a6,#f59e0b,#d63a78)!important;background-size:200% 100%!important;-webkit-background-clip:text!important;background-clip:text!important;animation:brandShimmer 5s linear infinite}
+html:root:root body .brand-copy:after{content:"LEARN · PRACTICE · SUCCEED";display:block;margin-top:1px;font-size:9.5px;font-weight:900;letter-spacing:.18em;color:var(--dr-muted,#5a5645);opacity:.85}
+@media(max-width:700px){html:root:root body .brand .seal{width:52px!important;height:52px!important;flex-basis:52px!important}html:root:root body .brand-text{font-size:22px!important}}
+/* ================= ANNOUNCEMENTS PAGE ================= */
+.ann-list{display:grid;gap:12px;max-width:760px;margin:0 auto}
+.ann-card{background:var(--dr-card,#fffbf2);border:1px solid var(--dr-line,#e2d4b4);border-left:5px solid #f59e0b;border-radius:22px;padding:16px 18px;box-shadow:0 10px 26px rgba(70,50,10,.07);animation:drCardIn .5s cubic-bezier(.22,.8,.3,1) backwards}
+.ann-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.ann-top strong{font-size:17px;color:var(--dr-ink,#1a1830)}.ann-top small{color:var(--dr-muted,#5a5645)}
+.ann-card p{margin:0 0 10px;line-height:1.65;color:var(--dr-ink,#1a1830);overflow-wrap:anywhere}
+#screen-announcements .profile-card{max-width:760px;margin:0 auto 16px}
+/* ================= MCQ: text cannot be selected / copied ================= */
+body.dr-exam-protect #screen-exam,body.dr-exam-protect #screen-exam *{-webkit-user-select:none!important;user-select:none!important;-webkit-touch-callout:none!important}
+body.dr-exam-protect ::selection{background:transparent}
+
 /* Notify: a small attention animation every 3 seconds */
 @keyframes notifyAttn{0%,64%,100%{transform:none;box-shadow:0 0 0 0 rgba(214,58,120,0)}68%{transform:rotate(-9deg) scale(1.07);box-shadow:0 0 0 0 rgba(214,58,120,.55)}72%{transform:rotate(9deg) scale(1.07)}76%{transform:rotate(-7deg) scale(1.05);box-shadow:0 0 0 10px rgba(214,58,120,0)}80%{transform:rotate(6deg)}84%{transform:rotate(-3deg)}88%{transform:none}}
 html:root:root body #enableNotificationsBtn:not([hidden]){animation:notifyAttn 3s ease-in-out infinite!important;transform-origin:50% 60%}
@@ -8159,6 +8198,118 @@ html:root:root body #homeHeroCarousel .hero-top-three .hero-top-user:nth-child(1
   if(b&&!b.hidden&&!busy()){armedUntil=0;const n=$('navMessagesBtn');if(n){n.click();note('💬 You have a new message from your teacher','info');}}
  },900);
  document.addEventListener('visibilitychange',()=>{if(document.hidden)hiddenAt=Date.now();else if(hiddenAt&&Date.now()-hiddenAt>15000){arm(25000);}});
+})();
+</script>
+
+<script id="admin-top">
+/* Admin: choose which subject / chapter the homepage "Top Performers" show */
+(function(){
+ const $=id=>document.getElementById(id);
+ const note=(m,t)=>{try{toast(m,t||'info',3500);}catch(e){alert(m);}};
+ function ensure(){
+  const sec=$('screen-admin');if(!sec||$('adminTopCard'))return;
+  const anchor=$('adminNotifyCard')||($('adminGoMaterials')&&$('adminGoMaterials').closest('.admin-card'));
+  const card=document.createElement('div');card.className='profile-card admin-card';card.id='adminTopCard';
+  card.innerHTML='<h3>🏆 Top Performers (homepage)</h3><p class="card-hint" id="topCurrent">Choose a subject and a chapter. The homepage will show the top 3 students of that subject or chapter. Only you (admin) can change this.</p>'+
+   '<form id="topForm" class="st-two-col"><label>Level<select id="topLevel"><option value="SSC">SSC</option><option value="HSC" selected>HSC</option><option value="Admission">Admission</option></select></label>'+
+   '<label>Subject<select id="topSubject"></select></label><label>Chapter<select id="topChapter"></select></label>'+
+   '<button class="btn btn-primary" type="submit">Show on homepage</button></form>'+
+   '<button class="btn btn-ghost" id="topReset" type="button" style="margin-top:10px">Show overall top 3 (all subjects)</button>';
+  if(anchor&&anchor.parentNode)anchor.parentNode.insertBefore(card,anchor.nextSibling);else sec.appendChild(card);
+  const lv=$('topLevel'),sb=$('topSubject'),ch=$('topChapter');
+  function fillSub(){sb.innerHTML='';(window.subjectsForLevel?window.subjectsForLevel(lv.value):[]).forEach(s=>{const o=document.createElement('option');o.value=s.key;o.textContent=s.label;sb.appendChild(o);});fillChap();}
+  function fillChap(){ch.innerHTML='<option value="">All chapters of this subject</option>';try{Object.keys(examData[sb.value].chapters).forEach(c=>{const o=document.createElement('option');o.value=c;o.textContent=c;ch.appendChild(o);});}catch(e){}}
+  lv.addEventListener('change',fillSub);sb.addEventListener('change',fillChap);fillSub();
+  async function showCurrent(){try{const r=await supabaseClient.from('app_settings').select('value').eq('key','top_performers').maybeSingle();const v=r&&r.data&&r.data.value;
+    $('topCurrent').textContent=v&&v.subject?('Now showing: '+(window.plainName?plainName(v.subject):v.subject)+(v.chapter?' · '+v.chapter:'')+'. Change it below.'):'Now showing: overall top 3 of all subjects. Choose a subject and a chapter to change it.';}catch(e){}}
+  showCurrent();
+  async function save(value){
+   const r=await supabaseClient.from('app_settings').upsert({key:'top_performers',value:value,updated_at:new Date().toISOString()});
+   if(r.error){const m=String(r.error.message||'');note(/relation|does not exist|schema cache/i.test(m)?'Run setup-v45.sql in Supabase first.':'Could not save: '+m,'error');return false;}
+   if(window.__resetTopCfg)window.__resetTopCfg();if(window.loadTopThree)window.loadTopThree();showCurrent();return true;
+  }
+  $('topForm').addEventListener('submit',async e=>{e.preventDefault();const b=e.target.querySelector('button');b.disabled=true;if(await save({subject:sb.value,chapter:ch.value||null,level:lv.value}))note('✅ Homepage top performers updated','success');b.disabled=false;});
+  $('topReset').addEventListener('click',async()=>{if(await save({}))note('Showing overall top 3 again','success');});
+  if(window.__drAcc){window.__drAcc.makeAcc(card);window.__drAcc.closeAcc(card);}
+ }
+ const t=setInterval(()=>{if($('screen-admin')){ensure();if($('adminTopCard'))clearInterval(t);}},800);
+})();
+</script>
+
+<script id="announcements">
+/* Announcements: admin posts / deletes, everybody reads. The navbar button animates when something new arrives. */
+(function(){
+ const $=id=>document.getElementById(id);
+ const cp=()=>window.currentProfile;
+ const note=(m,t)=>{try{toast(m,t||'info',3500);}catch(e){alert(m);}};
+ const esc=v=>String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const seenKey=()=>'drAnnSeen_'+((cp()&&cp().user_id)||'guest');
+ let list=[],btn=null;
+ function mk(){
+  const area=document.querySelector('.account-area');
+  if(area&&!$('navAnnounceBtn')){
+   btn=document.createElement('button');btn.className='account-btn';btn.id='navAnnounceBtn';btn.type='button';btn.innerHTML='<span class="an-ic">📢</span><span class="an-tx">Announce</span><b class="an-badge" hidden>0</b>';
+   const dark=$('themeToggleBtn');if(dark&&dark.nextSibling)area.insertBefore(btn,dark.nextSibling);else area.appendChild(btn);
+   btn.addEventListener('click',openPage);
+  }
+  const bar=document.querySelector('.topbar-inner');
+  if(bar&&!$('navBreak')){const br=document.createElement('div');br.id='navBreak';br.className='nav-break';br.setAttribute('aria-hidden','true');bar.appendChild(br);}
+  if(!$('screen-announcements')){
+   const wrap=document.querySelector('.wrap');if(!wrap)return;
+   const s=document.createElement('section');s.id='screen-announcements';s.setAttribute('data-extra-page','1');s.hidden=true;
+   s.innerHTML='<button class="back-btn" id="backFromAnn" type="button">← Back to Home</button><div class="lede"><h2>📢 Announcements</h2><p>News and notices from your teacher. The newest is on top.</p></div>'+
+    '<div class="profile-card" id="annCompose" hidden><h3>✍️ New announcement</h3><form id="annForm" class="st-two-col"><label>Title<input id="annTitle" maxlength="100" required placeholder="e.g. ICT exam on Friday"></label><label>Message<textarea id="annBody" maxlength="1500" rows="4" required placeholder="Write the full details here…"></textarea></label><button class="btn btn-primary" type="submit">📢 Post announcement</button></form></div>'+
+    '<div id="annList" class="ann-list"><div class="empty-profile">Loading…</div></div>';
+   wrap.appendChild(s);
+   $('backFromAnn').addEventListener('click',()=>{document.querySelectorAll('.wrap > section').forEach(x=>x.hidden=true);$('screen-subjects').hidden=false;$('topSub').textContent='Choose a subject to begin';});
+   $('annForm').addEventListener('submit',async e=>{e.preventDefault();const b=e.target.querySelector('button');b.disabled=true;
+    try{const title=$('annTitle').value.trim(),body=$('annBody').value.trim();
+     const r=await supabaseClient.from('announcements').insert({title,body}).select();if(r.error)throw r.error;
+     $('annTitle').value='';$('annBody').value='';note('✅ Announcement posted','success');
+     try{if(typeof sendArbijoyPushEvent==='function')void sendArbijoyPushEvent({event:'custom',title:'📢 '+title,body:body.slice(0,120)});}catch(x){}
+     await load();markSeen();}
+    catch(err){const m=String(err&&err.message||err);note(/relation|does not exist|schema cache/i.test(m)?'Run setup-v45.sql in Supabase first.':'Could not post: '+m,'error');}
+    b.disabled=false;});
+  }
+ }
+ function render(){
+  const box=$('annList');if(!box)return;const admin=!!(cp()&&cp().is_admin);
+  if($('annCompose'))$('annCompose').hidden=!admin;
+  if(!list.length){box.innerHTML='<div class="empty-profile">No announcements yet.</div>';return;}
+  box.innerHTML='';
+  list.forEach(a=>{
+   const d=document.createElement('div');d.className='ann-card';
+   d.innerHTML='<div class="ann-top"><strong>'+esc(a.title)+'</strong><small>'+new Date(a.created_at).toLocaleString()+'</small></div><p>'+esc(a.body).replace(/\n/g,'<br>')+'</p>';
+   if(admin){const del=document.createElement('button');del.type='button';del.className='st-mini danger';del.textContent='🗑 Delete';
+    del.addEventListener('click',async()=>{const ok=await customConfirm('Delete this announcement? Students will no longer see it.',{okText:'Yes, delete',cancelText:'Keep',icon:'🗑️'});if(!ok)return;
+     const r=await supabaseClient.from('announcements').delete().eq('id',a.id);if(r.error){note('Could not delete: '+r.error.message,'error');return;}note('Announcement deleted','success');await load();});
+    d.appendChild(del);}
+   box.appendChild(d);
+  });
+ }
+ function latest(){return list.length?Date.parse(list[0].created_at)||0:0;}
+ function unseenCount(){let seen=0;try{seen=Number(localStorage.getItem(seenKey()))||0;}catch(e){}return list.filter(a=>(Date.parse(a.created_at)||0)>seen).length;}
+ function markSeen(){try{localStorage.setItem(seenKey(),String(latest()||Date.now()));}catch(e){}paint();}
+ function paint(){
+  if(!btn)btn=$('navAnnounceBtn');if(!btn)return;
+  const n=unseenCount(),b=btn.querySelector('.an-badge');
+  btn.classList.toggle('has-new',n>0);if(b){b.hidden=n<1;b.textContent=n>9?'9+':String(n);}
+ }
+ async function load(){
+  if(!window.supabaseClient)return;
+  try{const r=await supabaseClient.from('announcements').select('*').order('created_at',{ascending:false}).limit(100);
+   if(!r.error&&Array.isArray(r.data)){list=r.data;render();paint();}}catch(e){}
+ }
+ function openPage(){
+  document.querySelectorAll('.wrap > section').forEach(x=>x.hidden=true);$('screen-announcements').hidden=false;$('topSub').textContent='Announcements';
+  try{if(typeof pushScreen==='function')pushScreen('announcements',{});}catch(e){}
+  window.scrollTo({top:0});load().then(markSeen);render();
+ }
+ function init(){mk();setTimeout(load,1200);setInterval(load,60000);
+  const pb=$('profileBtn');if(pb)new MutationObserver(()=>setTimeout(()=>{load();paint();},800)).observe(pb,{attributes:true,attributeFilter:['hidden']});
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)load();});
+  window.drAnnouncements={reload:load};}
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
 </script>
 
