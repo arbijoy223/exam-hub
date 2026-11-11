@@ -1464,6 +1464,13 @@ html[data-theme="dark"] a{color:#b9baff}
     <div id="adminCqHistoryPageContent"></div>
   </section>
 
+  <section id="screen-admin-exam-data" hidden>
+    <button class="back-btn" id="backFromAdminExamData" type="button">← Back to Admin Dashboard</button>
+    <div class="admin-head"><div><span class="admin-badge">🧰 DATA CONTROL</span><h2>Exam Data Manager</h2><p>Search by student name, username, subject or exam title. Edit marks or remove a selected record.</p></div><button class="btn btn-primary" id="refreshAdminExamData" type="button">↻ Refresh</button></div>
+    <div class="edm-search"><input id="admExamSearch" type="search" placeholder="🔎 Student name / username / exam name / subject লিখে Search করো…" autocomplete="off"><div class="edm-filters"><button type="button" class="active" data-edm-filter="ALL">All records</button><button type="button" data-edm-filter="MCQ">MCQ only</button><button type="button" data-edm-filter="CQ">CQ only</button></div><small id="admExamCount" style="display:block;margin-top:8px;color:var(--dr-muted,#666)">Loading records…</small></div>
+    <div id="admExamRows"><div class="empty-profile">Loading exam records…</div></div>
+  </section>
+
   <!-- Admin Dashboard -->
   <section id="screen-admin" hidden>
     <button class="back-btn" id="backFromAdmin">← Back to Home</button>
@@ -1492,6 +1499,7 @@ html[data-theme="dark"] a{color:#b9baff}
         <button class="admin-action-card" id="adminGoMaterials">📎<span>Materials Adding</span><small>Add and manage PDF / video materials</small></button>
         <button class="admin-action-card" id="adminGoMcqHistory">📊<span>MCQ Result History</span><small>View objective exam results separately</small></button>
         <button class="admin-action-card" id="adminGoCqHistory">📝<span>CQ Result History</span><small>View written exam results separately</small></button>
+        <button class="admin-action-card" id="adminGoExamDataManager">🧰<span>Exam Data Manager</span><small>Search any student or exam, edit marks and manage records</small></button>
         <button class="admin-action-card" id="adminGoLeaderboard">🏆<span>Leaderboard</span><small>Leaderboard for the most recently selected exam</small></button>
         <button class="admin-action-card" id="adminGoStudyMonitor">📚<span>Student Study Monitor</span><small>Date-wise study record of every student</small></button>
       </div>
@@ -3551,7 +3559,7 @@ function hideAllScreens(){
   document.querySelectorAll("[data-study-page]").forEach(function(s){ s.hidden = true; });
   document.querySelectorAll("[data-extra-page]").forEach(function(s){ s.hidden = true; });
   if($("screen-admin-study")) $("screen-admin-study").hidden = true;
-  ["screen-admin-materials","screen-admin-mcq-history","screen-admin-cq-history","screen-live-class"].forEach(id=>{if($(id))$(id).hidden=true;});
+  ["screen-admin-materials","screen-admin-mcq-history","screen-admin-cq-history","screen-admin-exam-data","screen-live-class"].forEach(id=>{if($(id))$(id).hidden=true;});
   if($("screen-profile")) $("screen-profile").hidden = true;
   if($("screen-admin")) $("screen-admin").hidden = true;
   if($("screen-messages")) $("screen-messages").hidden = true;
@@ -8434,44 +8442,79 @@ html:root:root body #homeHeroCarousel .hero-top-three .hero-top-user:nth-child(1
 
 
 <style id="compact-header-and-announcements">
-/* Compact layout: brand hero -40%, navbar controls about -20% */
-html:root:root body #homeHeroCarousel{height:clamp(138px,21.6vw,240px)!important;margin:10px auto 14px!important}
-@media(max-width:700px){html:root:root body #homeHeroCarousel{height:135px!important}}
-html:root:root body .brand{padding:7px 17px 7px 7px!important;gap:10px!important;border-radius:22px!important}
-html:root:root body .brand .seal{width:46px!important;height:46px!important;flex-basis:46px!important}
-html:root:root body .brand-text{font-size:20px!important}
-html:root:root body .topbar-inner{padding-top:7px!important;padding-bottom:7px!important;min-height:0!important;gap:8px!important}
-html:root:root body .account-area .account-btn{min-height:37px!important;padding:6px 5px!important;font-size:11.5px!important}
-html:root:root body .nav-search-wrap{height:40px!important}
+/* Corrected: compact ONLY the top brand/header strip. Hero slider dimensions are intentionally untouched. */
+html:root:root body .brand{padding:5px 13px 5px 6px!important;gap:9px!important;border-radius:18px!important;min-height:0!important;box-shadow:0 7px 18px rgba(124,92,255,.16)!important}
+html:root:root body .brand .seal{width:36px!important;height:36px!important;flex:0 0 36px!important;border-radius:12px!important}
+html:root:root body .brand .seal:after{inset:-3px!important;border-width:1px!important}
+html:root:root body .brand-text{font-size:17px!important;line-height:1.08!important}
+html:root:root body .brand-copy:after{font-size:8px!important;letter-spacing:.12em!important;margin-top:0!important}
+html:root:root body .topbar-inner{padding-top:5px!important;padding-bottom:5px!important;min-height:0!important;gap:7px!important}
+html:root:root body .account-area .account-btn{min-height:34px!important;padding:5px 7px!important;font-size:11px!important}
+html:root:root body .nav-search-wrap{height:36px!important}
 .ann-list-item{display:block;width:100%;text-align:left;cursor:pointer;color:inherit;font:inherit}
 .ann-open-hint{display:block;color:var(--dr-muted,#777);font-size:12px;margin-top:7px}
 .ann-detail{cursor:default}.ann-detail .ann-top{margin:14px 0}.ann-detail p{white-space:normal}
 .hero-top-scope{margin:4px 0 12px}.hero-top-scope-title{font-weight:900;font-size:12px;color:var(--dr-muted,#666);margin:4px 4px 7px}
+/* Elegant admin Top Performer configuration panel */
+#adminTopCard{position:relative;overflow:hidden;border:1px solid rgba(124,92,255,.22)!important;border-radius:24px!important;background:linear-gradient(135deg,rgba(124,92,255,.10),rgba(20,184,166,.08) 55%,rgba(245,158,11,.10)),var(--dr-card,#fffbf2)!important;box-shadow:0 16px 38px rgba(56,45,110,.10)!important;padding:22px!important}
+#adminTopCard:before{content:"🏆";position:absolute;right:22px;top:14px;font-size:42px;opacity:.13;pointer-events:none}
+#adminTopCard h3{font-size:21px!important;font-weight:950!important;letter-spacing:-.02em;color:var(--dr-ink,#1a1830)!important}
+#adminTopCard .card-hint{max-width:680px;line-height:1.65}
+#adminTopCard #topForm{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-top:16px;padding:16px;border:1px solid rgba(124,92,255,.16);border-radius:18px;background:rgba(255,255,255,.48)}
+#adminTopCard #topForm label{font-weight:800;color:var(--dr-ink,#1a1830)}
+#adminTopCard #topForm label:first-child{grid-column:1/-1}
+#adminTopCard #topForm select{width:100%;margin-top:7px;border:1px solid rgba(124,92,255,.28)!important;border-radius:13px!important;padding:10px!important;background:var(--dr-card,#fff)!important;min-height:44px}
+#adminTopCard #topForm select[multiple]{min-height:150px!important;line-height:1.8}
+#adminTopCard #topForm button{grid-column:1/-1;min-height:46px;border-radius:14px;font-weight:900}
+#adminTopCard #topReset{border-radius:13px!important;margin-top:12px!important}
+/* Exam Data Manager dedicated page */
+#screen-admin-exam-data .edm-search{position:sticky;top:8px;z-index:5;padding:13px;border:1px solid var(--dr-line,#e2d4b4);border-radius:18px;background:var(--dr-card,#fffbf2);box-shadow:0 8px 22px rgba(0,0,0,.06);margin:12px 0}
+#screen-admin-exam-data .edm-search input{width:100%;min-height:48px;border:1px solid var(--dr-line,#d8d0bd);border-radius:13px;padding:12px 14px;font-size:15px;background:var(--dr-card,#fff);color:var(--dr-ink,#1a1830)}
+#screen-admin-exam-data .edm-filters{display:flex;gap:8px;flex-wrap:wrap;margin-top:9px}
+#screen-admin-exam-data .edm-filters button{border:1px solid var(--dr-line,#ddd);border-radius:999px;padding:7px 13px;background:transparent;color:var(--dr-ink,#1a1830);font-weight:800}
+#screen-admin-exam-data .edm-filters button.active{background:#6d5ce8;color:white;border-color:#6d5ce8}
+#screen-admin-exam-data .edm-row{border:1px solid var(--dr-line,#e2d4b4);border-radius:17px;padding:14px;margin:10px 0;background:var(--dr-card,#fffbf2);box-shadow:0 7px 20px rgba(0,0,0,.045)}
+#screen-admin-exam-data .edm-row h4{margin:0 0 5px;font-size:16px}
+#screen-admin-exam-data .edm-row p{margin:5px 0;color:var(--dr-muted,#666);line-height:1.5}
+#screen-admin-exam-data .edm-edit{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px;padding:12px;border-radius:14px;background:rgba(124,92,255,.07)}
+#screen-admin-exam-data .edm-edit label{font-size:12px;font-weight:800}
+#screen-admin-exam-data .edm-edit input,#screen-admin-exam-data .edm-edit textarea{width:100%;min-height:42px;padding:9px;border:1px solid var(--dr-line,#ddd);border-radius:10px;background:var(--dr-card,#fff);color:var(--dr-ink,#111)}
+#screen-admin-exam-data .edm-edit .wide{grid-column:1/-1}
+#screen-admin-exam-data .edm-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+@media(max-width:650px){#adminTopCard #topForm{grid-template-columns:1fr}#adminTopCard #topForm label:first-child,#adminTopCard #topForm button{grid-column:auto}#screen-admin-exam-data .edm-edit{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){html:root:root body #navAnnounceBtn.has-new{animation:none!important}}
 </style>
 
 
 <script id="admin-exam-data-manager">
-/* Admin-only management of individual MCQ results and CQ submissions */
+/* Dedicated searchable Admin Exam Data Manager with detailed confirmation */
 (function(){
  const $=id=>document.getElementById(id), esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
- const say=(m,t)=>{try{toast(m,t||'info',3500)}catch(e){alert(m)}};
- async function load(){if(!window.currentProfile?.is_admin||!window.supabaseClient)return;const root=$('adminExamDataManager');if(!root)return;root.innerHTML='<h3>🧰 Exam data manager</h3><p class="card-hint">Admin can edit marks or delete an individual MCQ result / CQ submission.</p><div id="admExamRows">Loading…</div>';
-  try{const c=supabaseClient;const [mr,cr]=await Promise.all([c.from('results').select('id,user_id,subject,chapter,exam,correct,total,percent,status,attempted_at').order('attempted_at',{ascending:false}).limit(150),c.from('written_submissions').select('id,user_id,exam_id,status,score,feedback,submitted_at,graded_at').order('submitted_at',{ascending:false}).limit(150)]);if(mr.error)throw mr.error;if(cr.error)throw cr.error;
-   const all=[...(mr.data||[]).map(x=>({...x,_kind:'MCQ'})),...(cr.data||[]).map(x=>({...x,_kind:'CQ'}))];const ids=[...new Set(all.map(x=>x.user_id))],uids=[...new Set((cr.data||[]).map(x=>x.exam_id))];let names=new Map(),exams=new Map();if(ids.length){const u=await c.from('profiles').select('user_id,username').in('user_id',ids);if(u.error)throw u.error;names=new Map((u.data||[]).map(x=>[x.user_id,x.username]))}if(uids.length){const e=await c.from('written_exams').select('id,title,total_marks,subject,chapter').in('id',uids);if(e.error)throw e.error;exams=new Map((e.data||[]).map(x=>[x.id,x]))}
-   const box=$('admExamRows');box.innerHTML='';if(!all.length){box.textContent='No exam records found.';return;}all.forEach(x=>{const ex=exams.get(x.exam_id)||{},title=x._kind==='MCQ'?`${x.subject} → ${x.chapter} → ${x.exam}`:`${ex.subject||''} → ${ex.chapter||''} → ${ex.title||'CQ Exam'}`;const row=document.createElement('div');row.className='written-submit-card';row.innerHTML=`<strong>${x._kind} · ${esc(names.get(x.user_id)||'Student')}</strong><p>${esc(title)} · ${new Date(x._kind==='MCQ'?x.attempted_at:x.submitted_at).toLocaleString()}</p>`;
-    if(x._kind==='MCQ'){row.innerHTML+=`<p>Marks: <b>${x.correct}/${x.total} (${x.percent}%)</b> · ${esc(x.status||'')}</p><div class="action-row"><button class="btn btn-ghost" data-edit>✏️ Edit marks</button><button class="btn btn-ghost" data-del style="color:#b91c1c">🗑 Delete result</button></div>`;row.querySelector('[data-edit]').onclick=async()=>{const correct=prompt('Correct answers (0–'+x.total+')',String(x.correct));if(correct===null)return;const n=Number(correct);if(!Number.isInteger(n)||n<0||n>x.total){say('Correct marks invalid','warning');return;}const total=prompt('Total questions',String(x.total));if(total===null)return;const t=Number(total);if(!Number.isInteger(t)||t<1||n>t){say('Total invalid','warning');return;}const percent=Number((n/t*100).toFixed(2));const {error}=await cUpdate({correct:n,total:t,percent,status:percent>=50?'pass':'fail'},x.id);if(error)say(error.message,'error');else{say('MCQ marks updated','success');load()}};row.querySelector('[data-del]').onclick=()=>remove('results',x.id,'এই MCQ result delete করবে?');
-    }else{row.innerHTML+=`<p>Status: ${esc(x.status)} · Marks: ${x.score==null?'Not graded':x.score+'/'+(ex.total_marks||'?')}</p><div class="action-row"><button class="btn btn-ghost" data-edit>✏️ Update marks</button><button class="btn btn-ghost" data-del style="color:#b91c1c">🗑 Delete submission</button></div>`;row.querySelector('[data-edit]').onclick=async()=>{const score=prompt('CQ marks (max '+(ex.total_marks||'unknown')+')',String(x.score??''));if(score===null)return;const n=Number(score);if(!Number.isFinite(n)||n<0||(ex.total_marks&&n>Number(ex.total_marks))){say('Marks invalid','warning');return;}const feedback=prompt('Feedback (optional)',x.feedback||'');if(feedback===null)return;const {error}=await supabaseClient.from('written_submissions').update({score:n,feedback,status:'graded',graded_at:new Date().toISOString(),graded_by:(await cUserId())}).eq('id',x.id);if(error)say(error.message,'error');else{say('CQ marks updated','success');load()}};row.querySelector('[data-del]').onclick=()=>remove('written_submissions',x.id,'এই CQ submission এবং answer delete করবে?');}
-    box.appendChild(row);
-   });
-  }catch(e){root.innerHTML+='<p style="color:#dc2626">Could not load records: '+esc(e.message)+'</p>'}
- }
- async function cUpdate(values,id){return await supabaseClient.from('results').update(values).eq('id',id)}
- async function cUserId(){const r=await supabaseClient.auth.getUser();return r.data?.user?.id||null}
- async function remove(table,id,msg){if(!(await customConfirm(msg,{icon:'🗑️',okText:'Delete'})))return;const {error}=await supabaseClient.from(table).delete().eq('id',id);if(error){say('Delete failed: '+error.message,'error');return;}say('Record deleted','success');load()}
- function init(){if(!window.currentProfile?.is_admin)return;const sec=$('screen-admin');if(!sec||$('adminExamDataManager'))return;const card=document.createElement('div');card.className='profile-card admin-card';card.id='adminExamDataManager';sec.appendChild(card);load();}
- const timer=setInterval(()=>{if($('screen-admin')&&window.currentProfile?.is_admin){init();clearInterval(timer)}},900);
- document.addEventListener('click',e=>{if(e.target.closest('#adminBtn'))setTimeout(load,700)});
+ const say=(m,t)=>{try{toast(m,t||'info',3800)}catch(e){alert(m)}};
+ let records=[],filter='ALL',loaded=false;
+ const client=()=>window.supabaseClient;
+ async function uid(){const r=await client().auth.getUser();return r.data?.user?.id||null}
+ function page(show){if(!window.currentProfile?.is_admin){say('শুধু Admin এই পেজ ব্যবহার করতে পারবেন।','error');return;}if(typeof hideAllScreens==='function')hideAllScreens();document.querySelectorAll('.wrap > section').forEach(x=>x.hidden=true);$('screen-admin-exam-data').hidden=false;$('topSub').textContent='Exam Data Manager';if(show)history.pushState({screen:'admin-exam-data'},'','#admin-exam-data');window.scrollTo({top:0,behavior:'smooth'});if(!loaded)load();}
+ async function load(){const root=$('admExamRows');if(!root||!client()||!window.currentProfile?.is_admin)return;root.innerHTML='<div class="empty-profile">Loading MCQ and CQ records…</div>';$('admExamCount').textContent='Loading…';
+  try{const c=client();const [mr,cr]=await Promise.all([c.from('results').select('id,user_id,subject,chapter,exam,correct,total,percent,status,attempted_at').order('attempted_at',{ascending:false}).limit(1000),c.from('written_submissions').select('id,user_id,exam_id,status,score,feedback,submitted_at,graded_at').order('submitted_at',{ascending:false}).limit(1000)]);if(mr.error)throw mr.error;if(cr.error)throw cr.error;
+   const all=[...(mr.data||[]).map(x=>({...x,_kind:'MCQ',_when:x.attempted_at})),...(cr.data||[]).map(x=>({...x,_kind:'CQ',_when:x.submitted_at}))];
+   const ids=[...new Set(all.map(x=>x.user_id).filter(Boolean))],exids=[...new Set((cr.data||[]).map(x=>x.exam_id).filter(Boolean))];let names=new Map(),exams=new Map();
+   for(let i=0;i<ids.length;i+=250){const u=await c.from('profiles').select('user_id,username').in('user_id',ids.slice(i,i+250));if(u.error)throw u.error;(u.data||[]).forEach(x=>names.set(x.user_id,x.username||'Student'));}
+   for(let i=0;i<exids.length;i+=250){const e=await c.from('written_exams').select('id,title,total_marks,subject,chapter').in('id',exids.slice(i,i+250));if(e.error)throw e.error;(e.data||[]).forEach(x=>exams.set(x.id,x));}
+   records=all.map(x=>{const ex=exams.get(x.exam_id)||{};return {...x,_name:names.get(x.user_id)||'Student',_title:x._kind==='MCQ'?[x.subject,x.chapter,x.exam].filter(Boolean).join(' → '):[ex.subject,ex.chapter,ex.title||'CQ Exam'].filter(Boolean).join(' → '),_max:Number(ex.total_marks)||null};}).sort((a,b)=>Date.parse(b._when||0)-Date.parse(a._when||0));loaded=true;render();
+  }catch(e){root.innerHTML='<div class="empty-profile" style="color:#dc2626">রেকর্ড লোড হয়নি: '+esc(e.message)+'</div>';say('Exam data load failed: '+e.message,'error');}}
+ function filtered(){const q=($('admExamSearch')?.value||'').trim().toLocaleLowerCase();return records.filter(x=>(filter==='ALL'||x._kind===filter)&&(!q||[x._name,x.user_id,x._title,x.subject,x.chapter,x.exam,x.status].some(v=>String(v||'').toLocaleLowerCase().includes(q))));}
+ function render(){const box=$('admExamRows');if(!box)return;const rows=filtered();$('admExamCount').textContent=`${rows.length}টি রেকর্ড দেখানো হচ্ছে · মোট ${records.length}টি`;box.innerHTML='';if(!rows.length){box.innerHTML='<div class="empty-profile">কোনো matching record পাওয়া যায়নি। Search শব্দ পরিবর্তন করে দেখো।</div>';return;}rows.forEach(x=>{const row=document.createElement('article');row.className='edm-row';row.dataset.id=x.id;const when=x._when?new Date(x._when).toLocaleString():'—';row.innerHTML=`<div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><span class="admin-badge">${x._kind}</span><small>${esc(when)}</small></div><h4>👤 ${esc(x._name)}</h4><p><b>Exam:</b> ${esc(x._title||'Untitled exam')}</p><p><b>User ID:</b> <code>${esc(x.user_id)}</code></p>`;
+   if(x._kind==='MCQ')row.innerHTML+=`<p><b>Marks:</b> ${x.correct}/${x.total} · ${Number(x.percent||0).toFixed(2)}% · ${esc(x.status||'')}</p>`;else row.innerHTML+=`<p><b>Marks:</b> ${x.score==null?'Not graded':esc(x.score)+' / '+(x._max??'—')} · <b>Status:</b> ${esc(x.status||'')}</p>`;
+   row.innerHTML+='<div class="edm-actions"><button type="button" class="btn btn-primary" data-edit>✏️ Edit marks</button><button type="button" class="btn btn-ghost" data-delete style="color:#b91c1c">🗑 Delete record</button></div><div class="edm-editor-slot"></div>';
+   row.querySelector('[data-edit]').onclick=()=>editForm(row,x);row.querySelector('[data-delete]').onclick=()=>remove(x);box.appendChild(row);
+  });}
+ function editForm(row,x){const slot=row.querySelector('.edm-editor-slot');if(slot.innerHTML){slot.innerHTML='';return;}if(x._kind==='MCQ'){slot.innerHTML=`<div class="edm-edit"><label>Correct answers<input type="number" id="edmCorrect" min="0" max="10000" value="${Number(x.correct)||0}"></label><label>Total questions<input type="number" id="edmTotal" min="1" max="10000" value="${Number(x.total)||1}"></label><div class="wide" id="edmPreview" style="font-weight:900">New percentage: —</div><div class="edm-actions wide"><button type="button" class="btn btn-primary" data-save>Review & Save</button><button type="button" class="btn btn-ghost" data-cancel>Cancel</button></div></div>`;const a=slot.querySelector('#edmCorrect'),b=slot.querySelector('#edmTotal'),pv=slot.querySelector('#edmPreview');const preview=()=>{const n=Number(a.value),t=Number(b.value);pv.textContent=t>0&&n>=0&&n<=t?'New percentage: '+(n/t*100).toFixed(2)+'%':'Correct answers must be between 0 and total.'};a.oninput=b.oninput=preview;preview();slot.querySelector('[data-cancel]').onclick=()=>slot.innerHTML='';slot.querySelector('[data-save]').onclick=async()=>{const n=Number(a.value),t=Number(b.value);if(!Number.isInteger(n)||!Number.isInteger(t)||t<1||n<0||n>t){say('Marks invalid. Correct answers 0 থেকে total-এর মধ্যে হতে হবে।','warning');return;}const pct=Number((n/t*100).toFixed(2));const ok=await customConfirm(`MCQ result update করতে যাচ্ছো।\n\nStudent: ${x._name}\nExam: ${x._title}\nOld marks: ${x.correct}/${x.total} (${Number(x.percent||0).toFixed(2)}%)\nNew marks: ${n}/${t} (${pct}%)\n\nএই পরিবর্তনটি সরাসরি শিক্ষার্থীর ফলাফলে প্রভাব ফেলবে। নিশ্চিত?`,{icon:'🧾',okText:'Confirm & Update',cancelText:'Review again'});if(!ok)return;const btn=slot.querySelector('[data-save]');btn.disabled=true;const {error}=await client().from('results').update({correct:n,total:t,percent:pct,status:pct>=50?'pass':'fail'}).eq('id',x.id);if(error){say('Update failed: '+error.message,'error');btn.disabled=false;return;}say('MCQ marks updated successfully','success');loaded=false;await load();};
+   }else{slot.innerHTML=`<div class="edm-edit"><label>CQ marks<input type="number" id="edmScore" min="0" step="0.01" ${x._max?'max="'+x._max+'"':''} value="${x.score??''}"></label><label>Maximum marks<input type="text" readonly value="${x._max??'Not defined in exam'}"></label><label class="wide">Feedback<textarea id="edmFeedback" rows="3">${esc(x.feedback||'')}</textarea></label><div class="edm-actions wide"><button type="button" class="btn btn-primary" data-save>Review & Save</button><button type="button" class="btn btn-ghost" data-cancel>Cancel</button></div></div>`;slot.querySelector('[data-cancel]').onclick=()=>slot.innerHTML='';slot.querySelector('[data-save]').onclick=async()=>{const n=Number(slot.querySelector('#edmScore').value),feedback=slot.querySelector('#edmFeedback').value.trim();if(!Number.isFinite(n)||n<0||(x._max&&n>x._max)){say('CQ marks invalid.','warning');return;}const ok=await customConfirm(`CQ submission update করতে যাচ্ছো।\n\nStudent: ${x._name}\nExam: ${x._title}\nOld marks: ${x.score??'Not graded'}\nNew marks: ${n}/${x._max??'maximum not set'}\nFeedback: ${feedback||'(none)'}\n\nশিক্ষার্থীর CQ ফলাফল ও grading status পরিবর্তিত হবে। নিশ্চিত?`,{icon:'✍️',okText:'Confirm & Grade',cancelText:'Review again'});if(!ok)return;const btn=slot.querySelector('[data-save]');btn.disabled=true;const {error}=await client().from('written_submissions').update({score:n,feedback,status:'graded',graded_at:new Date().toISOString(),graded_by:await uid()}).eq('id',x.id);if(error){say('CQ update failed: '+error.message,'error');btn.disabled=false;return;}say('CQ marks updated successfully','success');loaded=false;await load();};}}
+ async function remove(x){const detail=`Record type: ${x._kind}\nStudent: ${x._name}\nExam: ${x._title}\nMarks: ${x._kind==='MCQ'?`${x.correct}/${x.total}`:(x.score??'Not graded')}\nDate: ${x._when?new Date(x._when).toLocaleString():'—'}\n\nএই নির্দিষ্ট ${x._kind} record স্থায়ীভাবে delete হবে। এটি ফিরিয়ে আনা যাবে না। তুমি কি নিশ্চিত?`;const ok=await customConfirm(detail,{icon:'⚠️',okText:'Yes, permanently delete',cancelText:'No, keep it'});if(!ok)return;const table=x._kind==='MCQ'?'results':'written_submissions';const {error}=await client().from(table).delete().eq('id',x.id);if(error){say('Delete failed: '+error.message,'error');return;}say(x._kind+' record deleted','success');loaded=false;await load();}
+ function init(){if(!window.currentProfile?.is_admin)return;const sec=$('screen-admin');if(!sec||$('adminGoExamDataManager'))return;const btn=document.createElement('button');btn.type='button';btn.className='admin-action-card';btn.id='adminGoExamDataManager';btn.innerHTML='🧰<span>Exam Data Manager</span><small>Search students and exams, edit marks and manage records</small>';const grid=sec.querySelector('.admin-actions-grid');if(grid)grid.appendChild(btn);btn.addEventListener('click',()=>page(true));}
+ function bind(){ $('adminGoExamDataManager')?.addEventListener('click',()=>page(true));$('backFromAdminExamData')?.addEventListener('click',()=>typeof showAdminDashboard==='function'?showAdminDashboard():page(false));$('refreshAdminExamData')?.addEventListener('click',()=>{loaded=false;load()});$('admExamSearch')?.addEventListener('input',render);document.querySelectorAll('[data-edm-filter]').forEach(b=>b.addEventListener('click',()=>{filter=b.dataset.edmFilter;document.querySelectorAll('[data-edm-filter]').forEach(z=>z.classList.toggle('active',z===b));render()}));}
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>{init();bind()});else{init();bind()}const timer=setInterval(()=>{if(window.currentProfile?.is_admin&&$('screen-admin')){init();bind();clearInterval(timer)}},800);
 })();
 </script>
 
