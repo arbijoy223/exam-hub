@@ -5705,23 +5705,12 @@ setTimeout(()=>{
  async function loadTopThree(){
   const box=$('heroTopThree'),c=client();if(!box||!c)return;
   try{
-   const cfg=await topConfig(c), scoped=!!(cfg&&cfg.subject);
-   const {data,error}=scoped?await c.rpc('get_top_performers_scope',{p_top:3,p_subject:cfg.subject,p_chapter:cfg.chapter||null}):await c.rpc('get_top_performers',{top_n:3});
-   box.setAttribute('data-label',scoped?('🏆 Top in '+topLabel(cfg)):'');
-   if(error)throw error;
-   const rows=data||[],medals=['🥇','🥈','🥉'];
-   const top=rows.filter(r=>Number(r.pos)<=3),mine=rows.find(r=>r.is_me);
-   let html=top.map(r=>topChip(medals[Number(r.pos)-1]||'🏅',r.username||'Student'+(r.is_me?' (You)':''),r.avg_percent,'avg · '+r.attempts+' exam'+(Number(r.attempts)===1?'':'s'),r.is_me?'me':'')).join('');
-   if(!top.length)html='<div class="hero-top-user"><span class="medal">🏆</span><div><strong>Top 3 coming soon</strong><small><span>Rankings start after the first exams</span></small></div></div>';
-   if(isLogged()){
-    if(mine&&Number(mine.pos)>3)html+=topChip('🎯','You · #'+mine.pos,mine.avg_percent,'avg · keep going!','me');
-    else if(!mine)html+='<div class="hero-top-user me"><span class="medal">🎯</span><div><strong>Your rank</strong><small><span>Take an exam to get ranked</span></small></div></div>';
-   }
-   box.innerHTML=html;
-  }catch(e){
-   console.debug('get_top_performers unavailable',e&&e.message);
-   if(isAdminUser())return loadTopThreeLegacy();
-  }
+   const cfg=await topConfig(c),scopes=Array.isArray(cfg?.scopes)?cfg.scopes.filter(x=>x&&x.subject):[];
+   if(!scopes.length){const {data,error}=await c.rpc('get_top_performers',{top_n:3});if(error)throw error;box.setAttribute('data-label','');const rows=data||[],medals=['🥇','🥈','🥉'];let html=rows.filter(r=>Number(r.pos)<=3).map(r=>topChip(medals[Number(r.pos)-1]||'🏅',r.username||'Student',r.avg_percent,'avg · '+r.attempts+' exams',r.is_me?'me':'')).join('');if(!html)html='<div class="hero-top-user"><span class="medal">🏆</span><div><strong>Top 3 coming soon</strong><small>Rankings start after the first exams</small></div></div>';box.innerHTML=html;return;}
+   const results=await Promise.all(scopes.slice(0,12).map(async sc=>{const r=await c.rpc('get_top_performers_scope',{p_top:3,p_subject:sc.subject,p_chapter:sc.chapter||null});if(r.error)throw r.error;return {scope:sc,rows:r.data||[]}}));
+   box.setAttribute('data-label','🏆 Subject-wise Top Performers');const medals=['🥇','🥈','🥉'];let html='';
+   results.forEach(({scope,rows})=>{const label=topLabel(scope);html+='<div class="hero-top-scope"><div class="hero-top-scope-title">'+esc(label)+'</div>';const top=rows.filter(r=>Number(r.pos)<=3);if(!top.length)html+='<div class="hero-top-user"><span class="medal">🏆</span><div><strong>Top 3 coming soon</strong><small>এই scope-এ এখনো result নেই</small></div></div>';else html+=top.map(r=>topChip(medals[Number(r.pos)-1]||'🏅',r.username||'Student',r.avg_percent,'avg · '+r.attempts+' exams',r.is_me?'me':'')).join('');html+='</div>';});box.innerHTML=html;
+  }catch(e){console.debug('Top performer scopes unavailable',e&&e.message);if(isAdminUser())return loadTopThreeLegacy();}
  }
  window.loadTopThree=loadTopThree;
 
@@ -8351,37 +8340,27 @@ html:root:root body #homeHeroCarousel .hero-top-three .hero-top-user:nth-child(1
 </script>
 
 <script id="admin-top">
-/* Admin: choose which subject / chapter the homepage "Top Performers" show */
+/* Admin: multiple subject/chapter scopes for homepage Top Performers */
 (function(){
- const $=id=>document.getElementById(id);
- const note=(m,t)=>{try{toast(m,t||'info',3500);}catch(e){alert(m);}};
+ const $=id=>document.getElementById(id), note=(m,t)=>{try{toast(m,t||'info',3500)}catch(e){alert(m)}};
  function ensure(){
   const sec=$('screen-admin');if(!sec||$('adminTopCard'))return;
   const anchor=$('adminNotifyCard')||($('adminGoMaterials')&&$('adminGoMaterials').closest('.admin-card'));
   const card=document.createElement('div');card.className='profile-card admin-card';card.id='adminTopCard';
-  card.innerHTML='<h3>🏆 Top Performers (homepage)</h3><p class="card-hint" id="topCurrent">Choose a subject and a chapter. The homepage will show the top 3 students of that subject or chapter. Only you (admin) can change this.</p>'+
-   '<form id="topForm" class="st-two-col"><label>Level<select id="topLevel"><option value="SSC">SSC</option><option value="HSC" selected>HSC</option><option value="Admission">Admission</option></select></label>'+
-   '<label>Subject<select id="topSubject"></select></label><label>Chapter<select id="topChapter"></select></label>'+
-   '<button class="btn btn-primary" type="submit">Show on homepage</button></form>'+
-   '<button class="btn btn-ghost" id="topReset" type="button" style="margin-top:10px">Show overall top 3 (all subjects)</button>';
+  card.innerHTML='<h3>🏆 Top Performers (homepage)</h3><p class="card-hint" id="topCurrent">একাধিক Subject ও Chapter নির্বাচন করো। প্রতিটি নির্বাচিত combination-এর আলাদা Top 3 দেখাবে।</p>'+
+   '<form id="topForm" class="st-two-col"><label>Level<select id="topLevel"><option>SSC</option><option selected>HSC</option><option>Admission</option></select></label><label>Subjects (একাধিক নির্বাচন করতে Ctrl/⌘ চাপো)<select id="topSubject" multiple size="5" style="min-height:125px"></select></label><label>Chapters (নির্বাচিত subject-গুলোর সব chapter; একাধিক নির্বাচন)<select id="topChapter" multiple size="6" style="min-height:145px"></select></label><button class="btn btn-primary" type="submit">Save selected scopes</button></form><button class="btn btn-ghost" id="topReset" type="button" style="margin-top:10px">Show overall top 3 (all subjects)</button>';
   if(anchor&&anchor.parentNode)anchor.parentNode.insertBefore(card,anchor.nextSibling);else sec.appendChild(card);
   const lv=$('topLevel'),sb=$('topSubject'),ch=$('topChapter');
-  function fillSub(){sb.innerHTML='';(window.subjectsForLevel?window.subjectsForLevel(lv.value):[]).forEach(s=>{const o=document.createElement('option');o.value=s.key;o.textContent=s.label;sb.appendChild(o);});fillChap();}
-  function fillChap(){ch.innerHTML='<option value="">All chapters of this subject</option>';try{Object.keys(examData[sb.value].chapters).forEach(c=>{const o=document.createElement('option');o.value=c;o.textContent=c;ch.appendChild(o);});}catch(e){}}
+  function fillSub(){sb.innerHTML='';(window.subjectsForLevel?window.subjectsForLevel(lv.value):[]).forEach(x=>{const o=document.createElement('option');o.value=x.key;o.textContent=x.label;sb.appendChild(o)});fillChap()}
+  function fillChap(){const chosen=[...sb.selectedOptions].map(o=>o.value);ch.innerHTML='';chosen.forEach(subject=>{Object.keys((examData[subject]||{}).chapters||{}).forEach(chapter=>{const o=document.createElement('option');o.value=JSON.stringify({subject,chapter});o.textContent=(window.plainName?plainName(subject):subject)+' — '+chapter;ch.appendChild(o)})})}
   lv.addEventListener('change',fillSub);sb.addEventListener('change',fillChap);fillSub();
-  async function showCurrent(){try{const r=await supabaseClient.from('app_settings').select('value').eq('key','top_performers').maybeSingle();const v=r&&r.data&&r.data.value;
-    $('topCurrent').textContent=v&&v.subject?('Now showing: '+(window.plainName?plainName(v.subject):v.subject)+(v.chapter?' · '+v.chapter:'')+'. Change it below.'):'Now showing: overall top 3 of all subjects. Choose a subject and a chapter to change it.';}catch(e){}}
-  showCurrent();
-  async function save(value){
-   const r=await supabaseClient.from('app_settings').upsert({key:'top_performers',value:value,updated_at:new Date().toISOString()});
-   if(r.error){const m=String(r.error.message||'');note(/relation|does not exist|schema cache/i.test(m)?'Run setup-v45.sql in Supabase first.':'Could not save: '+m,'error');return false;}
-   if(window.__resetTopCfg)window.__resetTopCfg();if(window.loadTopThree)window.loadTopThree();showCurrent();return true;
-  }
-  $('topForm').addEventListener('submit',async e=>{e.preventDefault();const b=e.target.querySelector('button');b.disabled=true;if(await save({subject:sb.value,chapter:ch.value||null,level:lv.value}))note('✅ Homepage top performers updated','success');b.disabled=false;});
-  $('topReset').addEventListener('click',async()=>{if(await save({}))note('Showing overall top 3 again','success');});
-  if(window.__drAcc){window.__drAcc.makeAcc(card);window.__drAcc.closeAcc(card);}
+  async function showCurrent(){try{const r=await supabaseClient.from('app_settings').select('value').eq('key','top_performers').maybeSingle(),v=r?.data?.value;const scopes=Array.isArray(v?.scopes)?v.scopes:[];$('topCurrent').textContent=scopes.length?'বর্তমানে '+scopes.length+'টি আলাদা subject/chapter leaderboard চালু: '+scopes.map(x=>(plainName?plainName(x.subject):x.subject)+(x.chapter?' · '+x.chapter:'')).join(' | '):'বর্তমানে Overall Top 3 দেখানো হচ্ছে।'}catch(e){}}
+  async function save(value){const r=await supabaseClient.from('app_settings').upsert({key:'top_performers',value,updated_at:new Date().toISOString()});if(r.error){note('Save হয়নি: '+r.error.message,'error');return false;}if(window.__resetTopCfg)window.__resetTopCfg();if(window.loadTopThree)window.loadTopThree();await showCurrent();return true}
+  $('topForm').addEventListener('submit',async e=>{e.preventDefault();const scopes=[...ch.selectedOptions].map(o=>{try{return JSON.parse(o.value)}catch(_){return null}}).filter(Boolean);if(!scopes.length){note('কমপক্ষে একটি chapter নির্বাচন করো।','warning');return;}const b=e.target.querySelector('button');b.disabled=true;const ok=await save({scopes});b.disabled=false;if(ok)note('✅ '+scopes.length+'টি Top Performer scope save হয়েছে','success')});
+  $('topReset').addEventListener('click',async()=>{if(await save({}))note('Overall Top 3 চালু হয়েছে','success')});showCurrent();
+  if(window.__drAcc){window.__drAcc.makeAcc(card);window.__drAcc.closeAcc(card)}
  }
- const t=setInterval(()=>{if($('screen-admin')){ensure();if($('adminTopCard'))clearInterval(t);}},800);
+ const t=setInterval(()=>{if($('screen-admin')){ensure();if($('adminTopCard'))clearInterval(t)}},800);
 })();
 </script>
 
@@ -8422,20 +8401,11 @@ html:root:root body #homeHeroCarousel .hero-top-three .hero-top-user:nth-child(1
   }
  }
  function render(){
-  const box=$('annList');if(!box)return;const admin=!!(cp()&&cp().is_admin);
-  if($('annCompose'))$('annCompose').hidden=!admin;
-  if(!list.length){box.innerHTML='<div class="empty-profile">No announcements yet.</div>';return;}
-  box.innerHTML='';
-  list.forEach(a=>{
-   const d=document.createElement('div');d.className='ann-card';
-   d.innerHTML='<div class="ann-top"><strong>'+esc(a.title)+'</strong><small>'+new Date(a.created_at).toLocaleString()+'</small></div><p>'+esc(a.body).replace(/\n/g,'<br>')+'</p>';
-   if(admin){const del=document.createElement('button');del.type='button';del.className='st-mini danger';del.textContent='🗑 Delete';
-    del.addEventListener('click',async()=>{const ok=await customConfirm('Delete this announcement? Students will no longer see it.',{okText:'Yes, delete',cancelText:'Keep',icon:'🗑️'});if(!ok)return;
-     const r=await supabaseClient.from('announcements').delete().eq('id',a.id);if(r.error){note('Could not delete: '+r.error.message,'error');return;}note('Announcement deleted','success');await load();});
-    d.appendChild(del);}
-   box.appendChild(d);
-  });
+  const box=$('annList');if(!box)return;const admin=!!(cp()&&cp().is_admin);if($('annCompose'))$('annCompose').hidden=!admin;
+  box.innerHTML='';if(!list.length){box.innerHTML='<div class="empty-profile">No announcements yet.</div>';return;}
+  list.forEach(a=>{const d=document.createElement('button');d.type='button';d.className='ann-card ann-list-item';d.innerHTML='<div class="ann-top"><strong>'+esc(a.title)+'</strong><small>'+new Date(a.created_at).toLocaleString()+'</small></div><span class="ann-open-hint">বিস্তারিত দেখতে চাপ দাও →</span>';d.addEventListener('click',()=>openDetail(a.id));box.appendChild(d)});
  }
+ function openDetail(id){const a=list.find(x=>String(x.id)===String(id));if(!a)return;const box=$('annList');if(!box)return;const admin=!!(cp()&&cp().is_admin);box.innerHTML='';const d=document.createElement('article');d.className='ann-card ann-detail';d.innerHTML='<button type="button" class="btn btn-ghost" id="annBackToList">← সব Announcement</button><div class="ann-top"><strong>'+esc(a.title)+'</strong><small>'+new Date(a.created_at).toLocaleString()+'</small></div><p>'+esc(a.body).replace(/\n/g,'<br>')+'</p>';if(admin){const del=document.createElement('button');del.type='button';del.className='st-mini danger';del.textContent='🗑 Delete announcement';del.addEventListener('click',async()=>{const ok=await customConfirm('Delete this announcement? Students will no longer see it.',{okText:'Yes, delete',cancelText:'Keep',icon:'🗑️'});if(!ok)return;const r=await supabaseClient.from('announcements').delete().eq('id',a.id);if(r.error){note('Could not delete: '+r.error.message,'error');return;}note('Announcement deleted','success');await load()});d.appendChild(del)}box.appendChild(d);$('annBackToList').addEventListener('click',render)}
  function latest(){return list.length?Date.parse(list[0].created_at)||0:0;}
  function unseenCount(){let seen=0;try{seen=Number(localStorage.getItem(seenKey()))||0;}catch(e){}return list.filter(a=>(Date.parse(a.created_at)||0)>seen).length;}
  function markSeen(){try{localStorage.setItem(seenKey(),String(latest()||Date.now()));}catch(e){}paint();}
@@ -8459,6 +8429,49 @@ html:root:root body #homeHeroCarousel .hero-top-three .hero-top-user:nth-child(1
   document.addEventListener('visibilitychange',()=>{if(!document.hidden)load();});
   window.drAnnouncements={reload:load};}
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+
+
+<style id="compact-header-and-announcements">
+/* Compact layout: brand hero -40%, navbar controls about -20% */
+html:root:root body #homeHeroCarousel{height:clamp(138px,21.6vw,240px)!important;margin:10px auto 14px!important}
+@media(max-width:700px){html:root:root body #homeHeroCarousel{height:135px!important}}
+html:root:root body .brand{padding:7px 17px 7px 7px!important;gap:10px!important;border-radius:22px!important}
+html:root:root body .brand .seal{width:46px!important;height:46px!important;flex-basis:46px!important}
+html:root:root body .brand-text{font-size:20px!important}
+html:root:root body .topbar-inner{padding-top:7px!important;padding-bottom:7px!important;min-height:0!important;gap:8px!important}
+html:root:root body .account-area .account-btn{min-height:37px!important;padding:6px 5px!important;font-size:11.5px!important}
+html:root:root body .nav-search-wrap{height:40px!important}
+.ann-list-item{display:block;width:100%;text-align:left;cursor:pointer;color:inherit;font:inherit}
+.ann-open-hint{display:block;color:var(--dr-muted,#777);font-size:12px;margin-top:7px}
+.ann-detail{cursor:default}.ann-detail .ann-top{margin:14px 0}.ann-detail p{white-space:normal}
+.hero-top-scope{margin:4px 0 12px}.hero-top-scope-title{font-weight:900;font-size:12px;color:var(--dr-muted,#666);margin:4px 4px 7px}
+@media(prefers-reduced-motion:reduce){html:root:root body #navAnnounceBtn.has-new{animation:none!important}}
+</style>
+
+
+<script id="admin-exam-data-manager">
+/* Admin-only management of individual MCQ results and CQ submissions */
+(function(){
+ const $=id=>document.getElementById(id), esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const say=(m,t)=>{try{toast(m,t||'info',3500)}catch(e){alert(m)}};
+ async function load(){if(!window.currentProfile?.is_admin||!window.supabaseClient)return;const root=$('adminExamDataManager');if(!root)return;root.innerHTML='<h3>🧰 Exam data manager</h3><p class="card-hint">Admin can edit marks or delete an individual MCQ result / CQ submission.</p><div id="admExamRows">Loading…</div>';
+  try{const c=supabaseClient;const [mr,cr]=await Promise.all([c.from('results').select('id,user_id,subject,chapter,exam,correct,total,percent,status,attempted_at').order('attempted_at',{ascending:false}).limit(150),c.from('written_submissions').select('id,user_id,exam_id,status,score,feedback,submitted_at,graded_at').order('submitted_at',{ascending:false}).limit(150)]);if(mr.error)throw mr.error;if(cr.error)throw cr.error;
+   const all=[...(mr.data||[]).map(x=>({...x,_kind:'MCQ'})),...(cr.data||[]).map(x=>({...x,_kind:'CQ'}))];const ids=[...new Set(all.map(x=>x.user_id))],uids=[...new Set((cr.data||[]).map(x=>x.exam_id))];let names=new Map(),exams=new Map();if(ids.length){const u=await c.from('profiles').select('user_id,username').in('user_id',ids);if(u.error)throw u.error;names=new Map((u.data||[]).map(x=>[x.user_id,x.username]))}if(uids.length){const e=await c.from('written_exams').select('id,title,total_marks,subject,chapter').in('id',uids);if(e.error)throw e.error;exams=new Map((e.data||[]).map(x=>[x.id,x]))}
+   const box=$('admExamRows');box.innerHTML='';if(!all.length){box.textContent='No exam records found.';return;}all.forEach(x=>{const ex=exams.get(x.exam_id)||{},title=x._kind==='MCQ'?`${x.subject} → ${x.chapter} → ${x.exam}`:`${ex.subject||''} → ${ex.chapter||''} → ${ex.title||'CQ Exam'}`;const row=document.createElement('div');row.className='written-submit-card';row.innerHTML=`<strong>${x._kind} · ${esc(names.get(x.user_id)||'Student')}</strong><p>${esc(title)} · ${new Date(x._kind==='MCQ'?x.attempted_at:x.submitted_at).toLocaleString()}</p>`;
+    if(x._kind==='MCQ'){row.innerHTML+=`<p>Marks: <b>${x.correct}/${x.total} (${x.percent}%)</b> · ${esc(x.status||'')}</p><div class="action-row"><button class="btn btn-ghost" data-edit>✏️ Edit marks</button><button class="btn btn-ghost" data-del style="color:#b91c1c">🗑 Delete result</button></div>`;row.querySelector('[data-edit]').onclick=async()=>{const correct=prompt('Correct answers (0–'+x.total+')',String(x.correct));if(correct===null)return;const n=Number(correct);if(!Number.isInteger(n)||n<0||n>x.total){say('Correct marks invalid','warning');return;}const total=prompt('Total questions',String(x.total));if(total===null)return;const t=Number(total);if(!Number.isInteger(t)||t<1||n>t){say('Total invalid','warning');return;}const percent=Number((n/t*100).toFixed(2));const {error}=await cUpdate({correct:n,total:t,percent,status:percent>=50?'pass':'fail'},x.id);if(error)say(error.message,'error');else{say('MCQ marks updated','success');load()}};row.querySelector('[data-del]').onclick=()=>remove('results',x.id,'এই MCQ result delete করবে?');
+    }else{row.innerHTML+=`<p>Status: ${esc(x.status)} · Marks: ${x.score==null?'Not graded':x.score+'/'+(ex.total_marks||'?')}</p><div class="action-row"><button class="btn btn-ghost" data-edit>✏️ Update marks</button><button class="btn btn-ghost" data-del style="color:#b91c1c">🗑 Delete submission</button></div>`;row.querySelector('[data-edit]').onclick=async()=>{const score=prompt('CQ marks (max '+(ex.total_marks||'unknown')+')',String(x.score??''));if(score===null)return;const n=Number(score);if(!Number.isFinite(n)||n<0||(ex.total_marks&&n>Number(ex.total_marks))){say('Marks invalid','warning');return;}const feedback=prompt('Feedback (optional)',x.feedback||'');if(feedback===null)return;const {error}=await supabaseClient.from('written_submissions').update({score:n,feedback,status:'graded',graded_at:new Date().toISOString(),graded_by:(await cUserId())}).eq('id',x.id);if(error)say(error.message,'error');else{say('CQ marks updated','success');load()}};row.querySelector('[data-del]').onclick=()=>remove('written_submissions',x.id,'এই CQ submission এবং answer delete করবে?');}
+    box.appendChild(row);
+   });
+  }catch(e){root.innerHTML+='<p style="color:#dc2626">Could not load records: '+esc(e.message)+'</p>'}
+ }
+ async function cUpdate(values,id){return await supabaseClient.from('results').update(values).eq('id',id)}
+ async function cUserId(){const r=await supabaseClient.auth.getUser();return r.data?.user?.id||null}
+ async function remove(table,id,msg){if(!(await customConfirm(msg,{icon:'🗑️',okText:'Delete'})))return;const {error}=await supabaseClient.from(table).delete().eq('id',id);if(error){say('Delete failed: '+error.message,'error');return;}say('Record deleted','success');load()}
+ function init(){if(!window.currentProfile?.is_admin)return;const sec=$('screen-admin');if(!sec||$('adminExamDataManager'))return;const card=document.createElement('div');card.className='profile-card admin-card';card.id='adminExamDataManager';sec.appendChild(card);load();}
+ const timer=setInterval(()=>{if($('screen-admin')&&window.currentProfile?.is_admin){init();clearInterval(timer)}},900);
+ document.addEventListener('click',e=>{if(e.target.closest('#adminBtn'))setTimeout(load,700)});
 })();
 </script>
 
