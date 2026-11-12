@@ -1355,7 +1355,7 @@ html[data-theme="dark"] a{color:#b9baff}
   <section id="screen-messages" hidden>
     <button class="back-btn" id="backFromMessages" type="button">← Back</button>
     <div class="lede"><h2 id="messagesHeading">💬 Messages</h2><p id="messagesSubheading">Questions, complaints and replies from Admin.</p></div>
-    <div class="profile-card" id="newMessageCard"><h3>✉️ Start a conversation</h3><p>You can message your teacher here, even without taking an exam.</p><form id="standaloneMessageForm"><label>Subject (optional)<input name="subject" maxlength="120" placeholder="Write a subject"></label><label>Message<textarea name="message" maxlength="3000" required placeholder="Write what you want to tell your teacher..."></textarea></label><button class="btn btn-primary" type="submit">📨 Send message</button><p id="standaloneMessageStatus" role="status"></p></form></div><div class="profile-card"><div class="admin-section-title"><div><h3 id="messagesListTitle">Your messages</h3></div><button class="btn btn-ghost" id="refreshMessagesBtn" type="button">↻ Refresh</button></div><div id="messageInboxList"><div class="empty-profile">Loading messages…</div></div></div>
+    <div class="profile-card" id="newMessageCard"><h3>✉️ Start a conversation</h3><p>পরীক্ষা না দিয়েও এখানে Admin-কে মেসেজ পাঠাতে পারো।</p><form id="standaloneMessageForm"><label>Subject (optional)<input name="subject" maxlength="120" placeholder="বিষয় লিখো"></label><label>Message<textarea name="message" maxlength="3000" required placeholder="Admin-কে কী জানাতে চাও লিখো..."></textarea></label><button class="btn btn-primary" type="submit">📨 Send message</button><p id="standaloneMessageStatus" role="status"></p></form></div><div class="profile-card"><div class="admin-section-title"><div><h3 id="messagesListTitle">Your messages</h3></div><button class="btn btn-ghost" id="refreshMessagesBtn" type="button">↻ Refresh</button></div><div id="messageInboxList"><div class="empty-profile">Loading messages…</div></div></div>
   </section>
 
   <!-- Live Class -->
@@ -1381,8 +1381,8 @@ html[data-theme="dark"] a{color:#b9baff}
       <div id="liveClassList" class="empty-profile">Loading classes…</div>
     </div>
     <div class="profile-card" id="recordedVideoSection">
-      <div class="admin-section-title"><div><h3>🎬 Recorded Video</h3><p>Saved recordings of these Live Classes</p></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="btn btn-primary" id="loadRecordedVideos">Load recordings</button><button type="button" class="btn btn-ghost" id="refreshRecordedVideos">↻ Refresh</button></div></div>
-      <div id="recordedVideoList" class="empty-profile">The recordings list loads when you open it, to keep the site fast.</div>
+      <div class="admin-section-title"><div><h3>🎬 Recorded Video</h3><p>এই Live Class-গুলোর সংরক্ষিত রেকর্ডিং</p></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="btn btn-primary" id="loadRecordedVideos">Load recordings</button><button type="button" class="btn btn-ghost" id="refreshRecordedVideos">↻ Refresh</button></div></div>
+      <div id="recordedVideoList" class="empty-profile">ওয়েবসাইট দ্রুত রাখার জন্য রেকর্ডিংয়ের তালিকা খুললে লোড হবে।</div>
     </div>
 
     <!-- STUDENT VIEW: only the teacher's video + audio, and chat -->
@@ -1467,7 +1467,7 @@ html[data-theme="dark"] a{color:#b9baff}
   <section id="screen-admin-exam-data" hidden>
     <button class="back-btn" id="backFromAdminExamData" type="button">← Back to Admin Dashboard</button>
     <div class="admin-head"><div><span class="admin-badge">🧰 DATA CONTROL</span><h2>Exam Data Manager</h2><p>Search by student name, username, subject or exam title. Edit marks or remove a selected record.</p></div><button class="btn btn-primary" id="refreshAdminExamData" type="button">↻ Refresh</button></div>
-    <div class="edm-search"><input id="admExamSearch" type="search" placeholder="🔎 Search by student name, username, exam name or subject…" autocomplete="off"><div class="edm-filters"><button type="button" class="active" data-edm-filter="ALL">All records</button><button type="button" data-edm-filter="MCQ">MCQ only</button><button type="button" data-edm-filter="CQ">CQ only</button></div><small id="admExamCount" style="display:block;margin-top:8px;color:var(--dr-muted,#666)">Loading records…</small></div>
+    <div class="edm-search"><input id="admExamSearch" type="search" placeholder="🔎 Student name / username / exam name / subject লিখে Search করো…" autocomplete="off"><div class="edm-filters"><button type="button" class="active" data-edm-filter="ALL">All records</button><button type="button" data-edm-filter="MCQ">MCQ only</button><button type="button" data-edm-filter="CQ">CQ only</button></div><small id="admExamCount" style="display:block;margin-top:8px;color:var(--dr-muted,#666)">Loading records…</small></div>
     <div id="admExamRows"><div class="empty-profile">Loading exam records…</div></div>
   </section>
 
@@ -1601,7 +1601,7 @@ html[data-theme="dark"] a{color:#b9baff}
     <div id="lbList"></div>
     <div class="action-row">
       <button class="btn btn-ghost" id="btnBackToResult">← Go Back</button>
-      <button class="btn btn-ghost" id="btnClearLeaderboard" hidden>Clear this leaderboard (Admin only)</button>
+      <button class="btn btn-ghost" id="btnClearLeaderboard" hidden>এই লিডারবোর্ড Clear leaderboard (Admin only)</button>
     </div>
   </section>
 
@@ -3773,7 +3773,7 @@ function showMaterials(subject, chapter){
         <div class="mat-icon mat-icon-video">▶️</div>
         <div class="mat-text">
           <p class="mat-title">${item.title}</p>
-          <p class="mat-sub">Video <span class="mat-views" id="mat-views-${idx}"></span></p>
+          <p class="mat-sub">ভিডিও <span class="mat-views" id="mat-views-${idx}"></span></p>
         </div>
         <button class="mat-action" data-play="${idx}">Watch</button>`;
       box.appendChild(row);
@@ -4082,7 +4082,7 @@ function showMyAnswerSheet(subject, chapter, exam, prev){
   if(!mk){ mk=document.createElement("div"); mk.id="akMarks"; $("akList").parentNode.insertBefore(mk,$("akList")); }
   mk.style.display="";
   mk.innerHTML=`<div class="ak-marks-top"><div><span class="ak-label">Obtained marks</span><strong>${bnNum(correct)} / ${bnNum(total)}</strong></div><div class="ak-pct ${pct>=50?"pass":"fail"}">${bnNum(pct)}%<small>${pct>=50?"Passed":"Needs practice"}</small></div></div><p class="ak-note">🔒 You have already taken this exam. Each MCQ exam can be taken only once, so you can only review the answer sheet.</p>${mine?"<p class=\"ak-hint\">🟢 Correct answer &nbsp; 🔴 Your wrong answer</p>":""}`;
-  const tags=["A","B","C","D"], box=$("akList"); box.innerHTML="";
+  const tags=["ক","খ","গ","ঘ"], box=$("akList"); box.innerHTML="";
   questions.forEach((q,i)=>{
     const card=document.createElement("div"); card.className="question-card";
     const n=document.createElement("div"); n.className="qnum"; n.textContent=`Question ${bnNum(i+1)} / ${bnNum(questions.length)}`;
@@ -4187,9 +4187,9 @@ function incrementSiteViewCount(videoId){
 
 function formatViews(n){
   if(n === null || n === undefined || isNaN(n)) return "";
-  if(n >= 10000000) return (n/10000000).toFixed(1).replace(/\.0$/,"") + "M";
-  if(n >= 100000) return (n/100000).toFixed(1).replace(/\.0$/,"") + "L";
-  if(n >= 1000) return (n/1000).toFixed(1).replace(/\.0$/,"") + "K";
+  if(n >= 10000000) return (n/10000000).toFixed(1).replace(/\.0$/,"") + " কোটি";
+  if(n >= 100000) return (n/100000).toFixed(1).replace(/\.0$/,"") + " লক্ষ";
+  if(n >= 1000) return (n/1000).toFixed(1).replace(/\.0$/,"") + " হাজার";
   return bnNum(n);
 }
 
@@ -4221,7 +4221,7 @@ function showAnswerKeyForAdmin(){
   $("akSubtitle").textContent = `${subject} → ${chapter} → ${exam}`;
 
   const questions = examData[subject].chapters[chapter].exams[exam].questions;
-  const tags = ["A","B","C","D"];
+  const tags = ["ক","খ","গ","ঘ"];
   const box = $("akList");
   box.innerHTML = "";
 
@@ -4341,7 +4341,7 @@ function renderAllQuestions(){
   const container = $("questionsContainer");
   container.innerHTML = "";
   
-  const tags = ["A","B","C","D"];
+  const tags = ["ক","খ","গ","ঘ"];
   
   questions.forEach((q, i)=>{
     const qCard = document.createElement("div");
@@ -4381,7 +4381,7 @@ function renderAllQuestions(){
         const answeredCount = state.answers.filter(a => a !== null).length;
         $("progressFill").style.width = (answeredCount/total*100)+"%";
         const unansweredCount = total - answeredCount;
-        $("pageLabel").textContent = `Answered ${bnNum(answeredCount)} • Remaining ${bnNum(unansweredCount)}`;
+        $("pageLabel").textContent = `Answered ${bnNum(answeredCount)}টি • Remaining ${bnNum(unansweredCount)}টি`;
       });
       optionsBox.appendChild(b);
     });
@@ -4395,7 +4395,7 @@ function renderAllQuestions(){
   const answeredCount = state.answers.filter(a => a !== null).length;
   $("progressFill").style.width = (answeredCount/total*100)+"%";
   const unansweredCount = total - answeredCount;
-  $("pageLabel").textContent = `Answered ${bnNum(answeredCount)} • Remaining ${bnNum(unansweredCount)}`;
+  $("pageLabel").textContent = `Answered ${bnNum(answeredCount)}টি • Remaining ${bnNum(unansweredCount)}টি`;
   
   window.scrollTo(0, 0);
 }
@@ -4411,7 +4411,7 @@ $("btnExitExam").addEventListener("click", async ()=>{
       await saveUserResult({examKey:getExamKey(),time:now,subject:state.selectedSubject,chapter:state.selectedChapter,exam:state.selectedExam,correct,total,percent,status:"cancelled"});
       saveLeaderboardEntry({examKey:getExamKey(),time:now,subject:state.selectedSubject,chapter:state.selectedChapter,exam:state.selectedExam,name:state.studentName,correct,total,percent});
       toast("Cancelled exam score saved (where database permissions allow).","info",3500);
-    }catch(err){console.error("Cancelled exam save failed:",err);toast("Exam was cancelled, but the score could not be saved: "+(err.message||""),"error",4500);}
+    }catch(err){console.error("Cancelled exam save failed:",err);toast("Exam cancel hoyeche, kintu score save hoyni: "+(err.message||""),"error",4500);}
     state.finished=true;state.examInProgress=false;hideAllScreens();$("screen-subjects").hidden=false;$("topSub").textContent="Choose a subject to begin";pushScreen("subjects",{});
   }
 });
@@ -4713,10 +4713,10 @@ function loadArbijoyFirebaseSdk(){
 }
 async function requestExamNotifications(){
  if(!('Notification' in window)||!('serviceWorker' in navigator)||!('PushManager' in window)){toast('This browser does not support web push. Try Chrome on Android.','error',4000);return;}
- if(!currentProfile||!supabaseClient){toast('Please log in first, then turn on Notify.','warning',3500);return;}
+ if(!currentProfile||!supabaseClient){toast('আগে লগইন করে তারপর Notify চালু করো।','warning',3500);return;}
  try{
   const permission=await Notification.requestPermission();
-  if(permission!=='granted'){toast('Notification permission was not granted. Please allow it in your browser settings.','error',3500);return;}
+  if(permission!=='granted'){toast('Notification permission দেওয়া হয়নি। Browser settings থেকে Allow করো।','error',3500);return;}
   await loadArbijoyFirebaseSdk();
   const swUrl=new URL('./firebase-messaging-sw.js',location.href);
   const registration=await navigator.serviceWorker.register(swUrl.href,{scope:new URL('./',location.href).pathname});
@@ -4748,25 +4748,25 @@ async function requestExamNotifications(){
     } catch (noticeError) { console.debug('Native notification display unavailable', noticeError); }
    });
   }
-  toast('🔔 Background notifications are on.','success',4000);
+  toast('🔔 Background notification চালু হয়েছে।','success',4000);
   return true;
- }catch(e){console.error('Push setup failed:',e);toast('Notification setup failed: '+(e.message||'Unknown error')+' — please check the setup guide.','error',6000);return false;}
+ }catch(e){console.error('Push setup failed:',e);toast('Notification setup হয়নি: '+(e.message||'Unknown error')+' — setup guide দেখো।','error',6000);return false;}
 }
-/* ---- phone push (admin events). Always explains WHY it failed, in English, to the admin ---- */
+/* ---- phone push (admin events). Always explains WHY it failed, in Bangla, to the admin ---- */
 const PUSH_HELP={
-  NO_AUTH:"Log in as admin, then try again.",
-  NOT_ADMIN:"Only the admin can send notifications.",
-  NO_SECRET:"FIREBASE_SERVICE_ACCOUNT is missing in Supabase → Edge Functions → Secrets. Save the full JSON file from Firebase under that name.",
-  BAD_JSON:"The FIREBASE_SERVICE_ACCOUNT JSON is invalid. Paste the ENTIRE file (from { to }) in one go, then Save/Add.",
-  BAD_KEY:"The JSON has no private_key or client_email. In Firebase → Project settings → Service accounts → 'Generate new private key', then use the new file.",
-  TOKEN_FAIL:"Google is not accepting the service account key. Generate a new private key and add it to the secret again.",
-  FCM_API_DISABLED:"Firebase Cloud Messaging API (V1) is disabled. Google Cloud Console → APIs → 'Firebase Cloud Messaging API' → Enable.",
-  FCM_FAIL:"Firebase rejected the message. Check that the service account’s project and the website’s Firebase project (exam-center-8c4bf) are the same.",
-  NO_DB_KEY:"The function cannot find the Supabase secret key. Deploy the function again.",
-  DB_FAIL:"Could not read the push_subscriptions table. Check that the table exists.",
-  JWT:"Turn OFF 'Enforce JWT verification' in Edge Functions → send-push → Settings, then Deploy.",
-  MISSING:"The send-push function is not deployed or its name is wrong. It must be named exactly 'send-push'.",
-  SERVER_ERROR:"An error occurred inside the function. Check Supabase → Edge Functions → send-push → Logs."
+  NO_AUTH:"Admin hishebe login koro, tarpor abar chesta koro.",
+  NOT_ADMIN:"Shudhu admin notification pathate pare.",
+  NO_SECRET:"Supabase → Edge Functions → Secrets e FIREBASE_SERVICE_ACCOUNT nai. Firebase theke paoa puro JSON file-ta oi nam-e save koro.",
+  BAD_JSON:"FIREBASE_SERVICE_ACCOUNT-er JSON bhul. File-er PURO lekha (shuru { theke shesh } porjonto) ek-bare paste koro, ar Save/Add dao.",
+  BAD_KEY:"JSON-e private_key ba client_email nai. Firebase → Project settings → Service accounts → 'Generate new private key' diye notun file nao.",
+  TOKEN_FAIL:"Google service account key-ta grohon korchhe na. Notun private key generate kore secret-e abar bosao.",
+  FCM_API_DISABLED:"Firebase Cloud Messaging API (V1) bondho. Google Cloud Console → APIs → 'Firebase Cloud Messaging API' → Enable koro.",
+  FCM_FAIL:"Firebase message grohon kore ni. Service account-er project ar website-er Firebase project (exam-center-8c4bf) ek kina dekho.",
+  NO_DB_KEY:"Function Supabase-er secret key paachhe na. Function ta abar Deploy koro.",
+  DB_FAIL:"push_subscriptions table porte parini. Table-ta ache kina dekho.",
+  JWT:"Edge Functions → send-push → Settings e 'Enforce JWT verification' OFF koro, tarpor Deploy koro.",
+  MISSING:"send-push function deploy kora nai ba nam bhul. Function-er nam thik 'send-push' hote hobe.",
+  SERVER_ERROR:"Function-er bhitore error hoyeche. Supabase → Edge Functions → send-push → Logs dekho."
 };
 async function drInvokePush(payload){
   try{
@@ -5046,7 +5046,7 @@ function showResult(){
   else { remark = "📚 Do not worry. Try again—you can do it!"; icon = "📚"; }
   $("resultIcon").textContent = icon;
   $("scoreRemark").textContent = remark;
-  $("topSub").textContent = "Exam Results";
+  $("topSub").textContent = "Exam Results ঠিক আছে";
 
   const reviewTitle = $("reviewTitle");
   const reviewBox = $("reviewBox");
@@ -5055,7 +5055,7 @@ function showResult(){
   reviewBox.hidden = false;
   reviewBox.innerHTML = "";
 
-  const tags = ["A","B","C","D"];
+  const tags = ["ক","খ","গ","ঘ"];
 
   // উত্তরপত্র একেবারে Question পেজের মতো ডেসক্রিপশনসহ রেন্ডার করা (Correct সবুজ, Incorrect লাল)
  // উত্তরপত্র একেবারে Question পেজের মতো রেন্ডার করা (Correct সবুজ, Incorrect লাল, আর উত্তর না দিলে লাইট ইয়েলো)
@@ -5679,29 +5679,29 @@ setTimeout(()=>{
  const $=id=>document.getElementById(id);
  function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
  const client=()=>window.supabaseClient||null, profile=()=>window.currentProfile||null;
- async function userId(){const c=client();if(!c)throw Error('Server connection is not ready.');const {data,error}=await c.auth.getUser();if(error||!data.user)throw Error('Please log in first.');return data.user.id;}
- function addFeedbackPanel(targetId,kind){const target=$(targetId);if(!target||target.querySelector('.exam-feedback-panel'))return;const panel=document.createElement('form');panel.className='exam-feedback-panel';panel.innerHTML=`<h3>💬 Question / Complaint to Your Teacher</h3><p>After an exam, you can report a question, a wrong question, marks or any other problem.</p><label>Subject (optional)<input name="subject" maxlength="120" placeholder="e.g. English — Chapter 1"></label><label>Message<textarea name="message" maxlength="3000" required placeholder="Write your question or complaint in detail..."></textarea></label><button class="btn btn-primary" type="submit">📨 Send to Your Teacher</button><span class="feedback-status" role="status" style="display:block;margin-top:8px;font-size:13px"></span>`;
- panel.addEventListener('submit',async e=>{e.preventDefault();const status=panel.querySelector('.feedback-status'),btn=panel.querySelector('button[type=submit]');try{const c=client(),uid=await userId(),msg=panel.elements.message.value.trim();if(!msg)throw Error('Please write a message.');btn.disabled=true;status.textContent='Sending…';const pr=profile()||{},examTitle=kind==='written'?($('writtenResultSub')?.textContent||'CQ / Written exam'):($('scoreSub')?.textContent||'MCQ exam');const {error}=await c.from('exam_messages').insert({user_id:uid,username:pr.username||'Student',exam_title:examTitle,subject:panel.elements.subject.value.trim()||null,message:msg,status:'open'});if(error)throw error;panel.reset();status.textContent='✅ Message sent. Your teacher will review it.';status.style.color='#16a34a';}catch(err){status.textContent='Could not send: '+(err.message||'Unknown error')+' — SQL setup has been run.';status.style.color='#dc2626';}finally{btn.disabled=false;}});target.appendChild(panel);}
+ async function userId(){const c=client();if(!c)throw Error('Server connection is not ready.');const {data,error}=await c.auth.getUser();if(error||!data.user)throw Error('আগে login করো।');return data.user.id;}
+ function addFeedbackPanel(targetId,kind){const target=$(targetId);if(!target||target.querySelector('.exam-feedback-panel'))return;const panel=document.createElement('form');panel.className='exam-feedback-panel';panel.innerHTML=`<h3>💬 Question / Complaint to Admin</h3><p>Exam শেষ হওয়ার পর প্রশ্ন, ভুল প্রশ্ন, মার্কস বা অন্য সমস্যা জানাতে পারো।</p><label>বিষয় / Subject (optional)<input name="subject" maxlength="120" placeholder="যেমন: English — Chapter 1"></label><label>Message<textarea name="message" maxlength="3000" required placeholder="তোমার প্রশ্ন বা অভিযোগ বিস্তারিত লিখো..."></textarea></label><button class="btn btn-primary" type="submit">📨 Send to Admin</button><span class="feedback-status" role="status" style="display:block;margin-top:8px;font-size:13px"></span>`;
+ panel.addEventListener('submit',async e=>{e.preventDefault();const status=panel.querySelector('.feedback-status'),btn=panel.querySelector('button[type=submit]');try{const c=client(),uid=await userId(),msg=panel.elements.message.value.trim();if(!msg)throw Error('Message লিখতে হবে।');btn.disabled=true;status.textContent='Sending…';const pr=profile()||{},examTitle=kind==='written'?($('writtenResultSub')?.textContent||'CQ / Written exam'):($('scoreSub')?.textContent||'MCQ exam');const {error}=await c.from('exam_messages').insert({user_id:uid,username:pr.username||'Student',exam_title:examTitle,subject:panel.elements.subject.value.trim()||null,message:msg,status:'open'});if(error)throw error;panel.reset();status.textContent='✅ Message sent. Admin will review it.';status.style.color='#16a34a';}catch(err){status.textContent='পাঠানো যায়নি: '+(err.message||'Unknown error')+' — SQL setup চালানো হয়েছে কি না দেখো।';status.style.color='#dc2626';}finally{btn.disabled=false;}});target.appendChild(panel);}
  function attachPanels(){addFeedbackPanel('screen-result','mcq');addFeedbackPanel('screen-written-result','written');}
  const obs=new MutationObserver(()=>{attachPanels();});['screen-result','screen-written-result'].forEach(id=>{if($(id))obs.observe($(id),{attributes:true,attributeFilter:['hidden']});});attachPanels();
- async function loadInbox(){const box=$('messageInboxList'),c=client();if(!box||!c)return;box.innerHTML='<div class="empty-profile">Loading messages…</div>';try{const uid=await userId(),admin=!!profile()?.is_admin;let q=c.from('exam_messages').select('id,user_id,username,exam_title,subject,message,admin_reply,replied_at,user_reply,user_replied_at,created_at,status,sender_id,sender_role').order('created_at',{ascending:false}).limit(100);if(!admin)q=q.eq('user_id',uid);else q=q.or('status.is.null,status.neq.resolved');const {data,error}=await q;if(error)throw error;if(!data?.length){box.innerHTML='<div class="empty-profile">No messages yet.</div>';return;}if(!admin&&data.some(m=>m.sender_role)){const dm=data.filter(m=>m.sender_role).sort((a,b)=>new Date(a.created_at)-new Date(b.created_at));box.innerHTML='<div class="chat-thread" id="studentDirectThread"></div><form id="studentDirectForm" class="chat-compose"><textarea name="message" maxlength="3000" required placeholder="Write your reply to your teacher…"></textarea><button class="btn btn-primary" type="submit">Send ➤</button></form>';const thread=$('studentDirectThread');dm.forEach(m=>{const b=document.createElement('div');b.className='chat-bubble '+(m.sender_role==='student'?'mine':'theirs');b.innerHTML='<div>'+esc(m.message)+'</div><small>'+esc(m.sender_role==='admin'?'Admin':(m.username||'You'))+' · '+(m.created_at?new Date(m.created_at).toLocaleString():'')+'</small>';thread.appendChild(b);});thread.scrollTop=thread.scrollHeight;$('studentDirectForm').onsubmit=async e=>{e.preventDefault();const f=e.currentTarget,txt=f.elements.message.value.trim();if(!txt)return;const btn=f.querySelector('button');btn.disabled=true;try{const me=await userId(),pr=profile()||{};const {error}=await c.from('exam_messages').insert({user_id:me,username:pr.username||'Student',exam_title:'Direct message',subject:'Direct chat',message:txt,status:'open',sender_id:me,sender_role:'student'});if(error)throw error;f.reset();await loadInbox();}catch(err){alert('Could not send reply: '+err.message);}finally{btn.disabled=false;}};return;}box.innerHTML='';data.forEach(m=>{const el=document.createElement('article');el.className='admin-message-item';el.innerHTML=`<div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><strong>${admin?'👤 '+esc(m.username||'Student'):'💬 '+esc(m.exam_title||'Exam')}</strong><span class="pill">${esc(m.status||'open')}</span></div><small>${esc(m.exam_title||'Exam')} · ${esc(m.subject||'General')} · ${m.created_at?new Date(m.created_at).toLocaleString():''}</small><p><b>${admin?'Student message':'Your message'}:</b><br>${esc(m.message)}</p>${m.admin_reply?`<div class="admin-reply-box"><strong>✉️ Reply from Your Teacher</strong><p>${esc(m.admin_reply)}</p><small>${m.replied_at?new Date(m.replied_at).toLocaleString():''}</small></div>`:''}${m.user_reply?`<div class="admin-reply-box"><strong>💬 Reply from User</strong><p>${esc(m.user_reply)}</p><small>${m.user_replied_at?new Date(m.user_replied_at).toLocaleString():''}</small></div>`:''}${!admin?`<div style="margin-top:10px"><label>Reply to Your Teacher<textarea data-userreply="${esc(m.id)}" maxlength="3000" placeholder="Write your reply to your teacher…">${esc(m.user_reply||'')}</textarea></label><button class="btn btn-primary" data-senduserreply="${esc(m.id)}">↩ Send reply</button></div>`:''}${admin?`<div style="margin-top:10px"><label>Reply to ${esc(m.username||'Student')}<textarea data-replytext="${esc(m.id)}" maxlength="3000" placeholder="Write a reply…">${esc(m.admin_reply||'')}</textarea></label><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button class="btn btn-primary" data-sendreply="${esc(m.id)}">↩ Send reply</button><button class="btn btn-ghost" data-resolve="${esc(m.id)}">✓ Mark resolved</button></div></div>`:''}`;
- if(!admin){el.querySelector('[data-senduserreply]')?.addEventListener('click',async ev=>{const reply=el.querySelector('[data-userreply]').value.trim();if(!reply){alert('Please write a reply.');return;}ev.currentTarget.disabled=true;try{const {error}=await c.from('exam_messages').update({user_reply:reply,user_replied_at:new Date().toISOString(),status:'open'}).eq('id',m.id).eq('user_id',await userId());if(error)throw error;await loadInbox();}catch(e){alert('Could not send reply: '+e.message);}finally{ev.currentTarget.disabled=false;}});}if(admin){el.querySelector('[data-sendreply]').addEventListener('click',async ev=>{const id=ev.currentTarget.dataset.sendreply,reply=el.querySelector('[data-replytext]').value.trim();if(!reply){alert('Please write a reply.');return;}ev.currentTarget.disabled=true;try{const {error}=await c.from('exam_messages').update({admin_reply:reply,replied_at:new Date().toISOString(),status:'replied'}).eq('id',id);if(error)throw error;void sendArbijoyPushEvent({event:'message_sent',user_id:m.user_id,title:'💬 New reply from your teacher',body:reply.slice(0,110)});await loadInbox();}catch(e){alert('Could not send reply: '+e.message);}finally{ev.currentTarget.disabled=false;}});el.querySelector('[data-resolve]').addEventListener('click',async ev=>{try{const {error}=await c.from('exam_messages').update({status:'resolved'}).eq('id',m.id);if(error)throw error;await loadInbox();}catch(e){alert('Status update failed: '+e.message);}});}box.appendChild(el);});}catch(e){box.innerHTML='<p style="color:#dc2626">Could not load messages: '+esc(e.message)+'<br>Supabase SQL setup  and the RLS policy.</p>';}}
- function openMessages(){if(!profile()){alert('Please log in to view messages.');return;}const admin=!!profile()?.is_admin;try{localStorage.setItem('examhub_msg_seen_'+(profile()?.user_id||'current')+'_'+(admin?'admin':'user'),new Date().toISOString());}catch(e){}document.querySelectorAll('.wrap > section').forEach(s=>s.hidden=true);if($('screen-messages'))$('screen-messages').hidden=false;$('messagesHeading').textContent=admin?'📨 Student Messages':'💬 Message';$('messagesSubheading').textContent=admin?'Student complaints, messages and replies.':'Your messages and your teacher\u2019s replies will appear here.';$('messagesListTitle').textContent=admin?'Student complaints inbox':'Your messages & replies';if($('newMessageCard'))$('newMessageCard').hidden=admin;$('topSub').textContent='Messages';history.pushState({screen:'messages'},'','#messages');loadInbox();userId().then(uid=>{try{localStorage.setItem('examhub_msg_seen_'+uid+'_'+(admin?'admin':'user'),new Date().toISOString());}catch(e){}updateNav();}).catch(()=>{});window.scrollTo({top:0,behavior:'smooth'});}
- $('standaloneMessageForm')?.addEventListener('submit',async e=>{e.preventDefault();const form=e.currentTarget,status=$('standaloneMessageStatus'),btn=form.querySelector('button[type=submit]');try{const c=client(),uid=await userId(),msg=form.elements.message.value.trim();if(!msg)throw Error('Please write a message.');btn.disabled=true;status.textContent='Sending…';const pr=profile()||{};const {error}=await c.from('exam_messages').insert({user_id:uid,username:pr.username||'Student',exam_title:'General message',subject:form.elements.subject.value.trim()||'General',message:msg,status:'open'});if(error)throw error;form.reset();status.textContent='✅ Message sent!';await loadInbox();}catch(err){status.textContent='Could not send: '+err.message;}finally{btn.disabled=false;}});$('navMessagesBtn')?.addEventListener('click',openMessages);$('refreshMessagesBtn')?.addEventListener('click',loadInbox);$('backFromMessages')?.addEventListener('click',()=>{if(profile()?.is_admin)showAdminDashboard();else{hideAllScreens();$('screen-subjects').hidden=false;$('topSub').textContent='Choose a subject to begin';}});
+ async function loadInbox(){const box=$('messageInboxList'),c=client();if(!box||!c)return;box.innerHTML='<div class="empty-profile">Loading messages…</div>';try{const uid=await userId(),admin=!!profile()?.is_admin;let q=c.from('exam_messages').select('id,user_id,username,exam_title,subject,message,admin_reply,replied_at,user_reply,user_replied_at,created_at,status,sender_id,sender_role').order('created_at',{ascending:false}).limit(100);if(!admin)q=q.eq('user_id',uid);else q=q.or('status.is.null,status.neq.resolved');const {data,error}=await q;if(error)throw error;if(!data?.length){box.innerHTML='<div class="empty-profile">এখনো কোনো মেসেজ নেই।</div>';return;}if(!admin&&data.some(m=>m.sender_role)){const dm=data.filter(m=>m.sender_role).sort((a,b)=>new Date(a.created_at)-new Date(b.created_at));box.innerHTML='<div class="chat-thread" id="studentDirectThread"></div><form id="studentDirectForm" class="chat-compose"><textarea name="message" maxlength="3000" required placeholder="Admin-কে উত্তর লিখো…"></textarea><button class="btn btn-primary" type="submit">Send ➤</button></form>';const thread=$('studentDirectThread');dm.forEach(m=>{const b=document.createElement('div');b.className='chat-bubble '+(m.sender_role==='student'?'mine':'theirs');b.innerHTML='<div>'+esc(m.message)+'</div><small>'+esc(m.sender_role==='admin'?'Admin':(m.username||'You'))+' · '+(m.created_at?new Date(m.created_at).toLocaleString():'')+'</small>';thread.appendChild(b);});thread.scrollTop=thread.scrollHeight;$('studentDirectForm').onsubmit=async e=>{e.preventDefault();const f=e.currentTarget,txt=f.elements.message.value.trim();if(!txt)return;const btn=f.querySelector('button');btn.disabled=true;try{const me=await userId(),pr=profile()||{};const {error}=await c.from('exam_messages').insert({user_id:me,username:pr.username||'Student',exam_title:'Direct message',subject:'Direct chat',message:txt,status:'open',sender_id:me,sender_role:'student'});if(error)throw error;f.reset();await loadInbox();}catch(err){alert('Reply পাঠানো যায়নি: '+err.message);}finally{btn.disabled=false;}};return;}box.innerHTML='';data.forEach(m=>{const el=document.createElement('article');el.className='admin-message-item';el.innerHTML=`<div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><strong>${admin?'👤 '+esc(m.username||'Student'):'💬 '+esc(m.exam_title||'Exam')}</strong><span class="pill">${esc(m.status||'open')}</span></div><small>${esc(m.exam_title||'Exam')} · ${esc(m.subject||'General')} · ${m.created_at?new Date(m.created_at).toLocaleString():''}</small><p><b>${admin?'Student message':'Your message'}:</b><br>${esc(m.message)}</p>${m.admin_reply?`<div class="admin-reply-box"><strong>✉️ Reply from Admin</strong><p>${esc(m.admin_reply)}</p><small>${m.replied_at?new Date(m.replied_at).toLocaleString():''}</small></div>`:''}${m.user_reply?`<div class="admin-reply-box"><strong>💬 Reply from User</strong><p>${esc(m.user_reply)}</p><small>${m.user_replied_at?new Date(m.user_replied_at).toLocaleString():''}</small></div>`:''}${!admin?`<div style="margin-top:10px"><label>Reply to Admin<textarea data-userreply="${esc(m.id)}" maxlength="3000" placeholder="Admin-কে উত্তর লিখো…">${esc(m.user_reply||'')}</textarea></label><button class="btn btn-primary" data-senduserreply="${esc(m.id)}">↩ Send reply</button></div>`:''}${admin?`<div style="margin-top:10px"><label>Reply to ${esc(m.username||'Student')}<textarea data-replytext="${esc(m.id)}" maxlength="3000" placeholder="Write a reply…">${esc(m.admin_reply||'')}</textarea></label><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button class="btn btn-primary" data-sendreply="${esc(m.id)}">↩ Send reply</button><button class="btn btn-ghost" data-resolve="${esc(m.id)}">✓ Mark resolved</button></div></div>`:''}`;
+ if(!admin){el.querySelector('[data-senduserreply]')?.addEventListener('click',async ev=>{const reply=el.querySelector('[data-userreply]').value.trim();if(!reply){alert('Reply লিখো।');return;}ev.currentTarget.disabled=true;try{const {error}=await c.from('exam_messages').update({user_reply:reply,user_replied_at:new Date().toISOString(),status:'open'}).eq('id',m.id).eq('user_id',await userId());if(error)throw error;await loadInbox();}catch(e){alert('Reply পাঠানো যায়নি: '+e.message);}finally{ev.currentTarget.disabled=false;}});}if(admin){el.querySelector('[data-sendreply]').addEventListener('click',async ev=>{const id=ev.currentTarget.dataset.sendreply,reply=el.querySelector('[data-replytext]').value.trim();if(!reply){alert('Reply লিখুন।');return;}ev.currentTarget.disabled=true;try{const {error}=await c.from('exam_messages').update({admin_reply:reply,replied_at:new Date().toISOString(),status:'replied'}).eq('id',id);if(error)throw error;void sendArbijoyPushEvent({event:'message_sent',user_id:m.user_id,title:'💬 New reply from your teacher',body:reply.slice(0,110)});await loadInbox();}catch(e){alert('Reply পাঠানো যায়নি: '+e.message);}finally{ev.currentTarget.disabled=false;}});el.querySelector('[data-resolve]').addEventListener('click',async ev=>{try{const {error}=await c.from('exam_messages').update({status:'resolved'}).eq('id',m.id);if(error)throw error;await loadInbox();}catch(e){alert('Status update failed: '+e.message);}});}box.appendChild(el);});}catch(e){box.innerHTML='<p style="color:#dc2626">মেসেজ লোড হয়নি: '+esc(e.message)+'<br>Supabase SQL setup ও RLS policy যাচাই করো।</p>';}}
+ function openMessages(){if(!profile()){alert('Messages দেখতে আগে login করো।');return;}const admin=!!profile()?.is_admin;try{localStorage.setItem('examhub_msg_seen_'+(profile()?.user_id||'current')+'_'+(admin?'admin':'user'),new Date().toISOString());}catch(e){}document.querySelectorAll('.wrap > section').forEach(s=>s.hidden=true);if($('screen-messages'))$('screen-messages').hidden=false;$('messagesHeading').textContent=admin?'📨 Student Messages':'💬 Message';$('messagesSubheading').textContent=admin?'Student complaints, messages and replies.':'তোমার পাঠানো মেসেজ ও Reply from Admin এখানে দেখাবে।';$('messagesListTitle').textContent=admin?'Student complaints inbox':'Your messages & replies';if($('newMessageCard'))$('newMessageCard').hidden=admin;$('topSub').textContent='Messages';history.pushState({screen:'messages'},'','#messages');loadInbox();userId().then(uid=>{try{localStorage.setItem('examhub_msg_seen_'+uid+'_'+(admin?'admin':'user'),new Date().toISOString());}catch(e){}updateNav();}).catch(()=>{});window.scrollTo({top:0,behavior:'smooth'});}
+ $('standaloneMessageForm')?.addEventListener('submit',async e=>{e.preventDefault();const form=e.currentTarget,status=$('standaloneMessageStatus'),btn=form.querySelector('button[type=submit]');try{const c=client(),uid=await userId(),msg=form.elements.message.value.trim();if(!msg)throw Error('Message লিখতে হবে।');btn.disabled=true;status.textContent='Sending…';const pr=profile()||{};const {error}=await c.from('exam_messages').insert({user_id:uid,username:pr.username||'Student',exam_title:'General message',subject:form.elements.subject.value.trim()||'General',message:msg,status:'open'});if(error)throw error;form.reset();status.textContent='✅ Message sent!';await loadInbox();}catch(err){status.textContent='পাঠানো যায়নি: '+err.message;}finally{btn.disabled=false;}});$('navMessagesBtn')?.addEventListener('click',openMessages);$('refreshMessagesBtn')?.addEventListener('click',loadInbox);$('backFromMessages')?.addEventListener('click',()=>{if(profile()?.is_admin)showAdminDashboard();else{hideAllScreens();$('screen-subjects').hidden=false;$('topSub').textContent='Choose a subject to begin';}});
  let activeDirectUser=null,activeDirectName='Student';
  window.openDirectConversation=async function(targetId,targetName){
    if(!profile()||!profile().is_admin)return; activeDirectUser=targetId;activeDirectName=targetName||'Student';
    document.querySelectorAll('.wrap > section').forEach(s=>s.hidden=true);const screen=$('screen-messages');if(screen)screen.hidden=false;
    $('messagesHeading').textContent='💬 Chat with '+activeDirectName;$('messagesSubheading').textContent='Private conversation';$('messagesListTitle').textContent='Conversation';$('newMessageCard').hidden=true;
-   const box=$('messageInboxList');box.innerHTML='<div class="chat-thread" id="directChatThread">Loading conversation…</div><form id="directChatForm" class="chat-compose"><textarea name="message" maxlength="3000" required placeholder="Write a message…"></textarea><button class="btn btn-primary" type="submit">Send ➤</button></form>';
+   const box=$('messageInboxList');box.innerHTML='<div class="chat-thread" id="directChatThread">Loading conversation…</div><form id="directChatForm" class="chat-compose"><textarea name="message" maxlength="3000" required placeholder="Message লিখুন…"></textarea><button class="btn btn-primary" type="submit">Send ➤</button></form>';
    history.pushState({screen:'messages',userId:targetId},'','#messages');await loadDirectConversation();
-   $('directChatForm').onsubmit=async e=>{e.preventDefault();const form=e.currentTarget,txt=form.elements.message.value.trim();if(!txt)return;const btn=form.querySelector('button');btn.disabled=true;try{const uid=await userId(),{error}=await client().from('exam_messages').insert({user_id:activeDirectUser,username:activeDirectName,exam_title:'Direct message',subject:'Direct chat',message:txt,status:'open',sender_id:uid,sender_role:'admin'});if(error)throw error;void sendArbijoyPushEvent({event:'message_sent',user_id:activeDirectUser,title:'💬 New message from your teacher',body:txt.slice(0,110)});form.reset();await loadDirectConversation();}catch(err){alert('Could not send message: '+err.message);}finally{btn.disabled=false;}};
+   $('directChatForm').onsubmit=async e=>{e.preventDefault();const form=e.currentTarget,txt=form.elements.message.value.trim();if(!txt)return;const btn=form.querySelector('button');btn.disabled=true;try{const uid=await userId(),{error}=await client().from('exam_messages').insert({user_id:activeDirectUser,username:activeDirectName,exam_title:'Direct message',subject:'Direct chat',message:txt,status:'open',sender_id:uid,sender_role:'admin'});if(error)throw error;void sendArbijoyPushEvent({event:'message_sent',user_id:activeDirectUser,title:'💬 New message from your teacher',body:txt.slice(0,110)});form.reset();await loadDirectConversation();}catch(err){alert('Message পাঠানো যায়নি: '+err.message);}finally{btn.disabled=false;}};
  };
- async function loadDirectConversation(){const box=$('directChatThread');if(!box||!activeDirectUser)return;try{const uid=await userId(),{data,error}=await client().from('exam_messages').select('id,user_id,username,message,created_at,sender_id,sender_role').eq('user_id',activeDirectUser).not('sender_role','is',null).order('created_at',{ascending:true}).limit(300);if(error)throw error;box.innerHTML='';(data||[]).forEach(m=>{const b=document.createElement('div');b.className='chat-bubble '+(m.sender_id===uid?'mine':'theirs');b.innerHTML='<div>'+esc(m.message)+'</div><small>'+esc(m.sender_role==='admin'?'Admin':(m.username||'Student'))+' · '+(m.created_at?new Date(m.created_at).toLocaleString(): '')+'</small>';box.appendChild(b);});if(!data?.length)box.innerHTML='<div class="empty-profile">No messages yet. Start the conversation.</div>';box.scrollTop=box.scrollHeight;}catch(e){box.innerHTML='<p>Could not load conversation: '+esc(e.message)+'</p>';}}
+ async function loadDirectConversation(){const box=$('directChatThread');if(!box||!activeDirectUser)return;try{const uid=await userId(),{data,error}=await client().from('exam_messages').select('id,user_id,username,message,created_at,sender_id,sender_role').eq('user_id',activeDirectUser).not('sender_role','is',null).order('created_at',{ascending:true}).limit(300);if(error)throw error;box.innerHTML='';(data||[]).forEach(m=>{const b=document.createElement('div');b.className='chat-bubble '+(m.sender_id===uid?'mine':'theirs');b.innerHTML='<div>'+esc(m.message)+'</div><small>'+esc(m.sender_role==='admin'?'Admin':(m.username||'Student'))+' · '+(m.created_at?new Date(m.created_at).toLocaleString(): '')+'</small>';box.appendChild(b);});if(!data?.length)box.innerHTML='<div class="empty-profile">এখনো কোনো মেসেজ নেই। কথোপকথন শুরু করো।</div>';box.scrollTop=box.scrollHeight;}catch(e){box.innerHTML='<p>Conversation load হয়নি: '+esc(e.message)+'</p>';}}
  async function updateNav(){const b=$('navMessagesBtn');if(!b)return;const pr=profile();b.hidden=!pr;const label=pr?.is_admin?'📨 Message':'💬 Message';if(!b.querySelector('.message-unread-badge'))b.innerHTML=label+'<span class="message-unread-badge" hidden>0</span>';else b.childNodes[0].textContent=label+' ';if(!pr||!client())return;try{const c=client(),uid=await userId(),key='examhub_msg_seen_'+uid+'_'+(pr.is_admin?'admin':'user');let seen=0;try{seen=Date.parse(localStorage.getItem(key)||'')||0;}catch(e){}let q=c.from('exam_messages').select('id,status,admin_reply,user_reply,user_id,created_at,replied_at,user_replied_at,sender_role,sender_id');if(pr.is_admin)q=q.or('created_at.gt.'+new Date(seen).toISOString()+',user_replied_at.gt.'+new Date(seen).toISOString());else q=q.eq('user_id',uid);const {data,error}=await q;if(error)throw error;const count=(data||[]).filter(m=>pr.is_admin?(Math.max(Date.parse(m.created_at||0)||0,Date.parse(m.user_replied_at||0)||0)>seen):((m.sender_role==='admin' || !!m.admin_reply) && Math.max(Date.parse(m.created_at||0)||0,Date.parse(m.replied_at||0)||0)>seen)).length;const badge=b.querySelector('.message-unread-badge');if(badge){badge.hidden=count<1;badge.textContent=count>99?'99+':String(count);}}catch(e){const badge=b.querySelector('.message-unread-badge');if(badge)badge.hidden=true;}}window.__updateNav=updateNav;setInterval(updateNav,12000);updateNav();
  async function loadTopThreeLegacy(){const box=$('heroTopThree'),c=client();if(!box||!c)return;try{
  const [{data:users,error:ue},{data:rs,error:re},{data:ws,error:we}]=await Promise.all([c.from('profiles').select('user_id,username,is_admin,blocked,created_at').eq('is_admin',false).eq('blocked',false),c.from('results').select('user_id,percent,correct,total,attempted_at'),c.from('written_submissions').select('user_id,exam_id,status,score,graded_at,submitted_at').eq('status','graded').not('score','is',null)]);if(ue)throw ue;if(re)throw re;if(we)throw we;
- const exids=[...new Set((ws||[]).map(x=>x.exam_id).filter(Boolean))];let exs=[];if(exids.length){const ex=await c.from('written_exams').select('id,total_marks').in('id',exids);if(ex.error)throw ex.error;exs=ex.data||[];}const maxMap=new Map(exs.map(x=>[x.id,Number(x.total_marks)||0]));const stats=new Map((users||[]).map(u=>[u.user_id,{username:u.username||'Student',sum:0,n:0}]));(rs||[]).forEach(r=>{const x=stats.get(r.user_id);if(x){x.sum+=Number(r.percent)||0;x.n++;}});(ws||[]).forEach(r=>{const x=stats.get(r.user_id),max=maxMap.get(r.exam_id)||0;if(x&&max>0){x.sum+=(Number(r.score)||0)/max*100;x.n++;}});const top=[...stats.entries()].filter(([id,x])=>x.n>0).map(([id,x])=>({id,username:x.username,avg:Math.round(x.sum/x.n)})).sort((a,b)=>b.avg-a.avg||a.username.localeCompare(b.username)).slice(0,3);if(!top.length){box.innerHTML='<div class="hero-top-user"><span class="medal">🏆</span><div><strong>Top 3 coming soon</strong><small>Ranked by overall performance</small></div></div>';return;}const medals=['🥇','🥈','🥉'];box.innerHTML=top.map((u,i)=>'<div class="hero-top-user"><span class="medal">'+medals[i]+'</span><div><strong>'+esc(u.username)+'</strong><small>'+u.avg+'% average</small></div></div>').join('');
+ const exids=[...new Set((ws||[]).map(x=>x.exam_id).filter(Boolean))];let exs=[];if(exids.length){const ex=await c.from('written_exams').select('id,total_marks').in('id',exids);if(ex.error)throw ex.error;exs=ex.data||[];}const maxMap=new Map(exs.map(x=>[x.id,Number(x.total_marks)||0]));const stats=new Map((users||[]).map(u=>[u.user_id,{username:u.username||'Student',sum:0,n:0}]));(rs||[]).forEach(r=>{const x=stats.get(r.user_id);if(x){x.sum+=Number(r.percent)||0;x.n++;}});(ws||[]).forEach(r=>{const x=stats.get(r.user_id),max=maxMap.get(r.exam_id)||0;if(x&&max>0){x.sum+=(Number(r.score)||0)/max*100;x.n++;}});const top=[...stats.entries()].filter(([id,x])=>x.n>0).map(([id,x])=>({id,username:x.username,avg:Math.round(x.sum/x.n)})).sort((a,b)=>b.avg-a.avg||a.username.localeCompare(b.username)).slice(0,3);if(!top.length){box.innerHTML='<div class="hero-top-user"><span class="medal">🏆</span><div><strong>Top 3 coming soon</strong><small>Admin User Performance report অনুযায়ী ranking</small></div></div>';return;}const medals=['🥇','🥈','🥉'];box.innerHTML=top.map((u,i)=>'<div class="hero-top-user"><span class="medal">'+medals[i]+'</span><div><strong>'+esc(u.username)+'</strong><small>'+u.avg+'% average · Admin report ranking</small></div></div>').join('');
  }catch(e){console.debug('Top-three report ranking unavailable',e.message);}}
  let _topCfg={t:0,v:null};
  window.__resetTopCfg=function(){_topCfg.t=0;};
@@ -5710,24 +5710,14 @@ setTimeout(()=>{
  function topChip(medal,name,pct,more,cls){return '<div class="hero-top-user'+(cls?' '+cls:'')+'"><span class="medal">'+medal+'</span><div><strong>'+esc(name)+'</strong><small><b>'+pct+'%</b><span class="more"> '+more+'</span></small></div></div>';}
  function isLogged(){const b=document.getElementById('profileBtn');return !!(b&&!b.hidden);}
  function isAdminUser(){const b=document.getElementById('adminBtn');return !!(b&&!b.hidden);}
-  function topScopeHtml(label,rows){
-   const medals=['\ud83e\udd47','\ud83e\udd48','\ud83e\udd49'];
-   const all=rows||[],top=all.filter(r=>Number(r.pos)<=3),me=all.find(r=>r.is_me);
-   let h='<div class="hero-top-scope"><div class="hero-top-scope-title">'+esc(label)+'</div><div class="hero-top-row">';
-   if(!top.length)h+='<div class="hero-top-user"><span class="medal">\ud83c\udfc6</span><div><strong>Top 3 coming soon</strong><small>No results yet</small></div></div>';
-   else h+=top.map(r=>topChip(medals[Number(r.pos)-1]||'\ud83c\udfc5',r.username||'Student',r.avg_percent,'avg \u00b7 '+r.attempts+' exams',r.is_me?'me':'')).join('');
-   h+='</div>';
-   if(isLogged()){h+='<div class="hero-top-rank"><span class="rank-k">Your rank</span>'+(me?'<span class="rank-v">#'+Number(me.pos)+'</span><span class="rank-p">'+me.avg_percent+'% avg</span>':'<span class="rank-p">Not ranked yet \u2014 take an exam</span>')+'</div>';}
-   return h+'</div>';
-  }
  async function loadTopThree(){
   const box=$('heroTopThree'),c=client();if(!box||!c)return;
   try{
    const cfg=await topConfig(c),scopes=Array.isArray(cfg?.scopes)?cfg.scopes.filter(x=>x&&x.subject):[];
-   if(!scopes.length){const {data,error}=await c.rpc('get_top_performers',{top_n:3});if(error)throw error;box.setAttribute('data-label','');box.innerHTML=topScopeHtml('Top Performers',data||[]);return;}
+   if(!scopes.length){const {data,error}=await c.rpc('get_top_performers',{top_n:3});if(error)throw error;box.setAttribute('data-label','');const rows=data||[],medals=['🥇','🥈','🥉'];let html=rows.filter(r=>Number(r.pos)<=3).map(r=>topChip(medals[Number(r.pos)-1]||'🏅',r.username||'Student',r.avg_percent,'avg · '+r.attempts+' exams',r.is_me?'me':'')).join('');if(!html)html='<div class="hero-top-user"><span class="medal">🏆</span><div><strong>Top 3 coming soon</strong><small>Rankings start after the first exams</small></div></div>';box.innerHTML=html;return;}
    const results=await Promise.all(scopes.slice(0,12).map(async sc=>{const r=await c.rpc('get_top_performers_scope',{p_top:3,p_subject:sc.subject,p_chapter:sc.chapter||null});if(r.error)throw r.error;return {scope:sc,rows:r.data||[]}}));
    box.setAttribute('data-label','🏆 Subject-wise Top Performers');const medals=['🥇','🥈','🥉'];let html='';
-   results.forEach(({scope,rows})=>{html+=topScopeHtml(topLabel(scope),rows);});box.innerHTML=html;
+   results.forEach(({scope,rows})=>{const label=topLabel(scope);html+='<div class="hero-top-scope"><div class="hero-top-scope-title">'+esc(label)+'</div>';const top=rows.filter(r=>Number(r.pos)<=3);if(!top.length)html+='<div class="hero-top-user"><span class="medal">🏆</span><div><strong>Top 3 coming soon</strong><small>এই scope-এ এখনো result নেই</small></div></div>';else html+=top.map(r=>topChip(medals[Number(r.pos)-1]||'🏅',r.username||'Student',r.avg_percent,'avg · '+r.attempts+' exams',r.is_me?'me':'')).join('');html+='</div>';});box.innerHTML=html;
   }catch(e){console.debug('Top performer scopes unavailable',e&&e.message);if(isAdminUser())return loadTopThreeLegacy();}
  }
  window.loadTopThree=loadTopThree;
@@ -5758,10 +5748,10 @@ setTimeout(()=>{
  const confirmBox=(m,o)=>typeof window.customConfirm==='function'?window.customConfirm(m,o):Promise.resolve(confirm(m));
  async function api(action,payload={}){
    const client=window.supabaseClient,url=edgeUrl();
-   if(!client)throw new Error('Supabase client not found.');
-   if(!url)throw new Error('Live Class Function URL is not configured.');
+   if(!client)throw new Error('Supabase client পাওয়া যায়নি।');
+   if(!url)throw new Error('Live Class Function URL কনফিগার করা হয়নি।');
    const {data:{session}}=await client.auth.getSession();
-   if(!session?.access_token)throw new Error('Please log in first.');
+   if(!session?.access_token)throw new Error('আগে লগইন করো।');
    const res=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token},body:JSON.stringify({action,...payload})});
    const body=await res.json().catch(()=>({}));
    if(!res.ok)throw new Error(body.error||'Live Class request failed');
@@ -5802,7 +5792,7 @@ setTimeout(()=>{
        if(document.exitFullscreen)await document.exitFullscreen();else if(document.webkitExitFullscreen)document.webkitExitFullscreen();
      }else if(stage.requestFullscreen)await stage.requestFullscreen();else if(stage.webkitRequestFullscreen)stage.webkitRequestFullscreen();
      else status('Fullscreen is not supported in this browser.');
-   }catch(e){status('Could not enter fullscreen: '+(e.message||e));}
+   }catch(e){status('Fullscreen চালু করা যায়নি: '+(e.message||e));}
  }
  function updateLiveFullscreenButtons(){
    [['liveStudentStage','liveStudentFullscreen'],['liveAdminStage','liveAdminFullscreen']].forEach(([sid,bid])=>{
@@ -5824,7 +5814,7 @@ setTimeout(()=>{
  }
  async function ensureProfile(){if(window.currentProfile)return true;try{if(typeof loadCurrentProfile==='function')await loadCurrentProfile();}catch(e){}return !!window.currentProfile;}
  function show(){
-   if(!window.currentProfile){ensureProfile().then(ok=>{if(ok)show();else alert('Please log in to watch the Live Class.');});return;}
+   if(!window.currentProfile){ensureProfile().then(ok=>{if(ok)show();else alert('Live Class দেখতে আগে লগইন করো।');});return;}
    document.querySelectorAll('.wrap > section').forEach(x=>x.hidden=true);
    $('screen-live-class').hidden=false;
    if(!room)showList(); 
@@ -5841,7 +5831,7 @@ setTimeout(()=>{
    try{
      const {data,error}=await window.supabaseClient.from('live_classes').select('id,title,subject,description,status,scheduled_at,created_at,created_by').in('status',['scheduled','live']).order('created_at',{ascending:false});
      if(error)throw error;
-     if(!data?.length){box.className='empty-profile';box.innerHTML='<div class="empty-profile">There is no Live Class right now.</div>';return;}
+     if(!data?.length){box.className='empty-profile';box.innerHTML='<div class="empty-profile">এখন কোনো Live Class নেই।</div>';return;}
      box.className='';
      const a=admin(),me=window.currentProfile&&window.currentProfile.user_id;
      box.innerHTML=data.map(c=>{
@@ -5854,7 +5844,7 @@ setTimeout(()=>{
      box.querySelectorAll('[data-join]').forEach(b=>b.addEventListener('click',()=>joinClass(b.dataset.join,false)));
      box.querySelectorAll('[data-studio]').forEach(b=>b.addEventListener('click',()=>joinClass(b.dataset.studio,true)));
      box.querySelectorAll('[data-end]').forEach(b=>b.addEventListener('click',()=>endClass(b.dataset.end)));
-   }catch(e){box.textContent='Could not load classes: '+e.message;}
+   }catch(e){box.textContent='ক্লাস লোড হয়নি: '+e.message;}
  }
 
  /* ---------- chat ---------- */
@@ -5970,13 +5960,13 @@ setTimeout(()=>{
    if(!sdkPromise){
      sdkPromise=new Promise((resolve,reject)=>{
        const urls=['https://cdn.jsdelivr.net/npm/livekit-client@2.15.6/dist/livekit-client.umd.min.js','https://unpkg.com/livekit-client@2.15.6/dist/livekit-client.umd.min.js'];let i=0;
-       const next=()=>{if(i>=urls.length){sdkPromise=null;return reject(new Error('LiveKit SDK could not be loaded from the CDN. Check your internet connection and try again.'));}
+       const next=()=>{if(i>=urls.length){sdkPromise=null;return reject(new Error('LiveKit SDK CDN থেকে লোড হয়নি। ইন্টারনেট সংযোগ পরীক্ষা করে আবার চেষ্টা করো।'));}
          const s=document.createElement('script');s.src=urls[i++];s.async=true;s.onload=()=>window.LivekitClient?resolve():next();s.onerror=()=>{s.remove();next();};document.head.appendChild(s);};
        next();
      });
    }
    await sdkPromise;
-   if(!window.LivekitClient)throw new Error('LiveKit SDK failed to load. Refresh the browser and try again.');
+   if(!window.LivekitClient)throw new Error('LiveKit SDK লোড হয়নি। Browser refresh করে আবার চেষ্টা করো।');
  }
  window.addEventListener('load',()=>setTimeout(()=>{ensureLiveKitSdk().catch(()=>{});},4000));
  function resetRoomUI(){
@@ -6064,19 +6054,19 @@ setTimeout(()=>{
    $('liveRecordStop').disabled=!(state==='recording'||state==='paused');
  }
  function getTeacherRecordingStream(){
-   if(!room||role!=='teacher')throw new Error('Only the admin/teacher can record.');
+   if(!room||role!=='teacher')throw new Error('শুধু Admin/Teacher রেকর্ড করতে পারবেন।');
    const tracks=[];
    room.localParticipant.trackPublications.forEach(pub=>{
      if(pub.track&&!pub.isMuted&&pub.track.mediaStreamTrack&&pub.track.mediaStreamTrack.readyState==='live'){
        tracks.push(pub.track.mediaStreamTrack);
      }
    });
-   if(!tracks.some(t=>t.kind==='video'))throw new Error('Turn on the camera to record.');
+   if(!tracks.some(t=>t.kind==='video'))throw new Error('রেকর্ড করার জন্য Camera চালু করুন।');
    if(!tracks.some(t=>t.kind==='audio'))console.warn('Recording without microphone audio.');
    return new MediaStream(tracks);
  }
  async function startLiveRecording(){
-   if(!window.MediaRecorder)throw new Error('MediaRecorder is not supported in this browser.');
+   if(!window.MediaRecorder)throw new Error('এই Browser-এ MediaRecorder সমর্থিত নয়।');
    if(liveRecorder&&liveRecorder.state!=='inactive')return;
    const stream=getTeacherRecordingStream();
    const mime=['video/webm;codecs=vp9,opus','video/webm;codecs=vp8,opus','video/webm'].find(t=>MediaRecorder.isTypeSupported(t));
@@ -6096,11 +6086,11 @@ setTimeout(()=>{
        if(error)throw error;
        recordingStatus('✓ Saved to Recorded Video','');
        await loadRecordedVideos();
-       if(typeof window.toast==='function')window.toast('Recording saved.','success',5000);
+       if(typeof window.toast==='function')window.toast('Recording সংরক্ষণ হয়েছে।','success',5000);
      }catch(err){
        recordingStatus('Save failed — download available','paused');
        const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='live-'+(activeClass||'class')+'.webm';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),60000);
-       alert('Recording could not be saved to Supabase Storage: '+err.message+'\\nThe video was downloaded instead.');
+       alert('Supabase Storage-এ recording save হয়নি: '+err.message+'\\nভিডিওটি ডাউনলোড করা হয়েছে।');
      }finally{syncRecordingButtons('idle');}
    };
    liveRecorder.start(1000);recordingStatus('● Recording…','recording');syncRecordingButtons('recording');
@@ -6112,7 +6102,7 @@ setTimeout(()=>{
  }
  async function loadRecordedVideos(){
    const box=$('recordedVideoList');if(!box||!window.supabaseClient)return;
-   box.className='empty-profile';box.textContent='Loading recordings…';
+   box.className='empty-profile';box.textContent='রেকর্ডিংয়ের তালিকা লোড হচ্ছে…';
    try{
      const {data:folders,error}=await window.supabaseClient.storage.from(RECORD_BUCKET).list('',{limit:100,sortBy:{column:'name',order:'desc'}});
      if(error)throw error;
@@ -6123,7 +6113,7 @@ setTimeout(()=>{
        return (files||[]).filter(f=>/\.webm$/i.test(f.name)).map(f=>({path:dir.name+'/'+f.name,name:f.name,created:f.created_at||f.updated_at||''}));
      }));
      const videos=folderResults.flat().sort((a,b)=>(b.created||'').localeCompare(a.created||''));
-     if(!videos.length){box.className='empty-profile';box.textContent='No recorded videos yet.';return;}
+     if(!videos.length){box.className='empty-profile';box.textContent='এখনো কোনো Recorded Video নেই।';return;}
      box.className='';box.innerHTML='';
      videos.forEach(v=>{
        const item=document.createElement('article');item.className='recorded-video-item';item.dataset.recordPath=v.path;
@@ -6136,7 +6126,7 @@ setTimeout(()=>{
        if(admin()){const del=document.createElement('button');del.type='button';del.className='btn btn-ghost recorded-delete-btn';del.textContent='🗑 Delete';del.dataset.deleteRecorded=v.path;actions.appendChild(del);}
        item.append(video,title,meta,actions);box.appendChild(item);
      });
-   }catch(e){box.className='empty-profile';box.textContent='Could not load recorded videos: '+e.message+' (Check the storage bucket and access policy.)';}
+   }catch(e){box.className='empty-profile';box.textContent='Recorded Video লোড হয়নি: '+e.message+' (Storage bucket ও access policy পরীক্ষা করুন।)';}
  }
  async function playRecordedVideo(path,button){
    const item=button.closest('.recorded-video-item'),video=item?.querySelector('video');if(!video)return;
@@ -6149,24 +6139,24 @@ setTimeout(()=>{
      }
      const result=video.play();if(result?.catch)await result.catch(()=>{});
      button.textContent='▶ Play';
-   }catch(e){button.textContent='Retry';alert('Could not play video: '+e.message);}finally{button.disabled=false;}
+   }catch(e){button.textContent='Retry';alert('ভিডিও চালু হয়নি: '+e.message);}finally{button.disabled=false;}
  }
  async function deleteRecordedVideo(path,button){
-   if(!admin()){alert('Only the admin can delete videos.');return;}
-   const ok=await confirmBox('Permanently delete this recorded video?',{okText:'Delete video',cancelText:'Cancel',icon:'🗑️'});
+   if(!admin()){alert('শুধু Admin ভিডিও Delete করতে পারবেন।');return;}
+   const ok=await confirmBox('এই Recorded Video স্থায়ীভাবে Delete করতে চান?',{okText:'Delete video',cancelText:'Cancel',icon:'🗑️'});
    if(!ok)return;
    try{
      button.disabled=true;button.textContent='Deleting…';
      const {error}=await window.supabaseClient.storage.from(RECORD_BUCKET).remove([path]);
      if(error)throw error;
      button.closest('.recorded-video-item')?.remove();
-     const box=$('recordedVideoList');if(box&&!box.querySelector('.recorded-video-item')){box.className='empty-profile';box.textContent='No recorded videos yet.';}
-     if(typeof window.toast==='function')window.toast('Video deleted.','success',4000);
-   }catch(e){button.disabled=false;button.textContent='🗑 Delete';alert('Could not delete video: '+e.message+'\nCheck the storage Admin-only DELETE policy.');}
+     const box=$('recordedVideoList');if(box&&!box.querySelector('.recorded-video-item')){box.className='empty-profile';box.textContent='এখনো কোনো Recorded Video নেই।';}
+     if(typeof window.toast==='function')window.toast('ভিডিও Delete হয়েছে।','success',4000);
+   }catch(e){button.disabled=false;button.textContent='🗑 Delete';alert('ভিডিও Delete হয়নি: '+e.message+'\nStorage-এর Admin-only DELETE policy পরীক্ষা করুন।');}
  }
 
  /* ---------- wiring ---------- */
- $('liveCreateForm')?.addEventListener('submit',async e=>{e.preventDefault();if(!admin())return;const btn=$('liveCreateForm').querySelector('button[type="submit"]');btn.disabled=true;btn.textContent='Starting…';try{const r=await api('create',{title:$('liveTitle').value.trim(),subject:$('liveSubject').value.trim(),description:$('liveDescription').value.trim()});$('liveCreateForm').reset();activeClass=r.class_id;try{if(typeof sendArbijoyPushEvent==='function')void sendArbijoyPushEvent({event:'live_started',title:$('liveTitle').value||r.title||'Live class',subject:r.subject||'',class_id:r.class_id});}catch(e){}await connectRoom(r,true);}catch(err){alert('Could not create class: '+err.message);showList();}finally{btn.disabled=false;btn.textContent='Create & Start Live';}});
+ $('liveCreateForm')?.addEventListener('submit',async e=>{e.preventDefault();if(!admin())return;const btn=$('liveCreateForm').querySelector('button[type="submit"]');btn.disabled=true;btn.textContent='Starting…';try{const r=await api('create',{title:$('liveTitle').value.trim(),subject:$('liveSubject').value.trim(),description:$('liveDescription').value.trim()});$('liveCreateForm').reset();activeClass=r.class_id;try{if(typeof sendArbijoyPushEvent==='function')void sendArbijoyPushEvent({event:'live_started',title:$('liveTitle').value||r.title||'Live class',subject:r.subject||'',class_id:r.class_id});}catch(e){}await connectRoom(r,true);}catch(err){alert('ক্লাস তৈরি হয়নি: '+err.message);showList();}finally{btn.disabled=false;btn.textContent='Create & Start Live';}});
  $('refreshLiveClasses')?.addEventListener('click',loadClasses);
  $('liveSoundBtn')?.addEventListener('click',async()=>{try{await room.startAudio();}catch(e){}$('liveSoundBtn').hidden=room?room.canPlaybackAudio!==false:true;$('liveAudioSink').querySelectorAll('audio').forEach(a=>{const p=a.play();if(p&&p.catch)p.catch(()=>{});});});
  $('liveMicBtn')?.addEventListener('click',async()=>{if(!room)return;try{await room.localParticipant.setMicrophoneEnabled(!room.localParticipant.isMicrophoneEnabled);micOnSince=Date.now();micPeak=0;micWarned=false;}catch(e){status('Microphone: '+e.message);}syncButtons();});
@@ -6174,7 +6164,7 @@ setTimeout(()=>{
  $('liveSwitchCamera')?.addEventListener('click',async()=>{const devs=(await navigator.mediaDevices.enumerateDevices()).filter(d=>d.kind==='videoinput');if(devs.length<2)return;const cur=$('liveCameraSelect').value,i=devs.findIndex(d=>d.deviceId===cur),next=devs[(i+1+devs.length)%devs.length];$('liveCameraSelect').value=next.deviceId;switchDevice('videoinput',next.deviceId);});
  $('liveCameraSelect')?.addEventListener('change',e=>switchDevice('videoinput',e.target.value));
  $('liveMicSelect')?.addEventListener('change',e=>{micOnSince=Date.now();micPeak=0;micWarned=false;switchDevice('audioinput',e.target.value);});
- $('liveRecordStart')?.addEventListener('click',async()=>{try{await startLiveRecording();}catch(e){alert('Could not start recording: '+e.message);}});
+ $('liveRecordStart')?.addEventListener('click',async()=>{try{await startLiveRecording();}catch(e){alert('Recording শুরু হয়নি: '+e.message);}});
  $('liveRecordPause')?.addEventListener('click',pauseLiveRecording);
  $('liveRecordResume')?.addEventListener('click',resumeLiveRecording);
  $('liveRecordStop')?.addEventListener('click',stopLiveRecording);
@@ -6204,10 +6194,10 @@ setTimeout(()=>{
        if(!knownLiveIds.has(c.id)){
          knownLiveIds.add(c.id);
          if(c.created_by===own)return;
-         const title='Live Class has started';
+         const title='Live Class শুরু হয়েছে';
          const body=(c.title||'New class')+(c.subject?' · '+c.subject:'');
          try{if('Notification'in window&&Notification.permission==='granted')new Notification(title,{body,tag:'live-'+c.id});}catch(e){}
-         if(typeof window.toast==='function')window.toast('🔴 '+body+' — open Live Class to join','info',6000);
+         if(typeof window.toast==='function')window.toast('🔴 '+body+' — Join করতে Live Class খোলো','info',6000);
          showLiveNotice(c);
        }
      });
@@ -6216,7 +6206,7 @@ setTimeout(()=>{
    }catch(e){console.debug('Live notification check:',e.message);}
  }
  function startWatcher(){if(pollTimer)return;checkLiveNotifications();pollTimer=setInterval(checkLiveNotifications,15000);}
- $('enableLiveNotifications')?.addEventListener('click',async()=>{if(!('Notification'in window)){alert('Notifications are not supported in this browser.');return;}try{const permission=await Notification.requestPermission();notificationReady=permission==='granted';$('enableLiveNotifications').textContent=notificationReady?'🔔 Notifications enabled':'🔔 Enable notifications';if(notificationReady)alert('Live Class notifications are on. You will be notified when a Live starts while the site is open.');}catch(e){alert('Could not enable notifications.');}});
+ $('enableLiveNotifications')?.addEventListener('click',async()=>{if(!('Notification'in window)){alert('এই Browser-এ Notification সমর্থিত নয়।');return;}try{const permission=await Notification.requestPermission();notificationReady=permission==='granted';$('enableLiveNotifications').textContent=notificationReady?'🔔 Notifications enabled':'🔔 Enable notifications';if(notificationReady)alert('Live Class notification চালু হয়েছে। ওয়েবসাইট খোলা থাকলে Live শুরু হলে জানাবে।');}catch(e){alert('Notification চালু করা যায়নি।');}});
  $('drawerLiveClass')?.addEventListener('click',()=>{document.querySelector('.side-drawer')?.classList.remove('open');document.querySelector('.drawer-backdrop')?.classList.remove('open');show();});
  $('adminGoLive')?.addEventListener('click',show);
  window.openExamHubLiveClass=show;
@@ -8132,7 +8122,7 @@ body.dr-exam-protect #screen-exam{-webkit-user-select:none;user-select:none;-web
    const steps=r.steps||[];let h='';
    steps.forEach(s=>{h+='<div class="nt-step '+(s.ok?'ok':'bad')+'">'+(s.ok?'✅ ':'❌ ')+(L[s.name]||s.name)+(s.detail?' <small>'+String(s.detail).replace(/[<>&]/g,'')+'</small>':'')+'</div>';});
    if(r.ok===false){h+='<div class="nt-fix">👉 '+(PUSH_HELP[r.code]||r.error||'Unknown problem')+'</div><small class="nt-raw">'+String(r.code||'')+': '+String(r.error||'').replace(/[<>&]/g,'').slice(0,240)+'</small>';}
-   else{const n=(typeof r.devices==='number')?r.devices:0;h+=n>0?'<div class="nt-fix ok">🎉 All set. Notifications will go to '+n+' student device(s).</div>':'<div class="nt-fix">ℹ️ Setup is fine, but no student has tapped Notify yet. Ask students to tap 🔔 Notify.</div>';}
+   else{const n=(typeof r.devices==='number')?r.devices:0;h+=n>0?'<div class="nt-fix ok">🎉 Shob thik ache. '+n+' ta student device-e notification jabe.</div>':'<div class="nt-fix">ℹ️ Setup thik. Kintu ekhono kono student Notify chape ni. Student-ke 🔔 Notify chapte bolo.</div>';}
    box.innerHTML=h;});
   if(window.__drAcc){window.__drAcc.makeAcc(card);window.__drAcc.closeAcc(card);}
  }
@@ -8365,17 +8355,17 @@ html:root:root body #homeHeroCarousel .hero-top-three .hero-top-user:nth-child(1
   const sec=$('screen-admin');if(!sec||$('adminTopCard'))return;
   const anchor=$('adminNotifyCard')||($('adminGoMaterials')&&$('adminGoMaterials').closest('.admin-card'));
   const card=document.createElement('div');card.className='profile-card admin-card';card.id='adminTopCard';
-  card.innerHTML='<h3>🏆 Top Performers (homepage)</h3><p class="card-hint" id="topCurrent">Select one or more subjects and chapters. Each selected combination gets its own Top 3.</p>'+
-   '<form id="topForm" class="st-two-col"><label>Level<select id="topLevel"><option>SSC</option><option selected>HSC</option><option>Admission</option></select></label><label>Subjects (hold Ctrl/⌘ to select several)<select id="topSubject" multiple size="5" style="min-height:125px"></select></label><label>Chapters (all chapters of the selected subjects; multiple selection allowed)<select id="topChapter" multiple size="6" style="min-height:145px"></select></label><button class="btn btn-primary" type="submit">Save selected scopes</button></form><button class="btn btn-ghost" id="topReset" type="button" style="margin-top:10px">Show overall top 3 (all subjects)</button>';
+  card.innerHTML='<h3>🏆 Top Performers (homepage)</h3><p class="card-hint" id="topCurrent">একাধিক Subject ও Chapter নির্বাচন করো। প্রতিটি নির্বাচিত combination-এর আলাদা Top 3 দেখাবে।</p>'+
+   '<form id="topForm" class="st-two-col"><label>Level<select id="topLevel"><option>SSC</option><option selected>HSC</option><option>Admission</option></select></label><label>Subjects (একাধিক নির্বাচন করতে Ctrl/⌘ চাপো)<select id="topSubject" multiple size="5" style="min-height:125px"></select></label><label>Chapters (নির্বাচিত subject-গুলোর সব chapter; একাধিক নির্বাচন)<select id="topChapter" multiple size="6" style="min-height:145px"></select></label><button class="btn btn-primary" type="submit">Save selected scopes</button></form><button class="btn btn-ghost" id="topReset" type="button" style="margin-top:10px">Show overall top 3 (all subjects)</button>';
   if(anchor&&anchor.parentNode)anchor.parentNode.insertBefore(card,anchor.nextSibling);else sec.appendChild(card);
   const lv=$('topLevel'),sb=$('topSubject'),ch=$('topChapter');
   function fillSub(){sb.innerHTML='';(window.subjectsForLevel?window.subjectsForLevel(lv.value):[]).forEach(x=>{const o=document.createElement('option');o.value=x.key;o.textContent=x.label;sb.appendChild(o)});fillChap()}
   function fillChap(){const chosen=[...sb.selectedOptions].map(o=>o.value);ch.innerHTML='';chosen.forEach(subject=>{Object.keys((examData[subject]||{}).chapters||{}).forEach(chapter=>{const o=document.createElement('option');o.value=JSON.stringify({subject,chapter});o.textContent=(window.plainName?plainName(subject):subject)+' — '+chapter;ch.appendChild(o)})})}
   lv.addEventListener('change',fillSub);sb.addEventListener('change',fillChap);fillSub();
-  async function showCurrent(){try{const r=await supabaseClient.from('app_settings').select('value').eq('key','top_performers').maybeSingle(),v=r?.data?.value;const scopes=Array.isArray(v?.scopes)?v.scopes:[];$('topCurrent').textContent=scopes.length?'Currently showing '+scopes.length+' separate subject/chapter leaderboards: '+scopes.map(x=>(plainName?plainName(x.subject):x.subject)+(x.chapter?' · '+x.chapter:'')).join(' | '):'Currently showing the Overall Top 3.'}catch(e){}}
-  async function save(value){const r=await supabaseClient.from('app_settings').upsert({key:'top_performers',value,updated_at:new Date().toISOString()});if(r.error){note('Could not save: '+r.error.message,'error');return false;}if(window.__resetTopCfg)window.__resetTopCfg();if(window.loadTopThree)window.loadTopThree();await showCurrent();return true}
-  $('topForm').addEventListener('submit',async e=>{e.preventDefault();const scopes=[...ch.selectedOptions].map(o=>{try{return JSON.parse(o.value)}catch(_){return null}}).filter(Boolean);if(!scopes.length){note('Select at least one chapter.','warning');return;}const b=e.target.querySelector('button');b.disabled=true;const ok=await save({scopes});b.disabled=false;if(ok)note('✅ '+scopes.length+' Top Performer scope(s) saved','success')});
-  $('topReset').addEventListener('click',async()=>{if(await save({}))note('Overall Top 3 enabled','success')});showCurrent();
+  async function showCurrent(){try{const r=await supabaseClient.from('app_settings').select('value').eq('key','top_performers').maybeSingle(),v=r?.data?.value;const scopes=Array.isArray(v?.scopes)?v.scopes:[];$('topCurrent').textContent=scopes.length?'বর্তমানে '+scopes.length+'টি আলাদা subject/chapter leaderboard চালু: '+scopes.map(x=>(plainName?plainName(x.subject):x.subject)+(x.chapter?' · '+x.chapter:'')).join(' | '):'বর্তমানে Overall Top 3 দেখানো হচ্ছে।'}catch(e){}}
+  async function save(value){const r=await supabaseClient.from('app_settings').upsert({key:'top_performers',value,updated_at:new Date().toISOString()});if(r.error){note('Save হয়নি: '+r.error.message,'error');return false;}if(window.__resetTopCfg)window.__resetTopCfg();if(window.loadTopThree)window.loadTopThree();await showCurrent();return true}
+  $('topForm').addEventListener('submit',async e=>{e.preventDefault();const scopes=[...ch.selectedOptions].map(o=>{try{return JSON.parse(o.value)}catch(_){return null}}).filter(Boolean);if(!scopes.length){note('কমপক্ষে একটি chapter নির্বাচন করো।','warning');return;}const b=e.target.querySelector('button');b.disabled=true;const ok=await save({scopes});b.disabled=false;if(ok)note('✅ '+scopes.length+'টি Top Performer scope save হয়েছে','success')});
+  $('topReset').addEventListener('click',async()=>{if(await save({}))note('Overall Top 3 চালু হয়েছে','success')});showCurrent();
   if(window.__drAcc){window.__drAcc.makeAcc(card);window.__drAcc.closeAcc(card)}
  }
  const t=setInterval(()=>{if($('screen-admin')){ensure();if($('adminTopCard'))clearInterval(t)}},800);
@@ -8421,9 +8411,9 @@ html:root:root body #homeHeroCarousel .hero-top-three .hero-top-user:nth-child(1
  function render(){
   const box=$('annList');if(!box)return;const admin=!!(cp()&&cp().is_admin);if($('annCompose'))$('annCompose').hidden=!admin;
   box.innerHTML='';if(!list.length){box.innerHTML='<div class="empty-profile">No announcements yet.</div>';return;}
-  list.forEach(a=>{const d=document.createElement('button');d.type='button';d.className='ann-card ann-list-item';d.innerHTML='<div class="ann-top"><strong>'+esc(a.title)+'</strong><small>'+new Date(a.created_at).toLocaleString()+'</small></div><span class="ann-open-hint">Tap to read more →</span>';d.addEventListener('click',()=>openDetail(a.id));box.appendChild(d)});
+  list.forEach(a=>{const d=document.createElement('button');d.type='button';d.className='ann-card ann-list-item';d.innerHTML='<div class="ann-top"><strong>'+esc(a.title)+'</strong><small>'+new Date(a.created_at).toLocaleString()+'</small></div><span class="ann-open-hint">বিস্তারিত দেখতে চাপ দাও →</span>';d.addEventListener('click',()=>openDetail(a.id));box.appendChild(d)});
  }
- function openDetail(id){const a=list.find(x=>String(x.id)===String(id));if(!a)return;const box=$('annList');if(!box)return;const admin=!!(cp()&&cp().is_admin);box.innerHTML='';const d=document.createElement('article');d.className='ann-card ann-detail';d.innerHTML='<button type="button" class="btn btn-ghost" id="annBackToList">← All announcements</button><div class="ann-top"><strong>'+esc(a.title)+'</strong><small>'+new Date(a.created_at).toLocaleString()+'</small></div><p>'+esc(a.body).replace(/\n/g,'<br>')+'</p>';if(admin){const del=document.createElement('button');del.type='button';del.className='st-mini danger';del.textContent='🗑 Delete announcement';del.addEventListener('click',async()=>{const ok=await customConfirm('Delete this announcement? Students will no longer see it.',{okText:'Yes, delete',cancelText:'Keep',icon:'🗑️'});if(!ok)return;const r=await supabaseClient.from('announcements').delete().eq('id',a.id);if(r.error){note('Could not delete: '+r.error.message,'error');return;}note('Announcement deleted','success');await load()});d.appendChild(del)}box.appendChild(d);$('annBackToList').addEventListener('click',render)}
+ function openDetail(id){const a=list.find(x=>String(x.id)===String(id));if(!a)return;const box=$('annList');if(!box)return;const admin=!!(cp()&&cp().is_admin);box.innerHTML='';const d=document.createElement('article');d.className='ann-card ann-detail';d.innerHTML='<button type="button" class="btn btn-ghost" id="annBackToList">← সব Announcement</button><div class="ann-top"><strong>'+esc(a.title)+'</strong><small>'+new Date(a.created_at).toLocaleString()+'</small></div><p>'+esc(a.body).replace(/\n/g,'<br>')+'</p>';if(admin){const del=document.createElement('button');del.type='button';del.className='st-mini danger';del.textContent='🗑 Delete announcement';del.addEventListener('click',async()=>{const ok=await customConfirm('Delete this announcement? Students will no longer see it.',{okText:'Yes, delete',cancelText:'Keep',icon:'🗑️'});if(!ok)return;const r=await supabaseClient.from('announcements').delete().eq('id',a.id);if(r.error){note('Could not delete: '+r.error.message,'error');return;}note('Announcement deleted','success');await load()});d.appendChild(del)}box.appendChild(d);$('annBackToList').addEventListener('click',render)}
  function latest(){return list.length?Date.parse(list[0].created_at)||0:0;}
  function unseenCount(){let seen=0;try{seen=Number(localStorage.getItem(seenKey()))||0;}catch(e){}return list.filter(a=>(Date.parse(a.created_at)||0)>seen).length;}
  function markSeen(){try{localStorage.setItem(seenKey(),String(latest()||Date.now()));}catch(e){}paint();}
@@ -8459,7 +8449,7 @@ html:root:root body .brand .seal:after{inset:-3px!important;border-width:1px!imp
 html:root:root body .brand-text{font-size:17px!important;line-height:1.08!important}
 html:root:root body .brand-copy:after{font-size:8px!important;letter-spacing:.12em!important;margin-top:0!important}
 html:root:root body .topbar-inner{padding-top:5px!important;padding-bottom:5px!important;min-height:0!important;gap:7px!important}
-html:root:root body .account-area .account-btn{min-height:46px!important;padding:9px 15px!important;font-size:14.5px!important}
+html:root:root body .account-area .account-btn{min-height:34px!important;padding:5px 7px!important;font-size:11px!important}
 html:root:root body .nav-search-wrap{height:36px!important}
 .ann-list-item{display:block;width:100%;text-align:left;cursor:pointer;color:inherit;font:inherit}
 .ann-open-hint{display:block;color:var(--dr-muted,#777);font-size:12px;margin-top:7px}
@@ -8504,7 +8494,7 @@ html:root:root body .nav-search-wrap{height:36px!important}
  let records=[],filter='ALL',loaded=false;
  const client=()=>window.supabaseClient;
  async function uid(){const r=await client().auth.getUser();return r.data?.user?.id||null}
- function page(show){if(!window.currentProfile?.is_admin){say('Only the admin can use this page.','error');return;}if(typeof hideAllScreens==='function')hideAllScreens();document.querySelectorAll('.wrap > section').forEach(x=>x.hidden=true);$('screen-admin-exam-data').hidden=false;$('topSub').textContent='Exam Data Manager';if(show)history.pushState({screen:'admin-exam-data'},'','#admin-exam-data');window.scrollTo({top:0,behavior:'smooth'});if(!loaded)load();}
+ function page(show){if(!window.currentProfile?.is_admin){say('শুধু Admin এই পেজ ব্যবহার করতে পারবেন।','error');return;}if(typeof hideAllScreens==='function')hideAllScreens();document.querySelectorAll('.wrap > section').forEach(x=>x.hidden=true);$('screen-admin-exam-data').hidden=false;$('topSub').textContent='Exam Data Manager';if(show)history.pushState({screen:'admin-exam-data'},'','#admin-exam-data');window.scrollTo({top:0,behavior:'smooth'});if(!loaded)load();}
  async function load(){const root=$('admExamRows');if(!root||!client()||!window.currentProfile?.is_admin)return;root.innerHTML='<div class="empty-profile">Loading MCQ and CQ records…</div>';$('admExamCount').textContent='Loading…';
   try{const c=client();const [mr,cr]=await Promise.all([c.from('results').select('id,user_id,subject,chapter,exam,correct,total,percent,status,attempted_at').order('attempted_at',{ascending:false}).limit(1000),c.from('written_submissions').select('id,user_id,exam_id,status,score,feedback,submitted_at,graded_at').order('submitted_at',{ascending:false}).limit(1000)]);if(mr.error)throw mr.error;if(cr.error)throw cr.error;
    const all=[...(mr.data||[]).map(x=>({...x,_kind:'MCQ',_when:x.attempted_at})),...(cr.data||[]).map(x=>({...x,_kind:'CQ',_when:x.submitted_at}))];
@@ -8512,262 +8502,20 @@ html:root:root body .nav-search-wrap{height:36px!important}
    for(let i=0;i<ids.length;i+=250){const u=await c.from('profiles').select('user_id,username').in('user_id',ids.slice(i,i+250));if(u.error)throw u.error;(u.data||[]).forEach(x=>names.set(x.user_id,x.username||'Student'));}
    for(let i=0;i<exids.length;i+=250){const e=await c.from('written_exams').select('id,title,total_marks,subject,chapter').in('id',exids.slice(i,i+250));if(e.error)throw e.error;(e.data||[]).forEach(x=>exams.set(x.id,x));}
    records=all.map(x=>{const ex=exams.get(x.exam_id)||{};return {...x,_name:names.get(x.user_id)||'Student',_title:x._kind==='MCQ'?[x.subject,x.chapter,x.exam].filter(Boolean).join(' → '):[ex.subject,ex.chapter,ex.title||'CQ Exam'].filter(Boolean).join(' → '),_max:Number(ex.total_marks)||null};}).sort((a,b)=>Date.parse(b._when||0)-Date.parse(a._when||0));loaded=true;render();
-  }catch(e){root.innerHTML='<div class="empty-profile" style="color:#dc2626">Could not load records: '+esc(e.message)+'</div>';say('Exam data load failed: '+e.message,'error');}}
+  }catch(e){root.innerHTML='<div class="empty-profile" style="color:#dc2626">রেকর্ড লোড হয়নি: '+esc(e.message)+'</div>';say('Exam data load failed: '+e.message,'error');}}
  function filtered(){const q=($('admExamSearch')?.value||'').trim().toLocaleLowerCase();return records.filter(x=>(filter==='ALL'||x._kind===filter)&&(!q||[x._name,x.user_id,x._title,x.subject,x.chapter,x.exam,x.status].some(v=>String(v||'').toLocaleLowerCase().includes(q))));}
- function render(){const box=$('admExamRows');if(!box)return;const rows=filtered();$('admExamCount').textContent=`Showing ${rows.length} records · ${records.length} in total`;box.innerHTML='';if(!rows.length){box.innerHTML='<div class="empty-profile">No matching records found. Try a different search term.</div>';return;}rows.forEach(x=>{const row=document.createElement('article');row.className='edm-row';row.dataset.id=x.id;const when=x._when?new Date(x._when).toLocaleString():'—';row.innerHTML=`<div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><span class="admin-badge">${x._kind}</span><small>${esc(when)}</small></div><h4>👤 ${esc(x._name)}</h4><p><b>Exam:</b> ${esc(x._title||'Untitled exam')}</p><p><b>User ID:</b> <code>${esc(x.user_id)}</code></p>`;
+ function render(){const box=$('admExamRows');if(!box)return;const rows=filtered();$('admExamCount').textContent=`${rows.length}টি রেকর্ড দেখানো হচ্ছে · মোট ${records.length}টি`;box.innerHTML='';if(!rows.length){box.innerHTML='<div class="empty-profile">কোনো matching record পাওয়া যায়নি। Search শব্দ পরিবর্তন করে দেখো।</div>';return;}rows.forEach(x=>{const row=document.createElement('article');row.className='edm-row';row.dataset.id=x.id;const when=x._when?new Date(x._when).toLocaleString():'—';row.innerHTML=`<div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><span class="admin-badge">${x._kind}</span><small>${esc(when)}</small></div><h4>👤 ${esc(x._name)}</h4><p><b>Exam:</b> ${esc(x._title||'Untitled exam')}</p><p><b>User ID:</b> <code>${esc(x.user_id)}</code></p>`;
    if(x._kind==='MCQ')row.innerHTML+=`<p><b>Marks:</b> ${x.correct}/${x.total} · ${Number(x.percent||0).toFixed(2)}% · ${esc(x.status||'')}</p>`;else row.innerHTML+=`<p><b>Marks:</b> ${x.score==null?'Not graded':esc(x.score)+' / '+(x._max??'—')} · <b>Status:</b> ${esc(x.status||'')}</p>`;
    row.innerHTML+='<div class="edm-actions"><button type="button" class="btn btn-primary" data-edit>✏️ Edit marks</button><button type="button" class="btn btn-ghost" data-delete style="color:#b91c1c">🗑 Delete record</button></div><div class="edm-editor-slot"></div>';
    row.querySelector('[data-edit]').onclick=()=>editForm(row,x);row.querySelector('[data-delete]').onclick=()=>remove(x);box.appendChild(row);
   });}
- function editForm(row,x){const slot=row.querySelector('.edm-editor-slot');if(slot.innerHTML){slot.innerHTML='';return;}if(x._kind==='MCQ'){slot.innerHTML=`<div class="edm-edit"><label>Correct answers<input type="number" id="edmCorrect" min="0" max="10000" value="${Number(x.correct)||0}"></label><label>Total questions<input type="number" id="edmTotal" min="1" max="10000" value="${Number(x.total)||1}"></label><div class="wide" id="edmPreview" style="font-weight:900">New percentage: —</div><div class="edm-actions wide"><button type="button" class="btn btn-primary" data-save>Review & Save</button><button type="button" class="btn btn-ghost" data-cancel>Cancel</button></div></div>`;const a=slot.querySelector('#edmCorrect'),b=slot.querySelector('#edmTotal'),pv=slot.querySelector('#edmPreview');const preview=()=>{const n=Number(a.value),t=Number(b.value);pv.textContent=t>0&&n>=0&&n<=t?'New percentage: '+(n/t*100).toFixed(2)+'%':'Correct answers must be between 0 and total.'};a.oninput=b.oninput=preview;preview();slot.querySelector('[data-cancel]').onclick=()=>slot.innerHTML='';slot.querySelector('[data-save]').onclick=async()=>{const n=Number(a.value),t=Number(b.value);if(!Number.isInteger(n)||!Number.isInteger(t)||t<1||n<0||n>t){say('Marks invalid. Correct answers must be between 0 and the total.','warning');return;}const pct=Number((n/t*100).toFixed(2));const ok=await customConfirm(`You are about to update this MCQ result.\n\nStudent: ${x._name}\nExam: ${x._title}\nOld marks: ${x.correct}/${x.total} (${Number(x.percent||0).toFixed(2)}%)\nNew marks: ${n}/${t} (${pct}%)\n\nThis change will directly affect the student’s result. Are you sure?`,{icon:'🧾',okText:'Confirm & Update',cancelText:'Review again'});if(!ok)return;const btn=slot.querySelector('[data-save]');btn.disabled=true;const {error}=await client().from('results').update({correct:n,total:t,percent:pct,status:pct>=50?'pass':'fail'}).eq('id',x.id);if(error){say('Update failed: '+error.message,'error');btn.disabled=false;return;}say('MCQ marks updated successfully','success');loaded=false;await load();};
-   }else{slot.innerHTML=`<div class="edm-edit"><label>CQ marks<input type="number" id="edmScore" min="0" step="0.01" ${x._max?'max="'+x._max+'"':''} value="${x.score??''}"></label><label>Maximum marks<input type="text" readonly value="${x._max??'Not defined in exam'}"></label><label class="wide">Feedback<textarea id="edmFeedback" rows="3">${esc(x.feedback||'')}</textarea></label><div class="edm-actions wide"><button type="button" class="btn btn-primary" data-save>Review & Save</button><button type="button" class="btn btn-ghost" data-cancel>Cancel</button></div></div>`;slot.querySelector('[data-cancel]').onclick=()=>slot.innerHTML='';slot.querySelector('[data-save]').onclick=async()=>{const n=Number(slot.querySelector('#edmScore').value),feedback=slot.querySelector('#edmFeedback').value.trim();if(!Number.isFinite(n)||n<0||(x._max&&n>x._max)){say('CQ marks invalid.','warning');return;}const ok=await customConfirm(`You are about to update this CQ submission.\n\nStudent: ${x._name}\nExam: ${x._title}\nOld marks: ${x.score??'Not graded'}\nNew marks: ${n}/${x._max??'maximum not set'}\nFeedback: ${feedback||'(none)'}\n\nThe student’s CQ result and grading status will change. Are you sure?`,{icon:'✍️',okText:'Confirm & Grade',cancelText:'Review again'});if(!ok)return;const btn=slot.querySelector('[data-save]');btn.disabled=true;const {error}=await client().from('written_submissions').update({score:n,feedback,status:'graded',graded_at:new Date().toISOString(),graded_by:await uid()}).eq('id',x.id);if(error){say('CQ update failed: '+error.message,'error');btn.disabled=false;return;}say('CQ marks updated successfully','success');loaded=false;await load();};}}
- async function remove(x){const detail=`Record type: ${x._kind}\nStudent: ${x._name}\nExam: ${x._title}\nMarks: ${x._kind==='MCQ'?`${x.correct}/${x.total}`:(x.score??'Not graded')}\nDate: ${x._when?new Date(x._when).toLocaleString():'—'}\n\nThis ${x._kind} record will be permanently deleted. This cannot be undone. Are you sure?`;const ok=await customConfirm(detail,{icon:'⚠️',okText:'Yes, permanently delete',cancelText:'No, keep it'});if(!ok)return;const table=x._kind==='MCQ'?'results':'written_submissions';const {error}=await client().from(table).delete().eq('id',x.id);if(error){say('Delete failed: '+error.message,'error');return;}say(x._kind+' record deleted','success');loaded=false;await load();}
+ function editForm(row,x){const slot=row.querySelector('.edm-editor-slot');if(slot.innerHTML){slot.innerHTML='';return;}if(x._kind==='MCQ'){slot.innerHTML=`<div class="edm-edit"><label>Correct answers<input type="number" id="edmCorrect" min="0" max="10000" value="${Number(x.correct)||0}"></label><label>Total questions<input type="number" id="edmTotal" min="1" max="10000" value="${Number(x.total)||1}"></label><div class="wide" id="edmPreview" style="font-weight:900">New percentage: —</div><div class="edm-actions wide"><button type="button" class="btn btn-primary" data-save>Review & Save</button><button type="button" class="btn btn-ghost" data-cancel>Cancel</button></div></div>`;const a=slot.querySelector('#edmCorrect'),b=slot.querySelector('#edmTotal'),pv=slot.querySelector('#edmPreview');const preview=()=>{const n=Number(a.value),t=Number(b.value);pv.textContent=t>0&&n>=0&&n<=t?'New percentage: '+(n/t*100).toFixed(2)+'%':'Correct answers must be between 0 and total.'};a.oninput=b.oninput=preview;preview();slot.querySelector('[data-cancel]').onclick=()=>slot.innerHTML='';slot.querySelector('[data-save]').onclick=async()=>{const n=Number(a.value),t=Number(b.value);if(!Number.isInteger(n)||!Number.isInteger(t)||t<1||n<0||n>t){say('Marks invalid. Correct answers 0 থেকে total-এর মধ্যে হতে হবে।','warning');return;}const pct=Number((n/t*100).toFixed(2));const ok=await customConfirm(`MCQ result update করতে যাচ্ছো।\n\nStudent: ${x._name}\nExam: ${x._title}\nOld marks: ${x.correct}/${x.total} (${Number(x.percent||0).toFixed(2)}%)\nNew marks: ${n}/${t} (${pct}%)\n\nএই পরিবর্তনটি সরাসরি শিক্ষার্থীর ফলাফলে প্রভাব ফেলবে। নিশ্চিত?`,{icon:'🧾',okText:'Confirm & Update',cancelText:'Review again'});if(!ok)return;const btn=slot.querySelector('[data-save]');btn.disabled=true;const {error}=await client().from('results').update({correct:n,total:t,percent:pct,status:pct>=50?'pass':'fail'}).eq('id',x.id);if(error){say('Update failed: '+error.message,'error');btn.disabled=false;return;}say('MCQ marks updated successfully','success');loaded=false;await load();};
+   }else{slot.innerHTML=`<div class="edm-edit"><label>CQ marks<input type="number" id="edmScore" min="0" step="0.01" ${x._max?'max="'+x._max+'"':''} value="${x.score??''}"></label><label>Maximum marks<input type="text" readonly value="${x._max??'Not defined in exam'}"></label><label class="wide">Feedback<textarea id="edmFeedback" rows="3">${esc(x.feedback||'')}</textarea></label><div class="edm-actions wide"><button type="button" class="btn btn-primary" data-save>Review & Save</button><button type="button" class="btn btn-ghost" data-cancel>Cancel</button></div></div>`;slot.querySelector('[data-cancel]').onclick=()=>slot.innerHTML='';slot.querySelector('[data-save]').onclick=async()=>{const n=Number(slot.querySelector('#edmScore').value),feedback=slot.querySelector('#edmFeedback').value.trim();if(!Number.isFinite(n)||n<0||(x._max&&n>x._max)){say('CQ marks invalid.','warning');return;}const ok=await customConfirm(`CQ submission update করতে যাচ্ছো।\n\nStudent: ${x._name}\nExam: ${x._title}\nOld marks: ${x.score??'Not graded'}\nNew marks: ${n}/${x._max??'maximum not set'}\nFeedback: ${feedback||'(none)'}\n\nশিক্ষার্থীর CQ ফলাফল ও grading status পরিবর্তিত হবে। নিশ্চিত?`,{icon:'✍️',okText:'Confirm & Grade',cancelText:'Review again'});if(!ok)return;const btn=slot.querySelector('[data-save]');btn.disabled=true;const {error}=await client().from('written_submissions').update({score:n,feedback,status:'graded',graded_at:new Date().toISOString(),graded_by:await uid()}).eq('id',x.id);if(error){say('CQ update failed: '+error.message,'error');btn.disabled=false;return;}say('CQ marks updated successfully','success');loaded=false;await load();};}}
+ async function remove(x){const detail=`Record type: ${x._kind}\nStudent: ${x._name}\nExam: ${x._title}\nMarks: ${x._kind==='MCQ'?`${x.correct}/${x.total}`:(x.score??'Not graded')}\nDate: ${x._when?new Date(x._when).toLocaleString():'—'}\n\nএই নির্দিষ্ট ${x._kind} record স্থায়ীভাবে delete হবে। এটি ফিরিয়ে আনা যাবে না। তুমি কি নিশ্চিত?`;const ok=await customConfirm(detail,{icon:'⚠️',okText:'Yes, permanently delete',cancelText:'No, keep it'});if(!ok)return;const table=x._kind==='MCQ'?'results':'written_submissions';const {error}=await client().from(table).delete().eq('id',x.id);if(error){say('Delete failed: '+error.message,'error');return;}say(x._kind+' record deleted','success');loaded=false;await load();}
  function init(){if(!window.currentProfile?.is_admin)return;const sec=$('screen-admin');if(!sec||$('adminGoExamDataManager'))return;const btn=document.createElement('button');btn.type='button';btn.className='admin-action-card';btn.id='adminGoExamDataManager';btn.innerHTML='🧰<span>Exam Data Manager</span><small>Search students and exams, edit marks and manage records</small>';const grid=sec.querySelector('.admin-actions-grid');if(grid)grid.appendChild(btn);btn.addEventListener('click',()=>page(true));}
  function bind(){ $('adminGoExamDataManager')?.addEventListener('click',()=>page(true));$('backFromAdminExamData')?.addEventListener('click',()=>typeof showAdminDashboard==='function'?showAdminDashboard():page(false));$('refreshAdminExamData')?.addEventListener('click',()=>{loaded=false;load()});$('admExamSearch')?.addEventListener('input',render);document.querySelectorAll('[data-edm-filter]').forEach(b=>b.addEventListener('click',()=>{filter=b.dataset.edmFilter;document.querySelectorAll('[data-edm-filter]').forEach(z=>z.classList.toggle('active',z===b));render()}));}
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>{init();bind()});else{init();bind()}const timer=setInterval(()=>{if(window.currentProfile?.is_admin&&$('screen-admin')){init();bind();clearInterval(timer)}},800);
 })();
 </script>
 
-
-<style id="v46-premium">
-/* ===================== v46 · Premium layer ===================== */
-:root{--pr-gold:#c9a227;--pr-gold2:#f2d27a;--pr-ind:#4f46e5;--pr-vio:#7c3aed;--pr-ease:cubic-bezier(.22,.8,.3,1)}
-html{scroll-behavior:smooth}
-html:root:root body{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;font-feature-settings:"liga","kern";
- background-image:radial-gradient(1100px 520px at 8% -8%,rgba(124,92,255,.10),transparent 60%),radial-gradient(900px 460px at 100% 0%,rgba(201,162,39,.10),transparent 55%),radial-gradient(800px 500px at 50% 110%,rgba(20,184,166,.07),transparent 60%);
- background-attachment:fixed}
-::selection{background:rgba(124,92,255,.28)}
-*{scrollbar-width:thin;scrollbar-color:rgba(124,92,255,.45) transparent}
-::-webkit-scrollbar{width:9px;height:9px}::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#8b7cff,#c9a227);border-radius:99px;border:2px solid transparent;background-clip:padding-box}
-
-/* scroll progress */
-#prProgress{position:fixed;left:0;top:0;height:3px;width:0;z-index:99999;background:linear-gradient(90deg,#7c5cff,#d63a78,#f2d27a);box-shadow:0 0 12px rgba(124,92,255,.6);transition:width .12s linear;pointer-events:none}
-
-/* ---------- top navigation buttons: bigger, clearer ---------- */
-html:root:root body .account-area .account-btn:not(#profileBtn){min-height:48px!important;padding:10px 18px!important;font-size:15px!important;font-weight:800!important;letter-spacing:.01em;border-radius:16px!important}
-html:root:root body .account-area #themeToggleLabel{display:inline!important}
-html:root:root body .account-area #navAnnounceBtn .an-ic,html:root:root body .account-area #themeToggleIcon{font-size:18px}
-@media(max-width:700px){
- html:root:root body .account-area .account-btn:not(#profileBtn){min-height:54px!important;padding:10px 8px!important;font-size:15.5px!important;border-radius:17px!important;gap:6px}
- html:root:root body .account-area #enableNotificationsBtn,
- html:root:root body .account-area #authActionBtn,
- html:root:root body .account-area #themeToggleBtn,
- html:root:root body .account-area #navAnnounceBtn{flex:1 1 calc(50% - 4px)!important;min-width:0!important}
- html:root:root body .topbar-inner:has(#enableNotificationsBtn[hidden]) #navAnnounceBtn{flex:1 1 100%!important}
-}
-
-/* ---------- hero: top performers ---------- */
-html:root:root body #homeHeroCarousel{height:clamp(290px,40vw,440px)!important}
-html:root:root body #homeHeroCarousel .hero-track{box-shadow:0 26px 60px rgba(26,24,48,.30),0 0 0 1px rgba(255,255,255,.08) inset!important}
-html:root:root body #homeHeroCarousel .hero-top-three{display:block!important;overflow:visible!important;top:16px!important;left:20px!important;right:20px!important;padding:0!important}
-html:root:root body #homeHeroCarousel .hero-top-three:before{content:"";position:absolute;inset:-16px -20px -18px;z-index:-1;border-radius:26px 26px 0 0;background:linear-gradient(to bottom,rgba(10,10,32,.78),rgba(10,10,32,.38) 62%,rgba(10,10,32,0));pointer-events:none}
-html:root:root body #homeHeroCarousel .hero-top-three>.hero-top-user{display:inline-flex!important;margin:0 12px 12px 0}
-html:root:root body #homeHeroCarousel .hero-top-scope{margin:0!important;animation:prFade .5s var(--pr-ease)}
-html:root:root body #homeHeroCarousel .hero-top-scope-title{display:flex;align-items:center;gap:8px;margin:0 0 12px!important;padding:0!important;font-size:16px!important;font-weight:900!important;letter-spacing:.01em;line-height:1.25;color:#fff!important;-webkit-text-fill-color:#fff!important;text-shadow:0 2px 12px rgba(0,0,0,.6)}
-html:root:root body #homeHeroCarousel .hero-top-scope-title:before{content:"\1F3C6";font-size:17px}
-html:root:root body #homeHeroCarousel .hero-top-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px}
-html:root:root body #homeHeroCarousel .hero-top-row .hero-top-user{margin:0!important;max-width:100%}
-html:root:root body #homeHeroCarousel .hero-top-user{white-space:nowrap}
-html:root:root body #homeHeroCarousel .hero-top-user strong{white-space:nowrap!important;max-width:min(58vw,240px)!important;font-size:14px!important}
-html:root:root body #homeHeroCarousel .hero-top-user small{font-size:11.5px!important;margin-top:1px}
-html:root:root body #homeHeroCarousel .hero-top-rank{display:inline-flex;align-items:center;gap:9px;margin-top:12px;padding:6px 16px;border-radius:999px;background:rgba(10,10,32,.62);border:1px solid rgba(255,255,255,.3);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#fff!important;font-size:12.5px;font-weight:800;text-shadow:none}
-html:root:root body #homeHeroCarousel .hero-top-rank *{color:#fff!important;-webkit-text-fill-color:#fff!important;text-shadow:none!important}
-html:root:root body #homeHeroCarousel .hero-top-rank .rank-v{font-size:16px;font-weight:950;color:#ffd166!important;-webkit-text-fill-color:#ffd166!important}
-html:root:root body #homeHeroCarousel .hero-top-rank .rank-p{opacity:.9;font-weight:700}
-html:root:root body #homeHeroCarousel .hero-top-three.rotating .hero-top-scope:not(.on){display:none}
-@keyframes prFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-@media(max-width:700px){
- html:root:root body #homeHeroCarousel{height:350px!important}
- html:root:root body #homeHeroCarousel .hero-top-three{top:14px!important;left:14px!important;right:14px!important}
- html:root:root body #homeHeroCarousel .hero-top-scope-title{font-size:14.5px!important;margin-bottom:10px!important}
- html:root:root body #homeHeroCarousel .hero-top-row{gap:9px 10px}
- html:root:root body #homeHeroCarousel .hero-top-user strong{font-size:13px!important;max-width:min(54vw,200px)!important}
- html:root:root body #homeHeroCarousel .hero-slide{padding:14px 16px 38px!important}
-}
-
-/* ---------- premium cards / sections ---------- */
-html:root:root body :is(.subject-card,.hub-card,.profile-card,.admin-card,.stat-card,.question-card,.score-card,.mat-row,.lb-row,.admin-stat,.written-card,.written-submit-card,.ann-list-item){
- border:1px solid var(--dr-line,#e5e7ee)!important;border-radius:22px!important;
- background:linear-gradient(160deg,var(--dr-card,#fff) 0%,color-mix(in srgb,var(--dr-card,#fff) 92%,#7c5cff 8%) 100%)!important;
- box-shadow:0 1px 0 rgba(255,255,255,.7) inset,0 2px 4px rgba(26,24,48,.04),0 16px 38px -14px rgba(26,24,48,.20)!important;
- transition:transform .35s var(--pr-ease),box-shadow .35s var(--pr-ease),border-color .3s ease!important}
-html:root:root body :is(.subject-card,.hub-card,.mat-row,.ann-list-item,.admin-stat,.stat-card):hover{
- transform:translateY(-5px)!important;border-color:rgba(201,162,39,.55)!important;
- box-shadow:0 1px 0 rgba(255,255,255,.8) inset,0 4px 8px rgba(26,24,48,.05),0 28px 54px -16px rgba(79,70,229,.30)!important}
-html:root:root body .profile-card>h3:first-child,html:root:root body .admin-card>h3:first-child{display:flex;align-items:center;gap:10px;font-weight:900!important;letter-spacing:-.015em}
-html:root:root body .profile-card>h3:first-child:after,html:root:root body .admin-card>h3:first-child:after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--dr-line,#ddd),transparent)}
-html:root:root body .lede{border-radius:30px!important;border:1px solid var(--dr-line,#e5e7ee)!important;box-shadow:0 1px 0 rgba(255,255,255,.7) inset,0 26px 60px -24px rgba(79,70,229,.30)!important;overflow:hidden}
-html:root:root body .lede:before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:linear-gradient(180deg,#7c5cff,#d63a78 55%,#f2d27a)}
-html:root:root body .lede h2{letter-spacing:-.03em!important;font-weight:900!important}
-html:root:root body .admin-head{border-radius:26px!important;box-shadow:0 24px 54px -22px rgba(79,70,229,.45)!important}
-
-/* buttons */
-html:root:root body .btn{border-radius:15px!important;font-weight:800!important;letter-spacing:.005em;position:relative;overflow:hidden;transition:transform .25s var(--pr-ease),box-shadow .25s var(--pr-ease),filter .25s ease!important}
-html:root:root body .btn:after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 35%,rgba(255,255,255,.35) 50%,transparent 65%);transform:translateX(-120%);transition:transform .7s ease;pointer-events:none}
-html:root:root body .btn:hover:not(:disabled):after{transform:translateX(120%)}
-html:root:root body .btn-primary{background:linear-gradient(135deg,#4f46e5,#7c3aed 60%,#9b5cf6)!important;box-shadow:0 12px 26px -8px rgba(79,70,229,.55)!important;color:#fff!important}
-html:root:root body .btn:active:not(:disabled){transform:translateY(0) scale(.985)!important}
-html:root:root body :is(input,select,textarea):focus{outline:none!important;border-color:#8b7cff!important;box-shadow:0 0 0 4px rgba(124,92,255,.16)!important}
-html:root:root body :is(input:not([type=checkbox]):not([type=radio]),select,textarea){border-radius:14px}
-
-/* exam options (keeps correct/incorrect colours) */
-html:root:root body .option{border-radius:16px!important;transition:transform .2s var(--pr-ease),box-shadow .2s ease,border-color .2s ease!important}
-html:root:root body .option:hover{transform:translateX(3px);box-shadow:0 12px 26px -14px rgba(79,70,229,.5)}
-
-/* modals, drawer, footer */
-html:root:root body .modal,html:root:root body .auth-modal{border-radius:30px!important;box-shadow:0 40px 100px -20px rgba(20,20,60,.45)!important}
-html:root:root body .drawer-backdrop{backdrop-filter:blur(6px)}
-html:root:root body .side-drawer{box-shadow:30px 0 80px -20px rgba(20,20,60,.45)}
-html:root:root body .drawer-nav button{border-radius:14px;transition:background .2s ease,transform .2s var(--pr-ease)}
-html:root:root body .drawer-nav button:hover{transform:translateX(4px)}
-html:root:root body .site-footer{position:relative;border-top:0}
-html:root:root body .site-footer:before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,transparent,#c9a227,#d63a78,#7c5cff,transparent)}
-html:root:root body .pill{border-radius:999px;font-weight:800;letter-spacing:.01em}
-html:root:root body .brand{box-shadow:0 14px 34px rgba(124,92,255,.22),0 0 0 1px rgba(201,162,39,.25)!important}
-html:root:root body .back-btn{border-radius:999px;font-weight:800;transition:transform .2s var(--pr-ease)}
-html:root:root body .back-btn:hover{transform:translateX(-3px)}
-
-/* reveal on scroll */
-.pr-rv{opacity:0;transform:translateY(18px)}
-.pr-rv.pr-in{opacity:1;transform:none;transition:opacity .7s var(--pr-ease),transform .7s var(--pr-ease)}
-@media(prefers-reduced-motion:reduce){.pr-rv{opacity:1!important;transform:none!important}#prProgress{display:none}html{scroll-behavior:auto}}
-
-</style>
-<script id="v46-premium-js">
-(function(){
- 'use strict';
- /* ---- scroll progress bar ---- */
- try{
-  var bar=document.createElement('div');bar.id='prProgress';document.body.appendChild(bar);
-  var tick=false;
-  function upd(){tick=false;var h=document.documentElement,m=h.scrollHeight-h.clientHeight;bar.style.width=(m>0?Math.min(100,h.scrollTop/m*100):0)+'%';}
-  window.addEventListener('scroll',function(){if(!tick){tick=true;requestAnimationFrame(upd);}},{passive:true});upd();
- }catch(e){}
-
- /* ---- "admin" -> "Your Teacher" for students ---- */
- var TEACHER='Your Teacher';
- function viewerIsAdmin(){
-  try{if(window.currentProfile&&window.currentProfile.is_admin)return true;}catch(e){}
-  var b=document.getElementById('adminBtn');return !!(b&&!b.hidden);
- }
- var SKIP={SCRIPT:1,STYLE:1,TEXTAREA:1,NOSCRIPT:1,CODE:1,PRE:1};
- /* ---- Bangla subject / chapter / exam titles -> English (display only; exam questions stay untouched) ---- */
- var LONG=[
-  ['তথ্য ও যোগাযোগ প্রযুক্তি: বিশ্ব ও বাংলাদেশ প্রেক্ষিত','Information & Communication Technology: World and Bangladesh Context'],
-  ['ডেটা কমিউনিকেশন এন্ড নেটওয়ার্কিং','Data Communication and Networking'],
-  ['ডেটা কমিউনিকেশন ও ট্রান্সমিশন মোড','Data Communication & Transmission Modes'],
-  ['নেটওয়ার্ক টপোলজি ও মাধ্যম','Network Topology & Media'],
-  ['প্রোটোকল, ক্লাউড কম্পিউটিং ও নিরাপত্তা','Protocols, Cloud Computing & Security'],
-  ['বোর্ড স্ট্যান্ডার্ড মিশ্র সেট','Board Standard Mixed Set'],
-  ['সংখ্যা পদ্ধতি ও ডিজিটাল ডিভাইস','Number Systems & Digital Devices'],
-  ['মানব শারীরতত্ত্ব : সমন্বয় ও নিয়ন্ত্রণ','Human Physiology: Coordination & Control'],
-  ['মানব শারীরতত্ত্ব: সমন্বয় ও নিয়ন্ত্রণ','Human Physiology: Coordination & Control'],
-  ['ম্যাট্রিক্স ও নির্ণায়ক','Matrices & Determinants'],
-  ['গুণগত রসায়ন','Qualitative Chemistry'],
-  ['পরিমাণগত রসায়ন','Quantitative Chemistry'],
-  ['গণিত ১ম পত্র','Math 1st Paper'],
-  ['ম্যাথ 1ম পত্র','Math 1st Paper'],
-  ['বোর্ড প্রশ্নভিত্তিক','Board Questions']
- ];
- var SHORT={'আইসিটি':'ICT','জীববিজ্ঞান':'Biology','রসায়ন':'Chemistry','পদার্থবিজ্ঞান':'Physics','পদার্থ':'Physics','ভেক্টর':'Vectors','গতিবিদ্যা':'Kinematics','ইংরেজি':'English','গণিত':'Math','উচ্চতর গণিত':'Higher Math','বাংলা':'Bangla'};
- var BN=/[\u0980-\u09FF]/;
- var QSKIP='[class*="question"],[class*="option"],[class*="qtext"],[class*="choice"],[class*="explan"],[class*="answer"],[id*="question"]';
- function trBn(s){
-  if(!BN.test(s))return s;
-  var o=s;
-  LONG.forEach(function(p){if(o.indexOf(p[0])>-1)o=o.split(p[0]).join(p[1]);});
-  o=o.replace(/(Board Questions) - সেট ([১২৩৪৫])/g,function(m,a,d){return a+' - Set '+('১২৩৪৫'.indexOf(d)+1);});
-  if(BN.test(o)){
-   o=o.split(/(\s[·•—|]\s)/).map(function(seg){
-    var m=/^(\s*(?:Chapter\s*\d+\s*:\s*)?)(.*?)(\s*(?:\[(?:SSC|Admission)\])?\s*)$/.exec(seg);
-    if(m&&SHORT[m[2]])return m[1]+SHORT[m[2]]+m[3];
-    return seg;
-   }).join('');
-  }
-  return o;
- }
- function fixText(s){
-  if(!s||!/admin/i.test(s))return s;
-  if(/^\s*admin\s*$/i.test(s))return s.replace(/admin/i,TEACHER);
-  return s.replace(/\badmin\b/gi,TEACHER);
- }
- function scan(root){
-  var isAdm=viewerIsAdmin();
-  try{
-   var w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:function(n){
-     var p=n.parentNode;if(!p||SKIP[p.nodeName])return NodeFilter.FILTER_REJECT;
-     var v=n.nodeValue;
-     if(BN.test(v)){ if(p.closest&&p.closest(QSKIP))return /admin/i.test(v)&&!isAdm?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_REJECT; return NodeFilter.FILTER_ACCEPT; }
-     if(isAdm||!/admin/i.test(v))return NodeFilter.FILTER_REJECT;
-     if(p.closest&&p.closest('#screen-admin,[data-admin-only]'))return NodeFilter.FILTER_REJECT;
-     return NodeFilter.FILTER_ACCEPT;}});
-   var n,list=[];while((n=w.nextNode()))list.push(n);
-   list.forEach(function(x){
-    var v=x.nodeValue,p=x.parentNode,skipQ=p.closest&&p.closest(QSKIP);
-    if(!skipQ)v=trBn(v);
-    if(!isAdm&&!(p.closest&&p.closest('#screen-admin,[data-admin-only]')))v=fixText(v);
-    if(v!==x.nodeValue)x.nodeValue=v;
-   });
-   if(!isAdm&&root.querySelectorAll){
-    root.querySelectorAll('[placeholder],[title],[aria-label]').forEach(function(el){
-     ['placeholder','title','aria-label'].forEach(function(a){var v=el.getAttribute(a);if(v&&/admin/i.test(v)){var nv=fixText(v);if(nv!==v)el.setAttribute(a,nv);}});
-    });
-   }
-  }catch(e){}
- }
- var pend=false;
- function schedule(){if(pend)return;pend=true;requestAnimationFrame(function(){pend=false;scan(document.body);});}
-
- /* ---- hero top performers: rotate subjects one at a time ---- */
- var rotT=null,rotIdx=0;
- function setupRotation(){
-  var box=document.getElementById('heroTopThree');if(!box)return;
-  var scopes=box.querySelectorAll('.hero-top-scope');
-  clearInterval(rotT);
-  if(scopes.length<2){box.classList.remove('rotating');return;}
-  box.classList.add('rotating');
-  rotIdx=Math.min(rotIdx,scopes.length-1);
-  function show(){scopes.forEach(function(s,i){s.classList.toggle('on',i===rotIdx);});}
-  show();
-  rotT=setInterval(function(){rotIdx=(rotIdx+1)%scopes.length;show();},5200);
- }
-
- /* ---- reveal on scroll ---- */
- var io=null;
- if('IntersectionObserver' in window){
-  io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('pr-in');io.unobserve(e.target);}});},{threshold:.08,rootMargin:'0px 0px -4% 0px'});
- }
- var SEL='.subject-card,.hub-card,.profile-card,.admin-card,.mat-row,.lb-row,.written-card,.ann-list-item,.stat-card,.admin-stat';
- function tag(root){
-  if(!io||!root.querySelectorAll)return;
-  root.querySelectorAll(SEL).forEach(function(el){
-   if(el.__pr)return;el.__pr=1;
-   var r=el.getBoundingClientRect();
-   if(r.width===0&&r.height===0){/* hidden screen: reveal later through observer */}
-   el.classList.add('pr-rv');io.observe(el);
-  });
- }
- setTimeout(function(){document.querySelectorAll('.pr-rv:not(.pr-in)').forEach(function(el){var r=el.getBoundingClientRect();if(r.top<window.innerHeight&&r.bottom>0)el.classList.add('pr-in');});},1800);
-
- /* ---- single observer for everything ---- */
- var heroBox=null;
- function onMut(muts){
-  schedule();
-  var heroChanged=false;
-  muts.forEach(function(m){
-   if(m.type==='childList'){
-    m.addedNodes.forEach(function(n){if(n.nodeType===1)tag(n);});
-    if(m.target&&(m.target.id==='heroTopThree'||(m.target.closest&&m.target.closest('#heroTopThree'))))heroChanged=true;
-   }
-  });
-  if(heroChanged)setupRotation();
- }
- function start(){
-  scan(document.body);tag(document.body);setupRotation();
-  new MutationObserver(onMut).observe(document.body,{childList:true,subtree:true,characterData:true});
- }
- if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start);else start();
-})();
-
-</script>
 </html>
