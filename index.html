@@ -3418,7 +3418,7 @@ const TEACHER_WHATSAPP_NUMBER = "8801995125480";
 ================================================================ */
 const materialsData = {
   "আইসিটি": {
-    "Chapter 2: সংখ্যা পদ্ধতি ও ডিজিটাল ডিভাইস": [
+    "Chapter 3: সংখ্যা পদ্ধতি ও ডিজিটাল ডিভাইস": [
       { type:"video", title:"সংখ্যা পদ্ধতি_ ভিডিও পার্ট 1 ", youtubeId:"https://youtu.be/6jnR74aAwx8?si=PvgQQ16cHJaNZF8J" },
       { type:"video", title:"সংখ্যা পদ্ধতি_ ভিডিও — পার্ট 2 ", youtubeId:"https://youtu.be/H_nuMeBAyqA?si=xmWgef9edYkQ6qE4" }
     ],
@@ -3445,12 +3445,12 @@ const materialsData = {
     "Chapter 2: ভেক্টর": [
     
     ],
-      "Chapter 3: গতিবিদ্যা": [
+      "Chapter 2: গতিবিদ্যা": [
     
     ],
    
   },
-  "ম্যাথ 1ম পত্র": {
+  "গণিত ১ম পত্র": {
     "Chapter 1: ম্যাট্রিক্স ও নির্ণায়ক": [
      
     ]
@@ -3589,7 +3589,7 @@ function renderSubjects(){
   ensureLevelSubjects();
   const grids={SSC:$("subjectGridSSC"),HSC:$("subjectGrid"),Admission:$("subjectGridAdmission")};
   Object.values(grids).forEach(g=>{ if(g) g.innerHTML=""; });
-  const icons = {"আইসিটি":"💻","রসায়ন":"🧪","পদার্থবিজ্ঞান":"⚛️","গণিত":"🧮","জীববিজ্ঞান":"🧬","ইংরেজি":"📖"};
+  const icons = {"আইসিটি":"💻","রসায়ন":"🧪","পদার্থবিজ্ঞান":"⚛️","গণিত":"🧮","গণিত ১ম পত্র":"🧮","জীববিজ্ঞান":"🧬","ইংরেজি":"📖"};
   const count={SSC:0,HSC:0,Admission:0};
   Object.keys(examData).forEach((name)=>{
     const lvl=levelOf(name), grid=grids[lvl]; if(!grid) return;
@@ -5725,9 +5725,9 @@ setTimeout(()=>{
   try{
    const cfg=await topConfig(c),scopes=Array.isArray(cfg?.scopes)?cfg.scopes.filter(x=>x&&x.subject):[];
    if(!scopes.length){const {data,error}=await c.rpc('get_top_performers',{top_n:3});if(error)throw error;box.setAttribute('data-label','');box.innerHTML=topScopeHtml('Top Performers',data||[]);return;}
-   const subs=[];scopes.forEach(sc=>{if(sc&&sc.subject&&subs.indexOf(sc.subject)<0)subs.push(sc.subject);});const results=await Promise.all(subs.slice(0,12).map(async s=>{let rows=[];try{const r=await c.rpc('get_top_performers_scope',{p_top:3,p_subject:s,p_chapter:null});if(r.error)throw r.error;rows=r.data||[];}catch(e){console.debug('Top performers unavailable for',s,e&&e.message);}return {scope:{subject:s},rows};}));
+   const results=await Promise.all(scopes.slice(0,12).map(async sc=>{let rows=[];try{const r=await c.rpc('get_top_performers_scope',{p_top:3,p_subject:sc.subject,p_chapter:sc.chapter||null});if(r.error)throw r.error;rows=r.data||[];}catch(e){console.debug('Top performers unavailable for',sc.subject,sc.chapter,e&&e.message);}return {scope:sc,rows};}));
    box.setAttribute('data-label','🏆 Subject-wise Top Performers');const medals=['🥇','🥈','🥉'];let html='';
-   results.forEach(({scope,rows})=>{html+=topScopeHtml(topLabel(scope),rows);});box.innerHTML=html;
+   results.forEach(({scope,rows})=>{html+=topScopeHtml(topLabel(scope),rows);});if(results.length>1)html+='<div class="hero-top-tabs">'+results.map((x,i)=>'<button type="button" data-i="'+i+'" aria-label="Show '+esc(topLabel(x.scope))+'"></button>').join('')+'</div>';box.innerHTML=html;
   }catch(e){console.debug('Top performer scopes unavailable',e&&e.message);if(isAdminUser())return loadTopThreeLegacy();}
  }
  window.loadTopThree=loadTopThree;
@@ -8365,17 +8365,33 @@ html:root:root body #homeHeroCarousel .hero-top-three .hero-top-user:nth-child(1
   const sec=$('screen-admin');if(!sec||$('adminTopCard'))return;
   const anchor=$('adminNotifyCard')||($('adminGoMaterials')&&$('adminGoMaterials').closest('.admin-card'));
   const card=document.createElement('div');card.className='profile-card admin-card';card.id='adminTopCard';
-  card.innerHTML='<h3>🏆 Top Performers (homepage)</h3><p class="card-hint" id="topCurrent">Select one or more subjects and chapters. Each selected combination gets its own Top 3.</p>'+
-   '<form id="topForm" class="st-two-col"><label>Level<select id="topLevel"><option>SSC</option><option selected>HSC</option><option>Admission</option></select></label><label>Subjects (hold Ctrl/⌘ to select several)<select id="topSubject" multiple size="5" style="min-height:125px"></select></label><label>Chapters (all chapters of the selected subjects; multiple selection allowed)<select id="topChapter" multiple size="6" style="min-height:145px"></select></label><button class="btn btn-primary" type="submit">Save selected scopes</button></form><button class="btn btn-ghost" id="topReset" type="button" style="margin-top:10px">Show overall top 3 (all subjects)</button>';
-  if(anchor&&anchor.parentNode)anchor.parentNode.insertBefore(card,anchor.nextSibling);else sec.appendChild(card);
-  const lv=$('topLevel'),sb=$('topSubject'),ch=$('topChapter');
-  function fillSub(){sb.innerHTML='';(window.subjectsForLevel?window.subjectsForLevel(lv.value):[]).forEach(x=>{const o=document.createElement('option');o.value=x.key;o.textContent=x.label;sb.appendChild(o)});fillChap()}
-  function fillChap(){const chosen=[...sb.selectedOptions].map(o=>o.value);ch.innerHTML='';chosen.forEach(subject=>{Object.keys((examData[subject]||{}).chapters||{}).forEach(chapter=>{const o=document.createElement('option');o.value=JSON.stringify({subject,chapter});o.textContent=(window.plainName?plainName(subject):subject)+' — '+chapter;ch.appendChild(o)})})}
-  lv.addEventListener('change',fillSub);sb.addEventListener('change',fillChap);fillSub();
-  async function showCurrent(){try{const r=await supabaseClient.from('app_settings').select('value').eq('key','top_performers').maybeSingle(),v=r?.data?.value;const scopes=Array.isArray(v?.scopes)?v.scopes:[];$('topCurrent').textContent=scopes.length?'Currently showing '+scopes.length+' separate subject/chapter leaderboards: '+scopes.map(x=>(plainName?plainName(x.subject):x.subject)+(x.chapter?' · '+x.chapter:'')).join(' | '):'Currently showing the Overall Top 3.'}catch(e){}}
-  async function save(value){const r=await supabaseClient.from('app_settings').upsert({key:'top_performers',value,updated_at:new Date().toISOString()});if(r.error){note('Could not save: '+r.error.message,'error');return false;}if(window.__resetTopCfg)window.__resetTopCfg();if(window.loadTopThree)window.loadTopThree();await showCurrent();return true}
-  $('topForm').addEventListener('submit',async e=>{e.preventDefault();const scopes=[...ch.selectedOptions].map(o=>{try{return JSON.parse(o.value)}catch(_){return null}}).filter(Boolean);if(!scopes.length){note('Select at least one chapter.','warning');return;}const b=e.target.querySelector('button');b.disabled=true;const ok=await save({scopes});b.disabled=false;if(ok)note('✅ '+scopes.length+' Top Performer scope(s) saved','success')});
-  $('topReset').addEventListener('click',async()=>{if(await save({}))note('Overall Top 3 enabled','success')});showCurrent();
+   card.innerHTML='<h3>🏆 Top Performers (homepage)</h3><p class="card-hint">Choose a level, pick subjects, then tick the chapters. Every ticked chapter gets its own Top 3 on the homepage.</p><div class="tp-current" id="topCurrent"></div><form id="topForm">'+
+   '<div class="tp-step"><span class="tp-num">1</span>Level</div><div class="tp-seg" id="topLevelSeg"></div>'+
+   '<div class="tp-step"><span class="tp-num">2</span>Subjects</div><div class="tp-chips" id="topSubjectChips"></div>'+
+   '<div class="tp-step"><span class="tp-num">3</span>Chapters<span class="tp-count" id="topCount">0 selected</span></div><div class="tp-chapters" id="topChapterList"></div>'+
+   '<div class="tp-actions"><button class="btn btn-primary" type="submit">💾 Save selected</button><button class="btn btn-ghost" id="topReset" type="button">Show overall top 3</button></div></form>';
+   if(anchor&&anchor.parentNode)anchor.parentNode.insertBefore(card,anchor.nextSibling);else sec.appendChild(card);
+   const seg=$('topLevelSeg'),chips=$('topSubjectChips'),list=$('topChapterList'),cnt=$('topCount');
+   let level='HSC';const subs=new Set(),chaps=new Map();
+   const key=(s,c)=>JSON.stringify({subject:s,chapter:c});
+   const pn=s=>window.plainName?plainName(s):s;
+   function mk(tag,cls,txt){const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e}
+   function upd(){cnt.textContent=chaps.size+' selected'+(chaps.size>12?' (first 12 are shown)':'')}
+   function drawLevel(){seg.innerHTML='';['SSC','HSC','Admission'].forEach(v=>{const b=mk('button',v===level?'on':'',v);b.type='button';b.onclick=()=>{level=v;drawLevel();drawSubs()};seg.appendChild(b)})}
+   function drawSubs(){chips.innerHTML='';const arr=window.subjectsForLevel?window.subjectsForLevel(level):[];if(!arr.length)chips.appendChild(mk('div','tp-empty','No subjects in this level.'));arr.forEach(x=>{const b=mk('button','tp-chip'+(subs.has(x.key)?' on':''),x.label);b.type='button';b.onclick=()=>{if(subs.has(x.key)){subs.delete(x.key);[...chaps.keys()].forEach(k=>{if(JSON.parse(k).subject===x.key)chaps.delete(k)})}else subs.add(x.key);drawSubs();drawChaps()};chips.appendChild(b)})}
+   function row(k,val,label,cls){const r=mk('label','tp-row'+(cls?' '+cls:'')+(chaps.has(k)?' on':'')),cb=document.createElement('input');cb.type='checkbox';cb.checked=chaps.has(k);cb.onchange=()=>{cb.checked?chaps.set(k,val):chaps.delete(k);r.classList.toggle('on',cb.checked);upd()};r.appendChild(cb);r.appendChild(mk('span','',label));return r}
+   function drawChaps(){list.innerHTML='';if(!subs.size){list.appendChild(mk('div','tp-empty','Select a subject first to see its chapters.'));upd();return}
+    subs.forEach(s=>{const names=Object.keys((examData[s]||{}).chapters||{}),g=mk('div','tp-group'),head=mk('div','tp-ghead');head.appendChild(mk('strong','',pn(s)));
+     const allOn=()=>names.length>0&&names.every(n=>chaps.has(key(s,n))),all=mk('button','tp-all',allOn()?'Clear chapters':'Select all chapters');all.type='button';
+     all.onclick=()=>{if(allOn())names.forEach(n=>chaps.delete(key(s,n)));else names.forEach(n=>chaps.set(key(s,n),{subject:s,chapter:n}));drawChaps()};head.appendChild(all);g.appendChild(head);
+     g.appendChild(row(key(s,null),{subject:s,chapter:null},'⭐ Whole subject (average of all chapters)','tp-subj'));
+     if(!names.length)g.appendChild(mk('div','tp-empty','No chapters yet.'));
+     names.forEach(n=>g.appendChild(row(key(s,n),{subject:s,chapter:n},n)));list.appendChild(g)});upd()}
+   async function showCurrent(){const el=$('topCurrent');try{const r=await supabaseClient.from('app_settings').select('value').eq('key','top_performers').maybeSingle(),v=r&&r.data&&r.data.value,sc=Array.isArray(v&&v.scopes)?v.scopes.filter(x=>x&&x.subject):[];el.innerHTML='';el.appendChild(mk('span','tp-cur-label',sc.length?'Live on homepage:':'Live on homepage: Overall Top 3'));sc.forEach(x=>el.appendChild(mk('span','tp-pill',pn(x.subject)+(x.chapter?' · '+String(x.chapter).split(':')[0].slice(0,26):' · All chapters'))));return sc}catch(e){return[]}}
+   async function save(value){const r=await supabaseClient.from('app_settings').upsert({key:'top_performers',value,updated_at:new Date().toISOString()});if(r.error){note('Could not save: '+r.error.message,'error');return false;}if(window.__resetTopCfg)window.__resetTopCfg();if(window.loadTopThree)window.loadTopThree();await showCurrent();return true}
+   $('topForm').addEventListener('submit',async e=>{e.preventDefault();const scopes=[...chaps.values()];if(!scopes.length){note('Select at least one chapter or a whole subject.','warning');return;}const b=e.target.querySelector('button[type=submit]');b.disabled=true;const ok=await save({scopes});b.disabled=false;if(ok)note('✅ '+scopes.length+' Top Performer scope(s) saved','success')});
+   $('topReset').addEventListener('click',async()=>{if(await save({}))note('Overall Top 3 enabled','success')});
+   (async()=>{const sc=await showCurrent();sc.forEach(x=>{subs.add(x.subject);chaps.set(key(x.subject,x.chapter||null),{subject:x.subject,chapter:x.chapter||null})});if(sc.length){try{level=levelOf(sc[0].subject)||'HSC'}catch(e){}}drawLevel();drawSubs();drawChaps()})();
   if(window.__drAcc){window.__drAcc.makeAcc(card);window.__drAcc.closeAcc(card)}
  }
  const t=setInterval(()=>{if($('screen-admin')){ensure();if($('adminTopCard'))clearInterval(t)}},800);
@@ -8676,7 +8692,38 @@ html:root:root body .back-btn:hover{transform:translateX(-3px)}
 /* non-destructive translation: original text stays in the DOM, English is shown */
 .pr-bn:before{content:attr(data-en)}
 .pr-orig{display:none!important}
-html:root:root body #homeHeroCarousel #heroTopThree div.hero-top-scope-title[data-pos]:after{content:attr(data-pos);margin-left:auto;font-size:11px;font-weight:800;opacity:.85;padding:2px 8px;border-radius:99px;background:rgba(255,255,255,.18)}
+html:root:root body #homeHeroCarousel .hero-top-tabs{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
+html:root:root body #homeHeroCarousel .hero-top-tabs button{all:unset;box-sizing:content-box;width:18px;height:6px;padding:7px 0;cursor:pointer;background:rgba(255,255,255,.42);background-clip:content-box;border-radius:99px;transition:width .3s var(--pr-ease),background-color .3s}
+html:root:root body #homeHeroCarousel .hero-top-tabs button.on{width:34px;background:#ffd166;background-clip:content-box}
+/* admin: Top Performers setup */
+#adminTopCard .tp-current{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin:4px 0 16px;padding:12px 14px;border-radius:16px;background:linear-gradient(135deg,rgba(124,92,255,.10),rgba(201,162,39,.12));border:1px solid var(--dr-line,#e5e7ee)}
+#adminTopCard .tp-cur-label{font-weight:800;font-size:12.5px;letter-spacing:.02em;color:var(--dr-ink,#1a1830);margin-right:4px}
+#adminTopCard .tp-pill{padding:4px 11px;border-radius:99px;font-size:12px;font-weight:800;color:#fff;background:linear-gradient(135deg,#4f46e5,#7c3aed);box-shadow:0 6px 14px -6px rgba(79,70,229,.6)}
+#adminTopCard .tp-step{display:flex;align-items:center;gap:10px;margin:18px 0 10px;font-weight:900;font-size:14px;color:var(--dr-ink,#1a1830);letter-spacing:.01em}
+#adminTopCard .tp-num{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;font-size:12px;font-weight:900;color:#fff;background:linear-gradient(135deg,#c9a227,#e7c765);box-shadow:0 4px 10px -3px rgba(201,162,39,.7)}
+#adminTopCard .tp-count{margin-left:auto;font-size:12px;font-weight:800;padding:3px 11px;border-radius:99px;background:rgba(124,92,255,.12);color:#5b43d6}
+#adminTopCard .tp-seg{display:inline-flex;padding:4px;gap:4px;border-radius:16px;background:rgba(124,92,255,.08);border:1px solid var(--dr-line,#e5e7ee)}
+#adminTopCard .tp-seg button{all:unset;cursor:pointer;padding:8px 20px;border-radius:12px;font-weight:800;font-size:13.5px;color:var(--dr-ink,#1a1830);transition:all .25s var(--pr-ease)}
+#adminTopCard .tp-seg button.on{color:#fff;background:linear-gradient(135deg,#4f46e5,#7c3aed);box-shadow:0 8px 18px -8px rgba(79,70,229,.7)}
+#adminTopCard .tp-chips{display:flex;flex-wrap:wrap;gap:8px}
+#adminTopCard .tp-chip{all:unset;cursor:pointer;padding:9px 16px;border-radius:14px;font-weight:800;font-size:13.5px;color:var(--dr-ink,#1a1830);border:1.5px solid var(--dr-line,#d9dce6);background:var(--dr-card,#fff);transition:all .25s var(--pr-ease)}
+#adminTopCard .tp-chip:hover{transform:translateY(-2px);border-color:#8b7cff}
+#adminTopCard .tp-chip.on{color:#fff;border-color:transparent;background:linear-gradient(135deg,#4f46e5,#7c3aed);box-shadow:0 10px 20px -8px rgba(79,70,229,.65)}
+#adminTopCard .tp-chip.on:before{content:"\2713 ";font-weight:900}
+#adminTopCard .tp-chapters{display:grid;gap:12px}
+#adminTopCard .tp-group{border:1px solid var(--dr-line,#e5e7ee);border-radius:18px;padding:12px;background:linear-gradient(160deg,var(--dr-card,#fff),rgba(124,92,255,.05))}
+#adminTopCard .tp-ghead{display:flex;align-items:center;justify-content:space-between;margin:0 2px 8px}
+#adminTopCard .tp-ghead strong{font-size:14.5px;font-weight:900;color:var(--dr-ink,#1a1830)}
+#adminTopCard .tp-all{all:unset;cursor:pointer;font-size:12px;font-weight:800;color:#5b43d6;padding:4px 12px;border-radius:99px;background:rgba(124,92,255,.12)}
+#adminTopCard .tp-row{display:flex;align-items:center;gap:11px;padding:10px 12px;margin-top:6px;border-radius:13px;cursor:pointer;font-size:13.5px;font-weight:700;line-height:1.35;color:var(--dr-ink,#1a1830);border:1px solid transparent;background:rgba(124,92,255,.04);transition:all .2s ease}
+#adminTopCard .tp-row:hover{background:rgba(124,92,255,.10)}
+#adminTopCard .tp-row.on{border-color:rgba(124,92,255,.55);background:rgba(124,92,255,.14)}
+#adminTopCard .tp-row.tp-subj{background:linear-gradient(135deg,rgba(201,162,39,.16),rgba(201,162,39,.06))}
+#adminTopCard .tp-row.tp-subj.on{border-color:rgba(201,162,39,.8)}
+#adminTopCard .tp-row input{width:18px;height:18px;accent-color:#6d4cf0;flex:0 0 auto;margin:0}
+#adminTopCard .tp-empty{padding:12px;font-size:13px;opacity:.7;font-weight:600}
+#adminTopCard .tp-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+#adminTopCard .tp-actions .btn{flex:1 1 200px;min-height:46px}
 
 </style>
 <script id="v46-premium-js">
@@ -8697,68 +8744,30 @@ html:root:root body #homeHeroCarousel #heroTopThree div.hero-top-scope-title[dat
   var b=document.getElementById('adminBtn');return !!(b&&!b.hidden);
  }
  var SKIP={SCRIPT:1,STYLE:1,TEXTAREA:1,NOSCRIPT:1,CODE:1,PRE:1};
- /* ---- Bangla subject / chapter / exam titles -> English (display only; exam questions stay untouched) ---- */
- var LONG=[
-  ['তথ্য ও যোগাযোগ প্রযুক্তি: বিশ্ব ও বাংলাদেশ প্রেক্ষিত','Information & Communication Technology: World and Bangladesh Context'],
-  ['ডেটা কমিউনিকেশন এন্ড নেটওয়ার্কিং','Data Communication and Networking'],
-  ['ডেটা কমিউনিকেশন ও ট্রান্সমিশন মোড','Data Communication & Transmission Modes'],
-  ['নেটওয়ার্ক টপোলজি ও মাধ্যম','Network Topology & Media'],
-  ['প্রোটোকল, ক্লাউড কম্পিউটিং ও নিরাপত্তা','Protocols, Cloud Computing & Security'],
-  ['বোর্ড স্ট্যান্ডার্ড মিশ্র সেট','Board Standard Mixed Set'],
-  ['সংখ্যা পদ্ধতি ও ডিজিটাল ডিভাইস','Number Systems & Digital Devices'],
-  ['মানব শারীরতত্ত্ব : সমন্বয় ও নিয়ন্ত্রণ','Human Physiology: Coordination & Control'],
-  ['মানব শারীরতত্ত্ব: সমন্বয় ও নিয়ন্ত্রণ','Human Physiology: Coordination & Control'],
-  ['ম্যাট্রিক্স ও নির্ণায়ক','Matrices & Determinants'],
-  ['গুণগত রসায়ন','Qualitative Chemistry'],
-  ['পরিমাণগত রসায়ন','Quantitative Chemistry'],
-  ['গণিত ১ম পত্র','Math 1st Paper'],
-  ['ম্যাথ 1ম পত্র','Math 1st Paper'],
-  ['বোর্ড প্রশ্নভিত্তিক','Board Questions']
- ];
- var SHORT={'আইসিটি':'ICT','জীববিজ্ঞান':'Biology','রসায়ন':'Chemistry','পদার্থবিজ্ঞান':'Physics','পদার্থ':'Physics','ভেক্টর':'Vectors','গতিবিদ্যা':'Kinematics','ইংরেজি':'English','গণিত':'Math','উচ্চতর গণিত':'Higher Math','বাংলা':'Bangla'};
- var BN=/[\u0980-\u09FF]/;
- var QSKIP='[class*="question"],[class*="option"],[class*="qtext"],[class*="choice"],[class*="explan"],[class*="answer"],[id*="question"]';
- function trBn(s){
-  if(!BN.test(s))return s;
-  var o=s;
-  LONG.forEach(function(p){if(o.indexOf(p[0])>-1)o=o.split(p[0]).join(p[1]);});
-  o=o.replace(/(Board Questions) - সেট ([১২৩৪৫])/g,function(m,a,d){return a+' - Set '+('১২৩৪৫'.indexOf(d)+1);});
-  if(BN.test(o)){
-   o=o.split(/(\s[·•—|]\s)/).map(function(seg){
-    var m=/^(\s*(?:Chapter\s*\d+\s*:\s*)?)(.*?)(\s*(?:\[(?:SSC|Admission)\])?\s*)$/.exec(seg);
-    if(m&&SHORT[m[2]])return m[1]+SHORT[m[2]]+m[3];
-    return seg;
-   }).join('');
-  }
-  return o;
- }
  function fixText(s){
   if(!s||!/admin/i.test(s))return s;
   if(/^\s*admin\s*$/i.test(s))return s.replace(/admin/i,TEACHER);
   return s.replace(/\badmin\b/gi,TEACHER);
  }
  function scan(root){
-  var isAdm=viewerIsAdmin();
+  if(viewerIsAdmin())return;
   try{
    var w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:function(n){
-     var p=n.parentNode;if(!p||SKIP[p.nodeName])return NodeFilter.FILTER_REJECT;if(p.classList&&(p.classList.contains('pr-orig')||p.classList.contains('pr-bn')))return NodeFilter.FILTER_REJECT;
-     var v=n.nodeValue;
-     if(BN.test(v)){ if(p.closest&&p.closest(QSKIP))return /admin/i.test(v)&&!isAdm?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_REJECT; return NodeFilter.FILTER_ACCEPT; }
-     if(isAdm||!/admin/i.test(v))return NodeFilter.FILTER_REJECT;
+     var p=n.parentNode;if(!p||SKIP[p.nodeName])return NodeFilter.FILTER_REJECT;
+     if(p.classList&&(p.classList.contains('pr-orig')||p.classList.contains('pr-bn')))return NodeFilter.FILTER_REJECT;
+     if(!/admin/i.test(n.nodeValue))return NodeFilter.FILTER_REJECT;
      if(p.closest&&p.closest('#screen-admin,[data-admin-only]'))return NodeFilter.FILTER_REJECT;
      return NodeFilter.FILTER_ACCEPT;}});
    var n,list=[];while((n=w.nextNode()))list.push(n);
    list.forEach(function(x){
-    var v=x.nodeValue,p=x.parentNode,skipQ=p.closest&&p.closest(QSKIP),nv=v;
-    if(!skipQ)nv=trBn(nv);
-    if(!isAdm&&!(p.closest&&p.closest('#screen-admin,[data-admin-only]')))nv=fixText(nv);
+    var v=x.nodeValue,p=x.parentNode,nv=fixText(v);
     if(nv===v)return;
     if(p.nodeName==='OPTION'){if(p.hasAttribute('value'))x.nodeValue=nv;return;}
     var sp=document.createElement('span'),o=document.createElement('span');
     sp.className='pr-bn';sp.setAttribute('data-en',nv);o.className='pr-orig';
     p.replaceChild(sp,x);sp.appendChild(o);o.appendChild(x);
    });
-   if(!isAdm&&root.querySelectorAll){
+   if(root.querySelectorAll){
     root.querySelectorAll('[placeholder],[title],[aria-label]').forEach(function(el){
      ['placeholder','title','aria-label'].forEach(function(a){var v=el.getAttribute(a);if(v&&/admin/i.test(v)){var nv=fixText(v);if(nv!==v)el.setAttribute(a,nv);}});
     });
@@ -8768,19 +8777,25 @@ html:root:root body #homeHeroCarousel #heroTopThree div.hero-top-scope-title[dat
  var pend=false;
  function schedule(){if(pend)return;pend=true;requestAnimationFrame(function(){pend=false;scan(document.body);});}
 
- /* ---- hero top performers: rotate subjects one at a time ---- */
- var rotT=null,rotIdx=0;
+ /* ---- hero top performers: one chapter/subject at a time, tappable dots ---- */
+ var rotT=null,rotIdx=0,curShow=null;
  function setupRotation(){
   var box=document.getElementById('heroTopThree');if(!box)return;
-  var scopes=box.querySelectorAll('.hero-top-scope');
+  var scopes=box.querySelectorAll('.hero-top-scope'),dots=box.querySelectorAll('.hero-top-tabs button');
   clearInterval(rotT);
-  if(scopes.length<2){box.classList.remove('rotating');return;}
+  if(scopes.length<2){box.classList.remove('rotating');curShow=null;return;}
   box.classList.add('rotating');
   rotIdx=Math.min(rotIdx,scopes.length-1);
-  function show(){scopes.forEach(function(s,i){s.classList.toggle('on',i===rotIdx);var tt=s.querySelector('.hero-top-scope-title');if(tt)tt.setAttribute('data-pos',(i+1)+' / '+scopes.length);});}
-  show();
-  rotT=setInterval(function(){rotIdx=(rotIdx+1)%scopes.length;show();},5200);
+  curShow=function(){scopes.forEach(function(s,i){s.classList.toggle('on',i===rotIdx);});dots.forEach(function(d,i){d.classList.toggle('on',i===rotIdx);});};
+  curShow();
+  rotT=setInterval(function(){rotIdx=(rotIdx+1)%scopes.length;curShow&&curShow();},5200);
  }
+ document.addEventListener('click',function(e){
+  var b=e.target.closest&&e.target.closest('#heroTopThree .hero-top-tabs button');if(!b||!curShow)return;
+  rotIdx=+b.getAttribute('data-i')||0;curShow();
+  clearInterval(rotT);var box=document.getElementById('heroTopThree');var n=box.querySelectorAll('.hero-top-scope').length;
+  rotT=setInterval(function(){rotIdx=(rotIdx+1)%n;curShow&&curShow();},7000);
+ });
 
  /* ---- reveal on scroll ---- */
  var io=null;
