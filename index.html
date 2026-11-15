@@ -4050,14 +4050,32 @@ async function gradeWrittenSubmission(id,max,score,feedback){
 
 // 4. নাম চাওয়া
 function drExamKeyFor(s,c,e){ return s+"|||"+c+"|||"+e; }
+function drNormCh(s){ return String(s||"").replace(/^\s*chapter\s*\d+\s*[:：.\-–]\s*/i,"").replace(/\s*[:：]\s*/g,":").replace(/\s+/g," ").trim().toLowerCase(); }
 async function getMyAttempt(subject, chapter, exam, uid){
   uid = uid || (currentProfile && currentProfile.user_id);
   let local=null;
   try{ local=JSON.parse(localStorage.getItem("drDone_"+uid+"_"+drExamKeyFor(subject,chapter,exam))||"null"); }catch(e){}
+  if(!local){
+    try{
+      const pre="drDone_"+uid+"_";
+      for(let i=0;i<localStorage.length;i++){
+        const k=localStorage.key(i);
+        if(k && k.indexOf(pre)===0){
+          const p=k.slice(pre.length).split("|||");
+          if(p.length===3 && p[0]===subject && p[2]===exam && drNormCh(p[1])===drNormCh(chapter)){ local=JSON.parse(localStorage.getItem(k)||"null"); if(local) break; }
+        }
+      }
+    }catch(e){}
+  }
   try{
-    const {data,error}=await supabaseClient.from("results").select("correct,total,percent,status,attempted_at").eq("user_id",uid).eq("subject",subject).eq("chapter",chapter).eq("exam",exam).order("attempted_at",{ascending:true}).limit(1);
-    if(!error && data && data.length) return data[0];
-    if(error) console.warn("Attempt check failed:",error.message);
+    const cols="correct,total,percent,status,attempted_at,subject,chapter,exam";
+    let r=await supabaseClient.from("results").select(cols+",answers").eq("user_id",uid).eq("exam",exam).order("attempted_at",{ascending:true}).limit(300);
+    if(r.error && /answers/i.test(r.error.message||"")) r=await supabaseClient.from("results").select(cols).eq("user_id",uid).eq("exam",exam).order("attempted_at",{ascending:true}).limit(300);
+    if(!r.error && Array.isArray(r.data)){
+      // match by subject + chapter title (tolerant to old "Chapter N:" numbering / spacing)
+      const hit=r.data.find(x=>x.subject===subject && drNormCh(x.chapter)===drNormCh(chapter));
+      if(hit) return hit;
+    } else if(r.error) console.warn("Attempt check failed:",r.error.message);
   }catch(e){ console.warn("Attempt check failed:",e); }
   return local;
 }
@@ -4075,24 +4093,37 @@ function showMyAnswerSheet(subject, chapter, exam, prev){
   const lb=$("btnAkLeaderboard"); if(lb) lb.style.display="none";
   const questions=examData[subject].chapters[chapter].exams[exam].questions;
   const uid=currentProfile && currentProfile.user_id;
-  let mine=null; try{ mine=JSON.parse(localStorage.getItem("drAns_"+uid+"_"+drExamKeyFor(subject,chapter,exam))||"null"); }catch(e){}
+  let mine=null;
+  if(prev && Array.isArray(prev.answers)) mine=prev.answers;
+  if(!mine){ try{ mine=JSON.parse(localStorage.getItem("drAns_"+uid+"_"+drExamKeyFor(subject,chapter,exam))||"null"); }catch(e){} }
+  if(!Array.isArray(mine)) mine=null;
   const total=Number(prev.total||questions.length), correct=Number(prev.correct||0);
   const pct=Math.round(prev.percent!=null?Number(prev.percent):(total?correct/total*100:0));
+  let ok=0,bad=0,skip=0;
+  if(mine) questions.forEach((q,i)=>{ const a=mine[i]; if(a===null||a===undefined) skip++; else if(a===q.answer) ok++; else bad++; });
   let mk=$("akMarks");
   if(!mk){ mk=document.createElement("div"); mk.id="akMarks"; $("akList").parentNode.insertBefore(mk,$("akList")); }
   mk.style.display="";
-  mk.innerHTML=`<div class="ak-marks-top"><div><span class="ak-label">Obtained marks</span><strong>${bnNum(correct)} / ${bnNum(total)}</strong></div><div class="ak-pct ${pct>=50?"pass":"fail"}">${bnNum(pct)}%<small>${pct>=50?"Passed":"Needs practice"}</small></div></div><p class="ak-note">🔒 You have already taken this exam. Each MCQ exam can be taken only once, so you can only review the answer sheet.</p>${mine?"<p class=\"ak-hint\">🟢 Correct answer &nbsp; 🔴 Your wrong answer</p>":""}`;
+  mk.innerHTML=`<div class="ak-marks-top"><div><span class="ak-label">Obtained marks</span><strong>${bnNum(correct)} / ${bnNum(total)}</strong></div><div class="ak-pct ${pct>=50?"pass":"fail"}">${bnNum(pct)}%<small>${pct>=50?"Passed":"Needs practice"}</small></div></div>`
+    +(mine?`<div class="ak-chips"><span class="ak-chip ok">✔ Correct ${ok}</span><span class="ak-chip bad">✘ Wrong ${bad}</span><span class="ak-chip skip">— Not answered ${skip}</span></div>`:"")
+    +`<p class="ak-note">🔒 You have already taken this exam. Each MCQ exam can be taken only once, so you can only view your answer sheet and marks.</p>`
+    +(mine?"":`<p class="ak-hint">Your selected answers were not saved for this older attempt, so only the correct answers are marked.</p>`);
   const tags=["A","B","C","D"], box=$("akList"); box.innerHTML="";
   questions.forEach((q,i)=>{
     const card=document.createElement("div"); card.className="question-card";
-    const n=document.createElement("div"); n.className="qnum"; n.textContent=`Question ${bnNum(i+1)} / ${bnNum(questions.length)}`;
+    const a=mine?mine[i]:undefined;
+    const st=!mine?"":(a===null||a===undefined)?"skip":(a===q.answer?"ok":"bad");
+    const n=document.createElement("div"); n.className="qnum";
+    n.innerHTML=`Question ${bnNum(i+1)} / ${bnNum(questions.length)}`+(st?`<span class="ak-state ${st}">${st==="ok"?"✔ Correct":st==="bad"?"✘ Wrong":"— Not answered"}</span>`:"");
     const t=document.createElement("div"); t.className="qtext"; t.textContent=q.q;
     card.appendChild(n); card.appendChild(t);
     const ob=document.createElement("div");
     q.options.forEach((opt,k)=>{
       const o=document.createElement("div");
-      let cls="option"; if(k===q.answer) cls+=" correct-ans"; else if(mine && mine[i]===k) cls+=" wrong-ans";
-      o.className=cls; o.innerHTML=`<span class="opt-tag">${tags[k]||(k+1)}</span><span>${opt}</span>`; ob.appendChild(o);
+      let cls="option", flag="";
+      if(k===q.answer){ cls+=" correct-ans"; flag="Correct answer"; }
+      if(mine && a===k){ if(k!==q.answer){ cls+=" wrong-ans"; flag="Your answer"; } else flag="Your answer ✔"; }
+      o.className=cls; o.innerHTML=`<span class="opt-tag">${tags[k]||(k+1)}</span><span class="opt-text">${opt}</span>`+(flag?`<em class="opt-flag">${flag}</em>`:""); ob.appendChild(o);
     });
     card.appendChild(ob); box.appendChild(card);
   });
@@ -4363,6 +4394,7 @@ function renderAllQuestions(){
       b.innerHTML = `<span class="opt-tag">${tags[optIdx]}</span><span>${opt}</span>`;
       b.addEventListener("click", (e)=>{
         e.preventDefault();
+        if(e.detail!==0 && !(e.target && e.target.closest && e.target.closest('.opt-tag'))) return; /* only the A/B/C/D circle selects */
 
         const previousAnswer = state.answers[i];
         const allOptions = optionsBox.querySelectorAll('.option');
@@ -4483,7 +4515,9 @@ async function saveUserResult(entry){
   if(!user) return;
   try{ const _k=drExamKeyFor(entry.subject,entry.chapter,entry.exam); localStorage.setItem("drAns_"+user.id+"_"+_k,JSON.stringify(_ans)); localStorage.setItem("drDone_"+user.id+"_"+_k,JSON.stringify({correct:entry.correct,total:entry.total,percent:entry.percent,status:entry.status||(entry.percent>=50?"pass":"fail"),attempted_at:new Date(entry.time).toISOString()})); }catch(e){}
   const row={user_id:user.id,exam_key:entry.examKey,subject:entry.subject,chapter:entry.chapter,exam:entry.exam,correct:entry.correct,total:entry.total,percent:entry.percent,status:entry.status || (entry.percent>=50?"pass":"fail"),attempted_at:new Date(entry.time).toISOString()};
-  const {error}=await supabaseClient.from("results").insert(row);
+  row.answers=_ans;
+  let {error}=await supabaseClient.from("results").insert(row);
+  if(error && /answers/i.test(error.message||"")){ delete row.answers; ({error}=await supabaseClient.from("results").insert(row)); }
   if(error) console.error("Result save failed:",error);
 }
 
@@ -5183,7 +5217,39 @@ function saveLeaderboardEntry(entry){
   }
 }
 
+function drDedupeLb(all){
+  const m=new Map();
+  (all||[]).forEach(e=>{
+    const k=String(e.name)+"|"+String(e.time);
+    const old=m.get(k);
+    if(!old || (Number(e.updatedAt)||0)>=(Number(old.updatedAt)||0)) m.set(k,e);
+  });
+  return [...m.values()];
+}
+async function drDbLeaderboard(){
+  if(!window.supabaseClient) return null;
+  const r=await supabaseClient.rpc("get_exam_leaderboard",{p_subject:state.selectedSubject,p_chapter:state.selectedChapter,p_exam:state.selectedExam});
+  if(r.error || !Array.isArray(r.data)) return null;
+  const k=getExamKey();
+  return r.data.map(x=>({examKey:k,name:x.username||"Student",correct:Number(x.correct),total:Number(x.total),percent:Math.round(Number(x.percent)),time:Date.parse(x.attempted_at)||0}));
+}
+/* called by the admin Exam Data Manager after marks change */
+window.__drAfterMarksUpdate=async function(x,n,t,pct){
+  try{
+    const examKey=x.subject+"|||"+x.chapter+"|||"+x.exam, time=Date.parse(x.attempted_at)||0, name=x._name;
+    const all=loadLeaderboard();
+    all.forEach(e=>{ if(e.examKey===examKey && String(e.time)===String(time)){ e.correct=n; e.total=t; e.percent=Math.round(pct); } });
+    try{ localStorage.setItem(LB_KEY,JSON.stringify(all)); }catch(e){}
+    try{ localStorage.removeItem("lbCache_"+examKey); }catch(e){}
+    if(LEADERBOARD_API_URL.trim()){
+      fetch(LEADERBOARD_API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({examKey,time,subject:x.subject,chapter:x.chapter,exam:x.exam,name,correct:n,total:t,percent:Math.round(pct),updated:true,updatedAt:Date.now()})}).catch(()=>{});
+    }
+    try{ if(window.__resetTopCfg) window.__resetTopCfg(); if(window.loadTopThree) window.loadTopThree(); }catch(e){}
+    try{ toast("🏆 Leaderboard and top performers refreshed","success",2600); }catch(e){}
+  }catch(e){ console.warn("Leaderboard refresh failed",e); }
+};
 function renderLeaderboardRows(all, noticeText){
+  all = drDedupeLb(all);
   $("lbSubtitle").textContent = `${state.selectedSubject} → ${state.selectedChapter} → ${state.selectedExam}`;
   const box = $("lbList");
   box.innerHTML = "";
@@ -5233,6 +5299,7 @@ async function showLeaderboard(){
 
   const key = getExamKey();
   const localAll = loadLeaderboard().filter(e => e.examKey === key);
+  try{ const dbRows = await drDbLeaderboard(); if(dbRows && dbRows.length){ setLbCache(key, dbRows); if(!$("screen-leaderboard").hidden) renderLeaderboardRows(dbRows, null); return; } }catch(e){}
 
   if(!LEADERBOARD_API_URL.trim()){
     // কোনো শেয়ার্ড শিট কনফিগার করা নেই — শুধু এই ডিভাইসের Results দেখাও
@@ -5706,10 +5773,27 @@ setTimeout(()=>{
  let _topCfg={t:0,v:null};
  window.__resetTopCfg=function(){_topCfg.t=0;};
  async function topConfig(c){ if(Date.now()-_topCfg.t<30000) return _topCfg.v; _topCfg.t=Date.now(); try{ const r=await c.from('app_settings').select('value').eq('key','top_performers').maybeSingle(); _topCfg.v=(r&&r.data&&r.data.value)||null; }catch(e){ _topCfg.v=null; } return _topCfg.v; }
- function topLabel(cfg){ let s=(typeof plainName==='function'?plainName(cfg.subject):cfg.subject); try{ const l=levelOf(cfg.subject); if(l!=='HSC') s+=' ('+l+')'; }catch(e){} if(cfg.chapter) s+=' · '+String(cfg.chapter).split(':')[0].slice(0,26); return s; }
+ function topLabel(cfg){ let s=(typeof plainName==='function'?plainName(cfg.subject):cfg.subject); try{ const l=levelOf(cfg.subject); if(l!=='HSC') s+=' ('+l+')'; }catch(e){} if(cfg.chapter) s+=' · '+String(cfg.chapter); return s; }
  function topChip(medal,name,pct,more,cls){return '<div class="hero-top-user'+(cls?' '+cls:'')+'"><span class="medal">'+medal+'</span><div><strong>'+esc(name)+'</strong><small><b>'+pct+'%</b><span class="more"> '+more+'</span></small></div></div>';}
  function isLogged(){const b=document.getElementById('profileBtn');return !!(b&&!b.hidden);}
  function isAdminUser(){const b=document.getElementById('adminBtn');return !!(b&&!b.hidden);}
+  async function topRowsFor(c,sc){
+   const args={p_top:3,p_subject:sc.subject,p_chapter:sc.chapter||null};
+   try{const r=await c.rpc('get_top_performers_scope_v2',args);if(!r.error&&Array.isArray(r.data))return r.data;}catch(e){} /* v2 (setup-v46.sql) matches chapter names tolerantly; otherwise fall back below */
+   let rows=[];
+   try{const r=await c.rpc('get_top_performers_scope',args);if(!r.error)rows=r.data||[];else console.debug('Top performers error',sc.subject,sc.chapter,r.error.message);}catch(e){}
+   if(rows.length||!sc.chapter)return rows;
+   /* results saved under an older chapter name (e.g. different "Chapter N:" number)? try the likely variants */
+   const ck='drTopAlt|'+sc.subject+'|'+sc.chapter;let cached=null;try{cached=sessionStorage.getItem(ck);}catch(e){}
+   if(cached==='none')return rows;
+   const m=/^\s*Chapter\s*(\d+)\s*:\s*(.*)$/i.exec(sc.chapter),title=(m?m[2]:sc.chapter).trim(),n=m?+m[1]:0,alts=[];
+   if(cached)alts.push(cached);
+   else{if(m){[n-1,n+1,n-2,n+2,1,2,3,4,5,6,7,8,9,10].forEach(k=>{if(k>0&&k!==n)alts.push('Chapter '+k+': '+title);});}alts.push(title);}
+   const res=await Promise.all(alts.map(a=>c.rpc('get_top_performers_scope',{p_top:3,p_subject:sc.subject,p_chapter:a}).then(r=>r.error?[]:(r.data||[])).catch(()=>[])));
+   const i=res.findIndex(x=>x&&x.length);
+   try{sessionStorage.setItem(ck,i>=0?alts[i]:'none');}catch(e){}
+   return i>=0?res[i]:rows;
+  }
   function topScopeHtml(label,rows){
    const medals=['\ud83e\udd47','\ud83e\udd48','\ud83e\udd49'];
    const all=rows||[],top=all.filter(r=>Number(r.pos)<=3),me=all.find(r=>r.is_me);
@@ -5725,7 +5809,7 @@ setTimeout(()=>{
   try{
    const cfg=await topConfig(c),scopes=Array.isArray(cfg?.scopes)?cfg.scopes.filter(x=>x&&x.subject):[];
    if(!scopes.length){const {data,error}=await c.rpc('get_top_performers',{top_n:3});if(error)throw error;box.setAttribute('data-label','');box.innerHTML=topScopeHtml('Top Performers',data||[]);return;}
-   const results=await Promise.all(scopes.slice(0,12).map(async sc=>{let rows=[];try{const r=await c.rpc('get_top_performers_scope',{p_top:3,p_subject:sc.subject,p_chapter:sc.chapter||null});if(r.error)throw r.error;rows=r.data||[];}catch(e){console.debug('Top performers unavailable for',sc.subject,sc.chapter,e&&e.message);}return {scope:sc,rows};}));
+   const results=await Promise.all(scopes.slice(0,12).map(async sc=>({scope:sc,rows:await topRowsFor(c,sc)})));
    box.setAttribute('data-label','🏆 Subject-wise Top Performers');const medals=['🥇','🥈','🥉'];let html='';
    results.forEach(({scope,rows})=>{html+=topScopeHtml(topLabel(scope),rows);});if(results.length>1)html+='<div class="hero-top-tabs">'+results.map((x,i)=>'<button type="button" data-i="'+i+'" aria-label="Show '+esc(topLabel(x.scope))+'"></button>').join('')+'</div>';box.innerHTML=html;
   }catch(e){console.debug('Top performer scopes unavailable',e&&e.message);if(isAdminUser())return loadTopThreeLegacy();}
@@ -8434,12 +8518,108 @@ html:root:root body #homeHeroCarousel .hero-top-three .hero-top-user:nth-child(1
     b.disabled=false;});
   }
  }
+ const REACTS=['👍','❤️','🎉','😮','🙏'];let counts={},poll=null;
+ const myId=()=>cp()&&cp().user_id;
+ const SETUP_MSG='Run setup-v46.sql in Supabase first (community tables are missing).';
+ const missing=e=>/relation|does not exist|schema cache|not find/i.test(String(e&&e.message||e));
+ const ago=v=>{try{return typeof timeAgo==='function'?timeAgo(v):new Date(v).toLocaleString();}catch(e){return '';}};
+ async function loadCounts(){
+  counts={};
+  try{
+   const ids=list.map(a=>String(a.id));if(!ids.length||!window.supabaseClient)return;
+   const [c,r]=await Promise.all([supabaseClient.from('announcement_comments').select('announcement_id').in('announcement_id',ids).limit(5000),supabaseClient.from('announcement_reactions').select('announcement_id').in('announcement_id',ids).limit(5000)]);
+   (c.data||[]).forEach(x=>{(counts[x.announcement_id]=counts[x.announcement_id]||{c:0,r:0}).c++;});
+   (r.data||[]).forEach(x=>{(counts[x.announcement_id]=counts[x.announcement_id]||{c:0,r:0}).r++;});
+  }catch(e){}
+ }
  function render(){
   const box=$('annList');if(!box)return;const admin=!!(cp()&&cp().is_admin);if($('annCompose'))$('annCompose').hidden=!admin;
-  box.innerHTML='';if(!list.length){box.innerHTML='<div class="empty-profile">No announcements yet.</div>';return;}
-  list.forEach(a=>{const d=document.createElement('button');d.type='button';d.className='ann-card ann-list-item';d.innerHTML='<div class="ann-top"><strong>'+esc(a.title)+'</strong><small>'+new Date(a.created_at).toLocaleString()+'</small></div><span class="ann-open-hint">Tap to read more →</span>';d.addEventListener('click',()=>openDetail(a.id));box.appendChild(d)});
+  clearInterval(poll);box.innerHTML='';
+  if(!list.length){box.innerHTML='<div class="empty-profile">No announcements yet.</div>';return;}
+  list.forEach(a=>{
+   const k=counts[String(a.id)]||{c:0,r:0};
+   const d=document.createElement('button');d.type='button';d.className='ann-card ann-list-item';
+   d.innerHTML='<div class="ann-top"><strong>'+esc(a.title)+'</strong><small>'+new Date(a.created_at).toLocaleString()+'</small></div><div class="ann-foot"><span class="ann-meta">💬 '+k.c+' &nbsp;·&nbsp; ❤️ '+k.r+'</span><span class="ann-open-hint">Open &amp; join the discussion →</span></div>';
+   d.addEventListener('click',()=>openDetail(a.id));box.appendChild(d);
+  });
  }
- function openDetail(id){const a=list.find(x=>String(x.id)===String(id));if(!a)return;const box=$('annList');if(!box)return;const admin=!!(cp()&&cp().is_admin);box.innerHTML='';const d=document.createElement('article');d.className='ann-card ann-detail';d.innerHTML='<button type="button" class="btn btn-ghost" id="annBackToList">← All announcements</button><div class="ann-top"><strong>'+esc(a.title)+'</strong><small>'+new Date(a.created_at).toLocaleString()+'</small></div><p>'+esc(a.body).replace(/\n/g,'<br>')+'</p>';if(admin){const del=document.createElement('button');del.type='button';del.className='st-mini danger';del.textContent='🗑 Delete announcement';del.addEventListener('click',async()=>{const ok=await customConfirm('Delete this announcement? Students will no longer see it.',{okText:'Yes, delete',cancelText:'Keep',icon:'🗑️'});if(!ok)return;const r=await supabaseClient.from('announcements').delete().eq('id',a.id);if(r.error){note('Could not delete: '+r.error.message,'error');return;}note('Announcement deleted','success');await load()});d.appendChild(del)}box.appendChild(d);$('annBackToList').addEventListener('click',render)}
+ function openDetail(id){
+  const a=list.find(x=>String(x.id)===String(id));if(!a)return;const box=$('annList');if(!box)return;
+  const aid=String(a.id),admin=!!(cp()&&cp().is_admin);window.__drAnnOpen=aid;clearInterval(poll);box.innerHTML='';
+  const d=document.createElement('article');d.className='ann-card ann-detail';
+  d.innerHTML='<button type="button" class="btn btn-ghost" id="annBackToList">← All announcements</button><div class="ann-top"><strong>'+esc(a.title)+'</strong><small>'+new Date(a.created_at).toLocaleString()+'</small></div><p>'+esc(a.body).replace(/\n/g,'<br>')+'</p>'
+   +'<div class="ann-react" id="annReact"></div><div class="ann-who" id="annWho" hidden></div>'
+   +'<div class="ann-comments"><h4>💬 Public discussion <span id="annCCount"></span></h4><div id="annCList" class="ann-clist"><div class="empty-profile">Loading…</div></div><div id="annCForm"></div></div>';
+  if(admin){const del=document.createElement('button');del.type='button';del.className='st-mini danger';del.textContent='🗑 Delete announcement';del.addEventListener('click',async()=>{const ok=await customConfirm('Delete this announcement? Students will no longer see it.',{okText:'Yes, delete',cancelText:'Keep',icon:'🗑️'});if(!ok)return;const r=await supabaseClient.from('announcements').delete().eq('id',a.id);if(r.error){note('Could not delete: '+r.error.message,'error');return;}try{await supabaseClient.from('announcement_comments').delete().eq('announcement_id',aid);await supabaseClient.from('announcement_reactions').delete().eq('announcement_id',aid);}catch(e){}window.__drAnnOpen=null;note('Announcement deleted','success');await load()});d.appendChild(del);}
+  box.appendChild(d);
+  $('annBackToList').addEventListener('click',()=>{window.__drAnnOpen=null;render();});
+  buildForm(aid);refresh(aid);
+  poll=setInterval(()=>{if(window.__drAnnOpen!==aid){clearInterval(poll);return;}if(!document.hidden)refresh(aid);},20000);
+ }
+ function buildForm(aid){
+  const f=$('annCForm');if(!f)return;
+  if(!cp()){f.innerHTML='<div class="ann-login"><span>Log in to react and join the discussion.</span><button type="button" class="btn btn-primary" id="annLoginBtn">🔐 Log in</button></div>';$('annLoginBtn').addEventListener('click',()=>{try{openAuthModal('login');}catch(e){note('Please log in first.','warning');}});return;}
+  const nm=cp().username||'Student',isT=!!cp().is_admin;
+  f.innerHTML='<div class="ann-write"><div class="ann-av">'+esc((isT?'T':nm).charAt(0).toUpperCase())+'</div><div class="ann-wbox"><textarea id="annCText" maxlength="1000" rows="2" placeholder="Write a comment as '+esc(isT?'Your Teacher':nm)+'…"></textarea><div class="ann-wbar"><small>Everyone can see your comment with your username.</small><button type="button" class="btn btn-primary" id="annCSend">Post</button></div></div></div>';
+  $('annCSend').addEventListener('click',()=>post(aid,null,$('annCText'),$('annCSend')));
+ }
+ async function post(aid,parent,ta,btn){
+  const body=(ta.value||'').trim();if(!body){note('Write something first.','warning');return;}
+  if(!cp()){note('Please log in first.','warning');return;}
+  btn.disabled=true;
+  try{const row={announcement_id:aid,body,username:cp().username||'Student'};if(parent)row.parent_id=parent;
+   const r=await supabaseClient.from('announcement_comments').insert(row);if(r.error)throw r.error;ta.value='';await refresh(aid);
+  }catch(err){note(missing(err)?SETUP_MSG:'Could not post: '+(err.message||err),'error');}
+  btn.disabled=false;
+ }
+ async function react(aid,e,mine){
+  if(!cp()){note('Please log in to react.','warning');try{openAuthModal('login');}catch(x){}return;}
+  try{
+   if(mine&&mine.emoji===e){const r=await supabaseClient.from('announcement_reactions').delete().eq('announcement_id',aid).eq('user_id',myId());if(r.error)throw r.error;}
+   else{const r=await supabaseClient.from('announcement_reactions').upsert({announcement_id:aid,user_id:myId(),emoji:e,username:cp().username||'Student'},{onConflict:'announcement_id,user_id'});if(r.error)throw r.error;}
+   await refresh(aid);
+  }catch(err){note(missing(err)?SETUP_MSG:'Could not react: '+(err.message||err),'error');}
+ }
+ async function refresh(aid){
+  if(window.__drAnnOpen!==aid)return;
+  try{
+   const [c,r]=await Promise.all([supabaseClient.from('announcement_comments').select('*').eq('announcement_id',aid).order('created_at',{ascending:true}).limit(500),supabaseClient.from('announcement_reactions').select('*').eq('announcement_id',aid).limit(3000)]);
+   const er=c.error||r.error;
+   if(er){const l=$('annCList');if(l)l.innerHTML='<div class="empty-profile">'+esc(missing(er)?SETUP_MSG:'Could not load discussion: '+er.message)+'</div>';return;}
+   if(window.__drAnnOpen!==aid)return;
+   drawReactions(aid,r.data||[]);drawThread(aid,c.data||[]);
+   counts[aid]={c:(c.data||[]).length,r:(r.data||[]).length};
+  }catch(e){}
+ }
+ function drawReactions(aid,rows){
+  const el=$('annReact');if(!el)return;const mine=rows.find(x=>x.user_id===myId());
+  const by={};REACTS.forEach(e=>by[e]=[]);rows.forEach(x=>{(by[x.emoji]=by[x.emoji]||[]).push(x);});
+  el.innerHTML=REACTS.map(e=>'<button type="button" class="ann-rx'+(mine&&mine.emoji===e?' on':'')+'" data-e="'+e+'"><span>'+e+'</span><b>'+(by[e].length||'')+'</b></button>').join('')+'<button type="button" class="ann-who-btn" id="annWhoBtn">'+rows.length+' reaction'+(rows.length===1?'':'s')+' · see who</button>';
+  el.querySelectorAll('.ann-rx').forEach(b=>b.addEventListener('click',()=>react(aid,b.dataset.e,mine)));
+  const who=$('annWho');if(who){const keep=!who.hidden;who.innerHTML=REACTS.filter(e=>by[e].length).map(e=>'<div><span>'+e+'</span> '+by[e].map(x=>esc(x.username||'Student')).join(', ')+'</div>').join('')||'<div>No reactions yet.</div>';who.hidden=!keep;$('annWhoBtn').addEventListener('click',()=>{who.hidden=!who.hidden;});}
+ }
+ function drawThread(aid,rows){
+  const list_=$('annCList');if(!list_)return;const admin=!!(cp()&&cp().is_admin);
+  const tops=rows.filter(x=>!x.parent_id),rep={};rows.filter(x=>x.parent_id).forEach(x=>{(rep[x.parent_id]=rep[x.parent_id]||[]).push(x);});
+  const cc=$('annCCount');if(cc)cc.textContent='('+rows.length+')';
+  const open=new Set([...list_.querySelectorAll('.ann-rform')].map(f=>f.dataset.for));const drafts={};list_.querySelectorAll('.ann-rform textarea').forEach(t=>{drafts[t.closest('.ann-rform').dataset.for]=t.value;});
+  if(!tops.length){list_.innerHTML='<div class="empty-profile">No comments yet. Be the first to comment!</div>';return;}
+  list_.innerHTML='';
+  const one=(c,isReply)=>{
+   const el=document.createElement('div');el.className='ann-c'+(c.is_admin?' is-teacher':'')+(isReply?' is-reply':'');
+   const name=c.is_admin?'Your Teacher':(c.username||'Student');
+   const canDel=admin||(myId()&&c.user_id===myId());
+   el.innerHTML='<div class="ann-av">'+esc((c.is_admin?'T':name).charAt(0).toUpperCase())+'</div><div class="ann-cb"><div class="ann-ch"><strong>'+esc(name)+'</strong>'+(c.is_admin?'<span class="ann-tbadge">Teacher</span>':'')+'<small>'+esc(ago(c.created_at))+'</small></div><div class="ann-ct">'+esc(c.body).replace(/\n/g,'<br>')+'</div><div class="ann-ca">'+(admin&&!isReply?'<button type="button" data-r>↩ Reply</button>':'')+(canDel?'<button type="button" data-x>🗑 Delete</button>':'')+'</div></div>';
+   const rb=el.querySelector('[data-r]');
+   const showForm=(txt)=>{if(el.querySelector('.ann-rform'))return;const f=document.createElement('div');f.className='ann-rform';f.dataset.for=c.id;f.innerHTML='<textarea rows="2" maxlength="1000" placeholder="Reply as Your Teacher…"></textarea><div><button type="button" class="btn btn-primary" data-s>Send reply</button><button type="button" class="btn btn-ghost" data-c>Cancel</button></div>';f.querySelector('textarea').value=txt||'';el.querySelector('.ann-cb').appendChild(f);f.querySelector('[data-c]').addEventListener('click',()=>f.remove());f.querySelector('[data-s]').addEventListener('click',()=>post(aid,c.id,f.querySelector('textarea'),f.querySelector('[data-s]')));};
+   if(rb)rb.addEventListener('click',()=>showForm(''));
+   if(open.has(String(c.id)))showForm(drafts[c.id]||'');
+   const xb=el.querySelector('[data-x]');
+   if(xb)xb.addEventListener('click',async()=>{const ok=await customConfirm('Delete this comment?'+(isReply?'':' Replies under it will be removed too.'),{okText:'Delete',cancelText:'Keep',icon:'🗑️'});if(!ok)return;const r=await supabaseClient.from('announcement_comments').delete().eq('id',c.id);if(r.error){note('Could not delete: '+r.error.message,'error');return;}refresh(aid);});
+   return el;
+  };
+  tops.forEach(c=>{const el=one(c,false);const rs=rep[c.id]||[];if(rs.length){const w=document.createElement('div');w.className='ann-replies';rs.forEach(r=>w.appendChild(one(r,true)));el.querySelector('.ann-cb').appendChild(w);}list_.appendChild(el);});
+ }
  function latest(){return list.length?Date.parse(list[0].created_at)||0:0;}
  function unseenCount(){let seen=0;try{seen=Number(localStorage.getItem(seenKey()))||0;}catch(e){}return list.filter(a=>(Date.parse(a.created_at)||0)>seen).length;}
  function markSeen(){try{localStorage.setItem(seenKey(),String(latest()||Date.now()));}catch(e){}paint();}
@@ -8451,9 +8631,9 @@ html:root:root body #homeHeroCarousel .hero-top-three .hero-top-user:nth-child(1
  async function load(){
   if(!window.supabaseClient)return;
   try{const r=await supabaseClient.from('announcements').select('*').order('created_at',{ascending:false}).limit(100);
-   if(!r.error&&Array.isArray(r.data)){list=r.data;render();paint();}}catch(e){}
+   if(!r.error&&Array.isArray(r.data)){list=r.data;paint();if(!window.__drAnnOpen)render();loadCounts().then(()=>{if(!window.__drAnnOpen)render();});}}catch(e){}
  }
- function openPage(){
+ function openPage(){window.__drAnnOpen=null;
   document.querySelectorAll('.wrap > section').forEach(x=>x.hidden=true);$('screen-announcements').hidden=false;$('topSub').textContent='Announcements';
   try{if(typeof pushScreen==='function')pushScreen('announcements',{});}catch(e){}
   window.scrollTo({top:0});load().then(markSeen);render();
@@ -8535,7 +8715,7 @@ html:root:root body .nav-search-wrap{height:36px!important}
    row.innerHTML+='<div class="edm-actions"><button type="button" class="btn btn-primary" data-edit>✏️ Edit marks</button><button type="button" class="btn btn-ghost" data-delete style="color:#b91c1c">🗑 Delete record</button></div><div class="edm-editor-slot"></div>';
    row.querySelector('[data-edit]').onclick=()=>editForm(row,x);row.querySelector('[data-delete]').onclick=()=>remove(x);box.appendChild(row);
   });}
- function editForm(row,x){const slot=row.querySelector('.edm-editor-slot');if(slot.innerHTML){slot.innerHTML='';return;}if(x._kind==='MCQ'){slot.innerHTML=`<div class="edm-edit"><label>Correct answers<input type="number" id="edmCorrect" min="0" max="10000" value="${Number(x.correct)||0}"></label><label>Total questions<input type="number" id="edmTotal" min="1" max="10000" value="${Number(x.total)||1}"></label><div class="wide" id="edmPreview" style="font-weight:900">New percentage: —</div><div class="edm-actions wide"><button type="button" class="btn btn-primary" data-save>Review & Save</button><button type="button" class="btn btn-ghost" data-cancel>Cancel</button></div></div>`;const a=slot.querySelector('#edmCorrect'),b=slot.querySelector('#edmTotal'),pv=slot.querySelector('#edmPreview');const preview=()=>{const n=Number(a.value),t=Number(b.value);pv.textContent=t>0&&n>=0&&n<=t?'New percentage: '+(n/t*100).toFixed(2)+'%':'Correct answers must be between 0 and total.'};a.oninput=b.oninput=preview;preview();slot.querySelector('[data-cancel]').onclick=()=>slot.innerHTML='';slot.querySelector('[data-save]').onclick=async()=>{const n=Number(a.value),t=Number(b.value);if(!Number.isInteger(n)||!Number.isInteger(t)||t<1||n<0||n>t){say('Marks invalid. Correct answers must be between 0 and the total.','warning');return;}const pct=Number((n/t*100).toFixed(2));const ok=await customConfirm(`You are about to update this MCQ result.\n\nStudent: ${x._name}\nExam: ${x._title}\nOld marks: ${x.correct}/${x.total} (${Number(x.percent||0).toFixed(2)}%)\nNew marks: ${n}/${t} (${pct}%)\n\nThis change will directly affect the student’s result. Are you sure?`,{icon:'🧾',okText:'Confirm & Update',cancelText:'Review again'});if(!ok)return;const btn=slot.querySelector('[data-save]');btn.disabled=true;const {error}=await client().from('results').update({correct:n,total:t,percent:pct,status:pct>=50?'pass':'fail'}).eq('id',x.id);if(error){say('Update failed: '+error.message,'error');btn.disabled=false;return;}say('MCQ marks updated successfully','success');loaded=false;await load();};
+ function editForm(row,x){const slot=row.querySelector('.edm-editor-slot');if(slot.innerHTML){slot.innerHTML='';return;}if(x._kind==='MCQ'){slot.innerHTML=`<div class="edm-edit"><label>Correct answers<input type="number" id="edmCorrect" min="0" max="10000" value="${Number(x.correct)||0}"></label><label>Total questions<input type="number" id="edmTotal" min="1" max="10000" value="${Number(x.total)||1}"></label><div class="wide" id="edmPreview" style="font-weight:900">New percentage: —</div><div class="edm-actions wide"><button type="button" class="btn btn-primary" data-save>Review & Save</button><button type="button" class="btn btn-ghost" data-cancel>Cancel</button></div></div>`;const a=slot.querySelector('#edmCorrect'),b=slot.querySelector('#edmTotal'),pv=slot.querySelector('#edmPreview');const preview=()=>{const n=Number(a.value),t=Number(b.value);pv.textContent=t>0&&n>=0&&n<=t?'New percentage: '+(n/t*100).toFixed(2)+'%':'Correct answers must be between 0 and total.'};a.oninput=b.oninput=preview;preview();slot.querySelector('[data-cancel]').onclick=()=>slot.innerHTML='';slot.querySelector('[data-save]').onclick=async()=>{const n=Number(a.value),t=Number(b.value);if(!Number.isInteger(n)||!Number.isInteger(t)||t<1||n<0||n>t){say('Marks invalid. Correct answers must be between 0 and the total.','warning');return;}const pct=Number((n/t*100).toFixed(2));const ok=await customConfirm(`You are about to update this MCQ result.\n\nStudent: ${x._name}\nExam: ${x._title}\nOld marks: ${x.correct}/${x.total} (${Number(x.percent||0).toFixed(2)}%)\nNew marks: ${n}/${t} (${pct}%)\n\nThis change will directly affect the student’s result. Are you sure?`,{icon:'🧾',okText:'Confirm & Update',cancelText:'Review again'});if(!ok)return;const btn=slot.querySelector('[data-save]');btn.disabled=true;const {error}=await client().from('results').update({correct:n,total:t,percent:pct,status:pct>=50?'pass':'fail'}).eq('id',x.id);if(error){say('Update failed: '+error.message,'error');btn.disabled=false;return;}say('MCQ marks updated successfully','success');try{await window.__drAfterMarksUpdate(x,n,t,pct);}catch(e){}loaded=false;await load();};
    }else{slot.innerHTML=`<div class="edm-edit"><label>CQ marks<input type="number" id="edmScore" min="0" step="0.01" ${x._max?'max="'+x._max+'"':''} value="${x.score??''}"></label><label>Maximum marks<input type="text" readonly value="${x._max??'Not defined in exam'}"></label><label class="wide">Feedback<textarea id="edmFeedback" rows="3">${esc(x.feedback||'')}</textarea></label><div class="edm-actions wide"><button type="button" class="btn btn-primary" data-save>Review & Save</button><button type="button" class="btn btn-ghost" data-cancel>Cancel</button></div></div>`;slot.querySelector('[data-cancel]').onclick=()=>slot.innerHTML='';slot.querySelector('[data-save]').onclick=async()=>{const n=Number(slot.querySelector('#edmScore').value),feedback=slot.querySelector('#edmFeedback').value.trim();if(!Number.isFinite(n)||n<0||(x._max&&n>x._max)){say('CQ marks invalid.','warning');return;}const ok=await customConfirm(`You are about to update this CQ submission.\n\nStudent: ${x._name}\nExam: ${x._title}\nOld marks: ${x.score??'Not graded'}\nNew marks: ${n}/${x._max??'maximum not set'}\nFeedback: ${feedback||'(none)'}\n\nThe student’s CQ result and grading status will change. Are you sure?`,{icon:'✍️',okText:'Confirm & Grade',cancelText:'Review again'});if(!ok)return;const btn=slot.querySelector('[data-save]');btn.disabled=true;const {error}=await client().from('written_submissions').update({score:n,feedback,status:'graded',graded_at:new Date().toISOString(),graded_by:await uid()}).eq('id',x.id);if(error){say('CQ update failed: '+error.message,'error');btn.disabled=false;return;}say('CQ marks updated successfully','success');loaded=false;await load();};}}
  async function remove(x){const detail=`Record type: ${x._kind}\nStudent: ${x._name}\nExam: ${x._title}\nMarks: ${x._kind==='MCQ'?`${x.correct}/${x.total}`:(x.score??'Not graded')}\nDate: ${x._when?new Date(x._when).toLocaleString():'—'}\n\nThis ${x._kind} record will be permanently deleted. This cannot be undone. Are you sure?`;const ok=await customConfirm(detail,{icon:'⚠️',okText:'Yes, permanently delete',cancelText:'No, keep it'});if(!ok)return;const table=x._kind==='MCQ'?'results':'written_submissions';const {error}=await client().from(table).delete().eq('id',x.id);if(error){say('Delete failed: '+error.message,'error');return;}say(x._kind+' record deleted','success');loaded=false;await load();}
  function init(){if(!window.currentProfile?.is_admin)return;const sec=$('screen-admin');if(!sec||$('adminGoExamDataManager'))return;const btn=document.createElement('button');btn.type='button';btn.className='admin-action-card';btn.id='adminGoExamDataManager';btn.innerHTML='🧰<span>Exam Data Manager</span><small>Search students and exams, edit marks and manage records</small>';const grid=sec.querySelector('.admin-actions-grid');if(grid)grid.appendChild(btn);btn.addEventListener('click',()=>page(true));}
@@ -8620,7 +8800,7 @@ html:root:root body #homeHeroCarousel .hero-top-three{display:block!important;ov
 html:root:root body #homeHeroCarousel .hero-top-three:before{content:"";position:absolute;inset:-16px -20px -18px;z-index:-1;border-radius:26px 26px 0 0;background:linear-gradient(to bottom,rgba(10,10,32,.78),rgba(10,10,32,.38) 62%,rgba(10,10,32,0));pointer-events:none}
 html:root:root body #homeHeroCarousel .hero-top-three>.hero-top-user{display:inline-flex!important;margin:0 12px 12px 0}
 html:root:root body #homeHeroCarousel .hero-top-scope{margin:0!important;animation:prFade .5s var(--pr-ease)}
-html:root:root body #homeHeroCarousel #heroTopThree div.hero-top-scope-title{display:flex;align-items:center;gap:8px;margin:0 0 12px!important;padding:0!important;font-size:16px!important;font-weight:900!important;letter-spacing:.01em;line-height:1.25;color:#fff!important;-webkit-text-fill-color:#fff!important;text-shadow:0 2px 12px rgba(0,0,0,.6)}
+html:root:root body #homeHeroCarousel #heroTopThree div.hero-top-scope-title{display:flex;align-items:flex-start;word-break:break-word;gap:8px;margin:0 0 12px!important;padding:0!important;font-size:16px!important;font-weight:900!important;letter-spacing:.01em;line-height:1.25;color:#fff!important;-webkit-text-fill-color:#fff!important;text-shadow:0 2px 12px rgba(0,0,0,.6)}
 html:root:root body #homeHeroCarousel #heroTopThree div.hero-top-scope-title:before{content:"\1F3C6";font-size:17px}
 html:root:root body #homeHeroCarousel .hero-top-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px}
 html:root:root body #homeHeroCarousel .hero-top-row .hero-top-user{margin:0!important;max-width:100%}
@@ -8725,6 +8905,68 @@ html:root:root body #homeHeroCarousel .hero-top-tabs button.on{width:34px;backgr
 #adminTopCard .tp-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
 #adminTopCard .tp-actions .btn{flex:1 1 200px;min-height:46px}
 
+/* ---------- exam: only the A/B/C/D circle selects an answer ---------- */
+html:root:root body #questionsContainer:before{content:"\1F446  Tap the A / B / C / D circle to choose an answer";display:block;margin:0 0 14px;padding:10px 14px;border-radius:14px;background:rgba(124,92,255,.10);border:1px dashed rgba(124,92,255,.4);font-size:13px;font-weight:800;color:var(--dr-ink,#1a1830)}
+html:root:root body #questionsContainer .option{cursor:default!important;-webkit-tap-highlight-color:transparent}
+html:root:root body #questionsContainer .option:hover{transform:none!important;box-shadow:none}
+html:root:root body #questionsContainer .option .opt-tag{width:44px!important;height:44px!important;border-radius:50%!important;font-size:16px!important;font-weight:900!important;cursor:pointer;box-shadow:inset 0 0 0 2px rgba(124,92,255,.38);transition:transform .15s ease,box-shadow .2s ease,background .2s ease}
+html:root:root body #questionsContainer .option .opt-tag:hover{transform:scale(1.1);box-shadow:inset 0 0 0 2px #7c5cff,0 6px 14px -4px rgba(124,92,255,.55)}
+html:root:root body #questionsContainer .option.selected .opt-tag{box-shadow:0 8px 18px -6px rgba(99,91,255,.7)}
+html:root:root body #questionsContainer .option>span:not(.opt-tag){user-select:text;-webkit-user-select:text}
+
+/* ---------- answer sheet ---------- */
+#akMarks .ak-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+#akMarks .ak-chip{padding:6px 14px;border-radius:99px;font-size:13px;font-weight:800}
+#akMarks .ak-chip.ok{background:#dcfce7;color:#14532d!important}
+#akMarks .ak-chip.bad{background:#ffe4e6;color:#881337!important}
+#akMarks .ak-chip.skip{background:#fef3c7;color:#78350f!important}
+#akList .qnum{display:flex;align-items:center;justify-content:space-between;gap:10px}
+#akList .ak-state{font-size:12px;font-weight:900;padding:4px 12px;border-radius:99px;letter-spacing:.02em}
+#akList .ak-state.ok{background:#16a34a;color:#fff}
+#akList .ak-state.bad{background:#ef4444;color:#fff}
+#akList .ak-state.skip{background:#eab308;color:#fff}
+#akList .option{align-items:center}
+#akList .option .opt-text{flex:1;min-width:0}
+#akList .opt-flag{font-style:normal;font-size:11.5px;font-weight:900;padding:3px 10px;border-radius:99px;background:rgba(255,255,255,.85);color:#111!important;white-space:nowrap;flex:0 0 auto}
+#akList .option.correct-ans{border-color:#16a34a!important;background:rgba(22,163,74,.12)!important}
+#akList .option.wrong-ans{border-color:#ef4444!important;background:rgba(239,68,68,.12)!important}
+
+/* ---------- announcements: public community ---------- */
+#screen-announcements .ann-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:8px;flex-wrap:wrap}
+#screen-announcements .ann-meta{font-size:12.5px;font-weight:800;opacity:.8}
+#screen-announcements .ann-react{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:16px 0 6px;padding-top:14px;border-top:1px solid var(--dr-line,#e5e7ee)}
+#screen-announcements .ann-rx{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:99px;font-size:17px;border:1.5px solid var(--dr-line,#d9dce6);background:var(--dr-card,#fff);transition:all .2s var(--pr-ease)}
+#screen-announcements .ann-rx b{font-size:13px;font-weight:900;color:var(--dr-ink,#1a1830);min-width:8px}
+#screen-announcements .ann-rx:hover{transform:translateY(-2px) scale(1.05);border-color:#8b7cff}
+#screen-announcements .ann-rx.on{border-color:transparent;background:linear-gradient(135deg,rgba(79,70,229,.18),rgba(124,58,237,.22));box-shadow:0 8px 18px -8px rgba(79,70,229,.6)}
+#screen-announcements .ann-who-btn{all:unset;cursor:pointer;margin-left:auto;font-size:12.5px;font-weight:800;color:#5b43d6;padding:6px 12px;border-radius:99px;background:rgba(124,92,255,.10)}
+#screen-announcements .ann-who{margin:6px 0 0;padding:12px 14px;border-radius:14px;background:rgba(124,92,255,.07);font-size:13.5px;line-height:1.7}
+#screen-announcements .ann-comments{margin-top:18px;padding-top:16px;border-top:1px solid var(--dr-line,#e5e7ee)}
+#screen-announcements .ann-comments h4{margin:0 0 12px;font-size:16px;font-weight:900}
+#screen-announcements .ann-c{display:flex;gap:11px;margin:0 0 14px}
+#screen-announcements .ann-av{flex:0 0 38px;height:38px;border-radius:50%;display:grid;place-items:center;font-weight:900;color:#fff;background:linear-gradient(135deg,#7c5cff,#d63a78);box-shadow:0 6px 14px -6px rgba(124,92,255,.7)}
+#screen-announcements .is-teacher>.ann-av{background:linear-gradient(135deg,#c9a227,#e7c765);color:#3a2c00}
+#screen-announcements .ann-cb{flex:1;min-width:0;padding:10px 14px;border-radius:16px;background:rgba(124,92,255,.06);border:1px solid var(--dr-line,#e5e7ee)}
+#screen-announcements .is-teacher>.ann-cb{background:linear-gradient(135deg,rgba(201,162,39,.14),rgba(201,162,39,.05));border-color:rgba(201,162,39,.55)}
+#screen-announcements .ann-ch{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+#screen-announcements .ann-ch strong{font-size:14px;font-weight:900}
+#screen-announcements .ann-ch small{opacity:.65;font-size:12px;margin-left:auto}
+#screen-announcements .ann-tbadge{font-size:10.5px;font-weight:900;letter-spacing:.05em;text-transform:uppercase;padding:2px 9px;border-radius:99px;color:#fff;background:linear-gradient(135deg,#c9a227,#a8841a)}
+#screen-announcements .ann-ct{margin-top:5px;font-size:14.5px;line-height:1.6;word-break:break-word}
+#screen-announcements .ann-ca{display:flex;gap:12px;margin-top:6px}
+#screen-announcements .ann-ca button{all:unset;cursor:pointer;font-size:12px;font-weight:800;color:#5b43d6}
+#screen-announcements .ann-ca button[data-x]{color:#b91c1c}
+#screen-announcements .ann-replies{margin-top:12px;padding-left:4px;border-left:3px solid rgba(201,162,39,.6)}
+#screen-announcements .ann-replies .ann-c{margin:10px 0 0 10px}
+#screen-announcements .ann-rform{margin-top:10px;display:grid;gap:8px}
+#screen-announcements .ann-rform div{display:flex;gap:8px;flex-wrap:wrap}
+#screen-announcements .ann-write{display:flex;gap:11px;margin-top:6px}
+#screen-announcements .ann-wbox{flex:1;min-width:0}
+#screen-announcements textarea{width:100%;border-radius:14px;padding:10px 12px;resize:vertical;min-height:56px;font:inherit;border:1.5px solid var(--dr-line,#d9dce6);background:var(--dr-card,#fff);color:var(--dr-ink,#1a1830)}
+#screen-announcements .ann-wbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:8px;flex-wrap:wrap}
+#screen-announcements .ann-wbar small{opacity:.65}
+#screen-announcements .ann-login{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:14px;border-radius:16px;background:rgba(124,92,255,.08);font-weight:700}
+
 </style>
 <script id="v46-premium-js">
 (function(){
@@ -8788,13 +9030,13 @@ html:root:root body #homeHeroCarousel .hero-top-tabs button.on{width:34px;backgr
   rotIdx=Math.min(rotIdx,scopes.length-1);
   curShow=function(){scopes.forEach(function(s,i){s.classList.toggle('on',i===rotIdx);});dots.forEach(function(d,i){d.classList.toggle('on',i===rotIdx);});};
   curShow();
-  rotT=setInterval(function(){rotIdx=(rotIdx+1)%scopes.length;curShow&&curShow();},5200);
+  rotT=setInterval(function(){rotIdx=(rotIdx+1)%scopes.length;curShow&&curShow();},3000);
  }
  document.addEventListener('click',function(e){
   var b=e.target.closest&&e.target.closest('#heroTopThree .hero-top-tabs button');if(!b||!curShow)return;
   rotIdx=+b.getAttribute('data-i')||0;curShow();
   clearInterval(rotT);var box=document.getElementById('heroTopThree');var n=box.querySelectorAll('.hero-top-scope').length;
-  rotT=setInterval(function(){rotIdx=(rotIdx+1)%n;curShow&&curShow();},7000);
+  rotT=setInterval(function(){rotIdx=(rotIdx+1)%n;curShow&&curShow();},6000);
  });
 
  /* ---- reveal on scroll ---- */
