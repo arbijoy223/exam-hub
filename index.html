@@ -1372,7 +1372,7 @@ html[data-theme="dark"] a{color:#b9baff}
         <label class="full">Description<textarea id="liveDescription" maxlength="500" placeholder="What will be covered?"></textarea></label>
         <button class="btn btn-primary full" type="submit">Create &amp; Start Live</button>
       </form>
-      <p class="card-hint">Maximum 50 student viewers. Students only watch and listen: their camera and microphone stay off.</p>
+      <p class="card-hint">Maximum 50 student viewers. Students can speak only with their mic button; you can mute, remove or block anyone from the studio.</p>
     </div>
 
     <!-- class list (admin + students) -->
@@ -1395,7 +1395,7 @@ html[data-theme="dark"] a{color:#b9baff}
         <div class="live-stage" id="liveStudentStage">
           <div class="live-stage-msg" id="liveStudentMsg">Waiting for the teacher's video…</div>
           <button type="button" class="live-sound-btn" id="liveSoundBtn" hidden>🔊 Tap to turn on sound</button>
-          <button type="button" class="live-fullscreen-btn" id="liveStudentFullscreen" aria-label="Fullscreen video" title="Fullscreen">⛶ Fullscreen</button>
+          <button type="button" class="live-fullscreen-btn" id="liveStudentFullscreen" aria-label="Fullscreen video" title="Fullscreen">⛶ Fullscreen</button><div class="live-ov-top"><span class="live-ov-live">🔴 LIVE</span><span class="live-ov-viewers">👥 1</span></div><div class="live-ov-comments" id="liveStudentOverlay"></div><button type="button" class="live-ov-mic off" id="liveStudentMicBtn" hidden>🎤 Mic off</button><form class="live-ov-form" id="liveStudentOvForm"><input id="liveStudentOvInput" maxlength="300" placeholder="Add a comment…" autocomplete="off"><button>➤</button></form>
         </div>
         <div class="live-chat">
           <div class="live-chat-title"><span>💬 Live chat</span></div>
@@ -1414,7 +1414,7 @@ html[data-theme="dark"] a{color:#b9baff}
       </div>
       <div class="live-layout">
         <div>
-          <div class="live-stage" id="liveAdminStage"><div class="live-stage-msg" id="liveAdminMsg">Starting your camera…</div><button type="button" class="live-fullscreen-btn" id="liveAdminFullscreen">⛶ Fullscreen</button></div>
+          <div class="live-stage" id="liveAdminStage"><div class="live-stage-msg" id="liveAdminMsg">Starting your camera…</div><button type="button" class="live-fullscreen-btn" id="liveAdminFullscreen">⛶ Fullscreen</button><div class="live-ov-top"><span class="live-ov-live">🔴 ON AIR</span><span class="live-ov-viewers">👥 0</span></div><div class="live-ov-comments" id="liveAdminOverlay"></div><form class="live-ov-form" id="liveAdminOvForm"><input id="liveAdminOvInput" maxlength="300" placeholder="Reply to students…" autocomplete="off"><button>➤</button></form></div>
           <div class="live-controls">
             <button type="button" class="live-ctl on" id="liveMicBtn">🎤 Mic on</button>
             <div class="live-meter" title="Microphone level"><i id="liveMicMeter"></i></div>
@@ -1440,7 +1440,7 @@ html[data-theme="dark"] a{color:#b9baff}
             <div id="liveAdminChatLog" class="live-chat-log"><div class="live-empty">Student comments will appear here.</div></div>
             <form id="liveAdminChatForm" class="live-chat-form"><input id="liveAdminChatInput" maxlength="300" placeholder="Reply to students…" autocomplete="off"><button class="btn btn-primary">Send</button></form>
           </div>
-          <div class="live-viewers"><div class="live-chat-title"><span>👥 Students watching</span></div><div id="liveViewerList" class="live-viewer-list"><span class="live-empty">No one has joined yet.</span></div></div>
+          <div class="live-viewers"><div class="live-chat-title"><span>👥 Students watching</span><button type="button" class="live-mini" id="liveMuteAll">🔇 Mute all</button></div><div id="liveViewerList" class="live-viewer-list"><span class="live-empty">No one has joined yet.</span></div><div class="live-chat-title live-blocked-title"><span>⛔ Blocked students</span></div><div id="liveBlockedList" class="live-blocked-list"><span class="live-empty">No blocked students.</span></div></div>
         </div>
       </div>
     </div>
@@ -5843,11 +5843,11 @@ setTimeout(()=>{
 @media(max-width:600px){.chat-thread{padding:10px;max-height:55vh}.chat-bubble{max-width:90%;font-size:14px}.chat-compose{gap:6px}.chat-compose button{padding:10px}}
 </style>
 
-<script>window.EXAMHUB_LIVECLASS_FUNCTION_URL='https://mjsdwhwigzqzdtataaqy.supabase.co/functions/v1/live-class';</script>
+<script>window.EXAMHUB_LIVECLASS_FUNCTION_URL='https://mjsdwhwigzqzdtataaqy.supabase.co/functions/v1/live-class';window.EXAMHUB_LIVECONTROL_FUNCTION_URL='https://mjsdwhwigzqzdtataaqy.supabase.co/functions/v1/live-control';</script>
 <script>
 (function(){
  const $=id=>document.getElementById(id);
- let room=null,role=null,activeClass=null,pollTimer=null,knownLiveIds=new Set(),notificationReady=false,leaving=false,lastChat=0,meterTimer=null,clockTimer=null,startedAt=0,commentCount=0,micWarned=false,micPeak=0,micOnSince=0;
+ let room=null,role=null,activeClass=null,pollTimer=null,knownLiveIds=new Set(),notificationReady=false,leaving=false,lastChat=0,meterTimer=null,clockTimer=null,startedAt=0,commentCount=0,micWarned=false,micPeak=0,micOnSince=0,studentMicReady=false,roomName='';
  const edgeUrl=()=> (window.EXAMHUB_LIVECLASS_FUNCTION_URL||'').replace(/\/$/,'');
  const LK=()=>window.LivekitClient||{};
  const EV=n=>((LK().RoomEvent)||{})[n];
@@ -5865,7 +5865,7 @@ setTimeout(()=>{
  }
  function admin(){return !!(window.currentProfile&&window.currentProfile.is_admin===true);}
  function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
- function isTeacherP(p){if(!p)return false;if(p.permissions)return !!p.permissions.canPublish;return !!(p.trackPublications&&p.trackPublications.size>0);}
+ function isTeacherP(p){if(!p)return false;try{const m=JSON.parse(p.metadata||'{}');if(m&&m.r==='s')return false;}catch(e){}if(p.permissions)return !!p.permissions.canPublish;return !!(p.trackPublications&&p.trackPublications.size>0);}
  function pname(p){return (p&&(p.name||p.identity))||'Student';}
 
  function normalizeLiveVideo(el){
@@ -5963,6 +5963,7 @@ setTimeout(()=>{
    d.append(s,t);log.appendChild(d);
    if(log.scrollHeight-log.scrollTop-log.clientHeight<160||kind==='me')log.scrollTop=log.scrollHeight;
    while(log.children.length>300)log.removeChild(log.firstChild);
+    pushOverlay(logId==='liveAdminChatLog'?'liveAdminOverlay':'liveStudentOverlay',name,text,kind);
  }
  function onData(payload,participant){
    let text='';try{const raw=new TextDecoder().decode(payload);try{const j=JSON.parse(raw);text=(j&&typeof j.m==='string')?j.m:raw;}catch(_){text=raw;}}catch(e){return;}
@@ -5982,24 +5983,130 @@ setTimeout(()=>{
  function status(t){const id=role==='teacher'?'liveAdminStatus':'liveStudentStatus';const el=$(id);if(el)el.textContent=t||'';}
 
  /* ---------- participants / viewers ---------- */
- function viewerNames(){const out=[];if(!room)return out;room.remoteParticipants.forEach(p=>{if(!isTeacherP(p))out.push(pname(p));});return out;}
- function updateViewers(){
-   if(!room)return;const names=viewerNames();
-   if(role==='teacher'){
-     $('liveAdminViewers').textContent='👥 '+names.length+(names.length===1?' student':' students');
-     const box=$('liveViewerList');box.innerHTML='';
-     if(!names.length){box.innerHTML='<span class="live-empty">No one has joined yet.</span>';}
-     else names.sort((a,b)=>a.localeCompare(b)).forEach(n=>{const c=document.createElement('span');c.className='live-chip';c.textContent=n;box.appendChild(c);});
-   }else{
-     const n=names.length+1;$('liveStudentViewers').textContent='👥 '+n+' watching';
-     let teacherHere=false;room.remoteParticipants.forEach(p=>{if(isTeacherP(p))teacherHere=true;});
-     if(!teacherHere&&!$('liveStudentStage').querySelector('video'))$('liveStudentMsg').textContent="Waiting for the teacher's video…";
-   }
- }
+   /* ---------- v46: student mic, teacher moderation, Facebook-style overlay ---------- */
+  const ctlUrl=()=>(window.EXAMHUB_LIVECONTROL_FUNCTION_URL||edgeUrl().replace(/\/live-class$/,'/live-control')).replace(/\/$/,'');
+  async function ctl(action,payload={}){
+    const client=window.supabaseClient;if(!client)throw new Error('Supabase client not found.');
+    const {data:{session}}=await client.auth.getSession();if(!session?.access_token)throw new Error('Please log in first.');
+    const res=await fetch(ctlUrl(),{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token},body:JSON.stringify({action,...payload})});
+    const body=await res.json().catch(()=>({}));
+    if(!res.ok)throw new Error(body.error||('live-control request failed ('+res.status+')'));
+    return body;
+  }
+  function tokenRoom(t){try{const p=JSON.parse(atob(String(t).split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));return (p.video&&p.video.room)||'';}catch(e){return '';}}
+  function metaOf(p){try{return JSON.parse((p&&p.metadata)||'{}')||{};}catch(e){return {};}}
+  function hhmm(d){return new Date(d).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});}
+  async function checkBlocked(id){
+    try{
+      const me=window.currentProfile&&window.currentProfile.user_id;if(!me)return;
+      const r=await window.supabaseClient.from('live_blocks').select('blocked_until').eq('class_id',String(id)).eq('user_id',me).eq('kind','block').gt('blocked_until',new Date().toISOString()).limit(1);
+      if(!r.error&&r.data&&r.data.length)throw new Error('You are blocked from this live class until '+hhmm(r.data[0].blocked_until)+'.');
+    }catch(e){if(/blocked/i.test(e.message))throw e;}
+  }
+  /* comments floating over the video (like Facebook Live) */
+  function pushOverlay(boxId,name,text,kind){
+    const box=$(boxId);if(!box)return;
+    const d=document.createElement('div');d.className='live-ov-msg'+(kind==='teacher'?' teacher':'');
+    const av=document.createElement('i');av.textContent=String(kind==='me'?'Y':(name||'?')).charAt(0).toUpperCase();
+    const b=document.createElement('div'),s=document.createElement('strong'),t=document.createElement('span');
+    s.textContent=(kind==='teacher'?'👨‍🏫 ':'')+name;t.textContent=text;b.append(s,t);d.append(av,b);box.appendChild(d);
+    while(box.children.length>5)box.removeChild(box.firstChild);
+    setTimeout(()=>{d.classList.add('out');setTimeout(()=>d.remove(),600);},14000);
+  }
+  /* student microphone */
+  function syncStudentMic(){
+    const b=$('liveStudentMicBtn');if(!b)return;
+    if(!room||role!=='student'||!studentMicReady){b.hidden=true;return;}
+    const lp=room.localParticipant,can=!lp.permissions||lp.permissions.canPublish!==false,on=!!lp.isMicrophoneEnabled&&can;
+    b.hidden=false;b.disabled=!can;b.textContent=!can?'🔇 Muted by teacher':(on?'🎤 Mic on':'🎤 Mic off');
+    b.classList.toggle('on',on);b.classList.toggle('off',!on);
+  }
+  async function toggleStudentMic(){
+    if(!room||role!=='student')return;const lp=room.localParticipant;
+    try{
+      if(lp.permissions&&lp.permissions.canPublish===false){status('🔇 The teacher has muted you.');return;}
+      const on=!lp.isMicrophoneEnabled;await lp.setMicrophoneEnabled(on);syncStudentMic();
+      status(on?'🎤 Your microphone is ON — everyone in the class can hear you.':'Your microphone is off.');
+    }catch(e){status('Microphone: '+(e.message||e)+' — allow microphone access in the browser and try again.');}
+  }
+  function onPermChange(p){
+    if(!room)return;
+    if(p===room.localParticipant&&role==='student'){
+      const can=!p.permissions||p.permissions.canPublish!==false;
+      if(!can){try{room.localParticipant.setMicrophoneEnabled(false);}catch(e){}status('🔇 The teacher has muted your microphone.');}
+      else if(studentMicReady)status('🎤 The teacher allowed your microphone. Tap the mic button to speak.');
+      syncStudentMic();
+    }
+    updateViewers();
+  }
+  function onSpeakers(sp){
+    document.querySelectorAll('.live-vrow.speaking').forEach(r=>r.classList.remove('speaking'));
+    (sp||[]).forEach(p=>{try{const r=document.querySelector('.live-vrow[data-id="'+CSS.escape(p.identity)+'"]');if(r)r.classList.add('speaking');}catch(e){}});
+  }
+  /* teacher moderation */
+  function pPayload(p){return {room:roomName,identity:p.identity,class_id:String(activeClass||''),user_id:metaOf(p).u||'',username:pname(p)};}
+  async function modAct(action,p,extra){
+    if(!roomName){alert('Teacher controls are not ready yet — reopen the studio.');return;}
+    try{await ctl(action,Object.assign(pPayload(p),extra||{}));updateViewers();if(action==='block')loadBlocked();}
+    catch(e){alert('Live control: '+e.message+'\n\nIs the live-control function deployed? (see the setup notes)');}
+  }
+  async function muteAll(){
+    const ps=viewerParts();if(!ps.length)return;if(!roomName){alert('Teacher controls are not ready yet — reopen the studio.');return;}
+    if(!await confirmBox('Mute every student\'s microphone?',{okText:'Mute all',cancelText:'Cancel',icon:'🔇'}))return;
+    try{await ctl('mute_all',{room:roomName,class_id:String(activeClass||''),participants:ps.map(p=>({identity:p.identity,user_id:metaOf(p).u||'',username:pname(p)}))});status('All students were muted.');}
+    catch(e){alert('Live control: '+e.message);}
+  }
+  async function blockFlow(p){
+    if(!metaOf(p).u){alert('This student joined with an older version, so only "Remove" is possible for now.');return;}
+    const m=window.prompt('Block '+pname(p)+' for how many minutes?\n(They are removed now and cannot rejoin until the time ends.)','30');if(m===null)return;
+    const n=Math.max(1,Math.min(1440,parseInt(m,10)||30));
+    await modAct('block',p,{minutes:n});status(pname(p)+' was blocked for '+n+' minutes.');
+  }
+  async function loadBlocked(){
+    const box=$('liveBlockedList');if(!box||role!=='teacher'||!activeClass)return;
+    try{
+      const r=await window.supabaseClient.from('live_blocks').select('*').eq('class_id',String(activeClass)).eq('kind','block').gt('blocked_until',new Date().toISOString());
+      if(r.error)throw r.error;const rows=r.data||[];box.innerHTML='';
+      if(!rows.length){box.innerHTML='<span class="live-empty">No blocked students.</span>';return;}
+      rows.forEach(x=>{
+        const c=document.createElement('div');c.className='live-brow';const n=document.createElement('span');n.textContent=(x.username||'Student')+' · until '+hhmm(x.blocked_until);
+        const b=document.createElement('button');b.type='button';b.textContent='Unblock';
+        b.addEventListener('click',async()=>{try{await ctl('unblock',{class_id:String(activeClass),user_id:x.user_id});loadBlocked();}catch(e){alert('Live control: '+e.message);}});
+        c.append(n,b);box.appendChild(c);
+      });
+    }catch(e){}
+  }
+  function viewerParts(){const out=[];if(!room)return out;room.remoteParticipants.forEach(p=>{if(!isTeacherP(p))out.push(p);});return out;}
+  function viewerNames(){return viewerParts().map(pname);}
+  function updateViewers(){
+    if(!room)return;const ps=viewerParts(),total=role==='teacher'?ps.length:ps.length+1;
+    document.querySelectorAll('.live-ov-viewers').forEach(e=>{e.textContent='👥 '+total;});
+    if(role==='teacher'){
+      $('liveAdminViewers').textContent='👥 '+ps.length+(ps.length===1?' student':' students');
+      const box=$('liveViewerList');box.innerHTML='';
+      if(!ps.length){box.innerHTML='<span class="live-empty">No one has joined yet.</span>';return;}
+      ps.slice().sort((a,b)=>pname(a).localeCompare(pname(b))).forEach(p=>{
+        const can=!p.permissions||p.permissions.canPublish!==false,mic=!!p.isMicrophoneEnabled&&can;
+        const r=document.createElement('div');r.className='live-vrow'+(mic?' mic':'');r.dataset.id=p.identity;
+        const nm=document.createElement('span');nm.className='vr-name';nm.textContent=pname(p);
+        const st=document.createElement('span');st.className='vr-st';st.textContent=!can?'🔇 muted':(mic?'🎤 on':'🎤 off');
+        const bt=document.createElement('div');bt.className='vr-btns';
+        const mk=(t,fn,cls)=>{const b=document.createElement('button');b.type='button';b.textContent=t;if(cls)b.className=cls;b.addEventListener('click',fn);bt.appendChild(b);};
+        mk(can?'🔇 Mute':'🎤 Allow',()=>modAct(can?'mute':'allow',p));
+        mk('🚪 Remove',async()=>{if(await confirmBox('Remove '+pname(p)+' from this live class? They can join again.',{okText:'Remove',cancelText:'Cancel',icon:'🚪'}))modAct('kick',p);});
+        mk('⛔ Block',()=>blockFlow(p),'danger');
+        r.append(nm,st,bt);box.appendChild(r);
+      });
+    }else{
+      $('liveStudentViewers').textContent='👥 '+total+' watching';
+      let teacherHere=false;room.remoteParticipants.forEach(p=>{if(isTeacherP(p))teacherHere=true;});
+      if(!teacherHere&&!$('liveStudentStage').querySelector('video'))$('liveStudentMsg').textContent="Waiting for the teacher's video…";
+    }
+  }
 
- /* ---------- tracks ---------- */
+  /* ---------- tracks ---------- */
  function attachRemote(track,pub,participant){
-   if(!track||role!=='student')return;           // the admin never renders students' media
+   if(!track)return; if(role!=='student'&&track.kind!=='audio')return;
    if(track.kind==='audio'){
      $('liveAudioSink').querySelectorAll('[data-sid="'+(track.sid||'')+'"]').forEach(x=>x.remove());
      const el=track.attach();el.dataset.sid=track.sid||'';el.autoplay=true;el.volume=1;el.muted=false;$('liveAudioSink').appendChild(el);
@@ -6080,7 +6187,7 @@ setTimeout(()=>{
    ['liveStudentStage','liveAdminStage'].forEach(id=>$(id).querySelectorAll('video').forEach(v=>v.remove()));
    $('liveStudentChatLog').innerHTML='';$('liveAdminChatLog').innerHTML='<div class="live-empty">Student comments will appear here.</div>';
    $('liveViewerList').innerHTML='<span class="live-empty">No one has joined yet.</span>';
-   commentCount=0;$('liveCommentCount').textContent='0';$('liveStudentStatus').textContent='';$('liveAdminStatus').textContent='';
+   commentCount=0;$('liveCommentCount').textContent='0';['liveStudentOverlay','liveAdminOverlay'].forEach(i=>{if($(i))$(i).innerHTML='';});studentMicReady=false;roomName='';if($('liveBlockedList'))$('liveBlockedList').innerHTML='<span class="live-empty">No blocked students.</span>';$('liveStudentStatus').textContent='';$('liveAdminStatus').textContent='';
    $('liveStudentMsg').hidden=false;$('liveStudentMsg').textContent="Waiting for the teacher's video…";
    $('liveAdminMsg').hidden=false;$('liveAdminMsg').textContent='Starting your camera…';
    $('liveSoundBtn').hidden=true;$('liveMicMeter').style.width='0';
@@ -6104,11 +6211,19 @@ setTimeout(()=>{
    room.on(EV('LocalTrackUnpublished')||'localTrackUnpublished',refreshPreview);
    room.on(EV('TrackMuted')||'trackMuted',refreshPreview);
    room.on(EV('TrackUnmuted')||'trackUnmuted',refreshPreview);
+    room.on(EV('TrackMuted')||'trackMuted',()=>{updateViewers();syncStudentMic();});
+    room.on(EV('TrackUnmuted')||'trackUnmuted',()=>{updateViewers();syncStudentMic();});
+    room.on(EV('ParticipantPermissionsChanged')||'participantPermissionsChanged',(prev,p)=>onPermChange(p));
+    room.on(EV('ParticipantMetadataChanged')||'participantMetadataChanged',()=>updateViewers());
+    room.on(EV('ActiveSpeakersChanged')||'activeSpeakersChanged',sp=>onSpeakers(sp));
+    room.on(EV('LocalTrackPublished')||'localTrackPublished',()=>syncStudentMic());
+    room.on(EV('LocalTrackUnpublished')||'localTrackUnpublished',()=>syncStudentMic());
    room.on(EV('Reconnecting')||'reconnecting',()=>status('Connection is unstable, reconnecting…'));
    room.on(EV('Reconnected')||'reconnected',()=>status(role==='teacher'?'You are live.':'You are watching the live class.'));
-   room.on(EV('Disconnected')||'disconnected',()=>{
-     if(leaving)return;
-     if(role==='student'){status('The class has ended or the connection was lost.');setTimeout(()=>{if(!leaving)leaveRoom();},2500);}
+   room.on(EV('Disconnected')||'disconnected',(reason)=>{
+      if(leaving)return;
+      if(role==='student'&&reason===((LK().DisconnectReason||{}).PARTICIPANT_REMOVED??4)){leaving=true;alert('You were removed from this live class by the teacher.');leaveRoom();return;}
+      if(role==='student'){status('The class has ended or the connection was lost.');setTimeout(()=>{if(!leaving)leaveRoom();},2500);}
      else status('Disconnected from the live room. Open your studio again to reconnect.');
    });
    await room.connect(data.livekit_url,data.token,{autoSubscribe:true});
@@ -6116,26 +6231,43 @@ setTimeout(()=>{
      const lp=room.localParticipant;let problems=[];
      try{await lp.setMicrophoneEnabled(true);}catch(e){problems.push('Microphone: '+(e.message||e));}
      try{await lp.setCameraEnabled(true);}catch(e){problems.push('Camera: '+(e.message||e));}
-     refreshPreview();await fillDevices();startMeter();startClock();updateViewers();
+     refreshPreview();await fillDevices();startMeter();startClock();updateViewers();roomName=tokenRoom(data.token);loadBlocked();
      status(problems.length?problems.join(' · ')+' — allow access in the browser address bar and try again.':'You are live. Only you are on camera; students listen and comment.');
    }else{
      try{await room.startAudio();}catch(e){}
+      studentMicReady=!!data._mic;syncStudentMic();
      $('liveSoundBtn').hidden=room.canPlaybackAudio!==false;
      room.remoteParticipants.forEach(p=>p.trackPublications.forEach(pub=>{if(pub.track)attachRemote(pub.track,pub,p);}));
-     updateViewers();status('You are watching the live class. Your camera and microphone are off.');
+     updateViewers();status(studentMicReady?'You are watching the live class. Tap the 🎤 button on the video if you want to speak.':'You are watching the live class. Your camera and microphone are off.');
    }
    window.scrollTo({top:(teacher?$('liveAdminRoom'):$('liveStudentRoom')).offsetTop,behavior:'smooth'});
  }
  async function joinClass(id,teacher){
-   try{
-     const data=await api(teacher?'start':'join',{class_id:id});
-     activeClass=id;await connectRoom(data,teacher);
-   }catch(e){
-     try{if(room){leaving=true;await room.disconnect();}}catch(_){}room=null;
-     alert('Live Class: '+e.message);showList();
-   }
- }
- async function leaveRoom(){
+    try{
+      if(!teacher)await checkBlocked(id);
+      const data=await api(teacher?'start':'join',{class_id:id});
+      if(!teacher){
+        try{
+          const up=await ctl('student_token',{class_id:id,token:data.token});
+          if(up&&up.token){data.token=up.token;if(up.livekit_url)data.livekit_url=up.livekit_url;data._mic=true;}
+        }catch(e){if(/blocked/i.test(e.message))throw e;console.debug('live-control not available:',e.message);}
+      }
+      activeClass=id;await connectRoom(data,teacher);
+    }catch(e){
+      try{if(room){leaving=true;await room.disconnect();}}catch(_){}room=null;
+      alert('Live Class: '+e.message);showList();
+    }
+  }
+  /* wiring */
+  (function(){
+    const on=(id,ev,fn)=>{const e=$(id);if(e)e.addEventListener(ev,fn);};
+    on('liveStudentMicBtn','click',toggleStudentMic);
+    on('liveMuteAll','click',muteAll);
+    on('liveStudentOvForm','submit',e=>{e.preventDefault();sendChat('liveStudentOvInput','liveStudentChatLog');});
+    on('liveAdminOvForm','submit',e=>{e.preventDefault();sendChat('liveAdminOvInput','liveAdminChatLog');});
+  })();
+
+  async function leaveRoom(){
    if(liveRecorder&&liveRecorder.state!=='inactive'){stopLiveRecording();await new Promise(resolve=>{const r=liveRecorder;if(!r||r.state==='inactive')return resolve();r.addEventListener('stop',resolve,{once:true});setTimeout(resolve,15000);});}
    leaving=true;stopMeter();stopClock();
    try{if(room){await room.disconnect();}}catch(e){}
@@ -6264,7 +6396,8 @@ setTimeout(()=>{
  /* ---------- wiring ---------- */
  $('liveCreateForm')?.addEventListener('submit',async e=>{e.preventDefault();if(!admin())return;const btn=$('liveCreateForm').querySelector('button[type="submit"]');btn.disabled=true;btn.textContent='Starting…';try{const r=await api('create',{title:$('liveTitle').value.trim(),subject:$('liveSubject').value.trim(),description:$('liveDescription').value.trim()});$('liveCreateForm').reset();activeClass=r.class_id;try{if(typeof sendArbijoyPushEvent==='function')void sendArbijoyPushEvent({event:'live_started',title:$('liveTitle').value||r.title||'Live class',subject:r.subject||'',class_id:r.class_id});}catch(e){}await connectRoom(r,true);}catch(err){alert('Could not create class: '+err.message);showList();}finally{btn.disabled=false;btn.textContent='Create & Start Live';}});
  $('refreshLiveClasses')?.addEventListener('click',loadClasses);
- $('liveSoundBtn')?.addEventListener('click',async()=>{try{await room.startAudio();}catch(e){}$('liveSoundBtn').hidden=room?room.canPlaybackAudio!==false:true;$('liveAudioSink').querySelectorAll('audio').forEach(a=>{const p=a.play();if(p&&p.catch)p.catch(()=>{});});});
+ $('liveSoundBtn')?.addEventListener('click',async()=>{try{await room.startAudio();}catch(e){}
+      studentMicReady=!!data._mic;syncStudentMic();$('liveSoundBtn').hidden=room?room.canPlaybackAudio!==false:true;$('liveAudioSink').querySelectorAll('audio').forEach(a=>{const p=a.play();if(p&&p.catch)p.catch(()=>{});});});
  $('liveMicBtn')?.addEventListener('click',async()=>{if(!room)return;try{await room.localParticipant.setMicrophoneEnabled(!room.localParticipant.isMicrophoneEnabled);micOnSince=Date.now();micPeak=0;micWarned=false;}catch(e){status('Microphone: '+e.message);}syncButtons();});
  $('liveCamBtn')?.addEventListener('click',async()=>{if(!room)return;try{await room.localParticipant.setCameraEnabled(!room.localParticipant.isCameraEnabled);}catch(e){status('Camera: '+e.message);}refreshPreview();});
  $('liveSwitchCamera')?.addEventListener('click',async()=>{const devs=(await navigator.mediaDevices.enumerateDevices()).filter(d=>d.kind==='videoinput');if(devs.length<2)return;const cur=$('liveCameraSelect').value,i=devs.findIndex(d=>d.deviceId===cur),next=devs[(i+1+devs.length)%devs.length];$('liveCameraSelect').value=next.deviceId;switchDevice('videoinput',next.deviceId);});
@@ -8751,18 +8884,25 @@ html:root:root body .nav-search-wrap{height:36px!important}
  const backToDash=()=>typeof showAdminDashboard==='function'?showAdminDashboard():showPage('screen-admin','Admin Dashboard');
 
  /* =====================  HOME SLIDER (public part)  ===================== */
- const HKEY='drHeroSlides';let lastSig='',defaultsHtml=null;
+ const HKEY='drHeroSlides';let lastSig='',defaults=null;
  function slideHtml(r,i){
   const u=encodeURI(String(r.image_url||'')).replace(/'/g,'%27');
   const txt=(r.title||r.subtitle)?'<div class="hero-slide-content">'+(r.title?'<h2>'+esc(r.title)+'</h2>':'')+(r.subtitle?'<p>'+esc(r.subtitle)+'</p>':'')+'</div>':'';
-  return '<article class="hero-slide hero-custom'+(i===0?' active':'')+'" style="background-image:url(\''+u+'\')">'+txt+'</article>';
+  return '<article class="hero-slide hero-custom" style="background-image:url(\''+u+'\')">'+txt+'</article>';
  }
+ function grabDefaults(){
+  if(defaults!==null)return;
+  const root=$('homeHeroCarousel'),track=root&&root.querySelector('.hero-track');if(!track)return;
+  defaults=[].slice.call(track.querySelectorAll('.hero-slide')).map(a=>{a.classList.remove('active');a.removeAttribute('data-x');return a.outerHTML;});
+ }
+ /* custom photos replace the default slides from the first one onwards; delete a photo and that default slide comes back */
  function applyHero(rows){
   const root=$('homeHeroCarousel'),track=root&&root.querySelector('.hero-track');if(!track)return;
-  if(defaultsHtml===null)defaultsHtml=track.innerHTML;
-  if(rows&&rows.length){track.innerHTML=rows.map(slideHtml).join('');track.dataset.custom='1';}
-  else if(track.dataset.custom==='1'){track.innerHTML=defaultsHtml;track.dataset.custom='';}
-  else return;
+  grabDefaults();if(!defaults||!defaults.length)return;
+  if(!(rows&&rows.length)&&track.dataset.custom!=='1')return;
+  const custom=(rows||[]).map(slideHtml),all=custom.concat(defaults.slice(custom.length));
+  track.innerHTML=all.join('');track.dataset.custom=custom.length?'1':'';
+  const first=track.querySelector('.hero-slide');if(first)first.classList.add('active');
   if(window.__heroInit)window.__heroInit();
  }
  const slim=rows=>rows.map(x=>({image_url:x.image_url,title:x.title||'',subtitle:x.subtitle||''}));
@@ -8777,13 +8917,13 @@ html:root:root body .nav-search-wrap{height:36px!important}
   }catch(e){}
  }
  function bootHero(){
-  const root=$('homeHeroCarousel'),track=root&&root.querySelector('.hero-track');if(track)defaultsHtml=track.innerHTML;
+  grabDefaults();
   try{const c=JSON.parse(localStorage.getItem(HKEY)||'null');if(Array.isArray(c)&&c.length){lastSig=JSON.stringify(c);applyHero(c);}}catch(e){}
   setTimeout(loadHero,700);setInterval(loadHero,120000);
  }
 
  /* =====================  HOME SLIDER (admin page)  ===================== */
- let sRows=[],picked=null;
+ let sRows=[],picked=[];
  async function compress(file){
   const url=URL.createObjectURL(file);
   try{
@@ -8796,32 +8936,43 @@ html:root:root body .nav-search-wrap{height:36px!important}
  }
  function buildSlider(){
   const box=$('adminSliderContent');if(!box||$('shFile'))return;
-  box.innerHTML='<div class="profile-card admin-card"><h3>➕ Add a photo</h3><p class="card-hint">Pick a photo from your phone gallery or camera. It is resized automatically and shown on the home slider for every student.</p>'
-   +'<label class="sh-pick"><input type="file" id="shFile" accept="image/*"><span>📷 Choose photo from phone</span></label>'
-   +'<div id="shPrev" class="sh-prev" hidden><img id="shImg" alt="Preview"><small id="shInfo"></small></div>'
+  box.innerHTML='<div class="profile-card admin-card"><h3>➕ Add photos</h3><p class="card-hint">Pick one or many photos from your phone gallery or camera. They are resized automatically and shown on the home slider for every student.</p>'
+   +'<label class="sh-pick"><input type="file" id="shFile" accept="image/*" multiple><span>📷 Choose photos from phone</span></label>'
+   +'<div id="shPrev" class="sh-prevs" hidden></div><small id="shInfo" class="sh-info"></small>'
    +'<div class="mat-admin-form"><label class="wide">Title on the photo (optional)<input id="shTitle" maxlength="80" placeholder="e.g. Admission Batch 2027"></label><label class="wide">Small text (optional)<input id="shSub" maxlength="140" placeholder="e.g. Enrol now · Limited seats"></label></div>'
-   +'<button class="btn btn-primary" id="shUpload" type="button">⬆ Upload &amp; add to slider</button><p class="card-hint">Tip: wide (landscape) photos look best. Leave the texts empty to show only the picture.</p></div>'
-   +'<div class="profile-card admin-card"><h3>🖼️ Current slides</h3><div id="shList" class="sh-list"></div><p class="card-hint">As soon as you add one photo, only your photos are shown. Delete them all to bring the default slides back.</p></div>';
+   +'<p class="card-hint" id="shMultiHint" hidden>With several photos, the texts above are skipped — add titles later with ✏️.</p>'
+   +'<button class="btn btn-primary" id="shUpload" type="button">⬆ Upload &amp; add to slider</button></div>'
+   +'<div class="profile-card admin-card"><h3>🖼️ Your slides</h3><div id="shList" class="sh-list"></div><p class="card-hint">Your photos replace the default slides one by one: photo 1 replaces default slide 1, photo 2 replaces slide 2, and so on. Delete (or hide) a photo and the default slide comes back automatically.</p></div>';
   $('shFile').addEventListener('change',async e=>{
-   const f=e.target.files&&e.target.files[0];picked=null;$('shPrev').hidden=true;if(!f)return;
-   try{const c=await compress(f);picked=c;$('shImg').src=URL.createObjectURL(c.blob);$('shInfo').textContent=c.w+'×'+c.h+' · '+Math.round(c.blob.size/1024)+' KB';$('shPrev').hidden=false;}
-   catch(err){note(String(err.message||err),'error');}
+   const files=[...(e.target.files||[])];picked=[];$('shPrev').innerHTML='';$('shPrev').hidden=true;$('shInfo').textContent='';$('shMultiHint').hidden=files.length<2;if(!files.length)return;
+   $('shInfo').textContent='Preparing '+files.length+' photo'+(files.length>1?'s':'')+'…';
+   for(const f of files){
+    try{const c=await compress(f);picked.push(c);const im=document.createElement('img');im.src=URL.createObjectURL(c.blob);im.alt='';$('shPrev').appendChild(im);}
+    catch(err){note(f.name+': '+String(err.message||err),'error');}
+   }
+   $('shPrev').hidden=!picked.length;$('shInfo').textContent=picked.length?picked.length+' photo'+(picked.length>1?'s':'')+' ready · '+Math.round(picked.reduce((n,c)=>n+c.blob.size,0)/1024)+' KB total':'';
   });
   $('shUpload').addEventListener('click',async()=>{
-   if(!picked){note('Choose a photo first.','warning');return;}
-   const b=$('shUpload');b.disabled=true;b.textContent='Uploading…';
+   if(!picked.length){note('Choose a photo first.','warning');return;}
+   const b=$('shUpload');b.disabled=true;let done=0;
    try{
-    const path='slides/'+Date.now()+'-'+Math.random().toString(36).slice(2,8)+'.jpg';
-    const up=await sb().storage.from('hero-images').upload(path,picked.blob,{contentType:'image/jpeg',cacheControl:'31536000',upsert:false});
-    if(up.error)throw up.error;
-    const pu=sb().storage.from('hero-images').getPublicUrl(path);const url=pu&&pu.data&&pu.data.publicUrl;if(!url)throw new Error('No public URL returned.');
-    const next=sRows.reduce((m,x)=>Math.max(m,Number(x.sort)||0),0)+1;
-    const ins=await sb().from('hero_slides').insert({image_url:url,storage_path:path,title:$('shTitle').value.trim(),subtitle:$('shSub').value.trim(),sort:next,active:true});
-    if(ins.error){try{await sb().storage.from('hero-images').remove([path]);}catch(e){}throw ins.error;}
-    $('shFile').value='';$('shTitle').value='';$('shSub').value='';$('shPrev').hidden=true;picked=null;
-    note('✅ Photo added to the home slider','success');await renderSlider();loadHero();
-   }catch(err){note(missing(err)?SETUP:'Upload failed: '+(err.message||err),'error');}
+    let next=sRows.reduce((m,x)=>Math.max(m,Number(x.sort)||0),0)+1;
+    for(const p of picked){
+     b.textContent='Uploading '+(done+1)+' / '+picked.length+'…';
+     const path='slides/'+Date.now()+'-'+Math.random().toString(36).slice(2,8)+'.jpg';
+     const up=await sb().storage.from('hero-images').upload(path,p.blob,{contentType:'image/jpeg',cacheControl:'31536000',upsert:false});
+     if(up.error)throw up.error;
+     const pu=sb().storage.from('hero-images').getPublicUrl(path);const url=pu&&pu.data&&pu.data.publicUrl;if(!url)throw new Error('No public URL returned.');
+     const single=picked.length===1;
+     const ins=await sb().from('hero_slides').insert({image_url:url,storage_path:path,title:single?$('shTitle').value.trim():'',subtitle:single?$('shSub').value.trim():'',sort:next++,active:true});
+     if(ins.error){try{await sb().storage.from('hero-images').remove([path]);}catch(e){}throw ins.error;}
+     done++;
+    }
+    $('shFile').value='';$('shTitle').value='';$('shSub').value='';$('shPrev').innerHTML='';$('shPrev').hidden=true;$('shInfo').textContent='';$('shMultiHint').hidden=true;picked=[];
+    note('✅ '+done+' photo'+(done>1?'s':'')+' added to the home slider','success');
+   }catch(err){note(missing(err)?SETUP:'Upload failed: '+(err.message||err)+(done?' ('+done+' uploaded)':''),'error');}
    b.disabled=false;b.textContent='⬆ Upload & add to slider';
+   await renderSlider();loadHero();
   });
  }
  async function renderSlider(){
@@ -9337,6 +9488,39 @@ html:root:root body #questionsContainer .option>span:not(.opt-tag){user-select:t
 .mq-q ol{margin:8px 0 0 30px;padding:0;font-size:13.5px;line-height:1.6}.mq-q li.ok{font-weight:900;color:#15803d}
 .mq-qb{display:flex;gap:8px;margin-top:8px}
 .mq-off{opacity:.55}
+
+/* ---------- live class: Facebook-style overlay + moderation ---------- */
+.live-stage{position:relative}
+.live-ov-top{position:absolute;left:10px;top:10px;display:flex;gap:6px;z-index:4;pointer-events:none}
+.live-ov-top span{padding:4px 11px;border-radius:99px;background:rgba(0,0,0,.55);color:#fff;font-weight:800;font-size:12.5px;backdrop-filter:blur(6px)}
+.live-ov-top .live-ov-live{background:#e11d48}
+.live-ov-comments{position:absolute;left:10px;right:96px;bottom:54px;max-height:48%;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;gap:6px;z-index:4;pointer-events:none}
+.live-ov-msg{display:flex;gap:8px;align-items:flex-start;width:fit-content;max-width:92%;padding:6px 12px 6px 6px;border-radius:16px;background:rgba(0,0,0,.55);color:#fff!important;font-size:13px;line-height:1.3;backdrop-filter:blur(6px);animation:ovIn .3s ease;transition:opacity .5s,transform .5s}
+.live-ov-msg *{color:#fff!important;-webkit-text-fill-color:#fff!important}
+.live-ov-msg i{flex:0 0 24px;height:24px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:12px;font-weight:900;background:linear-gradient(135deg,#7c5cff,#d63a78)}
+.live-ov-msg strong{display:block;font-size:11.5px;opacity:.9}
+.live-ov-msg.teacher{background:rgba(168,132,26,.82)}
+.live-ov-msg.out{opacity:0;transform:translateY(-8px)}
+@keyframes ovIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.live-ov-mic{position:absolute;right:10px;bottom:10px;z-index:5;min-height:42px;padding:0 16px;border:0;border-radius:99px;font-weight:900;font-size:14px;color:#fff;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);cursor:pointer;box-shadow:0 8px 20px -8px rgba(0,0,0,.6)}
+.live-ov-mic.on{background:#16a34a}.live-ov-mic:disabled{background:rgba(120,20,20,.8);cursor:not-allowed}
+.live-ov-form{position:absolute;left:10px;right:10px;bottom:8px;display:none;gap:6px;z-index:6}
+.live-ov-form input{flex:1;min-width:0;height:40px;padding:0 14px;border:0;border-radius:99px;background:rgba(0,0,0,.62);color:#fff;font:inherit}
+.live-ov-form input::placeholder{color:rgba(255,255,255,.7)}
+.live-ov-form button{width:44px;border:0;border-radius:50%;background:#7c3aed;color:#fff;font-size:16px;cursor:pointer}
+.live-stage:fullscreen .live-ov-form,.live-stage:-webkit-full-screen .live-ov-form{display:flex}
+.live-stage:fullscreen .live-ov-mic,.live-stage:-webkit-full-screen .live-ov-mic{bottom:62px}
+.live-stage:fullscreen .live-ov-comments,.live-stage:-webkit-full-screen .live-ov-comments{bottom:108px}
+.live-mini{margin-left:auto;border:0;cursor:pointer;padding:4px 12px;border-radius:99px;font-size:12px;font-weight:800;background:rgba(239,68,68,.14);color:#b91c1c}
+.live-vrow{display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:8px 10px;margin:0 0 6px;border-radius:14px;border:1px solid var(--dr-line,#e5e7ee);background:var(--dr-card,#fff);transition:box-shadow .2s}
+.live-vrow.speaking{box-shadow:0 0 0 2px #22c55e,0 6px 16px -6px rgba(34,197,94,.7)}
+.live-vrow .vr-name{font-weight:800;font-size:13.5px;flex:1 1 90px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.live-vrow .vr-st{font-size:12px;font-weight:800;opacity:.8}
+.vr-btns{display:flex;gap:6px;flex-wrap:wrap;width:100%}
+.vr-btns button,.live-brow button{border:0;cursor:pointer;padding:6px 11px;border-radius:10px;font-size:12px;font-weight:800;background:rgba(124,92,255,.14);color:var(--dr-ink,#1a1830)}
+.vr-btns button.danger{background:rgba(239,68,68,.14);color:#b91c1c}
+.live-brow{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 10px;margin-bottom:6px;border-radius:12px;background:rgba(239,68,68,.08);font-size:13px;font-weight:700}
+.live-blocked-title{margin-top:14px}
 
 </style>
 <script id="v46-premium-js">
