@@ -1448,6 +1448,16 @@ html[data-theme="dark"] a{color:#b9baff}
   </section>
 
   <!-- Dedicated Admin pages -->
+  <section id="screen-admin-slider" hidden>
+    <button class="back-btn" id="backFromAdminSlider" type="button">← Back to Admin Dashboard</button>
+    <div class="admin-head"><div><span class="admin-badge">🖼️ HOME SLIDER</span><h2>Home Slider</h2><p>Add photos from your phone — they appear on the home page slider for every student.</p></div></div>
+    <div id="adminSliderContent"></div>
+  </section>
+  <section id="screen-admin-mcq-add" hidden>
+    <button class="back-btn" id="backFromAdminMcqAdd" type="button">← Back to Admin Dashboard</button>
+    <div class="admin-head"><div><span class="admin-badge">🧩 EXAM BUILDER</span><h2>MCQ Exam Adding</h2><p>Create MCQ exams right from the app — no code editing needed.</p></div></div>
+    <div id="adminMcqAddContent"></div>
+  </section>
   <section id="screen-admin-materials" hidden>
     <button class="back-btn" id="backFromAdminMaterials" type="button">← Back to Admin Dashboard</button>
     <div class="admin-head"><div><span class="admin-badge">📎 CONTENT MANAGEMENT</span><h2>Study Materials</h2><p>Add and manage PDF notes and video lessons.</p></div></div>
@@ -1497,6 +1507,8 @@ html[data-theme="dark"] a{color:#b9baff}
         <button class="admin-action-card" id="adminGoSubjects">📚<span>Exam / Answer Key</span><small>View correct answers for any exam</small></button>
         <button class="admin-action-card" id="adminGoWritten">✍️<span>CQ Exam Adding</span><small>Create, manage and mark written exams</small></button>
         <button class="admin-action-card" id="adminGoMaterials">📎<span>Materials Adding</span><small>Add and manage PDF / video materials</small></button>
+        <button class="admin-action-card" id="adminGoMcqAdd">🧩<span>MCQ Exam Adding</span><small>Create MCQ exams from the app</small></button>
+        <button class="admin-action-card" id="adminGoSlider">🖼️<span>Home Slider</span><small>Add photos to the home slider from your phone</small></button>
         <button class="admin-action-card" id="adminGoMcqHistory">📊<span>MCQ Result History</span><small>View objective exam results separately</small></button>
         <button class="admin-action-card" id="adminGoCqHistory">📝<span>CQ Result History</span><small>View written exam results separately</small></button>
         <button class="admin-action-card" id="adminGoExamDataManager">🧰<span>Exam Data Manager</span><small>Search any student or exam, edit marks and manage records</small></button>
@@ -3559,7 +3571,7 @@ function hideAllScreens(){
   document.querySelectorAll("[data-study-page]").forEach(function(s){ s.hidden = true; });
   document.querySelectorAll("[data-extra-page]").forEach(function(s){ s.hidden = true; });
   if($("screen-admin-study")) $("screen-admin-study").hidden = true;
-  ["screen-admin-materials","screen-admin-mcq-history","screen-admin-cq-history","screen-admin-exam-data","screen-live-class"].forEach(id=>{if($(id))$(id).hidden=true;});
+  ["screen-admin-slider","screen-admin-mcq-add","screen-admin-materials","screen-admin-mcq-history","screen-admin-cq-history","screen-admin-exam-data","screen-live-class"].forEach(id=>{if($(id))$(id).hidden=true;});
   if($("screen-profile")) $("screen-profile").hidden = true;
   if($("screen-admin")) $("screen-admin").hidden = true;
   if($("screen-messages")) $("screen-messages").hidden = true;
@@ -6724,6 +6736,7 @@ html:root:root body :is(#standaloneMessageForm,.exam-feedback-panel form) button
 /* 1) Hero: homepage only, slides move right -> left every 2 seconds */
 (function(){
  function init(){
+  if(window.__heroT){clearInterval(window.__heroT);window.__heroT=null;}
   var root=document.getElementById('homeHeroCarousel'); if(!root) return;
   var slides=[].slice.call(root.querySelectorAll('.hero-slide'));
   var dotBox=root.querySelector('.hero-dots'), n=slides.length; if(!n) return;
@@ -6734,19 +6747,19 @@ html:root:root body :is(#standaloneMessageForm,.exam-feedback-panel form) button
   slides.forEach(function(_,i){place(i,i===0?0:100,false);});mark();
   function go(k){k=(k+n)%n; if(k===cur) return; place(k,100,false); void slides[k].offsetWidth; place(cur,-100,true); place(k,0,true); cur=k; mark();}
   function tick(){ if(root.hidden||document.hidden) return; go(cur+1); }
-  function start(){ if(!timer) timer=setInterval(tick,3000); }
+  function start(){ if(!timer){ timer=setInterval(tick,3000); window.__heroT=timer; } }
   function restart(){ clearInterval(timer); timer=null; start(); }
   start();
-  document.addEventListener('visibilitychange',function(){ if(!document.hidden) restart(); });
+  window.__heroRestart=restart; if(!window.__heroVis){ window.__heroVis=1; document.addEventListener('visibilitychange',function(){ if(!document.hidden&&window.__heroRestart) window.__heroRestart(); }); }
   // visible only on the home screen
   var wrap=document.querySelector('.wrap')||document.body;
   function homeNow(){ var h=document.getElementById('screen-subjects'); return !h || (!h.hidden); }
   function sync(){ var show=homeNow(); root.hidden=!show; root.style.display=''; }
-  new MutationObserver(sync).observe(wrap,{attributes:true,attributeFilter:['hidden'],subtree:true});
-  window.addEventListener('popstate',function(){setTimeout(sync,80);});
+  window.__heroSync=sync; if(!window.__heroObs){ window.__heroObs=1; new MutationObserver(function(){ if(window.__heroSync) window.__heroSync(); }).observe(wrap,{attributes:true,attributeFilter:['hidden'],subtree:true}); window.addEventListener('popstate',function(){ setTimeout(function(){ if(window.__heroSync) window.__heroSync(); },80); }); }
   sync();
  }
- if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+ window.__heroInit=init;
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
 
 /* 2) Navbar: only the current / clicked button is highlighted; Notify vanishes on click */
@@ -8725,6 +8738,328 @@ html:root:root body .nav-search-wrap{height:36px!important}
 </script>
 
 
+<script id="v47-admin-tools">
+(function(){
+ 'use strict';
+ const $=id=>document.getElementById(id);
+ const note=(m,t)=>{try{toast(m,t||'info',3600);}catch(e){alert(m);}};
+ const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const sb=()=>window.supabaseClient||null;
+ const SETUP='Run setup-v47.sql in Supabase first.';
+ const missing=e=>/relation|does not exist|schema cache|bucket|not found/i.test(String(e&&e.message||e));
+ function showPage(id,title){if(typeof hideAllScreens==='function')hideAllScreens();document.querySelectorAll('.wrap > section').forEach(x=>x.hidden=true);$(id).hidden=false;if($('topSub'))$('topSub').textContent=title;window.scrollTo({top:0,behavior:'smooth'});}
+ const backToDash=()=>typeof showAdminDashboard==='function'?showAdminDashboard():showPage('screen-admin','Admin Dashboard');
+
+ /* =====================  HOME SLIDER (public part)  ===================== */
+ const HKEY='drHeroSlides';let lastSig='',defaultsHtml=null;
+ function slideHtml(r,i){
+  const u=encodeURI(String(r.image_url||'')).replace(/'/g,'%27');
+  const txt=(r.title||r.subtitle)?'<div class="hero-slide-content">'+(r.title?'<h2>'+esc(r.title)+'</h2>':'')+(r.subtitle?'<p>'+esc(r.subtitle)+'</p>':'')+'</div>':'';
+  return '<article class="hero-slide hero-custom'+(i===0?' active':'')+'" style="background-image:url(\''+u+'\')">'+txt+'</article>';
+ }
+ function applyHero(rows){
+  const root=$('homeHeroCarousel'),track=root&&root.querySelector('.hero-track');if(!track)return;
+  if(defaultsHtml===null)defaultsHtml=track.innerHTML;
+  if(rows&&rows.length){track.innerHTML=rows.map(slideHtml).join('');track.dataset.custom='1';}
+  else if(track.dataset.custom==='1'){track.innerHTML=defaultsHtml;track.dataset.custom='';}
+  else return;
+  if(window.__heroInit)window.__heroInit();
+ }
+ const slim=rows=>rows.map(x=>({image_url:x.image_url,title:x.title||'',subtitle:x.subtitle||''}));
+ async function loadHero(){
+  if(!sb())return;
+  try{
+   const r=await sb().from('hero_slides').select('*').eq('active',true).order('sort',{ascending:true}).order('created_at',{ascending:true});
+   if(r.error)return;
+   const rows=r.data||[],sig=JSON.stringify(slim(rows));
+   try{if(rows.length)localStorage.setItem(HKEY,sig);else localStorage.removeItem(HKEY);}catch(e){}
+   if(sig!==lastSig){lastSig=sig;applyHero(rows);}
+  }catch(e){}
+ }
+ function bootHero(){
+  const root=$('homeHeroCarousel'),track=root&&root.querySelector('.hero-track');if(track)defaultsHtml=track.innerHTML;
+  try{const c=JSON.parse(localStorage.getItem(HKEY)||'null');if(Array.isArray(c)&&c.length){lastSig=JSON.stringify(c);applyHero(c);}}catch(e){}
+  setTimeout(loadHero,700);setInterval(loadHero,120000);
+ }
+
+ /* =====================  HOME SLIDER (admin page)  ===================== */
+ let sRows=[],picked=null;
+ async function compress(file){
+  const url=URL.createObjectURL(file);
+  try{
+   const img=await new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=()=>rej(new Error('This image could not be read. Try a JPG or PNG photo.'));i.src=url;});
+   const max=1600;let w=img.naturalWidth,h=img.naturalHeight;const k=Math.min(1,max/Math.max(w,h));w=Math.round(w*k);h=Math.round(h*k);
+   const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);
+   const blob=await new Promise(res=>c.toBlob(res,'image/jpeg',0.82));if(!blob)throw new Error('Could not process the image.');
+   return {blob,w,h};
+  }finally{URL.revokeObjectURL(url);}
+ }
+ function buildSlider(){
+  const box=$('adminSliderContent');if(!box||$('shFile'))return;
+  box.innerHTML='<div class="profile-card admin-card"><h3>➕ Add a photo</h3><p class="card-hint">Pick a photo from your phone gallery or camera. It is resized automatically and shown on the home slider for every student.</p>'
+   +'<label class="sh-pick"><input type="file" id="shFile" accept="image/*"><span>📷 Choose photo from phone</span></label>'
+   +'<div id="shPrev" class="sh-prev" hidden><img id="shImg" alt="Preview"><small id="shInfo"></small></div>'
+   +'<div class="mat-admin-form"><label class="wide">Title on the photo (optional)<input id="shTitle" maxlength="80" placeholder="e.g. Admission Batch 2027"></label><label class="wide">Small text (optional)<input id="shSub" maxlength="140" placeholder="e.g. Enrol now · Limited seats"></label></div>'
+   +'<button class="btn btn-primary" id="shUpload" type="button">⬆ Upload &amp; add to slider</button><p class="card-hint">Tip: wide (landscape) photos look best. Leave the texts empty to show only the picture.</p></div>'
+   +'<div class="profile-card admin-card"><h3>🖼️ Current slides</h3><div id="shList" class="sh-list"></div><p class="card-hint">As soon as you add one photo, only your photos are shown. Delete them all to bring the default slides back.</p></div>';
+  $('shFile').addEventListener('change',async e=>{
+   const f=e.target.files&&e.target.files[0];picked=null;$('shPrev').hidden=true;if(!f)return;
+   try{const c=await compress(f);picked=c;$('shImg').src=URL.createObjectURL(c.blob);$('shInfo').textContent=c.w+'×'+c.h+' · '+Math.round(c.blob.size/1024)+' KB';$('shPrev').hidden=false;}
+   catch(err){note(String(err.message||err),'error');}
+  });
+  $('shUpload').addEventListener('click',async()=>{
+   if(!picked){note('Choose a photo first.','warning');return;}
+   const b=$('shUpload');b.disabled=true;b.textContent='Uploading…';
+   try{
+    const path='slides/'+Date.now()+'-'+Math.random().toString(36).slice(2,8)+'.jpg';
+    const up=await sb().storage.from('hero-images').upload(path,picked.blob,{contentType:'image/jpeg',cacheControl:'31536000',upsert:false});
+    if(up.error)throw up.error;
+    const pu=sb().storage.from('hero-images').getPublicUrl(path);const url=pu&&pu.data&&pu.data.publicUrl;if(!url)throw new Error('No public URL returned.');
+    const next=sRows.reduce((m,x)=>Math.max(m,Number(x.sort)||0),0)+1;
+    const ins=await sb().from('hero_slides').insert({image_url:url,storage_path:path,title:$('shTitle').value.trim(),subtitle:$('shSub').value.trim(),sort:next,active:true});
+    if(ins.error){try{await sb().storage.from('hero-images').remove([path]);}catch(e){}throw ins.error;}
+    $('shFile').value='';$('shTitle').value='';$('shSub').value='';$('shPrev').hidden=true;picked=null;
+    note('✅ Photo added to the home slider','success');await renderSlider();loadHero();
+   }catch(err){note(missing(err)?SETUP:'Upload failed: '+(err.message||err),'error');}
+   b.disabled=false;b.textContent='⬆ Upload & add to slider';
+  });
+ }
+ async function renderSlider(){
+  buildSlider();const list=$('shList');if(!list||!sb())return;
+  const r=await sb().from('hero_slides').select('*').order('sort',{ascending:true}).order('created_at',{ascending:true});
+  if(r.error){list.innerHTML='<div class="mat-admin-empty">'+esc(missing(r.error)?SETUP:r.error.message)+'</div>';return;}
+  sRows=r.data||[];
+  if(!sRows.length){list.innerHTML='<div class="mat-admin-empty">No custom slides yet — the default slides are showing.</div>';return;}
+  list.innerHTML='';
+  sRows.forEach((s,i)=>{
+   const row=document.createElement('div');row.className='sh-row'+(s.active===false?' off':'');
+   row.innerHTML='<img src="'+esc(s.image_url)+'" alt=""><div class="sh-tx"><strong>'+esc(s.title||'(no title)')+'</strong><small>'+esc(s.subtitle||'')+'</small></div><div class="sh-bt"><button type="button" data-a="up" '+(i===0?'disabled':'')+'>▲</button><button type="button" data-a="dn" '+(i===sRows.length-1?'disabled':'')+'>▼</button><button type="button" data-a="ed">✏️</button><button type="button" data-a="vis">'+(s.active===false?'🙈':'👁')+'</button><button type="button" data-a="del" class="danger">🗑</button></div>';
+   row.querySelectorAll('button').forEach(btn=>btn.addEventListener('click',()=>slideAction(btn.dataset.a,i)));
+   list.appendChild(row);
+  });
+ }
+ async function slideAction(a,i){
+  const s=sRows[i];if(!s)return;
+  try{
+   if(a==='up'||a==='dn'){
+    const j=a==='up'?i-1:i+1,o=sRows[j];if(!o)return;
+    let sa=Number(s.sort)||i+1,sb_=Number(o.sort)||j+1;if(sa===sb_){sa=i+1;sb_=j+1;}
+    const r1=await sb().from('hero_slides').update({sort:sb_}).eq('id',s.id);const r2=await sb().from('hero_slides').update({sort:sa}).eq('id',o.id);
+    if(r1.error||r2.error)throw (r1.error||r2.error);
+   }else if(a==='vis'){const r=await sb().from('hero_slides').update({active:s.active===false}).eq('id',s.id);if(r.error)throw r.error;}
+   else if(a==='ed'){
+    const t=window.prompt('Title on the photo (leave empty for none):',s.title||'');if(t===null)return;
+    const u=window.prompt('Small text (leave empty for none):',s.subtitle||'');if(u===null)return;
+    const r=await sb().from('hero_slides').update({title:t.trim(),subtitle:u.trim()}).eq('id',s.id);if(r.error)throw r.error;
+   }else if(a==='del'){
+    const ok=await customConfirm('Delete this photo from the slider?',{okText:'Yes, delete',cancelText:'Keep',icon:'🗑️'});if(!ok)return;
+    const r=await sb().from('hero_slides').delete().eq('id',s.id);if(r.error)throw r.error;
+    if(s.storage_path){try{await sb().storage.from('hero-images').remove([s.storage_path]);}catch(e){}}
+    note('Photo deleted','success');
+   }
+   await renderSlider();loadHero();
+  }catch(err){note('Could not update: '+(err.message||err),'error');}
+ }
+
+ /* =====================  MCQ EXAMS ADDED FROM THE APP  ===================== */
+ let cRows=[],cAdded=[],pending=[],editId=null,editQ=-1;
+ const LET={A:0,B:1,C:2,D:3,a:0,b:1,c:2,d:3,'ক':0,'খ':1,'গ':2,'ঘ':3,'1':0,'2':1,'3':2,'4':3,'১':0,'২':1,'৩':2,'৪':3};
+ function parseQuestions(raw){
+  const txt=String(raw||'').trim(),errors=[],qs=[];
+  if(!txt)return {qs,errors:['Paste some questions first.']};
+  /* 1) JSON / the same array format used in the code (q / options / answer) */
+  if(/^\s*[\[{]/.test(txt)||/(^|[\s,{])q\s*:/.test(txt)){
+   try{
+    let s=txt.replace(/^\s*(?:const|let|var)\s+\w+\s*=\s*/,'').replace(/;\s*$/,'');
+    if(!/^\s*\[/.test(s))s='['+s.replace(/,\s*$/,'')+']';
+    s=s.replace(/([{,]\s*)([A-Za-z_]\w*)\s*:/g,'$1"$2":').replace(/,\s*([\]}])/g,'$1');
+    const arr=JSON.parse(s);
+    if(Array.isArray(arr)){
+     arr.forEach((o,i)=>{
+      const q=String(o.q||o.question||'').trim(),opts=(o.options||o.opts||[]).map(x=>String(x).trim());
+      let a=o.answer!=null?o.answer:(o.ans!=null?o.ans:o.correct);
+      if(typeof a==='string'&&a in LET)a=LET[a];
+      qs.push({q,options:opts,answer:Number(a),_n:i+1});
+     });
+     return {qs:validate(qs,errors),errors};
+    }
+   }catch(e){/* fall back to text format */}
+  }
+  /* 2) plain text: question, A) B) C) D) options, "Ans: B" */
+  const optRe=/^\s*\(?([A-Da-dক-ঘ])[\)\.\:\-]\s*(.*\S)\s*$/,ansRe=/^\s*(?:ans(?:wer)?|correct|উত্তর|সঠিক(?:\s*উত্তর)?)\s*[:\-=]?\s*\(?\s*([A-Da-dক-ঘ1-4১-৪])\s*\)?/i,numRe=/^\s*(?:Q(?:uestion)?\s*)?[\(\[]?(\d+|[০-৯]+)[\)\]\.\:\-]\s*(.+)$/i;
+  let cur=null,n=0;
+  const fin=()=>{if(cur){cur._n=++n;qs.push(cur);cur=null;}};
+  txt.split(/\r?\n/).forEach(line=>{
+   if(!line.trim())return;
+   let m=ansRe.exec(line);
+   if(m&&cur){cur.answer=LET[m[1]];return;}
+   m=optRe.exec(line);
+   if(m&&cur&&cur.options.length<4){let t=m[2],star=/\s*(\*|✓|✔)\s*$/.test(t);t=t.replace(/\s*(\*|✓|✔)\s*$/,'').trim();cur.options.push(t);if(star)cur.answer=cur.options.length-1;return;}
+   if(cur&&cur.options.length===0&&cur.answer==null){cur.q+='\n'+line.trim();return;}
+   fin();const nm=numRe.exec(line);cur={q:(nm?nm[2]:line).trim(),options:[],answer:null};
+  });
+  fin();
+  return {qs:validate(qs,errors),errors};
+ }
+ function validate(qs,errors){
+  const ok=[];
+  qs.forEach(q=>{
+   const tag='Question '+q._n;
+   if(!q.q){errors.push(tag+': question text is empty.');return;}
+   if(!Array.isArray(q.options)||q.options.length!==4||q.options.some(o=>!o)){errors.push(tag+': needs exactly 4 non-empty options.');return;}
+   if(!(q.answer>=0&&q.answer<=3)){errors.push(tag+': correct answer is missing (use Ans: A/B/C/D).');return;}
+   ok.push({q:q.q,options:q.options,answer:q.answer});
+  });
+  return ok;
+ }
+ /* ---- merge into examData for everybody ---- */
+ function ensureExams(){
+  let changed=false;
+  cRows.forEach(r=>{
+   if(r.active===false)return;
+   try{
+    const sub=examData[r.subject];if(!sub)return;sub.chapters=sub.chapters||{};
+    let newCh=false;if(!sub.chapters[r.chapter]){sub.chapters[r.chapter]={exams:{},_custom:true};newCh=true;}
+    const ch=sub.chapters[r.chapter];ch.exams=ch.exams||{};
+    if(ch.exams[r.exam_name]){if(newCh)changed=true;return;}
+    ch.exams[r.exam_name]={examTime:Number(r.exam_time)||20,questions:Array.isArray(r.questions)?r.questions:[],_dbId:r.id};
+    cAdded.push({s:r.subject,c:r.chapter,e:r.exam_name});changed=true;
+   }catch(e){}
+  });
+  return changed;
+ }
+ function refreshScreens(){
+  try{renderSubjects();}catch(e){}
+  try{const S=state;if($('screen-chapters')&&!$('screen-chapters').hidden&&S.selectedSubject)showChapters(S.selectedSubject);}catch(e){}
+ }
+ function rebuildExams(){
+  cAdded.forEach(a=>{try{const ch=examData[a.s].chapters[a.c];if(ch&&ch.exams&&ch.exams[a.e]&&ch.exams[a.e]._dbId)delete ch.exams[a.e];}catch(e){}});cAdded=[];
+  ensureExams();refreshScreens();
+ }
+ async function loadExams(){
+  if(!sb())return;
+  try{const r=await sb().from('custom_mcq_exams').select('*').order('created_at',{ascending:true});
+   if(!r.error&&Array.isArray(r.data)){const sig=JSON.stringify(r.data.map(x=>[x.id,x.active,x.exam_name,x.exam_time,(x.questions||[]).length]));if(sig!==loadExams.sig){loadExams.sig=sig;cRows=r.data;rebuildExams();fillList();}}
+   else if(r.error)console.debug('custom_mcq_exams not ready:',r.error.message);
+  }catch(e){}
+ }
+ /* ---- admin builder page ---- */
+ function buildMcq(){
+  const box=$('adminMcqAddContent');if(!box||$('mqBuilder'))return;
+  box.innerHTML='<div class="profile-card admin-card" id="mqBuilder"><h3 id="mqBTitle">🧩 Add MCQ Exam</h3><p class="card-hint">Choose where the exam goes, then paste your questions (same array you used in the code works!) or add them one by one.</p>'
+   +'<div class="mat-admin-form"><label>Level<select id="mqLevel"><option>SSC</option><option selected>HSC</option><option>Admission</option></select></label><label>Subject<select id="mqSubject"></select></label>'
+   +'<label>Chapter<select id="mqChapter"></select></label><label class="wide" id="mqNewWrap" hidden>New chapter name<input id="mqNewChapter" maxlength="140" placeholder="e.g. Chapter 4: Web Design"></label>'
+   +'<label class="wide">Exam name<input id="mqName" maxlength="120" placeholder="e.g. Exam 3 (Board Questions)"></label><label>Time (minutes)<input id="mqTime" type="number" min="1" max="300" value="20"></label></div>'
+   +'<div class="mq-tabs"><button type="button" class="on" data-t="paste">📋 Paste many</button><button type="button" data-t="one">✍️ Add one</button></div>'
+   +'<div id="mqPanePaste"><textarea id="mqPaste" rows="9" placeholder="Option 1 — text format:&#10;1. Question text&#10;A) first option&#10;B) second option&#10;C) third option&#10;D) fourth option&#10;Ans: B&#10;&#10;Option 2 — the array from your code:&#10;[{ q: &quot;Question?&quot;, options: [&quot;a&quot;,&quot;b&quot;,&quot;c&quot;,&quot;d&quot;], answer: 1 }, ...]"></textarea><button type="button" class="btn btn-primary" id="mqParse">➕ Add these questions</button></div>'
+   +'<div id="mqPaneOne" hidden><textarea id="mqQ" rows="3" placeholder="Question"></textarea><div class="mq-opts"><label><b>A</b><input id="mqO0" placeholder="Option A"></label><label><b>B</b><input id="mqO1" placeholder="Option B"></label><label><b>C</b><input id="mqO2" placeholder="Option C"></label><label><b>D</b><input id="mqO3" placeholder="Option D"></label></div>'
+   +'<label class="mq-ans">Correct answer <select id="mqAns"><option value="0">A</option><option value="1">B</option><option value="2">C</option><option value="3">D</option></select></label><button type="button" class="btn btn-primary" id="mqAddOne">➕ Add question</button></div>'
+   +'<div id="mqMsg" class="mq-msg" hidden></div>'
+   +'<h4 class="mq-h">Questions in this exam <span id="mqCount">0</span></h4><div id="mqPending" class="mq-pending"></div>'
+   +'<div class="tp-actions"><button type="button" class="btn btn-primary" id="mqPublish">💾 Publish exam</button><button type="button" class="btn btn-ghost" id="mqReset">↺ Clear form</button></div></div>'
+   +'<div class="profile-card admin-card"><h3>📚 Exams added from the app</h3><div id="mqList" class="mat-admin-list"></div></div>';
+  $('mqLevel').addEventListener('change',fillSubjects);$('mqSubject').addEventListener('change',fillChapters);
+  $('mqChapter').addEventListener('change',()=>{$('mqNewWrap').hidden=$('mqChapter').value!=='__new';});
+  box.querySelectorAll('.mq-tabs button').forEach(b=>b.addEventListener('click',()=>{box.querySelectorAll('.mq-tabs button').forEach(x=>x.classList.toggle('on',x===b));$('mqPanePaste').hidden=b.dataset.t!=='paste';$('mqPaneOne').hidden=b.dataset.t!=='one';}));
+  $('mqParse').addEventListener('click',()=>{
+   const r=parseQuestions($('mqPaste').value);
+   if(r.qs.length){pending.push(...r.qs);$('mqPaste').value=r.errors.length?$('mqPaste').value:'';}
+   msg(r.errors.length?(r.qs.length?'Added '+r.qs.length+' question(s). Fix these and add again:\n':'Nothing added:\n')+r.errors.join('\n'):'✅ Added '+r.qs.length+' question(s).',r.errors.length?'warn':'ok');drawPending();
+  });
+  $('mqAddOne').addEventListener('click',()=>{
+   const q={q:$('mqQ').value.trim(),options:[0,1,2,3].map(i=>$('mqO'+i).value.trim()),answer:Number($('mqAns').value)};
+   const v=validate([Object.assign({_n:pending.length+1},q)],[]);
+   if(!v.length){msg('Write the question and all 4 options.','warn');return;}
+   if(editQ>=0){pending.splice(editQ,0,v[0]);editQ=-1;}else pending.push(v[0]);
+   $('mqQ').value='';[0,1,2,3].forEach(i=>$('mqO'+i).value='');$('mqAns').value='0';msg('✅ Question added.','ok');drawPending();
+  });
+  $('mqPublish').addEventListener('click',publish);$('mqReset').addEventListener('click',resetForm);
+  fillSubjects();drawPending();fillList();
+ }
+ function msg(t,k){const m=$('mqMsg');if(!m)return;m.textContent=t;m.className='mq-msg '+(k||'');m.hidden=!t;}
+ function fillSubjects(){
+  const lv=$('mqLevel').value,cur=$('mqSubject').value,list=window.subjectsForLevel?window.subjectsForLevel(lv):[];
+  $('mqSubject').innerHTML='';list.forEach(s=>{const o=document.createElement('option');o.value=s.key;o.textContent=s.label;$('mqSubject').appendChild(o);});
+  if(cur&&[...$('mqSubject').options].some(o=>o.value===cur))$('mqSubject').value=cur;fillChapters();
+ }
+ function fillChapters(){
+  const s=$('mqSubject').value,sel=$('mqChapter'),cur=sel.value;sel.innerHTML='';
+  Object.keys((examData[s]||{}).chapters||{}).forEach(c=>{const o=document.createElement('option');o.value=c;o.textContent=c;sel.appendChild(o);});
+  const n=document.createElement('option');n.value='__new';n.textContent='➕ New chapter…';sel.appendChild(n);
+  if(cur&&[...sel.options].some(o=>o.value===cur))sel.value=cur;$('mqNewWrap').hidden=sel.value!=='__new';
+ }
+ function drawPending(){
+  const box=$('mqPending');if(!box)return;$('mqCount').textContent=pending.length;box.innerHTML='';
+  if(!pending.length){box.innerHTML='<div class="mat-admin-empty">No questions yet.</div>';return;}
+  pending.forEach((q,i)=>{
+   const d=document.createElement('div');d.className='mq-q';
+   d.innerHTML='<div class="mq-qh"><b>Q'+(i+1)+'</b><span>'+esc(q.q).replace(/\n/g,'<br>')+'</span></div><ol type="A">'+q.options.map((o,k)=>'<li class="'+(k===q.answer?'ok':'')+'">'+esc(o)+(k===q.answer?' ✓':'')+'</li>').join('')+'</ol><div class="mq-qb"><button type="button" data-e>✏️ Edit</button><button type="button" data-d class="danger">🗑 Remove</button></div>';
+   d.querySelector('[data-d]').addEventListener('click',()=>{pending.splice(i,1);drawPending();});
+   d.querySelector('[data-e]').addEventListener('click',()=>{
+    editQ=i;pending.splice(i,1);document.querySelector('#adminMcqAddContent .mq-tabs [data-t="one"]').click();
+    $('mqQ').value=q.q;q.options.forEach((o,k)=>$('mqO'+k).value=o);$('mqAns').value=String(q.answer);drawPending();$('mqQ').scrollIntoView({behavior:'smooth',block:'center'});
+   });
+   box.appendChild(d);
+  });
+ }
+ function resetForm(){
+  editId=null;editQ=-1;pending=[];$('mqName').value='';$('mqTime').value='20';$('mqPaste').value='';$('mqNewChapter').value='';$('mqBTitle').textContent='🧩 Add MCQ Exam';$('mqPublish').textContent='💾 Publish exam';msg('');drawPending();
+ }
+ async function publish(){
+  const subject=$('mqSubject').value;let chapter=$('mqChapter').value;const isNew=chapter==='__new';
+  if(isNew)chapter=$('mqNewChapter').value.trim();
+  const name=$('mqName').value.trim(),time=Math.max(1,Math.min(300,Number($('mqTime').value)||20));
+  if(!subject){msg('Choose a subject.','warn');return;}if(!chapter){msg('Choose a chapter (or type the new chapter name).','warn');return;}
+  if(!name){msg('Write the exam name.','warn');return;}if(!pending.length){msg('Add at least one question.','warn');return;}
+  try{const ex=examData[subject].chapters[chapter];if(ex&&ex.exams&&ex.exams[name]&&!(editId&&ex.exams[name]._dbId===editId)){msg('An exam with this name already exists in this chapter. Use a different name.','warn');return;}}catch(e){}
+  const b=$('mqPublish');b.disabled=true;
+  try{
+   const row={subject,chapter,exam_name:name,exam_time:time,questions:pending.map(q=>({q:q.q,options:q.options,answer:q.answer})),active:true};
+   let r;
+   if(editId)r=await sb().from('custom_mcq_exams').update(row).eq('id',editId);else r=await sb().from('custom_mcq_exams').insert(row);
+   if(r.error)throw r.error;
+   if(isNew){try{await sb().from('custom_chapters').insert({subject,chapter});if(window.drChapters)window.drChapters.reload();}catch(e){}}
+   note('✅ Exam published — students can see it now','success');
+   const wasEdit=!!editId;resetForm();loadExams.sig='';await loadExams();fillChapters();
+   if(wasEdit)note('Exam updated','success');
+  }catch(err){msg(missing(err)?SETUP:'Could not publish: '+(err.message||err),'warn');}
+  b.disabled=false;
+ }
+ function fillList(){
+  const box=$('mqList');if(!box)return;box.innerHTML='';
+  if(!cRows.length){box.innerHTML='<div class="mat-admin-empty">No exams added from the app yet.</div>';return;}
+  cRows.slice().reverse().forEach(r=>{
+   const row=document.createElement('div');row.className='mat-admin-item'+(r.active===false?' mq-off':'');
+   row.innerHTML='<div class="mi-ic">🧩</div><div class="mi-tx"><strong>'+esc(r.exam_name)+'</strong><small>'+esc(r.subject)+' · '+esc(r.chapter)+' · '+(r.questions||[]).length+' questions · '+r.exam_time+' min'+(r.active===false?' · hidden':'')+'</small></div>';
+   const mk=(t,fn,cls)=>{const b=document.createElement('button');b.type='button';b.textContent=t;if(cls)b.className=cls;b.addEventListener('click',fn);row.appendChild(b);};
+   mk('✏️ Edit',()=>{
+    let lv='HSC';try{lv=levelOf(r.subject)||'HSC';}catch(e){}
+    $('mqLevel').value=lv;fillSubjects();$('mqSubject').value=r.subject;fillChapters();
+    if(![...$('mqChapter').options].some(o=>o.value===r.chapter)){const o=document.createElement('option');o.value=r.chapter;o.textContent=r.chapter;$('mqChapter').insertBefore(o,$('mqChapter').lastChild);}
+    $('mqChapter').value=r.chapter;$('mqNewWrap').hidden=true;$('mqName').value=r.exam_name;$('mqTime').value=r.exam_time;
+    pending=(r.questions||[]).map(q=>({q:q.q,options:q.options.slice(),answer:q.answer}));editId=r.id;$('mqBTitle').textContent='✏️ Edit MCQ Exam';$('mqPublish').textContent='💾 Save changes';drawPending();$('mqBuilder').scrollIntoView({behavior:'smooth'});
+   });
+   mk(r.active===false?'👁 Show':'🙈 Hide',async()=>{const x=await sb().from('custom_mcq_exams').update({active:r.active===false}).eq('id',r.id);if(x.error){note('Could not update: '+x.error.message,'error');return;}loadExams.sig='';await loadExams();});
+   mk('🗑 Delete',async()=>{const ok=await customConfirm('Delete exam "'+r.exam_name+'"? Student results already saved are kept.',{okText:'Yes, delete',cancelText:'Keep',icon:'🗑️'});if(!ok)return;const x=await sb().from('custom_mcq_exams').delete().eq('id',r.id);if(x.error){note('Could not delete: '+x.error.message,'error');return;}note('Exam deleted','success');loadExams.sig='';await loadExams();},'danger');
+   box.appendChild(row);
+  });
+ }
+
+ /* ---- wiring ---- */
+ function init(){
+  $('adminGoSlider')&&$('adminGoSlider').addEventListener('click',()=>{showPage('screen-admin-slider','Home Slider');renderSlider();});
+  $('adminGoMcqAdd')&&$('adminGoMcqAdd').addEventListener('click',()=>{showPage('screen-admin-mcq-add','MCQ Exam Adding');buildMcq();fillSubjects();fillList();});
+  $('backFromAdminSlider')&&$('backFromAdminSlider').addEventListener('click',backToDash);
+  $('backFromAdminMcqAdd')&&$('backFromAdminMcqAdd').addEventListener('click',backToDash);
+  bootHero();
+  setTimeout(loadExams,1100);setInterval(loadExams,180000);setInterval(()=>{if(ensureExams())refreshScreens();},4000);
+  const pb=$('profileBtn');if(pb)new MutationObserver(()=>setTimeout(loadExams,900)).observe(pb,{attributes:true,attributeFilter:['hidden']});
+  window.drMcqAdmin={reload:()=>{loadExams.sig='';return loadExams();},parse:parseQuestions};
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+
+</script>
 <style id="v46-premium">
 /* ===================== v46 · Premium layer ===================== */
 :root{--pr-gold:#c9a227;--pr-gold2:#f2d27a;--pr-ind:#4f46e5;--pr-vio:#7c3aed;--pr-ease:cubic-bezier(.22,.8,.3,1)}
@@ -8967,6 +9302,42 @@ html:root:root body #questionsContainer .option>span:not(.opt-tag){user-select:t
 #screen-announcements .ann-wbar small{opacity:.65}
 #screen-announcements .ann-login{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:14px;border-radius:16px;background:rgba(124,92,255,.08);font-weight:700}
 
+/* ---------- custom hero photo slides ---------- */
+.hero-slide.hero-custom{background-size:cover!important;background-position:center!important}
+.hero-slide.hero-custom:before{background:linear-gradient(to top,rgba(15,23,42,.55),rgba(15,23,42,.05) 60%)!important}
+
+/* ---------- admin: slider + MCQ builder ---------- */
+.sh-pick{display:block;margin:6px 0 14px;cursor:pointer}
+.sh-pick input{position:absolute;opacity:0;width:1px;height:1px}
+.sh-pick span{display:flex;align-items:center;justify-content:center;gap:10px;min-height:96px;border:2px dashed rgba(124,92,255,.55);border-radius:20px;background:linear-gradient(135deg,rgba(124,92,255,.08),rgba(201,162,39,.10));font-weight:900;font-size:16px;color:var(--dr-ink,#1a1830);transition:all .2s ease}
+.sh-pick:hover span{border-color:#7c5cff;transform:translateY(-2px)}
+.sh-prev{margin:0 0 14px}.sh-prev img{width:100%;max-height:230px;object-fit:cover;border-radius:18px;box-shadow:0 14px 30px -14px rgba(26,24,48,.45)}.sh-prev small{display:block;margin-top:6px;opacity:.7;font-weight:700}
+.sh-list{display:grid;gap:10px}
+.sh-row{display:flex;align-items:center;gap:12px;padding:10px;border-radius:18px;border:1px solid var(--dr-line,#e5e7ee);background:var(--dr-card,#fff)}
+.sh-row img{width:92px;height:58px;object-fit:cover;border-radius:12px;flex:0 0 auto}
+.sh-row.off{opacity:.55}
+.sh-tx{flex:1;min-width:0}.sh-tx strong{display:block;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.sh-tx small{display:block;opacity:.7;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sh-bt{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end;max-width:150px}
+.sh-bt button,.mq-qb button{all:unset;cursor:pointer;min-width:32px;height:32px;display:inline-grid;place-items:center;padding:0 8px;border-radius:10px;background:rgba(124,92,255,.12);font-size:13px;font-weight:800;color:var(--dr-ink,#1a1830);box-sizing:border-box}
+.sh-bt button:disabled{opacity:.3;cursor:default}.sh-bt button.danger,.mq-qb button.danger{background:rgba(239,68,68,.14);color:#b91c1c}
+.mq-tabs{display:inline-flex;gap:4px;padding:4px;margin:16px 0 10px;border-radius:14px;background:rgba(124,92,255,.08);border:1px solid var(--dr-line,#e5e7ee)}
+.mq-tabs button{all:unset;cursor:pointer;padding:8px 16px;border-radius:10px;font-weight:800;font-size:13.5px;color:var(--dr-ink,#1a1830)}
+.mq-tabs button.on{color:#fff;background:linear-gradient(135deg,#4f46e5,#7c3aed)}
+#adminMcqAddContent textarea{width:100%;border-radius:14px;padding:12px;font:inherit;border:1.5px solid var(--dr-line,#d9dce6);background:var(--dr-card,#fff);color:var(--dr-ink,#1a1830);margin-bottom:10px;resize:vertical}
+.mq-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.mq-opts label{display:flex;align-items:center;gap:8px}.mq-opts b{display:grid;place-items:center;flex:0 0 30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#c9a227,#e7c765);color:#3a2c00;font-weight:900}
+.mq-opts input{flex:1;min-width:0}.mq-ans{display:flex;align-items:center;gap:10px;margin:0 0 10px;font-weight:800}
+@media(max-width:560px){.mq-opts{grid-template-columns:1fr}}
+.mq-msg{white-space:pre-line;margin:10px 0;padding:10px 14px;border-radius:14px;font-weight:700;font-size:13.5px}
+.mq-msg.ok{background:#dcfce7;color:#14532d}.mq-msg.warn{background:#fef3c7;color:#78350f}
+.mq-h{display:flex;align-items:center;gap:10px;margin:18px 0 8px;font-size:15px;font-weight:900}.mq-h span{padding:2px 12px;border-radius:99px;background:rgba(124,92,255,.14);color:#5b43d6;font-size:12.5px}
+.mq-pending{display:grid;gap:10px}
+.mq-q{padding:12px 14px;border-radius:16px;border:1px solid var(--dr-line,#e5e7ee);background:var(--dr-card,#fff)}
+.mq-qh{display:flex;gap:10px;font-weight:800;font-size:14px;line-height:1.45}.mq-qh b{color:#7c3aed}
+.mq-q ol{margin:8px 0 0 30px;padding:0;font-size:13.5px;line-height:1.6}.mq-q li.ok{font-weight:900;color:#15803d}
+.mq-qb{display:flex;gap:8px;margin-top:8px}
+.mq-off{opacity:.55}
+
 </style>
 <script id="v46-premium-js">
 (function(){
@@ -8991,8 +9362,11 @@ html:root:root body #questionsContainer .option>span:not(.opt-tag){user-select:t
   if(/^\s*admin\s*$/i.test(s))return s.replace(/admin/i,TEACHER);
   return s.replace(/\badmin\b/gi,TEACHER);
  }
+ function unwrapAll(){
+  document.querySelectorAll('.pr-bn').forEach(function(sp){var o=sp.querySelector('.pr-orig');if(o&&o.firstChild&&sp.parentNode)sp.parentNode.replaceChild(o.firstChild,sp);});
+ }
  function scan(root){
-  if(viewerIsAdmin())return;
+  if(viewerIsAdmin()){unwrapAll();return;}
   try{
    var w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:function(n){
      var p=n.parentNode;if(!p||SKIP[p.nodeName])return NodeFilter.FILTER_REJECT;
