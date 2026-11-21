@@ -6262,7 +6262,81 @@ setTimeout(()=>{
  }
 
  /* ---------- wiring ---------- */
- $('liveCreateForm')?.addEventListener('submit',async e=>{e.preventDefault();if(!admin())return;const btn=$('liveCreateForm').querySelector('button[type="submit"]');btn.disabled=true;btn.textContent='Starting…';try{const r=await api('create',{title:$('liveTitle').value.trim(),subject:$('liveSubject').value.trim(),description:$('liveDescription').value.trim()});$('liveCreateForm').reset();activeClass=r.class_id;try{if(typeof sendArbijoyPushEvent==='function')void sendArbijoyPushEvent({event:'live_started',title:$('liveTitle').value||r.title||'Live class',subject:r.subject||'',class_id:r.class_id});}catch(e){}await connectRoom(r,true);}catch(err){alert('Could not create class: '+err.message);showList();}finally{btn.disabled=false;btn.textContent='Create & Start Live';}});
+
+$('liveCreateForm')?.addEventListener('submit', async e => {
+  e.preventDefault();
+
+  if (!admin()) return;
+
+  const btn = $('liveCreateForm').querySelector('button[type="submit"]');
+
+  btn.disabled = true;
+  btn.textContent = 'Starting...';
+
+  try {
+    // Save form values before resetting
+    const title = $('liveTitle').value.trim();
+    const subject = $('liveSubject').value.trim();
+    const description = $('liveDescription').value.trim();
+
+    // STEP 1: Create the class
+    const created = await api('create', {
+      title,
+      subject,
+      description
+    });
+
+    if (!created.class_id) {
+      throw new Error('Class ID was not returned.');
+    }
+
+    activeClass = created.class_id;
+
+    // STEP 2: Start class and get LiveKit token
+    const liveData = await api('start', {
+      class_id: created.class_id
+    });
+
+    // Validate LiveKit connection data
+    if (!liveData.token || !liveData.livekit_url) {
+      throw new Error('LiveKit token or URL is missing from server response.');
+    }
+
+    // STEP 3: Reset form
+    $('liveCreateForm').reset();
+
+    // STEP 4: Connect teacher to live room
+    await connectRoom(liveData, true);
+
+    // STEP 5: Send notification
+    try {
+      if (typeof sendArbijoyPushEvent === 'function') {
+        void sendArbijoyPushEvent({
+          event: 'live_started',
+          title: title || 'Live class',
+          subject,
+          class_id: created.class_id
+        });
+      }
+    } catch (err) {
+      console.warn('Live notification:', err);
+    }
+
+  } catch (err) {
+    console.error('Live Class Create/Start Error:', err);
+
+    alert('Could not create/start class: ' +
+      (err.message || 'Unknown error'));
+
+    showList();
+    loadClasses();
+
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Create & Start Live';
+  }
+});
+e.preventDefault();if(!admin())return;const btn=$('liveCreateForm').querySelector('button[type="submit"]');btn.disabled=true;btn.textContent='Starting…';try{const r=await api('create',{title:$('liveTitle').value.trim(),subject:$('liveSubject').value.trim(),description:$('liveDescription').value.trim()});$('liveCreateForm').reset();activeClass=r.class_id;try{if(typeof sendArbijoyPushEvent==='function')void sendArbijoyPushEvent({event:'live_started',title:$('liveTitle').value||r.title||'Live class',subject:r.subject||'',class_id:r.class_id});}catch(e){}await connectRoom(r,true);}catch(err){alert('Could not create class: '+err.message);showList();}finally{btn.disabled=false;btn.textContent='Create & Start Live';}});
  $('refreshLiveClasses')?.addEventListener('click',loadClasses);
  $('liveSoundBtn')?.addEventListener('click',async()=>{try{await room.startAudio();}catch(e){}$('liveSoundBtn').hidden=room?room.canPlaybackAudio!==false:true;$('liveAudioSink').querySelectorAll('audio').forEach(a=>{const p=a.play();if(p&&p.catch)p.catch(()=>{});});});
  $('liveMicBtn')?.addEventListener('click',async()=>{if(!room)return;try{await room.localParticipant.setMicrophoneEnabled(!room.localParticipant.isMicrophoneEnabled);micOnSince=Date.now();micPeak=0;micWarned=false;}catch(e){status('Microphone: '+e.message);}syncButtons();});
