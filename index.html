@@ -982,6 +982,66 @@ html[data-theme="dark"] a{color:#b9baff}
 </style>
 <link href="https://fonts.googleapis.com/css2?family=Mona+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+
+<style id="requested-premium-corrections">
+/* Dedicated level page and animated premium level cards */
+.level-detail-heading{padding:22px 24px;margin:8px 0 20px;border-radius:26px;background:linear-gradient(125deg,rgba(99,91,255,.13),rgba(20,184,166,.10));border:1px solid var(--border);box-shadow:0 16px 38px rgba(25,35,70,.08)}
+.level-detail-kicker{font-size:11px;font-weight:900;letter-spacing:.16em;color:var(--primary);text-transform:uppercase}
+.level-detail-heading h2{font-size:clamp(26px,5vw,38px);margin:5px 0;color:var(--text)}
+.level-detail-heading p{margin:0;color:var(--muted);font-weight:600}
+.level-section{animation:levelPremiumIn .5s cubic-bezier(.2,.8,.2,1) both}
+.level-head{position:relative;overflow:hidden;isolation:isolate;min-height:94px}
+.level-head:before{content:"";position:absolute;inset:-60% auto -60% -35%;width:45%;transform:rotate(18deg);background:linear-gradient(90deg,transparent,rgba(255,255,255,.30),transparent);animation:levelShimmer 5s ease-in-out infinite;z-index:-1}
+.level-head:hover{transform:translateY(-4px) scale(1.006)!important;box-shadow:0 18px 42px rgba(99,91,255,.16)!important}
+.level-badge{box-shadow:0 8px 20px rgba(20,30,60,.09);animation:levelFloat 4s ease-in-out infinite}
+.level-section.open>.level-head{background:linear-gradient(115deg,var(--card),rgba(99,91,255,.08))!important}
+@keyframes levelPremiumIn{from{opacity:0;transform:translateY(16px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes levelShimmer{0%,65%,100%{left:-55%}35%{left:120%}}
+@keyframes levelFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+/* Premium typography and strong contrast on slider text */
+#homeHeroCarousel .hero-slide:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(8,12,28,.86),rgba(8,12,28,.52) 52%,rgba(8,12,28,.12));z-index:0}
+#homeHeroCarousel .hero-slide-content{position:absolute!important;z-index:2!important;left:clamp(18px,5vw,54px)!important;right:clamp(18px,5vw,54px)!important;bottom:clamp(35px,7vw,62px)!important;max-width:760px!important;padding:clamp(17px,3vw,27px)!important;border:1px solid rgba(255,255,255,.26)!important;border-radius:22px!important;background:linear-gradient(120deg,rgba(10,15,35,.76),rgba(10,15,35,.38))!important;backdrop-filter:blur(12px)!important;box-shadow:0 18px 42px rgba(0,0,0,.25)!important;animation:heroCaptionIn .65s cubic-bezier(.2,.8,.2,1) both}
+#homeHeroCarousel .hero-slide-content h2{font-family:"Mona Sans","Hanken Grotesk",sans-serif!important;font-size:clamp(23px,4vw,42px)!important;line-height:1.16!important;font-weight:900!important;letter-spacing:-.035em!important;color:#fff!important;text-shadow:0 3px 18px rgba(0,0,0,.35)!important;margin:0 0 9px!important}
+#homeHeroCarousel .hero-slide-content p{font-family:"Hanken Grotesk","Hind Siliguri",sans-serif!important;font-size:clamp(14px,1.8vw,18px)!important;line-height:1.65!important;font-weight:650!important;color:#f8fafc!important;text-shadow:0 2px 10px rgba(0,0,0,.45)!important;margin:0!important;max-width:650px}
+@keyframes heroCaptionIn{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
+/* Mobile slider actions: never clip edit/delete buttons */
+.sh-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;min-width:0}
+.sh-row .sh-tx{flex:1 1 150px;min-width:0}
+.sh-row .sh-bt{display:flex;flex:1 1 100%;width:100%;justify-content:flex-end;gap:7px;flex-wrap:wrap;min-width:0}
+.sh-row .sh-bt button{min-width:40px;min-height:38px;padding:8px 11px;border-radius:10px;white-space:nowrap;touch-action:manipulation}
+.sh-default-thumb{width:76px;height:56px;flex:0 0 76px;border-radius:11px;background:linear-gradient(135deg,#dbeafe,#ede9fe);background-size:cover;background-position:center;border:1px solid var(--border)}
+.sh-row.off{opacity:.65}
+@media(max-width:520px){
+ #homeHeroCarousel .hero-slide-content{left:12px!important;right:12px!important;bottom:42px!important;padding:14px!important;border-radius:17px!important}
+ #homeHeroCarousel .hero-slide-content h2{font-size:21px!important}
+ #homeHeroCarousel .hero-slide-content p{font-size:13px!important;line-height:1.5!important}
+ .sh-row .sh-bt{justify-content:flex-start}
+ .sh-row .sh-bt button{flex:1 1 42px}
+}
+/* Theme selector popover */
+.theme-palette-menu{position:absolute;z-index:100500;width:min(280px,calc(100vw - 20px));padding:14px;border:1px solid var(--border);border-radius:18px;background:var(--card);color:var(--text);box-shadow:0 18px 50px rgba(0,0,0,.22)}
+.theme-palette-menu[hidden]{display:none!important}
+.theme-palette-menu>strong{display:block;font-size:14px;margin:0 0 10px}
+.theme-palette-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.theme-palette-options button{display:flex;align-items:center;gap:9px;min-height:42px;padding:8px 10px;border:1px solid var(--border);border-radius:11px;background:transparent;color:var(--text);font-family:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.theme-palette-options button.selected{border-color:var(--primary);background:color-mix(in srgb,var(--primary) 12%,transparent)}
+.theme-palette-options i{width:18px;height:18px;border-radius:50%;background:var(--swatch);box-shadow:inset 0 0 0 2px rgba(255,255,255,.5)}
+/* Colour themes: backgrounds, cards and typography stay readable */
+html[data-theme="orange"]{color-scheme:light;--bg:#fff7ed;--card:#fffdfa;--text:#352014;--muted:#79543d;--border:#f3d6bd;--primary:#ea580c;--primary2:#f59e0b;--dr-ink:#352014;--dr-muted:#79543d;--dr-card:#fffdfa;--dr-line:#f3d6bd;--dr-btn:#c2410c;--dr-btn-fg:#fff}
+html[data-theme="maroon"]{color-scheme:light;--bg:#fff1f2;--card:#fffafa;--text:#3b1423;--muted:#784456;--border:#eccbd5;--primary:#9f1239;--primary2:#be123c;--dr-ink:#3b1423;--dr-muted:#784456;--dr-card:#fffafa;--dr-line:#eccbd5;--dr-btn:#881337;--dr-btn-fg:#fff}
+html[data-theme="cyan"]{color-scheme:light;--bg:#ecfeff;--card:#fbffff;--text:#083344;--muted:#356575;--border:#b9e5ea;--primary:#0891b2;--primary2:#06b6d4;--dr-ink:#083344;--dr-muted:#356575;--dr-card:#fbffff;--dr-line:#b9e5ea;--dr-btn:#0e7490;--dr-btn-fg:#fff}
+html[data-theme="blue"]{color-scheme:light;--bg:#eff6ff;--card:#fcfdff;--text:#172b4d;--muted:#536987;--border:#cbdcf4;--primary:#2563eb;--primary2:#4f46e5;--dr-ink:#172b4d;--dr-muted:#536987;--dr-card:#fcfdff;--dr-line:#cbdcf4;--dr-btn:#1d4ed8;--dr-btn-fg:#fff}
+html[data-theme="red"]{color-scheme:light;--bg:#fef2f2;--card:#fffdfd;--text:#3b1515;--muted:#7b4a4a;--border:#f2caca;--primary:#dc2626;--primary2:#f43f5e;--dr-ink:#3b1515;--dr-muted:#7b4a4a;--dr-card:#fffdfd;--dr-line:#f2caca;--dr-btn:#b91c1c;--dr-btn-fg:#fff}
+html[data-theme="orange"] body,html[data-theme="maroon"] body,html[data-theme="cyan"] body,html[data-theme="blue"] body,html[data-theme="red"] body{background:radial-gradient(circle at 8% 8%,color-mix(in srgb,var(--primary) 13%,transparent),transparent 30%),linear-gradient(135deg,var(--bg),color-mix(in srgb,var(--bg) 80%,#fff))!important;color:var(--text)!important}
+html[data-theme="orange"] .topbar,html[data-theme="maroon"] .topbar,html[data-theme="cyan"] .topbar,html[data-theme="blue"] .topbar,html[data-theme="red"] .topbar{background:color-mix(in srgb,var(--card) 94%,transparent)!important;border-color:var(--border)!important}
+html[data-theme="orange"] :is(.subject-card,.hub-card,.profile-card,.admin-card,.stat-card,.question-card,.option,.result-card,.written-card,.material-card,.level-head,.modal,.fancy-modal-box),html[data-theme="maroon"] :is(.subject-card,.hub-card,.profile-card,.admin-card,.stat-card,.question-card,.option,.result-card,.written-card,.material-card,.level-head,.modal,.fancy-modal-box),html[data-theme="cyan"] :is(.subject-card,.hub-card,.profile-card,.admin-card,.stat-card,.question-card,.option,.result-card,.written-card,.material-card,.level-head,.modal,.fancy-modal-box),html[data-theme="blue"] :is(.subject-card,.hub-card,.profile-card,.admin-card,.stat-card,.question-card,.option,.result-card,.written-card,.material-card,.level-head,.modal,.fancy-modal-box),html[data-theme="red"] :is(.subject-card,.hub-card,.profile-card,.admin-card,.stat-card,.question-card,.option,.result-card,.written-card,.material-card,.level-head,.modal,.fancy-modal-box){background:var(--card)!important;color:var(--text)!important;border-color:var(--border)!important}
+html[data-theme="orange"] :is(h1,h2,h3,h4,strong,.qtext,.option,.level-tx b,.subject-card h3,.hub-text h3),html[data-theme="maroon"] :is(h1,h2,h3,h4,strong,.qtext,.option,.level-tx b,.subject-card h3,.hub-text h3),html[data-theme="cyan"] :is(h1,h2,h3,h4,strong,.qtext,.option,.level-tx b,.subject-card h3,.hub-text h3),html[data-theme="blue"] :is(h1,h2,h3,h4,strong,.qtext,.option,.level-tx b,.subject-card h3,.hub-text h3),html[data-theme="red"] :is(h1,h2,h3,h4,strong,.qtext,.option,.level-tx b,.subject-card h3,.hub-text h3){color:var(--text)!important}
+html[data-theme="orange"] :is(p,small,label,li,.muted,.lede p,.hub-text p,.subject-meta),html[data-theme="maroon"] :is(p,small,label,li,.muted,.lede p,.hub-text p,.subject-meta),html[data-theme="cyan"] :is(p,small,label,li,.muted,.lede p,.hub-text p,.subject-meta),html[data-theme="blue"] :is(p,small,label,li,.muted,.lede p,.hub-text p,.subject-meta),html[data-theme="red"] :is(p,small,label,li,.muted,.lede p,.hub-text p,.subject-meta){color:var(--muted)!important}
+html[data-theme="orange"] input,html[data-theme="orange"] textarea,html[data-theme="orange"] select,html[data-theme="maroon"] input,html[data-theme="maroon"] textarea,html[data-theme="maroon"] select,html[data-theme="cyan"] input,html[data-theme="cyan"] textarea,html[data-theme="cyan"] select,html[data-theme="blue"] input,html[data-theme="blue"] textarea,html[data-theme="blue"] select,html[data-theme="red"] input,html[data-theme="red"] textarea,html[data-theme="red"] select{background:var(--card)!important;color:var(--text)!important;border-color:var(--border)!important}
+html[data-theme="dark"] .theme-palette-menu{background:#151e30;color:#edf2ff;border-color:#334155}
+@media(prefers-reduced-motion:reduce){.level-head:before,.level-badge{animation:none!important}}
+</style>
+
 </head>
 
 <body>
@@ -1017,7 +1077,7 @@ html[data-theme="dark"] a{color:#b9baff}
     <div class="nav-search-wrap"><span aria-hidden="true">⌕</span><input id="siteSearch" type="search" placeholder="Search subjects, chapters, exams…" aria-label="Search subjects, chapters and exams"><button id="clearSiteSearch" type="button" aria-label="Clear search" hidden>×</button></div>
     <div class="account-area">
       <button class="account-btn home-nav-btn" id="navHomeBtn" type="button" title="Go to Home">⌂ Home</button>
-      <button class="account-btn ghost theme-toggle" id="themeToggleBtn" type="button" aria-label="Switch to dark mode" aria-pressed="false" title="Switch theme"><span id="themeToggleIcon" aria-hidden="true">🌙</span> <span id="themeToggleLabel">Dark</span></button>
+      <button class="account-btn ghost theme-toggle" id="themeToggleBtn" type="button" aria-label="Switch to dark mode" aria-pressed="false" title="Switch theme"><span id="themeToggleIcon" aria-hidden="true">🎨</span> <span id="themeToggleLabel">Theme</span></button>
       <button class="account-btn ghost" id="enableNotificationsBtn" type="button" title="Enable exam notifications">🔔 Notify</button>
       <button class="account-btn ghost" id="authActionBtn">↪ Log in</button>
       <button class="account-btn profile-nav-btn" id="profileBtn" hidden><span class="nav-profile-avatar" id="navProfileAvatar">U</span><span id="navProfileName">Profile</span></button>
@@ -3556,6 +3616,7 @@ function bnNum(n){
 function hideAllScreens(){
   window.scrollTo(0, 0);
   $("screen-subjects").hidden = true;
+  if($("screen-level-detail")) $("screen-level-detail").hidden = true;
   $("screen-chapters").hidden = true;
   $("screen-chapterhub").hidden = true;
   $("screen-exams").hidden = true;
@@ -4086,7 +4147,9 @@ async function getMyAttempt(subject, chapter, exam, uid){
     if(!r.error && Array.isArray(r.data)){
       // match by subject + chapter title (tolerant to old "Chapter N:" numbering / spacing)
       const hit=r.data.find(x=>x.subject===subject && drNormCh(x.chapter)===drNormCh(chapter));
-      if(hit) return hit;
+      // Supabase is authoritative: if admin deleted the result row, allow a fresh attempt.
+      // Keep local cache only when the server query itself fails.
+      return hit || null;
     } else if(r.error) console.warn("Attempt check failed:",r.error.message);
   }catch(e){ console.warn("Attempt check failed:",e); }
   return local;
@@ -5172,9 +5235,10 @@ Score: ${correct} / ${total} (${percent}%)`;
 }
 
 $("backToSubjects").addEventListener("click", ()=>{
+  const levelPage=$("screen-level-detail");
   hideAllScreens();
-  $("screen-subjects").hidden = false;
-  $("topSub").textContent = "Choose a subject to begin";
+  if(levelPage&&levelPage.dataset.activeLevel){levelPage.hidden=false;$("topSub").textContent=levelPage.dataset.activeLevel+" Level";}
+  else{$("screen-subjects").hidden=false;$("topSub").textContent="Choose a subject to begin";}
   pushScreen("subjects", {});
 });
 
@@ -5697,26 +5761,36 @@ setTimeout(()=>{
 
 <script id="manual-theme-toggle">
 (function(){
-  const root=document.documentElement;
-  const btn=document.getElementById('themeToggleBtn');
-  const icon=document.getElementById('themeToggleIcon');
-  const label=document.getElementById('themeToggleLabel');
-  if(!btn)return;
-  let saved=null;
-  try{saved=localStorage.getItem('bijoy-theme')}catch(e){}
-  const systemDark=!!(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches);
-  function applyTheme(theme){
-    root.setAttribute('data-theme',theme);
-    const isDark=theme==='dark';
-    if(icon)icon.textContent=isDark?'☀️':'🌙';
-    if(label)label.textContent=isDark?'Light':'Dark';
-    btn.setAttribute('aria-pressed',String(isDark));
-    btn.setAttribute('aria-label',isDark?'Switch to light mode':'Switch to dark mode');
-    btn.title=isDark?'Switch to light mode':'Switch to dark mode';
-    try{localStorage.setItem('bijoy-theme',theme)}catch(e){}
-  }
-  applyTheme(saved==='light'||saved==='dark'?saved:(systemDark?'dark':'light'));
-  btn.addEventListener('click',function(){applyTheme(root.getAttribute('data-theme')==='dark'?'light':'dark')});
+ const root=document.documentElement,btn=document.getElementById('themeToggleBtn');
+ if(!btn)return;
+ let saved='light';try{saved=localStorage.getItem('bijoy-theme')||'light'}catch(e){}
+ const palettes=[
+  {id:'orange',name:'Orange',swatch:'#f97316',icon:'🟠'},
+  {id:'maroon',name:'Maroon',swatch:'#7f1d3a',icon:'🟥'},
+  {id:'cyan',name:'Cyan',swatch:'#0891b2',icon:'🩵'},
+  {id:'blue',name:'Blue',swatch:'#2563eb',icon:'🔵'},
+  {id:'red',name:'Red',swatch:'#dc2626',icon:'🔴'},
+  {id:'dark',name:'Dark',swatch:'#111827',icon:'🌙'}
+ ];
+ let menu=document.getElementById('themePaletteMenu');
+ if(!menu){menu=document.createElement('div');menu.id='themePaletteMenu';menu.className='theme-palette-menu';menu.hidden=true;menu.setAttribute('role','menu');menu.innerHTML='<strong>Choose website theme</strong><div class="theme-palette-options"></div>';document.body.appendChild(menu);}
+ const options=menu.querySelector('.theme-palette-options');
+ options.innerHTML=palettes.map(p=>'<button type="button" role="menuitem" data-theme-choice="'+p.id+'"><i style="--swatch:'+p.swatch+'"></i><span>'+p.name+'</span></button>').join('');
+ function applyTheme(theme){
+  if(!palettes.some(p=>p.id===theme))theme='orange';
+  root.setAttribute('data-theme',theme);
+  const p=palettes.find(x=>x.id===theme);
+  const icon=document.getElementById('themeToggleIcon'),label=document.getElementById('themeToggleLabel');
+  if(icon)icon.textContent='🎨';if(label)label.textContent='Theme';
+  btn.setAttribute('aria-pressed','true');btn.setAttribute('aria-label','Choose website theme');btn.title='Choose website theme';
+  options.querySelectorAll('button').forEach(b=>b.classList.toggle('selected',b.dataset.themeChoice===theme));
+  try{localStorage.setItem('bijoy-theme',theme)}catch(e){}
+ }
+ applyTheme(saved==='light'?'orange':saved);
+ btn.addEventListener('click',e=>{e.stopPropagation();menu.hidden=!menu.hidden;const r=btn.getBoundingClientRect();menu.style.top=(r.bottom+8+window.scrollY)+'px';menu.style.right=Math.max(10,window.innerWidth-r.right)+'px';});
+ options.addEventListener('click',e=>{const b=e.target.closest('[data-theme-choice]');if(!b)return;applyTheme(b.dataset.themeChoice);menu.hidden=true;});
+ document.addEventListener('click',e=>{if(!menu.contains(e.target)&&e.target!==btn&&!btn.contains(e.target))menu.hidden=true;});
+ document.addEventListener('keydown',e=>{if(e.key==='Escape')menu.hidden=true;});
 })();
 </script>
 
@@ -8008,20 +8082,46 @@ html[data-theme="dark"] #levelSSC .level-badge{background:#1b3a33}html[data-them
 <script id="home-levels">
 (function(){
  const $=id=>document.getElementById(id);
- function setOpen(level,open,scroll){
-  document.querySelectorAll('.level-section').forEach(s=>{
-   const on=open&&s.id==='level'+level;
-   s.classList.toggle('open',on);const h=s.querySelector('.level-head');if(h)h.setAttribute('aria-expanded',String(on));
-  });
-  try{if(open){state.selectedLevel=level;sessionStorage.setItem('drLevelOpen',level);if(window.drNewBadges&&window.drNewBadges.ackLevel)window.drNewBadges.ackLevel(level);}else sessionStorage.removeItem('drLevelOpen');}catch(e){}
-  if(open&&scroll){const sec=$('level'+level);if(sec)setTimeout(()=>sec.scrollIntoView({behavior:'smooth',block:'start'}),60);}
+ let active=null,placeholder=null,homeParent=null;
+ function ensurePage(){
+  let page=$('screen-level-detail');if(page)return page;
+  const wrap=document.querySelector('.wrap');if(!wrap)return null;
+  page=document.createElement('section');page.id='screen-level-detail';page.hidden=true;
+  page.innerHTML='<button type="button" class="back-btn" id="backFromLevelDetail">← Back to Levels</button><div class="level-detail-heading"><span class="level-detail-kicker">YOUR LEARNING PATH</span><h2 id="levelDetailTitle">Choose a subject</h2><p id="levelDetailDesc">Select a subject to explore chapters and exams.</p></div><div id="levelDetailMount"></div>';
+  wrap.appendChild(page);
+  $('backFromLevelDetail').addEventListener('click',backHome);
+  return page;
+ }
+ function backHome(){
+  if(active&&placeholder&&placeholder.parentNode){placeholder.parentNode.insertBefore(active,placeholder);placeholder.remove();}
+  active=null;placeholder=null;const lp=$('screen-level-detail');if(lp)delete lp.dataset.activeLevel;
+  document.querySelectorAll('.wrap > section').forEach(x=>x.hidden=true);
+  $('screen-subjects').hidden=false;
+  if($('topSub'))$('topSub').textContent='Choose a subject to begin';
+  window.scrollTo({top:0,behavior:'smooth'});
+ }
+ function openLevel(level){
+  const page=ensurePage(),section=$('level'+level);if(!page||!section)return;
+  if(active)backHome();
+  homeParent=section.parentNode;placeholder=document.createComment('level-'+level+'-home-position');
+  homeParent.insertBefore(placeholder,section);active=section;
+  $('levelDetailMount').appendChild(section);
+  document.querySelectorAll('.wrap > section').forEach(x=>x.hidden=true);
+  page.hidden=false;page.dataset.activeLevel=level;
+  $('levelDetailTitle').textContent=level==='Admission'?'Admission Preparation':level+' Level';
+  $('levelDetailDesc').textContent=level==='SSC'?'Secondary School Certificate — choose a subject to continue.':level==='HSC'?'Higher Secondary Certificate — choose a subject to continue.':'University admission preparation — choose a subject to continue.';
+  section.classList.add('open');
+  const h=section.querySelector('.level-head');if(h)h.setAttribute('aria-expanded','true');
+  try{state.selectedLevel=level;sessionStorage.setItem('drLevelOpen',level);if(window.drNewBadges?.ackLevel)window.drNewBadges.ackLevel(level);}catch(e){}
+  if($('topSub'))$('topSub').textContent=level+' Level';
+  window.scrollTo({top:0,behavior:'smooth'});
  }
  document.addEventListener('click',e=>{
   const h=e.target.closest('.level-head');if(!h)return;
-  const lvl=h.dataset.level,isOpen=$('level'+lvl).classList.contains('open');
-  setOpen(lvl,!isOpen,!isOpen);
+  e.preventDefault();openLevel(h.dataset.level);
  });
- try{const l=sessionStorage.getItem('drLevelOpen');if(l&&$('level'+l))setOpen(l,true,false);}catch(e){}
+ // Keep the level screen in sync if the navbar Home action is used.
+ document.getElementById('navHomeBtn')?.addEventListener('click',()=>{if(active)backHome();});
 })();
 </script>
 
@@ -8884,7 +8984,7 @@ html:root:root body .nav-search-wrap{height:36px!important}
  const backToDash=()=>typeof showAdminDashboard==='function'?showAdminDashboard():showPage('screen-admin','Admin Dashboard');
 
  /* =====================  HOME SLIDER (public part)  ===================== */
- const HKEY='drHeroSlides';let lastSig='',defaults=null;
+ const HKEY='drHeroSlides';let lastSig='',defaults=null,hiddenDefaults=[],trackHiddenSig='';
  function slideHtml(r,i){
   const u=encodeURI(String(r.image_url||'')).replace(/'/g,'%27');
   const txt=(r.title||r.subtitle)?'<div class="hero-slide-content">'+(r.title?'<h2>'+esc(r.title)+'</h2>':'')+(r.subtitle?'<p>'+esc(r.subtitle)+'</p>':'')+'</div>':'';
@@ -8896,11 +8996,12 @@ html:root:root body .nav-search-wrap{height:36px!important}
   defaults=[].slice.call(track.querySelectorAll('.hero-slide')).map(a=>{a.classList.remove('active');a.removeAttribute('data-x');return a.outerHTML;});
  }
  /* custom photos replace the default slides from the first one onwards; delete a photo and that default slide comes back */
- function applyHero(rows){
+ function applyHero(rows,hidden){
   const root=$('homeHeroCarousel'),track=root&&root.querySelector('.hero-track');if(!track)return;
   grabDefaults();if(!defaults||!defaults.length)return;
-  if(!(rows&&rows.length)&&track.dataset.custom!=='1')return;
-  const custom=(rows||[]).map(slideHtml),all=custom.concat(defaults.slice(custom.length));
+  const gone=Array.isArray(hidden)?hidden.map(Number):hiddenDefaults;
+  const custom=(rows||[]).map(slideHtml),remaining=defaults.map((html,i)=>({html,i})).filter(x=>x.i>=custom.length&&!gone.includes(x.i)).map(x=>x.html),all=custom.concat(remaining);
+  if(!all.length){track.innerHTML='<article class="hero-slide hero-custom hero-empty-slide"><div class="hero-slide-content"><h2>Welcome</h2><p>Explore your learning dashboard.</p></div></article>';track.dataset.custom='1';return;}
   track.innerHTML=all.join('');track.dataset.custom=custom.length?'1':'';
   const first=track.querySelector('.hero-slide');if(first)first.classList.add('active');
   if(window.__heroInit)window.__heroInit();
@@ -8912,13 +9013,15 @@ html:root:root body .nav-search-wrap{height:36px!important}
    const r=await sb().from('hero_slides').select('*').eq('active',true).order('sort',{ascending:true}).order('created_at',{ascending:true});
    if(r.error)return;
    const rows=r.data||[],sig=JSON.stringify(slim(rows));
+   const sr=await sb().from('hero_settings').select('hidden_defaults').eq('id','main').maybeSingle();
+   hiddenDefaults=(!sr.error&&Array.isArray(sr.data?.hidden_defaults))?sr.data.hidden_defaults.map(Number):[];
    try{if(rows.length)localStorage.setItem(HKEY,sig);else localStorage.removeItem(HKEY);}catch(e){}
-   if(sig!==lastSig){lastSig=sig;applyHero(rows);}
+   if(sig!==lastSig||JSON.stringify(hiddenDefaults)!==trackHiddenSig){lastSig=sig;applyHero(rows,hiddenDefaults);trackHiddenSig=JSON.stringify(hiddenDefaults);}else applyHero(rows,hiddenDefaults);
   }catch(e){}
  }
  function bootHero(){
   grabDefaults();
-  try{const c=JSON.parse(localStorage.getItem(HKEY)||'null');if(Array.isArray(c)&&c.length){lastSig=JSON.stringify(c);applyHero(c);}}catch(e){}
+  try{const c=JSON.parse(localStorage.getItem(HKEY)||'null');if(Array.isArray(c)&&c.length){lastSig=JSON.stringify(c);applyHero(c,hiddenDefaults);}}catch(e){}
   setTimeout(loadHero,700);setInterval(loadHero,120000);
  }
 
@@ -8942,7 +9045,8 @@ html:root:root body .nav-search-wrap{height:36px!important}
    +'<div class="mat-admin-form"><label class="wide">Title on the photo (optional)<input id="shTitle" maxlength="80" placeholder="e.g. Admission Batch 2027"></label><label class="wide">Small text (optional)<input id="shSub" maxlength="140" placeholder="e.g. Enrol now · Limited seats"></label></div>'
    +'<p class="card-hint" id="shMultiHint" hidden>With several photos, the texts above are skipped — add titles later with ✏️.</p>'
    +'<button class="btn btn-primary" id="shUpload" type="button">⬆ Upload &amp; add to slider</button></div>'
-   +'<div class="profile-card admin-card"><h3>🖼️ Your slides</h3><div id="shList" class="sh-list"></div><p class="card-hint">Your photos replace the default slides one by one: photo 1 replaces default slide 1, photo 2 replaces slide 2, and so on. Delete (or hide) a photo and the default slide comes back automatically.</p></div>';
+   +'<div class="profile-card admin-card"><h3>🖼️ Your slides</h3><div id="shList" class="sh-list"></div><p class="card-hint">Your photos replace the default slides one by one.</p></div>'
+   +'<div class="profile-card admin-card"><h3>🗑️ Built-in static slides</h3><p class="card-hint">Remove old built-in photos from the homepage for every visitor. You can restore them later.</p><div id="shDefaultList" class="sh-list"></div></div>';
   $('shFile').addEventListener('change',async e=>{
    const files=[...(e.target.files||[])];picked=[];$('shPrev').innerHTML='';$('shPrev').hidden=true;$('shInfo').textContent='';$('shMultiHint').hidden=files.length<2;if(!files.length)return;
    $('shInfo').textContent='Preparing '+files.length+' photo'+(files.length>1?'s':'')+'…';
@@ -8975,12 +9079,32 @@ html:root:root body .nav-search-wrap{height:36px!important}
    await renderSlider();loadHero();
   });
  }
+ function renderDefaultSlides(){
+  const box=$('shDefaultList');if(!box)return;grabDefaults();
+  if(!defaults||!defaults.length){box.innerHTML='<div class="mat-admin-empty">No built-in slides found.</div>';return;}
+  box.innerHTML='';
+  defaults.forEach((html,i)=>{
+   const doc=new DOMParser().parseFromString(html,'text/html'),slide=doc.querySelector('.hero-slide'),title=slide?.querySelector('h2')?.textContent||('Built-in slide '+(i+1)),sub=slide?.querySelector('p')?.textContent||'',bg=slide?.getAttribute('style')||'',m=bg.match(/url\(['"]?(.*?)['"]?\)/),gone=hiddenDefaults.includes(i);
+   const row=document.createElement('div');row.className='sh-row'+(gone?' off':'');
+   row.innerHTML='<div class="sh-default-thumb" style="'+(m?'background-image:url(&quot;'+esc(m[1])+'&quot;)':'')+'"></div><div class="sh-tx"><strong>'+esc(title)+'</strong><small>'+esc(sub||'Built-in homepage image')+'</small></div><div class="sh-bt"><button type="button" data-default="'+i+'" class="danger">'+(gone?'↩ Restore':'🗑 Remove')+'</button></div>';
+   row.querySelector('button').addEventListener('click',async()=>{
+    const next=hiddenDefaults.slice();if(gone){hiddenDefaults=next.filter(x=>x!==i);}else{const ok=await customConfirm('Remove this built-in slide from the homepage for all visitors?',{okText:'Remove slide',cancelText:'Keep it',icon:'🗑️'});if(!ok)return;hiddenDefaults=next.concat(i);}
+    const {error}=await sb().from('hero_settings').upsert({id:'main',hidden_defaults:hiddenDefaults,updated_at:new Date().toISOString()},{onConflict:'id'});
+    if(error){note('Could not update built-in slides: '+error.message,'error');hiddenDefaults=next;return;}
+    renderDefaultSlides();loadHero();note(gone?'Built-in slide restored':'Built-in slide removed','success');
+   });
+   box.appendChild(row);
+  });
+ }
  async function renderSlider(){
   buildSlider();const list=$('shList');if(!list||!sb())return;
   const r=await sb().from('hero_slides').select('*').order('sort',{ascending:true}).order('created_at',{ascending:true});
   if(r.error){list.innerHTML='<div class="mat-admin-empty">'+esc(missing(r.error)?SETUP:r.error.message)+'</div>';return;}
   sRows=r.data||[];
-  if(!sRows.length){list.innerHTML='<div class="mat-admin-empty">No custom slides yet — the default slides are showing.</div>';return;}
+  const settings=await sb().from('hero_settings').select('hidden_defaults').eq('id','main').maybeSingle();
+  hiddenDefaults=(!settings.error&&Array.isArray(settings.data?.hidden_defaults))?settings.data.hidden_defaults.map(Number):[];
+  renderDefaultSlides();
+  if(!sRows.length){list.innerHTML='<div class="mat-admin-empty">No custom slides yet.</div>';return;}
   list.innerHTML='';
   sRows.forEach((s,i)=>{
    const row=document.createElement('div');row.className='sh-row'+(s.active===false?' off':'');
