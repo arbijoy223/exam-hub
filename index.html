@@ -5671,6 +5671,14 @@ window.addEventListener("popstate", async function(e){
       $("topSub").textContent = "Choose a subject to begin";
       break;
     case "subjects":
+      if(typeof window.__backFromLevelDetail==="function")window.__backFromLevelDetail();
+      hideAllScreens();
+      $("screen-subjects").hidden = false;
+      $("topSub").textContent = "Choose a subject to begin";
+      break;
+    case "level-detail":
+      if(typeof window.__backFromLevelDetail==="function")window.__backFromLevelDetail();
+      break;
     default:
       hideAllScreens();
       $("screen-subjects").hidden = false;
@@ -5763,34 +5771,50 @@ setTimeout(()=>{
 (function(){
  const root=document.documentElement,btn=document.getElementById('themeToggleBtn');
  if(!btn)return;
- let saved='light';try{saved=localStorage.getItem('bijoy-theme')||'light'}catch(e){}
  const palettes=[
-  {id:'orange',name:'Orange',swatch:'#f97316',icon:'🟠'},
-  {id:'maroon',name:'Maroon',swatch:'#7f1d3a',icon:'🟥'},
-  {id:'cyan',name:'Cyan',swatch:'#0891b2',icon:'🩵'},
-  {id:'blue',name:'Blue',swatch:'#2563eb',icon:'🔵'},
-  {id:'red',name:'Red',swatch:'#dc2626',icon:'🔴'},
-  {id:'dark',name:'Dark',swatch:'#111827',icon:'🌙'}
+  {id:'orange',name:'Orange',swatch:'#f97316'},
+  {id:'maroon',name:'Maroon',swatch:'#7f1d3a'},
+  {id:'cyan',name:'Cyan',swatch:'#0891b2'},
+  {id:'blue',name:'Blue',swatch:'#2563eb'},
+  {id:'red',name:'Red',swatch:'#dc2626'},
+  {id:'dark',name:'Dark',swatch:'#111827'}
  ];
+ let saved='orange';try{saved=localStorage.getItem('bijoy-theme')||'orange'}catch(e){}
  let menu=document.getElementById('themePaletteMenu');
- if(!menu){menu=document.createElement('div');menu.id='themePaletteMenu';menu.className='theme-palette-menu';menu.hidden=true;menu.setAttribute('role','menu');menu.innerHTML='<strong>Choose website theme</strong><div class="theme-palette-options"></div>';document.body.appendChild(menu);}
+ if(!menu){menu=document.createElement('div');menu.id='themePaletteMenu';document.body.appendChild(menu);}
+ menu.className='theme-palette-menu';menu.setAttribute('role','menu');menu.innerHTML='<div class="theme-menu-head"><span>Choose your theme</span><small>Personalize your experience</small></div><div class="theme-palette-options"></div>';
  const options=menu.querySelector('.theme-palette-options');
- options.innerHTML=palettes.map(p=>'<button type="button" role="menuitem" data-theme-choice="'+p.id+'"><i style="--swatch:'+p.swatch+'"></i><span>'+p.name+'</span></button>').join('');
+ options.innerHTML=palettes.map(p=>'<button type="button" role="menuitem" data-theme-choice="'+p.id+'"><i style="--swatch:'+p.swatch+'"></i><span>'+p.name+'</span><b aria-hidden="true">✓</b></button>').join('');
+ let current=saved;
  function applyTheme(theme){
   if(!palettes.some(p=>p.id===theme))theme='orange';
-  root.setAttribute('data-theme',theme);
-  const p=palettes.find(x=>x.id===theme);
+  current=theme;root.setAttribute('data-theme',theme);
   const icon=document.getElementById('themeToggleIcon'),label=document.getElementById('themeToggleLabel');
   if(icon)icon.textContent='🎨';if(label)label.textContent='Theme';
-  btn.setAttribute('aria-pressed','true');btn.setAttribute('aria-label','Choose website theme');btn.title='Choose website theme';
+  btn.setAttribute('aria-label','Choose website theme');btn.setAttribute('aria-expanded',String(!menu.hidden));
   options.querySelectorAll('button').forEach(b=>b.classList.toggle('selected',b.dataset.themeChoice===theme));
   try{localStorage.setItem('bijoy-theme',theme)}catch(e){}
  }
+ function closeMenu(){
+  if(menu.hidden)return;
+  menu.classList.remove('is-open');btn.setAttribute('aria-expanded','false');
+  setTimeout(()=>{if(!menu.classList.contains('is-open'))menu.hidden=true;},190);
+ }
+ function openMenu(){
+  const r=btn.getBoundingClientRect();
+  menu.hidden=false;menu.style.top=Math.min(window.innerHeight-260,Math.max(8,r.bottom+9))+'px';
+  menu.style.right=Math.max(10,window.innerWidth-r.right)+'px';
+  requestAnimationFrame(()=>menu.classList.add('is-open'));
+  btn.setAttribute('aria-expanded','true');
+ }
  applyTheme(saved==='light'?'orange':saved);
- btn.addEventListener('click',e=>{e.stopPropagation();menu.hidden=!menu.hidden;const r=btn.getBoundingClientRect();menu.style.top=(r.bottom+8+window.scrollY)+'px';menu.style.right=Math.max(10,window.innerWidth-r.right)+'px';});
- options.addEventListener('click',e=>{const b=e.target.closest('[data-theme-choice]');if(!b)return;applyTheme(b.dataset.themeChoice);menu.hidden=true;});
- document.addEventListener('click',e=>{if(!menu.contains(e.target)&&e.target!==btn&&!btn.contains(e.target))menu.hidden=true;});
- document.addEventListener('keydown',e=>{if(e.key==='Escape')menu.hidden=true;});
+ btn.setAttribute('aria-expanded','false');
+ btn.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();menu.hidden||!menu.classList.contains('is-open')?openMenu():closeMenu();});
+ options.addEventListener('click',e=>{const b=e.target.closest('[data-theme-choice]');if(!b)return;applyTheme(b.dataset.themeChoice);closeMenu();});
+ document.addEventListener('click',e=>{if(!menu.contains(e.target)&&!btn.contains(e.target))closeMenu();});
+ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu();});
+ window.addEventListener('resize',closeMenu);
+ window.addEventListener('scroll',closeMenu,{passive:true});
 })();
 </script>
 
@@ -6593,6 +6617,44 @@ setTimeout(()=>{
 
 
 </div>
+
+<style id="premium-theme-level-slider-fixes">
+/* Theme palette: define the variables actually consumed by the global V8 layer. */
+html:root:root[data-theme="orange"]{--dr-bg:#fff7ed;--dr-card:#fffdfa;--dr-ink:#352014;--dr-muted:#79543d;--dr-line:#f3d6bd;--dr-soft:#ffedd5;--dr-btn:#c2410c;--dr-btn-fg:#fff;--primary:#ea580c;--border:#f3d6bd;--card:#fffdfa;--text:#352014;--muted:#79543d}
+html:root:root[data-theme="maroon"]{--dr-bg:#fff1f2;--dr-card:#fffafa;--dr-ink:#3b1423;--dr-muted:#784456;--dr-line:#eccbd5;--dr-soft:#ffe4e9;--dr-btn:#881337;--dr-btn-fg:#fff;--primary:#9f1239;--border:#eccbd5;--card:#fffafa;--text:#3b1423;--muted:#784456}
+html:root:root[data-theme="cyan"]{--dr-bg:#ecfeff;--dr-card:#fbffff;--dr-ink:#083344;--dr-muted:#356575;--dr-line:#b9e5ea;--dr-soft:#cffafe;--dr-btn:#0e7490;--dr-btn-fg:#fff;--primary:#0891b2;--border:#b9e5ea;--card:#fbffff;--text:#083344;--muted:#356575}
+html:root:root[data-theme="blue"]{--dr-bg:#eff6ff;--dr-card:#fcfdff;--dr-ink:#172b4d;--dr-muted:#536987;--dr-line:#cbdcf4;--dr-soft:#dbeafe;--dr-btn:#1d4ed8;--dr-btn-fg:#fff;--primary:#2563eb;--border:#cbdcf4;--card:#fcfdff;--text:#172b4d;--muted:#536987}
+html:root:root[data-theme="red"]{--dr-bg:#fef2f2;--dr-card:#fffdfd;--dr-ink:#3b1515;--dr-muted:#7b4a4a;--dr-line:#f2caca;--dr-soft:#fee2e2;--dr-btn:#b91c1c;--dr-btn-fg:#fff;--primary:#dc2626;--border:#f2caca;--card:#fffdfd;--text:#3b1515;--muted:#7b4a4a}
+html:root:root[data-theme="orange"] body,html:root:root[data-theme="maroon"] body,html:root:root[data-theme="cyan"] body,html:root:root[data-theme="blue"] body,html:root:root[data-theme="red"] body{background:radial-gradient(circle at 8% 8%,color-mix(in srgb,var(--primary) 13%,transparent),transparent 30%),linear-gradient(135deg,var(--dr-bg),color-mix(in srgb,var(--dr-bg) 80%,#fff))!important;color:var(--dr-ink)!important}
+html:root:root[data-theme="orange"] .topbar,html:root:root[data-theme="maroon"] .topbar,html:root:root[data-theme="cyan"] .topbar,html:root:root[data-theme="blue"] .topbar,html:root:root[data-theme="red"] .topbar{background:color-mix(in srgb,var(--dr-card) 94%,transparent)!important;border-color:var(--dr-line)!important}
+html:root:root[data-theme="orange"] :is(.subject-card,.hub-card,.profile-card,.admin-card,.stat-card,.question-card,.option,.result-card,.written-card,.material-card,.level-head,.modal,.fancy-modal-box,.admin-panel,.sh-row),html:root:root[data-theme="maroon"] :is(.subject-card,.hub-card,.profile-card,.admin-card,.stat-card,.question-card,.option,.result-card,.written-card,.material-card,.level-head,.modal,.fancy-modal-box,.admin-panel,.sh-row),html:root:root[data-theme="cyan"] :is(.subject-card,.hub-card,.profile-card,.admin-card,.stat-card,.question-card,.option,.result-card,.written-card,.material-card,.level-head,.modal,.fancy-modal-box,.admin-panel,.sh-row),html:root:root[data-theme="blue"] :is(.subject-card,.hub-card,.profile-card,.admin-card,.stat-card,.question-card,.option,.result-card,.written-card,.material-card,.level-head,.modal,.fancy-modal-box,.admin-panel,.sh-row),html:root:root[data-theme="red"] :is(.subject-card,.hub-card,.profile-card,.admin-card,.stat-card,.question-card,.option,.result-card,.written-card,.material-card,.level-head,.modal,.fancy-modal-box,.admin-panel,.sh-row){background:var(--dr-card)!important;color:var(--dr-ink)!important;border-color:var(--dr-line)!important}
+
+/* Smooth premium theme picker */
+.theme-palette-menu{position:fixed!important;z-index:100500!important;width:min(310px,calc(100vw - 24px))!important;padding:15px!important;border:1px solid var(--dr-line)!important;border-radius:22px!important;background:color-mix(in srgb,var(--dr-card) 94%,transparent)!important;color:var(--dr-ink)!important;box-shadow:0 22px 65px rgba(15,23,42,.22),0 4px 14px rgba(15,23,42,.08)!important;backdrop-filter:blur(22px) saturate(1.35)!important;-webkit-backdrop-filter:blur(22px) saturate(1.35)!important;opacity:0;transform:translateY(-9px) scale(.97);transform-origin:top right;transition:opacity .2s ease,transform .24s cubic-bezier(.2,.8,.2,1);pointer-events:none}
+.theme-palette-menu[hidden]{display:none!important}
+.theme-palette-menu.is-open{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
+.theme-menu-head{display:flex;flex-direction:column;gap:3px;padding:2px 3px 12px}
+.theme-menu-head span{font-size:15px;font-weight:900;letter-spacing:-.02em}
+.theme-menu-head small{font-size:11px;color:var(--dr-muted);font-weight:600}
+.theme-palette-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.theme-palette-options button{position:relative;display:flex;align-items:center;gap:9px;min-height:48px;padding:8px 10px;border:1px solid var(--dr-line)!important;border-radius:14px!important;background:var(--dr-card)!important;color:var(--dr-ink)!important;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;transition:transform .18s ease,border-color .18s ease,background .18s ease,box-shadow .18s ease}
+.theme-palette-options button:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(15,23,42,.09)}
+.theme-palette-options button i{width:22px;height:22px;flex:0 0 22px;border-radius:50%;background:var(--swatch);box-shadow:inset 0 0 0 2px rgba(255,255,255,.65),0 2px 6px rgba(0,0,0,.12)}
+.theme-palette-options button b{margin-left:auto;opacity:0;color:var(--primary);font-size:14px}
+.theme-palette-options button.selected{border-color:var(--primary)!important;background:color-mix(in srgb,var(--primary) 9%,var(--dr-card))!important;box-shadow:0 0 0 2px color-mix(in srgb,var(--primary) 15%,transparent)}
+.theme-palette-options button.selected b{opacity:1}
+
+/* Custom slide captions use the same split-colour text and reveal motion as built-in slides, without the unwanted dark panel. */
+html:root:root body #homeHeroCarousel .hero-slide.hero-custom .hero-slide-content{position:relative!important;left:auto!important;right:auto!important;bottom:auto!important;max-width:760px!important;padding:0!important;margin:0!important;border:0!important;border-radius:0!important;background:transparent!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;box-shadow:none!important;animation:none!important}
+html:root:root body #homeHeroCarousel .hero-slide.hero-custom .hero-slide-content h2{font-family:"Mona Sans","Hanken Grotesk",sans-serif!important;font-size:clamp(23px,4vw,42px)!important;line-height:1.16!important;font-weight:900!important;letter-spacing:-.035em!important;color:#fff!important;text-shadow:0 3px 18px rgba(0,0,0,.48)!important;margin:0 0 9px!important}
+html:root:root body #homeHeroCarousel .hero-slide.hero-custom .hero-slide-content p{font-family:"Hanken Grotesk","Hind Siliguri",sans-serif!important;font-size:clamp(14px,1.8vw,18px)!important;line-height:1.65!important;font-weight:650!important;color:#f1f5ff!important;text-shadow:0 2px 10px rgba(0,0,0,.55)!important;margin:0!important;max-width:650px!important}
+html:root:root body #homeHeroCarousel .hero-slide.hero-custom .hero-slide-content h2 .h-a{color:#fff!important;-webkit-text-fill-color:#fff!important}
+html:root:root body #homeHeroCarousel .hero-slide.hero-custom .hero-slide-content h2 .h-b{background:linear-gradient(90deg,#ffd166,#ff7aa8,#9b8cff,#ffd166)!important;background-size:200% 100%!important;-webkit-background-clip:text!important;background-clip:text!important;-webkit-text-fill-color:transparent!important;color:transparent!important;text-shadow:none!important;filter:drop-shadow(0 2px 10px rgba(0,0,0,.45))}
+html:root:root body #homeHeroCarousel .hero-slide.hero-custom .hero-slide-content p .p-a{color:#f1f5ff!important;-webkit-text-fill-color:#f1f5ff!important}
+html:root:root body #homeHeroCarousel .hero-slide.hero-custom .hero-slide-content p .p-b{color:#9eeaff!important;-webkit-text-fill-color:#9eeaff!important;font-weight:700!important}
+@media(max-width:700px){.theme-palette-menu{right:10px!important;width:min(300px,calc(100vw - 20px))!important}.theme-palette-options button{min-height:46px}}
+@media(prefers-reduced-motion:reduce){.theme-palette-menu,.theme-palette-options button{transition:none!important}}
+</style>
 </body>
 <style id="dribbble-theme-v8">
 /* ===== V8: Dribbble-inspired UI (visual layer only - no logic changed) ===== */
@@ -8089,7 +8151,7 @@ html[data-theme="dark"] #levelSSC .level-badge{background:#1b3a33}html[data-them
   page=document.createElement('section');page.id='screen-level-detail';page.hidden=true;
   page.innerHTML='<button type="button" class="back-btn" id="backFromLevelDetail">← Back to Levels</button><div class="level-detail-heading"><span class="level-detail-kicker">YOUR LEARNING PATH</span><h2 id="levelDetailTitle">Choose a subject</h2><p id="levelDetailDesc">Select a subject to explore chapters and exams.</p></div><div id="levelDetailMount"></div>';
   wrap.appendChild(page);
-  $('backFromLevelDetail').addEventListener('click',backHome);
+  $('backFromLevelDetail').addEventListener('click',()=>{if(location.hash==='#level-detail'&&history.length>1)history.back();else backHome();});
   return page;
  }
  function backHome(){
@@ -8108,6 +8170,7 @@ html[data-theme="dark"] #levelSSC .level-badge{background:#1b3a33}html[data-them
   $('levelDetailMount').appendChild(section);
   document.querySelectorAll('.wrap > section').forEach(x=>x.hidden=true);
   page.hidden=false;page.dataset.activeLevel=level;
+  try{if(typeof pushScreen==='function')pushScreen('level-detail',{level:level});}catch(e){}
   $('levelDetailTitle').textContent=level==='Admission'?'Admission Preparation':level+' Level';
   $('levelDetailDesc').textContent=level==='SSC'?'Secondary School Certificate — choose a subject to continue.':level==='HSC'?'Higher Secondary Certificate — choose a subject to continue.':'University admission preparation — choose a subject to continue.';
   section.classList.add('open');
@@ -8120,6 +8183,8 @@ html[data-theme="dark"] #levelSSC .level-badge{background:#1b3a33}html[data-them
   const h=e.target.closest('.level-head');if(!h)return;
   e.preventDefault();openLevel(h.dataset.level);
  });
+ // Let the device/browser Back button restore the level list before leaving this view.
+ window.__backFromLevelDetail=()=>{if(active)backHome();};
  // Keep the level screen in sync if the navbar Home action is used.
  document.getElementById('navHomeBtn')?.addEventListener('click',()=>{if(active)backHome();});
 })();
@@ -8987,7 +9052,8 @@ html:root:root body .nav-search-wrap{height:36px!important}
  const HKEY='drHeroSlides';let lastSig='',defaults=null,hiddenDefaults=[],trackHiddenSig='';
  function slideHtml(r,i){
   const u=encodeURI(String(r.image_url||'')).replace(/'/g,'%27');
-  const txt=(r.title||r.subtitle)?'<div class="hero-slide-content">'+(r.title?'<h2>'+esc(r.title)+'</h2>':'')+(r.subtitle?'<p>'+esc(r.subtitle)+'</p>':'')+'</div>':'';
+  const splitText=(value,ratio)=>{const words=String(value||'').trim().split(/\\s+/);if(words.length<2)return '<span class="h-a">'+esc(value)+'</span>';const cut=Math.max(1,Math.min(words.length-1,Math.round(words.length*ratio)));return '<span class="h-a">'+esc(words.slice(0,cut).join(' '))+'</span> <span class="h-b">'+esc(words.slice(cut).join(' '))+'</span>';};
+  const txt=(r.title||r.subtitle)?'<div class="hero-slide-content">'+(r.title?'<h2>'+splitText(r.title,.5)+'</h2>':'')+(r.subtitle?'<p>'+splitText(r.subtitle,.6).replace(/class="h-/g,'class="p-')+'</p>':'')+'</div>':'';
   return '<article class="hero-slide hero-custom" style="background-image:url(\''+u+'\')">'+txt+'</article>';
  }
  function grabDefaults(){
