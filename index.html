@@ -8884,7 +8884,7 @@ html:root:root body .nav-search-wrap{height:36px!important}
   });}
  function editForm(row,x){const slot=row.querySelector('.edm-editor-slot');if(slot.innerHTML){slot.innerHTML='';return;}if(x._kind==='MCQ'){slot.innerHTML=`<div class="edm-edit"><label>Correct answers<input type="number" id="edmCorrect" min="0" max="10000" value="${Number(x.correct)||0}"></label><label>Total questions<input type="number" id="edmTotal" min="1" max="10000" value="${Number(x.total)||1}"></label><div class="wide" id="edmPreview" style="font-weight:900">New percentage: —</div><div class="edm-actions wide"><button type="button" class="btn btn-primary" data-save>Review & Save</button><button type="button" class="btn btn-ghost" data-cancel>Cancel</button></div></div>`;const a=slot.querySelector('#edmCorrect'),b=slot.querySelector('#edmTotal'),pv=slot.querySelector('#edmPreview');const preview=()=>{const n=Number(a.value),t=Number(b.value);pv.textContent=t>0&&n>=0&&n<=t?'New percentage: '+(n/t*100).toFixed(2)+'%':'Correct answers must be between 0 and total.'};a.oninput=b.oninput=preview;preview();slot.querySelector('[data-cancel]').onclick=()=>slot.innerHTML='';slot.querySelector('[data-save]').onclick=async()=>{const n=Number(a.value),t=Number(b.value);if(!Number.isInteger(n)||!Number.isInteger(t)||t<1||n<0||n>t){say('Marks invalid. Correct answers must be between 0 and the total.','warning');return;}const pct=Number((n/t*100).toFixed(2));const ok=await customConfirm(`You are about to update this MCQ result.\n\nStudent: ${x._name}\nExam: ${x._title}\nOld marks: ${x.correct}/${x.total} (${Number(x.percent||0).toFixed(2)}%)\nNew marks: ${n}/${t} (${pct}%)\n\nThis change will directly affect the student’s result. Are you sure?`,{icon:'🧾',okText:'Confirm & Update',cancelText:'Review again'});if(!ok)return;const btn=slot.querySelector('[data-save]');btn.disabled=true;const {error}=await client().from('results').update({correct:n,total:t,percent:pct,status:pct>=50?'pass':'fail'}).eq('id',x.id);if(error){say('Update failed: '+error.message,'error');btn.disabled=false;return;}say('MCQ marks updated successfully','success');try{await window.__drAfterMarksUpdate(x,n,t,pct);}catch(e){}loaded=false;await load();};
    }else{slot.innerHTML=`<div class="edm-edit"><label>CQ marks<input type="number" id="edmScore" min="0" step="0.01" ${x._max?'max="'+x._max+'"':''} value="${x.score??''}"></label><label>Maximum marks<input type="text" readonly value="${x._max??'Not defined in exam'}"></label><label class="wide">Feedback<textarea id="edmFeedback" rows="3">${esc(x.feedback||'')}</textarea></label><div class="edm-actions wide"><button type="button" class="btn btn-primary" data-save>Review & Save</button><button type="button" class="btn btn-ghost" data-cancel>Cancel</button></div></div>`;slot.querySelector('[data-cancel]').onclick=()=>slot.innerHTML='';slot.querySelector('[data-save]').onclick=async()=>{const n=Number(slot.querySelector('#edmScore').value),feedback=slot.querySelector('#edmFeedback').value.trim();if(!Number.isFinite(n)||n<0||(x._max&&n>x._max)){say('CQ marks invalid.','warning');return;}const ok=await customConfirm(`You are about to update this CQ submission.\n\nStudent: ${x._name}\nExam: ${x._title}\nOld marks: ${x.score??'Not graded'}\nNew marks: ${n}/${x._max??'maximum not set'}\nFeedback: ${feedback||'(none)'}\n\nThe student’s CQ result and grading status will change. Are you sure?`,{icon:'✍️',okText:'Confirm & Grade',cancelText:'Review again'});if(!ok)return;const btn=slot.querySelector('[data-save]');btn.disabled=true;const {error}=await client().from('written_submissions').update({score:n,feedback,status:'graded',graded_at:new Date().toISOString(),graded_by:await uid()}).eq('id',x.id);if(error){say('CQ update failed: '+error.message,'error');btn.disabled=false;return;}say('CQ marks updated successfully','success');loaded=false;await load();};}}
- async function remove(x){const detail=`Record type: ${x._kind}\nStudent: ${x._name}\nExam: ${x._title}\nMarks: ${x._kind==='MCQ'?`${x.correct}/${x.total}`:(x.score??'Not graded')}\nDate: ${x._when?new Date(x._when).toLocaleString():'—'}\n\nThis ${x._kind} record will be permanently deleted. This cannot be undone. Are you sure?`;const ok=await customConfirm(detail,{icon:'⚠️',okText:'Yes, permanently delete',cancelText:'No, keep it'});if(!ok)return;const table=x._kind==='MCQ'?'results':'written_submissions';const {error}=await client().from(table).delete().eq('id',x.id);if(error){say('Delete failed: '+error.message,'error');return;}say(x._kind+' record deleted','success');loaded=false;await load();}
+ async function remove(x){const detail=`Record type: ${x._kind}\nStudent: ${x._name}\nExam: ${x._title}\nMarks: ${x._kind==='MCQ'?`${x.correct}/${x.total}`:(x.score??'Not graded')}\nDate: ${x._when?new Date(x._when).toLocaleString():'—'}\n\nThis ${x._kind} record will be permanently deleted. This cannot be undone. Are you sure?`;const ok=await customConfirm(detail,{icon:'⚠️',okText:'Yes, permanently delete',cancelText:'No, keep it'});if(!ok)return;const table=x._kind==='MCQ'?'results':'written_submissions';const {data:delRows,error}=await client().from(table).delete().eq('id',x.id).select('id');if(error){say('Delete failed: '+error.message,'error');return;}if(!delRows||!delRows.length){say('Not deleted — the database blocked it (permission). Run setup-v49.sql in Supabase, then try again.','error');return;}try{localStorage.removeItem('lbCache_'+x.subject+'|||'+x.chapter+'|||'+x.exam);}catch(e){}say(x._kind+' record deleted','success');loaded=false;await load();}
  function init(){if(!window.currentProfile?.is_admin)return;const sec=$('screen-admin');if(!sec||$('adminGoExamDataManager'))return;const btn=document.createElement('button');btn.type='button';btn.className='admin-action-card';btn.id='adminGoExamDataManager';btn.innerHTML='🧰<span>Exam Data Manager</span><small>Search students and exams, edit marks and manage records</small>';const grid=sec.querySelector('.admin-actions-grid');if(grid)grid.appendChild(btn);btn.addEventListener('click',()=>page(true));}
  function bind(){ $('adminGoExamDataManager')?.addEventListener('click',()=>page(true));$('backFromAdminExamData')?.addEventListener('click',()=>typeof showAdminDashboard==='function'?showAdminDashboard():page(false));$('refreshAdminExamData')?.addEventListener('click',()=>{loaded=false;load()});$('admExamSearch')?.addEventListener('input',render);document.querySelectorAll('[data-edm-filter]').forEach(b=>b.addEventListener('click',()=>{filter=b.dataset.edmFilter;document.querySelectorAll('[data-edm-filter]').forEach(z=>z.classList.toggle('active',z===b));render()}));}
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>{init();bind()});else{init();bind()}const timer=setInterval(()=>{if(window.currentProfile?.is_admin&&$('screen-admin')){init();bind();clearInterval(timer)}},800);
@@ -8953,7 +8953,13 @@ html:root:root body .nav-search-wrap{height:36px!important}
   {id:'maroon',name:'Maroon',kind:'dark',sw:'linear-gradient(135deg,#4A0F1E,#8A2A40)'},
   {id:'cyan',name:'Cyan',kind:'light',sw:'linear-gradient(135deg,#22C7D9,#7FE0EA)'},
   {id:'blue',name:'Blue',kind:'dark',sw:'linear-gradient(135deg,#0C2A6B,#2F5DB8)'},
-  {id:'red',name:'Red',kind:'dark',sw:'linear-gradient(135deg,#8B1414,#C93A3A)'}
+  {id:'red',name:'Red',kind:'dark',sw:'linear-gradient(135deg,#8B1414,#C93A3A)'},
+  {id:'green',name:'Green',kind:'dark',sw:'linear-gradient(135deg,#0E4A2B,#25804F)'},
+  {id:'purple',name:'Purple',kind:'dark',sw:'linear-gradient(135deg,#2E1065,#6D3AC4)'},
+  {id:'pink',name:'Pink',kind:'light',sw:'linear-gradient(135deg,#FF86B8,#FFC9DF)'},
+  {id:'teal',name:'Teal',kind:'dark',sw:'linear-gradient(135deg,#0B4F4A,#1F8C84)'},
+  {id:'yellow',name:'Yellow',kind:'light',sw:'linear-gradient(135deg,#FFD23F,#FFEB99)'},
+  {id:'brown',name:'Brown',kind:'dark',sw:'linear-gradient(135deg,#3E2A1E,#7B573B)'}
  ];
  const find=id=>THEMES.find(t=>t.id===id)||null;
  function current(){
@@ -9097,9 +9103,9 @@ html:root:root body .nav-search-wrap{height:36px!important}
   const url=URL.createObjectURL(file);
   try{
    const img=await new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=()=>rej(new Error('This image could not be read. Try a JPG or PNG photo.'));i.src=url;});
-   const max=1600;let w=img.naturalWidth,h=img.naturalHeight;const k=Math.min(1,max/Math.max(w,h));w=Math.round(w*k);h=Math.round(h*k);
+   const max=2000;let w=img.naturalWidth,h=img.naturalHeight;const k=Math.min(1,max/Math.max(w,h));w=Math.round(w*k);h=Math.round(h*k);
    const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);
-   const blob=await new Promise(res=>c.toBlob(res,'image/jpeg',0.82));if(!blob)throw new Error('Could not process the image.');
+   const blob=await new Promise(res=>c.toBlob(res,'image/jpeg',0.9));if(!blob)throw new Error('Could not process the image.');
    return {blob,w,h};
   }finally{URL.revokeObjectURL(url);}
  }
@@ -9807,6 +9813,45 @@ html:is([data-accent="maroon"],[data-accent="blue"],[data-accent="red"]):root bo
 html:is([data-accent="maroon"],[data-accent="blue"],[data-accent="red"]):root body .account-area #navAnnounceBtn *{color:#fff!important;-webkit-text-fill-color:#fff!important}
 html[data-accent]:root body .account-area .account-btn:not(#navAnnounceBtn):not(#profileBtn){color:var(--dr-ink)!important;-webkit-text-fill-color:var(--dr-ink)!important}
 html[data-accent]:root body .nav-search-wrap input{color:var(--dr-ink)!important;-webkit-text-fill-color:var(--dr-ink)!important}
+
+
+
+/* ===== v49: lighter slider photos, plain text ===== */
+html:root:root body #homeHeroCarousel .hero-slide.hero-custom{filter:none!important}
+html:root:root body #homeHeroCarousel .hero-slide.hero-custom:before{background:linear-gradient(to top,rgba(10,10,32,.10),rgba(10,10,32,0) 55%)!important}
+html:root:root body #homeHeroCarousel .hero-slide.hero-custom .hero-slide-content{background:none!important;border:0!important;padding:0!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;box-shadow:none!important}
+html:root:root body #homeHeroCarousel .hero-slide.hero-custom .hero-slide-content :is(h2,p,span){text-shadow:0 2px 3px rgba(0,0,0,.7),0 6px 24px rgba(0,0,0,.55)}
+
+/* ===== v49: level cards use the same pastel colours as the subject cards ===== */
+html:root:root body #levelSSC .level-head{--lv:var(--dr-p1)}
+html:root:root body #levelHSC .level-head{--lv:var(--dr-p3)}
+html:root:root body #levelAdmission .level-head{--lv:var(--dr-p2)}
+html:root:root body #screen-subjects .level-head{background:linear-gradient(135deg,var(--lv),color-mix(in srgb,var(--lv) 70%,#ffffff 30%))!important;background-size:100% 100%!important;box-shadow:0 18px 38px -20px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.6)!important}
+html:root:root body #screen-subjects .level-head :is(b,small,span,i){color:var(--dr-pastel-ink)!important;-webkit-text-fill-color:var(--dr-pastel-ink)!important;text-shadow:none!important}
+html:root:root body #screen-subjects .level-badge{background:rgba(255,255,255,.62)!important;border:1px solid rgba(255,255,255,.85)!important}
+html:root:root body #screen-subjects .level-count{background:rgba(255,255,255,.55)!important;border:1px solid rgba(0,0,0,.08)!important}
+html:root:root body #screen-subjects .level-chev{background:var(--dr-btn)!important}
+html:root:root body #screen-subjects .level-chev:before{color:var(--dr-btn-fg)!important;-webkit-text-fill-color:var(--dr-btn-fg)!important}
+html:root:root body #screen-subjects .level-head:before{background:radial-gradient(circle,rgba(255,255,255,.7),rgba(255,255,255,0) 68%)}
+html:root:root body #screen-subjects .level-head:after{background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.55) 50%,transparent 65%)}
+html:root:root body #screen-level[data-level=SSC] .lvl-ic{background:var(--dr-p1);color:var(--dr-pastel-ink);box-shadow:0 14px 28px -12px rgba(0,0,0,.35)}
+html:root:root body #screen-level[data-level=HSC] .lvl-ic{background:var(--dr-p3);color:var(--dr-pastel-ink);box-shadow:0 14px 28px -12px rgba(0,0,0,.35)}
+html:root:root body #screen-level[data-level=Admission] .lvl-ic{background:var(--dr-p2);color:var(--dr-pastel-ink);box-shadow:0 14px 28px -12px rgba(0,0,0,.35)}
+
+/* ===== v49: more colour themes ===== */
+.theme-pop{max-height:calc(100vh - 110px);overflow:auto}
+html[data-accent="green"]:root{--dr-bg:#0E4A2B;--dr-card:#145C37;--dr-ink:#EFFFF5;--dr-muted:#B7E8CB;--dr-line:#25804F;--dr-soft:#176B40;--dr-cream:#176B40;--dr-pink:#6EE7A4;--dr-pink-soft:#123F29;--dr-btn:#EFFFF5;--dr-btn-fg:#0E4A2B;--dr-pastel-ink:#EFFFF5;--dr-p1:#17673E;--dr-p2:#1D7A49;--dr-p3:#14573A;--dr-p4:#2A7A3A;--dr-p5:#12664F;--dr-p6:#1B6E58;color-scheme:dark}
+html[data-accent="purple"]:root{--dr-bg:#2E1065;--dr-card:#44198F;--dr-ink:#F5EEFF;--dr-muted:#D2BFF5;--dr-line:#6D3AC4;--dr-soft:#4E1FA3;--dr-cream:#4E1FA3;--dr-pink:#C4A1FF;--dr-pink-soft:#3A1680;--dr-btn:#F5EEFF;--dr-btn-fg:#2E1065;--dr-pastel-ink:#F5EEFF;--dr-p1:#4A1FA0;--dr-p2:#5A28B5;--dr-p3:#3F1A8F;--dr-p4:#5B2AA8;--dr-p5:#3B2FA6;--dr-p6:#6A2A9E;color-scheme:dark}
+html[data-accent="pink"]:root{--dr-bg:#FFB3D1;--dr-card:#FFF0F6;--dr-ink:#3A0A22;--dr-muted:#7A2A52;--dr-line:#F08AB4;--dr-soft:#FFC9DF;--dr-cream:#FFD9E8;--dr-pink:#BE185D;--dr-pink-soft:#FFD0E3;--dr-btn:#3A0A22;--dr-btn-fg:#FFF0F6;--dr-pastel-ink:#3A0A22;--dr-p1:#FFD9E8;--dr-p2:#FFE4D6;--dr-p3:#EBD9FF;--dr-p4:#FFF1C9;--dr-p5:#D9E8FF;--dr-p6:#FFCFE2;color-scheme:light}
+html[data-accent="teal"]:root{--dr-bg:#0B4F4A;--dr-card:#0F645E;--dr-ink:#E8FFFC;--dr-muted:#A8E6DF;--dr-line:#1F8C84;--dr-soft:#11736C;--dr-cream:#11736C;--dr-pink:#5EEAD4;--dr-pink-soft:#0C4C47;--dr-btn:#E8FFFC;--dr-btn-fg:#0B4F4A;--dr-pastel-ink:#E8FFFC;--dr-p1:#117068;--dr-p2:#16807A;--dr-p3:#0F5F6B;--dr-p4:#2A7A5E;--dr-p5:#0F5E7A;--dr-p6:#177A6E;color-scheme:dark}
+html[data-accent="yellow"]:root{--dr-bg:#FFE066;--dr-card:#FFFBE6;--dr-ink:#2E2600;--dr-muted:#5E4E00;--dr-line:#E8C840;--dr-soft:#FFEB99;--dr-cream:#FFF1B8;--dr-pink:#A16207;--dr-pink-soft:#FFF0B3;--dr-btn:#2E2600;--dr-btn-fg:#FFFBE6;--dr-pastel-ink:#2E2600;--dr-p1:#FFF3B8;--dr-p2:#FFE4B0;--dr-p3:#FFF8D0;--dr-p4:#E9F3B8;--dr-p5:#FFEBC2;--dr-p6:#FFE0B8;color-scheme:light}
+html[data-accent="brown"]:root{--dr-bg:#3E2A1E;--dr-card:#523826;--dr-ink:#FFF4E8;--dr-muted:#E5CDB4;--dr-line:#7B573B;--dr-soft:#5E4130;--dr-cream:#5E4130;--dr-pink:#F0B27A;--dr-pink-soft:#46301F;--dr-btn:#FFF4E8;--dr-btn-fg:#3E2A1E;--dr-pastel-ink:#FFF4E8;--dr-p1:#5E4130;--dr-p2:#6B4A33;--dr-p3:#553A2C;--dr-p4:#6A5530;--dr-p5:#4F4333;--dr-p6:#6E4538;color-scheme:dark}
+html[data-accent="pink"]:root body,html[data-accent="yellow"]:root body{background-image:radial-gradient(900px 480px at 10% -10%,rgba(255,255,255,.35),transparent 60%),radial-gradient(800px 420px at 100% 0%,rgba(255,255,255,.22),transparent 55%)}
+html:is([data-accent="green"],[data-accent="purple"],[data-accent="teal"],[data-accent="brown"]):root body{background-image:radial-gradient(900px 480px at 10% -10%,rgba(255,255,255,.10),transparent 60%),radial-gradient(800px 420px at 100% 0%,rgba(0,0,0,.25),transparent 55%)}
+html:is([data-accent="green"],[data-accent="purple"],[data-accent="teal"],[data-accent="brown"]):root body :is(.brand-text,.brand-sub,.brand-copy small){color:var(--dr-ink)!important;-webkit-text-fill-color:var(--dr-ink)!important}
+html:is([data-accent="green"],[data-accent="purple"],[data-accent="teal"],[data-accent="brown"]):root body .brand-text .b1{-webkit-text-fill-color:transparent!important}
+html:is([data-accent="green"],[data-accent="purple"],[data-accent="teal"],[data-accent="brown"]):root body .account-area #navAnnounceBtn{background:linear-gradient(135deg,#e11d48,#f97316)!important;color:#fff!important;-webkit-text-fill-color:#fff!important;border-color:transparent!important}
+html:is([data-accent="green"],[data-accent="purple"],[data-accent="teal"],[data-accent="brown"]):root body .account-area #navAnnounceBtn *{color:#fff!important;-webkit-text-fill-color:#fff!important}
 
 </style>
 <script id="v46-premium-js">
